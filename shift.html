@@ -2,6 +2,9 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="favicon-64.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>window.GAS_APP = 'shift';</script>
   <script src="gas.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -331,7 +334,7 @@
     // ===== ใครมา / หยุด / ลา (รวมคำร้องจากฟอร์ม) =====
     const LEAVE_TYPES = ['ลากิจ', 'ลาป่วย'];
     function matchReport(p, reps) {
-      const keys = [p.header, p.pcName].filter(Boolean).map(s => s.toUpperCase());
+      const keys = [p.header, p.pcName].concat(String(p.header).split(/\s*:\s*/)).filter(k => k && k.length > 1).map(s => s.toUpperCase());
       return reps.find(r => { const n = String(r.name || '').toUpperCase().trim(); return n && keys.some(k => n === k || n.indexOf(k) !== -1 || k.indexOf(n) !== -1); });
     }
     function dayPeople(day) {
@@ -343,8 +346,12 @@
         const st = classify(info ? info.values[i] : '');
         if (!st) return;
         const isPC = p.group === 'PC';
-        const name = isPC ? (p.pcName || p.header) : p.header;
-        const sub = isPC ? 'PC ' + p.header : (p.role || 'STAFF');
+        // หัวคอลัมน์แบบ "ABSM : BOSTON" → ตำแหน่ง ABSM · ชื่อ BOSTON
+        const hp = String(p.header).split(/\s*:\s*/);
+        const hName = hp.length > 1 ? hp.slice(1).join(' ') : p.header;
+        const hRole = hp.length > 1 ? hp[0] : '';
+        const name = isPC ? (p.pcName || hName) : hName;
+        const sub = isPC ? 'PC ' + (hp.length > 1 ? hp[0] : p.header) : ((p.role && p.role !== 'STAFF') ? p.role : (hRole || p.role || 'STAFF'));
         const rep = matchReport(p, reps);
         if (rep) used.add(rep);
         const item = { name, sub, isPC, rep };

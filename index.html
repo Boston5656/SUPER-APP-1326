@@ -2,13 +2,17 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="favicon-64.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="SYSTEM 1326">
+  <meta name="application-name" content="SYSTEM 1326">
   <script>window.GAS_APP = 'dash';</script>
   <script src="gas.js"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SYSTEM 1326</title>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -1001,6 +1005,16 @@
       }
     });
 
+    // แสดงสาเหตุจริงใต้กล่องล็อกอิน (ไว้เช็กปัญหาการเชื่อมต่อหลังบ้าน)
+    function showLoginError(err) {
+      let el = document.getElementById('login-err');
+      if (!el) {
+        el = document.createElement('div'); el.id = 'login-err';
+        el.style.cssText = 'margin-top:16px;max-width:384px;width:100%;padding:12px 14px;border-radius:16px;background:rgba(28,28,30,.9);color:#FFB4AE;font-size:12px;font-weight:600;line-height:1.5;word-break:break-word';
+        document.getElementById('loginBox').after(el);
+      }
+      el.textContent = '⚠️ ' + ((err && err.message) || err);
+    }
     function processLogin() {
       const input = document.getElementById('loginId').value;
       if (!input) { shakeLogin(); resetSlider("กรุณากรอกรหัสก่อน"); return; }
@@ -1021,7 +1035,7 @@
             }, 380);
           } else { shakeLogin(); resetSlider(res.message); }
         })
-        .withFailureHandler(err => { shakeLogin(); resetSlider("เชื่อมต่อไม่ได้ ลองใหม่"); })
+        .withFailureHandler(err => { shakeLogin(); resetSlider("เชื่อมต่อไม่ได้"); showLoginError(err); })
         .authenticateUser(input);
     }
 

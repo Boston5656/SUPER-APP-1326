@@ -32,7 +32,12 @@
         .then(function (r) { return r.text(); })
         .then(function (txt) {
           var res;
-          try { res = JSON.parse(txt); } catch (e) { throw new Error('เซิร์ฟเวอร์ตอบกลับผิดรูปแบบ (ตรวจสอบว่า Deploy เป็น "ทุกคน" แล้ว)'); }
+          try { res = JSON.parse(txt); } catch (e) {
+            var hint = /doPost/i.test(txt) ? 'หลังบ้านยังไม่มี API.gs หรือยังไม่ได้ Deploy เป็น New version'
+              : /accounts\.google|signin|ServiceLogin/i.test(txt) ? 'Deploy ยังตั้งสิทธิ์ไม่ใช่ "Anyone" (ทุกคน)'
+              : 'หลังบ้านตอบกลับไม่ใช่ข้อมูล — เช็ก Deploy (New version + Anyone)';
+            throw new Error(hint + ' · ' + txt.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140));
+          }
           if (res.ok) {
             if (fn === 'authenticateUser' && res.data && res.data.token) setToken(res.data.token);
             ok && ok(res.data);
@@ -45,7 +50,7 @@
         .catch(function (e) {
           if (tries < 2 && /Failed to fetch|NetworkError|Load failed/i.test(String(e && e.message))) { setTimeout(go, 800); return; }
           var err = new Error(/Failed to fetch|NetworkError|Load failed/i.test(String(e && e.message))
-            ? 'เชื่อมต่อไม่ได้ — ตรวจสอบอินเทอร์เน็ตแล้วลองใหม่' : (e && e.message) || String(e));
+            ? 'ติดต่อหลังบ้านไม่ได้ (มักเกิดจาก Deploy ยังไม่ใช่ "Anyone" หรือยังไม่ได้กด New version) — ' + (e && e.message) : (e && e.message) || String(e));
           if (fail) fail(err); else console.error(err);
         });
     }
