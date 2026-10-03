@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <script>window.GAS_APP = 'stock';</script>
+  <script src="gas.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบค้นหา STOCK 1326</title>
+  <meta name="theme-color" content="#FFD600">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'theme-yellow': '#FFD600',
+            'theme-yellow-hover': '#E5C000',
+            'theme-dark': '#1C1C1E',
+            'theme-dark-hover': '#2C2C2E',
+            'theme-white': '#FFFFFF',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --ios-ease: cubic-bezier(0.32, 0.72, 0, 1);
+      --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --spring-soft: cubic-bezier(0.22, 1.18, 0.36, 1);
+    }
+    * { -webkit-tap-highlight-color: transparent; }
+    body {
+      background:
+        radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%),
+        radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%),
+        #FFD600;
+      background-attachment: fixed;
+      color: #1C1C1E;
+      font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: calc(48px + env(safe-area-inset-bottom)) !important;
+    }
+    .font-num { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+    /* ---------- Motion ---------- */
+    @keyframes riseIn {
+      0%   { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(4px); }
+      100% { opacity: 1; transform: none; filter: blur(0); }
+    }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.92); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes chipPop { 0% { transform: scale(0.9); } 55% { transform: scale(1.06); } 100% { transform: scale(1); } }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .section-enter > * { animation: riseIn 0.6s var(--ios-ease) both; }
+    .section-enter > *:nth-child(2) { animation-delay: 0.06s; }
+    .section-enter > *:nth-child(3) { animation-delay: 0.12s; }
+    .section-enter > *:nth-child(4) { animation-delay: 0.18s; }
+    .row-in { animation: riseIn 0.5s var(--ios-ease) both; }
+    .pop-in { animation: popIn 0.45s var(--spring) both; }
+
+    /* ---------- Cards ---------- */
+    .glass-card {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: 0 1px 2px rgba(60,48,0,0.05), 0 18px 40px -16px rgba(60,48,0,0.28);
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 100px;
+      background: rgba(28,28,30,0.08); color: rgba(28,28,30,0.72);
+      font-family: 'Space Grotesk', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.8px;
+    }
+    .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #1C1C1E; box-shadow: 0 0 0 3px rgba(28,28,30,0.12); }
+
+    /* ---------- Segmented tab bar ---------- */
+    .tab-shell {
+      position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 40;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: saturate(180%) blur(22px); -webkit-backdrop-filter: saturate(180%) blur(22px);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 8px 28px -10px rgba(60,48,0,0.35);
+    }
+    .tab-glider {
+      position: absolute; top: 0; left: 0; width: 0; height: 0;
+      border-radius: 9999px; background: #1C1C1E;
+      box-shadow: 0 6px 16px -4px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: transform 0.55s var(--spring-soft), width 0.55s var(--spring-soft), height 0.3s var(--ios-ease);
+      z-index: 0;
+    }
+    .tab-btn { position: relative; z-index: 1; color: #6E6E73; transition: color 0.35s var(--ios-ease), transform 0.25s var(--ios-ease); }
+    .tab-btn:active { transform: scale(0.94); }
+    .tab-btn.is-active { color: #FFFFFF; }
+
+    /* ---------- Inputs & buttons ---------- */
+    .ios-input { transition: box-shadow 0.3s var(--ios-ease), background-color 0.3s var(--ios-ease); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+    .ios-input:focus { background-color: #2C2C2E; box-shadow: 0 0 0 4px rgba(255,214,0,0.28); outline: none; }
+    .press { transition: transform 0.35s var(--spring), filter 0.2s, background-color 0.2s; }
+    .press:active { transform: scale(0.95); transition-duration: 0.1s; }
+
+    .month-btn {
+      padding: 12px 4px; border-radius: 14px; font-weight: 700; font-size: 0.78rem;
+      background: #1C1C1E; color: #A1A1A6;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: background-color 0.3s var(--ios-ease), color 0.3s var(--ios-ease), box-shadow 0.3s var(--ios-ease), transform 0.35s var(--spring);
+    }
+    .month-btn:hover { color: #FFFFFF; background: #2C2C2E; }
+    .month-btn:active { transform: scale(0.92); transition-duration: 0.12s; }
+    .month-btn.is-active {
+      background: #FFD600; color: #1C1C1E;
+      box-shadow: 0 6px 16px -6px rgba(242,194,0,0.9), inset 0 1px 0 rgba(255,255,255,0.5);
+      animation: chipPop 0.42s var(--spring);
+    }
+
+    .loading-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 14px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; color: #A1A1A6;
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.04) 100%);
+      background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
+    }
+    .loading-pill.light { color: #8E8E93; background-image: linear-gradient(90deg, rgba(142,142,147,0.08) 0%, rgba(142,142,147,0.2) 50%, rgba(142,142,147,0.08) 100%); }
+    .spin { width: 13px; height: 13px; border-radius: 50%; border: 2px solid rgba(142,142,147,0.3); border-top-color: currentColor; animation: spin 0.8s linear infinite; }
+
+    /* ---------- Modals -> iOS sheets ---------- */
+    .sheet { display: flex; visibility: hidden; pointer-events: none; transition: visibility 0s linear 0.45s; }
+    .sheet.open { visibility: visible; pointer-events: auto; transition: none; }
+    .sheet-backdrop { opacity: 0; transition: opacity 0.42s var(--ios-ease); }
+    .sheet.open .sheet-backdrop { opacity: 1; }
+    .sheet-panel { opacity: 0; transform: translateY(26px) scale(0.95); transition: transform 0.6s var(--spring-soft), opacity 0.35s var(--ios-ease); }
+    .sheet.open .sheet-panel { opacity: 1; transform: none; }
+    .grabber { display: none; width: 38px; height: 5px; border-radius: 100px; background: rgba(255,255,255,0.3); margin: 0 auto 12px; }
+    @media (max-width: 639px) {
+      .sheet { align-items: flex-end !important; padding: 0 !important; }
+      .sheet-panel { border-radius: 30px 30px 0 0 !important; max-height: 90vh !important; transform: translateY(100%); opacity: 1; transition: transform 0.55s var(--ios-ease); padding-bottom: env(safe-area-inset-bottom); }
+      .grabber { display: block; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen p-4 sm:p-6 flex flex-col items-center">
+
+  <div class="w-full max-w-2xl">
+
+    <div id="tabShell" class="tab-shell relative flex justify-center gap-1 p-1.5 rounded-full max-w-md mx-auto mb-6">
+      <div id="tabGlider" class="tab-glider"></div>
+      <button onclick="switchTab('stock')" id="tabStock" class="tab-btn is-active flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
+        📦 เช็คสต๊อก
+      </button>
+      <button onclick="switchTab('interest')" id="tabInterest" class="tab-btn flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
+        🧮 คำนวณผ่อน
+      </button>
+      <button onclick="switchTab('price')" id="tabPrice" class="tab-btn flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
+        🔍 เช็คราคา
+      </button>
+    </div>
+
+    <!-- หน้าเมนูที่ 1: เช็คสต๊อกสินค้า -->
+    <div id="stockSection" class="space-y-6">
+      <div class="text-center mb-2">
+        <span class="eyebrow">STOCK 1326 · REALTIME</span>
+        <h1 class="text-[1.7rem] sm:text-4xl font-bold text-theme-dark mt-2.5 mb-1 tracking-tight">ค้นหาสต๊อกสินค้า</h1>
+        <p class="text-xs sm:text-sm text-theme-dark/60 font-medium">เช็คจำนวนคงเหลือในคลังได้ทันที</p>
+      </div>
+
+      <div class="glass-card rounded-[1.75rem] p-5 sm:p-7 space-y-4 shadow-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-extrabold text-theme-dark mb-2 uppercase tracking-wide">📁 เลือกหมวดหมู่</label>
+            <select id="categorySelect" onchange="performStockSearch()" class="w-full px-4 py-3.5 bg-theme-dark rounded-2xl text-white font-medium ios-input text-sm appearance-none cursor-pointer">
+              <option value="all">ทุกหมวดหมู่ (All)</option>
+              <option value="smartphone">Smartphone / iPhone</option>
+              <option value="tablet">Tablet / iPad</option>
+              <option value="film">Film / กระจกกันรอย</option>
+              <option value="acc">Accessories / อื่นๆ</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-extrabold text-theme-dark mb-2 uppercase tracking-wide">🏷️ แบรนด์</label>
+            <div class="relative">
+              <input type="text" id="brandKeyword" list="brandList" placeholder="เช่น OPPO, Samsung, Apple..." autocomplete="off"
+                class="w-full px-4 py-3.5 pr-10 bg-theme-dark rounded-2xl text-white placeholder-gray-500 font-medium ios-input text-sm">
+              <button type="button" onclick="clearBrand()" title="ล้างแบรนด์"
+                class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full text-gray-400 hover:text-white hover:bg-white/10 text-sm font-bold">✕</button>
+            </div>
+            <datalist id="brandList"></datalist>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <label class="block text-xs font-extrabold text-theme-dark mb-2 uppercase tracking-wide">✏️ พิมพ์ชื่อรุ่น / รหัสสินค้า / Serial</label>
+          <div class="flex gap-2">
+            <input type="text" id="stockKeyword" placeholder="เช่น reno16, v70, 6932..." 
+              class="w-full px-4 py-3.5 bg-theme-dark rounded-2xl text-white placeholder-gray-500 font-medium ios-input text-sm">
+            <button onclick="performStockSearch()" class="px-6 py-3.5 bg-theme-yellow hover:bg-theme-yellow-hover text-theme-dark font-bold rounded-2xl press text-sm whitespace-nowrap shadow-sm">
+              🔍 ค้นหา
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-[1.75rem] p-4 sm:p-5 shadow-sm">
+        <div class="bg-theme-dark rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-gray-400 text-[10px] sm:text-xs uppercase border-b border-white/10 tracking-wider">
+                <tr>
+                  <th class="py-4 px-5 font-bold">รหัส/ชื่อสินค้า</th>
+                  <th class="py-4 px-5 font-bold text-right min-w-[120px]">ราคา / โปรโมชั่น</th>
+                  <th class="py-4 px-4 font-bold text-center">คงเหลือ</th>
+                  <th class="py-4 px-3 font-bold text-center">สาขา<br>1067</th>
+                  <th class="py-4 px-3 font-bold text-center">สาขา<br>2567</th>
+                  <th class="py-4 px-3 font-bold text-center">FIFO</th>
+                </tr>
+              </thead>
+              <tbody id="stockTableBody" class="divide-y divide-white/5 text-gray-200 bg-theme-dark">
+                <tr>
+                  <td colspan="6" class="py-16 text-center text-gray-500 font-medium bg-theme-dark">
+                    🔍 พิมพ์ชื่อรุ่น แบรนด์ หรือเลือกหมวดหมู่เพื่อเริ่มค้นหา
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้าเมนูที่ 2: เครื่องคิดเลขคำนวณผ่อน -->
+    <div id="interestSection" class="hidden space-y-6">
+      <div class="text-center mb-2">
+        <span class="eyebrow">INSTALLMENT · CALCULATOR</span>
+        <h1 class="text-[1.7rem] sm:text-4xl font-bold text-theme-dark mt-2.5 mb-1 tracking-tight">คำนวณผ่อน</h1>
+        <p class="text-xs sm:text-sm text-theme-dark/60 font-medium">ค่างวด ยอดจัด และดอกเบี้ยสุทธิ</p>
+      </div>
+
+      <div class="glass-card rounded-[1.75rem] p-6 sm:p-8 space-y-5 shadow-sm">
+        <div>
+          <label class="block text-xs font-extrabold text-theme-dark mb-2 uppercase">💰 ราคาสินค้า (บาท)</label>
+          <input type="number" id="priceInput" placeholder="เช่น 25900" oninput="calculateInstallment()"
+            class="w-full px-5 py-4 bg-theme-dark rounded-2xl text-white placeholder-gray-500 ios-input text-lg font-bold">
+        </div>
+        <div>
+          <label class="block text-xs font-extrabold text-theme-dark mb-2 uppercase">💵 เงินดาวน์ (บาท)</label>
+          <input type="number" id="downInput" value="0" oninput="calculateInstallment()"
+            class="w-full px-5 py-4 bg-theme-dark rounded-2xl text-white ios-input text-lg font-bold">
+        </div>
+        <div>
+          <label class="block text-xs font-extrabold text-theme-dark mb-2 uppercase">PERCENT (%) ดอกเบี้ยต่อเดือน</label>
+          <div class="flex">
+            <input type="number" step="0.01" id="rateInput" value="0.79" oninput="calculateInstallment()"
+              class="w-full px-5 py-4 bg-theme-dark rounded-l-2xl text-white ios-input text-lg font-bold">
+            <span class="bg-theme-dark px-5 flex items-center text-theme-yellow font-black text-sm rounded-r-2xl border-l border-white/10 whitespace-nowrap">
+              % / เดือน
+            </span>
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <label class="block text-xs font-extrabold text-theme-dark mb-3 uppercase">📅 เลือกระยะเวลาผ่อน (เดือน)</label>
+          <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+            <button type="button" onclick="selectMonth(4)" class="month-btn" data-month="4">4 ด.</button>
+            <button type="button" onclick="selectMonth(6)" class="month-btn" data-month="6">6 ด.</button>
+            <button type="button" onclick="selectMonth(8)" class="month-btn" data-month="8">8 ด.</button>
+            <button type="button" onclick="selectMonth(10)" class="month-btn" data-month="10">10 ด.</button>
+            <button type="button" onclick="selectMonth(12)" class="month-btn is-active" data-month="12">12 ด.</button>
+            <button type="button" onclick="selectMonth(15)" class="month-btn" data-month="15">15 ด.</button>
+            <button type="button" onclick="selectMonth(18)" class="month-btn" data-month="18">18 ด.</button>
+            <button type="button" onclick="selectMonth(20)" class="month-btn" data-month="20">20 ด.</button>
+            <button type="button" onclick="selectMonth(24)" class="month-btn" data-month="24">24 ด.</button>
+            <button type="button" onclick="selectMonth(36)" class="month-btn" data-month="36">36 ด.</button>
+            <button type="button" onclick="selectMonth(48)" class="month-btn" data-month="48">48 ด.</button>
+          </div>
+        </div>
+
+        <div class="bg-theme-dark rounded-2xl p-6 mt-6 space-y-4">
+          <h3 class="text-sm font-black text-theme-yellow flex items-center gap-2 border-b border-white/10 pb-4 uppercase tracking-wide">📋 สรุปรายการผ่อน</h3>
+          <div class="space-y-4 text-sm">
+            <div class="flex justify-between items-end">
+              <p class="text-gray-400 text-xs font-bold">ยอดจัดไฟแนนซ์คงเหลือ</p>
+              <p id="loanAmount" class="text-lg font-bold font-num text-white">0 บาท</p>
+            </div>
+            <div class="flex justify-between items-end">
+              <p class="text-gray-400 text-xs font-bold">ดอกเบี้ยรวมทั้งหมด</p>
+              <p id="totalInterest" class="text-lg font-bold font-num text-red-400">0 บาท</p>
+            </div>
+            <div class="flex justify-between items-end">
+              <p class="text-gray-400 text-xs font-bold">ราคารวมดอกเบี้ยสุทธิ</p>
+              <p id="totalPrice" class="text-lg font-bold font-num text-theme-yellow">0 บาท</p>
+            </div>
+          </div>
+          <div class="bg-black/40 rounded-2xl p-5 text-center mt-2">
+            <p class="text-xs font-bold text-gray-400 tracking-wide mb-1">ค่างวดต่อเดือน · <span id="monthLabel">12</span> เดือน</p>
+            <p id="monthlyPayment" class="text-5xl font-bold font-num text-theme-yellow">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- หน้าเมนูที่ 3: PRICE CHECK -->
+    <div id="priceSection" class="hidden max-w-md mx-auto">
+      <div class="glass-card rounded-[1.75rem] p-6 sm:p-8 shadow-sm text-center">
+        <div class="inline-flex items-center justify-center gap-2 mb-6 bg-theme-dark text-white px-5 py-2.5 rounded-full">
+          <svg class="w-5 h-5 text-theme-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M3 9a2 2 0 012-2h0.93a2 2 0 001.664-.89l0.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l0.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          <h1 class="text-xl font-black tracking-tight">PRICE <span class="text-theme-yellow">CHECK</span></h1>
+        </div>
+
+        <button onclick="openScanner()" class="w-full py-4 bg-theme-dark hover:bg-theme-dark-hover text-white font-bold rounded-2xl press text-sm mb-4 flex items-center justify-center gap-2">
+          <svg class="w-5 h-5 inline text-theme-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h0.93a2 2 0 001.664-.89l0.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l0.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
+          เปิดกล้องสแกนบาร์โค้ด (ไลฟ์)
+        </button>
+
+        <div class="flex gap-2">
+          <input type="text" id="barcodeInput" placeholder="หรือพิมพ์รหัสที่นี่..." class="w-full px-4 py-3.5 bg-gray-100 rounded-xl text-theme-dark placeholder-gray-400 ios-input font-mono text-center font-bold text-sm">
+          <button onclick="processSearch(document.getElementById('barcodeInput').value)" class="px-6 py-3.5 bg-theme-yellow hover:bg-theme-yellow-hover text-theme-dark font-bold rounded-xl press whitespace-nowrap text-sm">ค้นหา</button>
+        </div>
+
+        <div id="resultBox" class="hidden text-left bg-theme-dark p-6 rounded-2xl mt-6 transition-all">
+          <div id="successView" class="hidden">
+            <p class="text-[10px] text-gray-400 font-bold mb-1 uppercase tracking-widest">ชื่อสินค้า</p>
+            <p id="productName" class="text-lg font-bold text-white mb-5 break-words leading-snug"></p>
+            <div class="border-t border-white/10 pt-4 flex justify-between items-end">
+              <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">ราคาจำหน่าย</p>
+              <p id="productPrice" class="text-4xl font-bold font-num text-theme-yellow leading-none"></p>
+            </div>
+          </div>
+          <div id="errorView" class="hidden text-center py-4">
+            <p id="errorMessage" class="text-red-400 font-bold text-sm"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL POPUP สำหรับโปรโมชั่น -->
+  <div id="promoModal" class="sheet fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="sheet-backdrop absolute inset-0 bg-black/40 backdrop-blur-md" onclick="closePromoModal()"></div>
+    <div class="sheet-panel relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+      <div class="p-5 sm:p-6 pt-3 sm:pt-6 bg-theme-dark flex flex-wrap justify-between items-center">
+        <div class="grabber w-full basis-full"></div>
+        <h2 class="text-lg sm:text-xl font-black text-theme-yellow flex items-center gap-2 uppercase tracking-wide">
+          🎁 รายละเอียดโปรโมชั่น
+        </h2>
+        <button onclick="closePromoModal()" class="text-gray-400 hover:text-white bg-white/10 hover:bg-red-500 rounded-full p-2 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-5">
+        <p id="modalProductName" class="text-sm font-bold text-theme-dark bg-gray-100 p-4 rounded-2xl mb-2"></p>
+        <div class="space-y-3">
+          <div class="bg-theme-dark rounded-2xl p-5 border-l-4 border-green-400">
+            <p class="text-xs text-green-400 font-bold mb-1 uppercase tracking-wide">💰 ส่วนลดค่าเครื่อง</p>
+            <p id="modalDiscount" class="text-2xl font-black text-white">-</p>
+          </div>
+          <div class="bg-theme-dark rounded-2xl p-5 border-l-4 border-pink-400">
+            <p class="text-xs text-pink-400 font-bold mb-3 uppercase tracking-wide">🎁 ของแถม (Freebies)</p>
+            <ul id="modalFreebies" class="list-disc list-inside text-sm text-gray-200 font-medium space-y-1.5"></ul>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-gray-200">
+          <details class="text-xs text-gray-500 cursor-pointer">
+            <summary class="hover:text-theme-dark font-bold transition-colors">📄 ดูข้อความโปรโมชั่นต้นฉบับเต็มๆ</summary>
+            <p id="modalRawText" class="mt-3 text-white font-medium p-4 bg-theme-dark rounded-2xl leading-relaxed"></p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL POPUP สำหรับ FIFO -->
+  <div id="fifoModal" class="sheet fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="sheet-backdrop absolute inset-0 bg-black/40 backdrop-blur-md" onclick="closeFifoModal()"></div>
+    <div class="sheet-panel relative bg-white w-full max-w-lg rounded-[2rem] shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
+      <div class="p-5 sm:p-6 pt-3 sm:pt-6 bg-theme-dark flex flex-wrap justify-between items-center">
+        <div class="grabber w-full basis-full"></div>
+        <h2 class="text-lg sm:text-xl font-black text-theme-yellow flex items-center gap-2 uppercase tracking-wide">
+          📅 FIFO · หยิบตัวไหนก่อน
+        </h2>
+        <button onclick="closeFifoModal()" class="text-gray-400 hover:text-white bg-white/10 hover:bg-red-500 rounded-full p-2 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4">
+        <div class="bg-gray-100 p-4 rounded-2xl">
+          <p id="fifoProductCode" class="font-mono text-[10px] text-gray-500 font-bold mb-1"></p>
+          <p id="fifoProductName" class="text-sm font-bold text-theme-dark"></p>
+          <p id="fifoSummary" class="text-xs text-gray-500 font-bold mt-2"></p>
+        </div>
+        <div id="fifoList" class="space-y-2"></div>
+        <p class="text-[11px] text-gray-400 font-medium text-center pt-1">เรียงจากรับเข้านานที่สุด → ใหม่สุด (อ้างอิงคอลัมน์ AA)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- กล้องสแกนบาร์โค้ด -->
+  <div id="scanModal" class="sheet fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="sheet-backdrop absolute inset-0 bg-black/60 backdrop-blur-md" onclick="closeScanner()"></div>
+    <div class="sheet-panel relative bg-theme-dark w-full max-w-md rounded-[2rem] shadow-2xl overflow-hidden p-5">
+      <div class="grabber"></div>
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-lg font-black text-theme-yellow">📷 สแกนบาร์โค้ด</h2>
+        <button onclick="closeScanner()" class="text-gray-400 hover:text-white bg-white/10 rounded-full w-9 h-9 font-bold">✕</button>
+      </div>
+      <div id="scanView" class="w-full rounded-2xl overflow-hidden bg-black" style="min-height:260px"></div>
+      <p id="scanMsg" class="text-center text-gray-400 text-xs font-bold mt-3"></p>
+    </div>
+  </div>
+
+  <!-- Script ควบคุมระบบทั้งหมด -->
+  <script>
+    // เปิดหน้าด้วย ...stock.html?barcode=xxxx ได้ (สแกนแล้วเช็คราคาทันที)
+    const initialBarcode = new URLSearchParams(location.search).get('barcode') || '';
+
+    let selectedMonths = 12;
+    let globalStockData = [];
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    // สีตามอายุสต๊อก: 90 วันขึ้นไป = แดง, 30 วันขึ้นไป = ส้ม, น้อยกว่านั้น = เขียว
+    function dayTextClass(d) {
+      if (d === null || d === undefined) return 'text-gray-400';
+      if (d >= 90) return 'text-red-400';
+      if (d >= 30) return 'text-orange-300';
+      return 'text-green-400';
+    }
+
+    function switchTab(tabName) {
+      const stockSec = document.getElementById('stockSection');
+      const interestSec = document.getElementById('interestSection');
+      const priceSec = document.getElementById('priceSection');
+
+      const map = { stock: [stockSec, 'tabStock'], interest: [interestSec, 'tabInterest'], price: [priceSec, 'tabPrice'] };
+      Object.keys(map).forEach(k => {
+        map[k][0].classList.add('hidden');
+        map[k][0].classList.remove('section-enter');
+        document.getElementById(map[k][1]).classList.remove('is-active');
+      });
+
+      const sec = map[tabName][0];
+      const btn = document.getElementById(map[tabName][1]);
+      sec.classList.remove('hidden');
+      void sec.offsetWidth;          // รีสตาร์ทอนิเมชันทุกครั้งที่สลับแท็บ
+      sec.classList.add('section-enter');
+      btn.classList.add('is-active');
+      moveTabGlider(btn);
+      tapFeedback();
+
+      if (tabName === 'interest') {
+        calculateInstallment();
+      } else if (tabName === 'price') {
+        setTimeout(() => document.getElementById('barcodeInput').focus(), 100);
+      }
+    }
+
+    // ---------- iOS helpers ----------
+    // แถบเมนู: ไฮไลต์สีดำเลื่อนตามแท็บแบบสปริง
+    function moveTabGlider(btn, instant) {
+      const shell = document.getElementById('tabShell');
+      const glider = document.getElementById('tabGlider');
+      btn = btn || shell.querySelector('.tab-btn.is-active');
+      if (!btn) return;
+      const s = shell.getBoundingClientRect();
+      const r = btn.getBoundingClientRect();
+      if (instant) glider.style.transition = 'none';
+      glider.style.width = r.width + 'px';
+      glider.style.height = r.height + 'px';
+      glider.style.transform = 'translate(' + (r.left - s.left - shell.clientLeft) + 'px,' + (r.top - s.top - shell.clientTop) + 'px)';
+      if (instant) { void glider.offsetWidth; glider.style.transition = ''; }
+    }
+    window.addEventListener('resize', () => moveTabGlider(null, true));
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => moveTabGlider(null, true));
+
+    function tapFeedback() {
+      try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
+    }
+
+    // ตัวเลขวิ่งนุ่ม ๆ
+    const numAnims = {};
+    function animateNumber(el, to, suffix) {
+      if (!el) return;
+      const target = Number(to) || 0;
+      const from = Number(el.dataset.val || 0);
+      const t0 = performance.now();
+      const dur = 650;
+      if (numAnims[el.id]) cancelAnimationFrame(numAnims[el.id]);
+      function step(now) {
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 4);
+        el.textContent = Math.round(from + (target - from) * eased).toLocaleString('th-TH') + (suffix || '');
+        if (p < 1) numAnims[el.id] = requestAnimationFrame(step);
+        else { el.dataset.val = target; numAnims[el.id] = null; }
+      }
+      numAnims[el.id] = requestAnimationFrame(step);
+    }
+
+    function openSheet(id) { document.getElementById(id).classList.add('open'); }
+    function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+
+    // ---------- โปรโมชั่น ----------
+    function openPromoModal(productCode) {
+      const item = globalStockData.find(d => d.code === productCode);
+      if (!item || !item.promo) return;
+
+      const p = item.promo;
+      document.getElementById('modalProductName').innerText = item.name;
+      document.getElementById('modalDiscount').innerText = p.discount || '-';
+      document.getElementById('modalRawText').innerText = p.rawText || '';
+
+      const fbUl = document.getElementById('modalFreebies');
+      fbUl.innerHTML = '';
+      if (p.freebies && p.freebies.length > 0) {
+        p.freebies.forEach(fb => {
+          let li = document.createElement('li');
+          li.innerText = fb;
+          fbUl.appendChild(li);
+        });
+      } else {
+        fbUl.innerHTML = '<li class="text-gray-400 font-medium">ไม่มีระบุของแถม</li>';
+      }
+
+      openSheet('promoModal');
+    }
+
+    function closePromoModal() {
+      closeSheet('promoModal');
+    }
+
+    // ---------- FIFO ----------
+    function openFifoModal(productCode) {
+      const item = globalStockData.find(d => d.code === productCode);
+      document.getElementById('fifoProductCode').innerText = productCode || '';
+      document.getElementById('fifoProductName').innerText = item ? item.name : '';
+      document.getElementById('fifoSummary').innerText = '';
+      document.getElementById('fifoList').innerHTML =
+        '<div class="py-10 text-center"><span class="loading-pill light"><span class="spin"></span>กำลังโหลดรายการ Serial</span></div>';
+      openSheet('fifoModal');
+
+      google.script.run
+        .withSuccessHandler(renderFifo)
+        .withFailureHandler(err => {
+          document.getElementById('fifoList').innerHTML =
+            '<div class="py-10 text-center text-red-500 font-bold text-sm">❌ โหลดไม่สำเร็จ: ' + esc(err.message || err) + '</div>';
+        })
+        .getFifo(productCode);
+    }
+
+    function renderFifo(res) {
+      const list = document.getElementById('fifoList');
+      if (res.name) document.getElementById('fifoProductName').innerText = res.name;
+
+      if (!res.items || res.items.length === 0) {
+        list.innerHTML = '<div class="py-10 text-center text-red-500 font-bold text-sm">❌ ไม่มีสินค้าคงเหลือของรหัสนี้</div>';
+        return;
+      }
+
+      const totalQty = res.items.reduce((s, it) => s + it.qty, 0);
+      const oldest = res.items[0].days;
+      document.getElementById('fifoSummary').innerText =
+        'คงเหลือ ' + totalQty + ' ชิ้น · ' + res.items.length + ' รายการ' +
+        (oldest !== null ? ' · เก่าสุด ' + oldest + ' วัน' : '');
+
+      list.innerHTML = res.items.map((it, i) => {
+        const first = i === 0;
+        const daysText = it.days === null ? '-' : it.days;
+        const boxClass = first ? 'bg-theme-yellow text-theme-dark ring-2 ring-theme-dark' : 'bg-theme-dark text-white';
+        const rankClass = first ? 'bg-theme-dark text-theme-yellow' : 'bg-white/10 text-gray-300';
+        const dayClass = first ? 'text-theme-dark' : dayTextClass(it.days);
+
+        return `
+          <div class="row-in flex items-center gap-3 p-4 rounded-2xl ${boxClass}" style="animation-delay:${Math.min(i, 10) * 0.05}s">
+            <div class="w-9 h-9 shrink-0 rounded-full flex items-center justify-center font-black text-sm ${rankClass}">${i + 1}</div>
+            <div class="flex-1 min-w-0">
+              ${first ? '<div class="text-[10px] font-black uppercase tracking-widest mb-0.5">👉 หยิบตัวนี้ก่อน</div>' : ''}
+              <div class="text-[10px] font-bold opacity-60 uppercase tracking-wider">Serial</div>
+              <div class="font-mono font-bold text-sm break-all">${esc(it.serial)}</div>
+              ${it.qty > 1 ? `<div class="text-[11px] opacity-70 font-bold mt-0.5">จำนวน ${it.qty} ชิ้น</div>` : ''}
+            </div>
+            <div class="text-right shrink-0">
+              <div class="text-2xl font-black leading-none ${dayClass}">${daysText}</div>
+              <div class="text-[10px] font-bold opacity-70 mt-1">วัน</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function closeFifoModal() {
+      closeSheet('fifoModal');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closePromoModal(); closeFifoModal(); closeScanner(); }
+    });
+
+    // ---------- คำนวณผ่อน ----------
+    function selectMonth(m) {
+      selectedMonths = m;
+      document.querySelectorAll('.month-btn').forEach(btn => {
+        btn.classList.toggle('is-active', parseInt(btn.getAttribute('data-month')) === m);
+      });
+      tapFeedback();
+      calculateInstallment();
+    }
+
+    function calculateInstallment() {
+      const price = parseFloat(document.getElementById('priceInput').value) || 0;
+      const down = parseFloat(document.getElementById('downInput').value) || 0;
+      const rate = parseFloat(document.getElementById('rateInput').value) || 0;
+
+      const loan = Math.max(0, price - down);
+      const totalInt = loan * (rate / 100) * selectedMonths;
+      const totalPrice = loan + totalInt;
+      const monthly = selectedMonths > 0 ? (totalPrice / selectedMonths) : 0;
+
+      animateNumber(document.getElementById('loanAmount'), loan, ' บาท');
+      animateNumber(document.getElementById('totalInterest'), Math.round(totalInt), ' บาท');
+      animateNumber(document.getElementById('totalPrice'), Math.round(totalPrice), ' บาท');
+      animateNumber(document.getElementById('monthlyPayment'), Math.round(monthly));
+      document.getElementById('monthLabel').innerText = selectedMonths;
+    }
+
+    // ---------- สแกนเนอร์ ----------
+    // กล้องสแกนในหน้าเลย ไม่ต้องเด้งออกไปหน้าอื่น (ไม่ต้องรีเฟรช / ไม่ต้องล็อกอินใหม่)
+    let qrScanner = null, scanBusy = false;
+    function openScanner() {
+      if (typeof Html5Qrcode === 'undefined') { alert('โหลดตัวสแกนไม่สำเร็จ ลองรีเฟรชหน้าอีกครั้ง'); return; }
+      openSheet('scanModal');
+      document.getElementById('scanMsg').textContent = 'เล็งบาร์โค้ดให้อยู่ในกรอบ';
+      scanBusy = false;
+      qrScanner = qrScanner || new Html5Qrcode('scanView', { verbose: false });
+      const box = Math.min(300, Math.floor(window.innerWidth * 0.72));
+      qrScanner.start({ facingMode: 'environment' },
+        { fps: 12, qrbox: { width: box, height: Math.round(box * 0.55) }, aspectRatio: 1.0 },
+        (text) => {
+          if (scanBusy) return;
+          scanBusy = true;
+          tapFeedback();
+          closeScanner();
+          document.getElementById('barcodeInput').value = text;
+          processSearch(text);
+        },
+        () => {}
+      ).catch(err => {
+        document.getElementById('scanMsg').textContent = 'เปิดกล้องไม่ได้: ' + (err && err.message ? err.message : err) + ' — อนุญาตการใช้กล้องในเบราว์เซอร์ก่อน';
+      });
+    }
+    function closeScanner() {
+      closeSheet('scanModal');
+      if (qrScanner) { try { qrScanner.stop().catch(() => {}); } catch (e) {} }
+    }
+
+    // ---------- ค้นหาสต๊อก ----------
+    document.getElementById('stockKeyword').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') performStockSearch();
+    });
+    document.getElementById('brandKeyword').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') performStockSearch();
+    });
+    // เลือกแบรนด์จากรายการแนะนำแล้วค้นหาให้ทันที
+    document.getElementById('brandKeyword').addEventListener('change', performStockSearch);
+
+    function clearBrand() {
+      document.getElementById('brandKeyword').value = '';
+      performStockSearch();
+    }
+
+    // โหลดรายชื่อแบรนด์จากคอลัมน์ AJ มาเป็นตัวช่วยพิมพ์
+    google.script.run.withSuccessHandler(function (brands) {
+      const dl = document.getElementById('brandList');
+      dl.innerHTML = (brands || []).map(b => `<option value="${esc(b)}"></option>`).join('');
+    }).getBrandList();
+
+    function performStockSearch() {
+      const keyword = document.getElementById('stockKeyword').value;
+      const brand = document.getElementById('brandKeyword').value;
+      const category = document.getElementById('categorySelect').value;
+      const tbody = document.getElementById('stockTableBody');
+
+      tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center"><span class="loading-pill"><span class="spin"></span>กำลังค้นหาข้อมูล</span></td></tr>';
+
+      google.script.run
+        .withSuccessHandler(renderStockTable)
+        .withFailureHandler(err => {
+          tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-red-400 font-bold">❌ เกิดข้อผิดพลาด: ' + esc(err.message || err) + '</td></tr>';
+        })
+        .searchStock(keyword, category, brand);
+    }
+
+    function renderStockTable(data) {
+      const tbody = document.getElementById('stockTableBody');
+      globalStockData = data || [];
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="py-12 text-center text-red-400 font-bold">❌ ไม่พบข้อมูลสินค้าที่ค้นหา</td></tr>';
+        return;
+      }
+
+      function branchBadge(has) {
+        return has
+          ? '<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-400/10 border border-green-400/30 text-green-400 font-black text-sm">✓</span>'
+          : '<span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-400/10 border border-red-400/30 text-red-400 font-black text-sm">✕</span>';
+      }
+
+      let html = '';
+      data.forEach((item, idx) => {
+        const priceFormatted = typeof item.price === 'number' ? '฿' + item.price.toLocaleString('th-TH') : esc(item.price);
+
+        const hasMainData = item.totalNum !== null && item.totalNum !== undefined;
+        const qtyDisplay = hasMainData ? item.totalNum : '-';
+        const qtyColor = !hasMainData
+          ? 'text-gray-400 bg-gray-400/10 border-gray-400/30'
+          : (item.totalNum > 0 ? 'text-green-400 bg-green-400/10 border-green-400/30' : 'text-red-400 bg-red-400/10 border-red-400/30');
+
+        let promoBtnHtml = '';
+        if (item.promo && item.promo.rawText) {
+          promoBtnHtml = `
+            <button onclick="openPromoModal(this.dataset.code)" data-code="${esc(item.code)}" class="mt-1.5 px-3 py-1.5 bg-theme-white text-theme-dark text-[10px] font-black rounded-lg shadow-sm transition-all uppercase tracking-wider flex items-center justify-end gap-1 w-full max-w-fit ml-auto hover:bg-gray-200">
+              🎁 โปรโมชั่น
+            </button>`;
+        }
+
+        const oldestHtml = (hasMainData && item.totalNum > 0 && item.oldestDays !== null && item.oldestDays !== undefined)
+          ? `<div class="mt-1.5 text-[10px] font-bold whitespace-nowrap ${dayTextClass(item.oldestDays)}">เก่าสุด ${item.oldestDays} วัน</div>`
+          : '';
+
+        const fifoHtml = (hasMainData && item.totalNum > 0)
+          ? `<button onclick="openFifoModal(this.dataset.code)" data-code="${esc(item.code)}" class="px-3 py-2 bg-theme-yellow hover:bg-theme-yellow-hover text-theme-dark text-[10px] font-black rounded-lg whitespace-nowrap shadow-sm press">📅 FIFO</button>`
+          : '<span class="text-gray-600 font-bold">-</span>';
+
+        const brandHtml = item.brand
+          ? `<span class="inline-block mt-1.5 px-2 py-0.5 rounded-md bg-white/10 text-gray-300 text-[10px] font-bold uppercase tracking-wider">${esc(item.brand)}</span>`
+          : '';
+
+        html += `
+          <tr class="row-in hover:bg-theme-dark-hover transition-colors border-b border-white/5 last:border-0" style="animation-delay:${Math.min(idx, 12) * 0.04}s">
+            <td class="py-4 px-5">
+              <div class="font-mono text-gray-400 text-[10px] mb-1 font-bold">${esc(item.code) || '-'}</div>
+              <div class="font-bold text-white leading-snug">${esc(item.name) || '-'}</div>
+              ${brandHtml}
+            </td>
+            <td class="py-4 px-5 text-right align-top">
+              <div class="font-bold font-num text-theme-yellow text-base mb-1 whitespace-nowrap">${priceFormatted}</div>
+              ${promoBtnHtml}
+            </td>
+            <td class="py-4 px-4 text-center align-top">
+              <span class="inline-block px-3 py-1.5 rounded-full border text-xs font-black whitespace-nowrap ${qtyColor}">${qtyDisplay}</span>
+              ${oldestHtml}
+            </td>
+            <td class="py-4 px-3 text-center align-top">${branchBadge(item.has1067)}</td>
+            <td class="py-4 px-3 text-center align-top">${branchBadge(item.has2567)}</td>
+            <td class="py-4 px-3 text-center align-top">${fifoHtml}</td>
+          </tr>`;
+      });
+      tbody.innerHTML = html;
+    }
+
+    // ---------- เช็คราคา ----------
+    document.getElementById('barcodeInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') processSearch(this.value);
+    });
+
+    function processSearch(barcode) {
+      if (!barcode) return;
+      google.script.run.withSuccessHandler(function (res) {
+        const box = document.getElementById('resultBox');
+        const succ = document.getElementById('successView');
+        const err = document.getElementById('errorView');
+        box.classList.remove('hidden');
+        box.classList.remove('pop-in'); void box.offsetWidth; box.classList.add('pop-in');
+        tapFeedback();
+        if (res.status === 'success') {
+          succ.classList.remove('hidden');
+          err.classList.add('hidden');
+          document.getElementById('productName').innerText = res.name;
+          document.getElementById('productPrice').innerText = typeof res.price === 'number' ? '฿' + res.price.toLocaleString('th-TH') : res.price;
+        } else {
+          succ.classList.add('hidden');
+          err.classList.remove('hidden');
+          document.getElementById('errorMessage').innerText = res.message;
+          document.getElementById('errorMessage').className = "text-red-400 font-bold text-sm";
+        }
+        document.getElementById('barcodeInput').value = '';
+        document.getElementById('barcodeInput').focus();
+      }).searchProduct(barcode);
+    }
+
+    moveTabGlider(null, true);
+    document.getElementById('stockSection').classList.add('section-enter');
+
+    // ถ้าเพิ่งกลับมาจากหน้าสแกน ให้สลับไปแท็บเช็คราคาและค้นหาทันที
+    if (initialBarcode) {
+      switchTab('price');
+      document.getElementById('barcodeInput').value = initialBarcode;
+      processSearch(initialBarcode);
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    }
+  </script>
+</body>
+</html>

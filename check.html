@@ -1,0 +1,3777 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+  <meta charset="UTF-8">
+        <script>window.GAS_APP = 'check';</script>
+    <script src="gas.js"></script>
+    <title>Check List 1326</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#FFD600">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      /* =========================================================
+         🎨 DESIGN TOKENS
+      ========================================================= */
+      :root {
+        --yellow: #FFD600;
+        --yellow-soft: #FFE45C;
+        --yellow-deep: #F2C200;
+        --ink: #1C1C1E;
+        --ink-2: #2C2C2E;
+        --ink-3: #3A3A3C;
+        --white: #FFFFFF;
+        --gray-1: #8E8E93;
+        --gray-2: #AEAEB2;
+        --gray-5: #E5E5EA;
+        --gray-6: #F2F2F7;
+        --green: #34C759;
+        --red: #FF3B30;
+        --blue: #0A84FF;
+        --purple: #AF52DE;
+        --orange: #FF9F0A;
+
+        /* iOS motion curves */
+        --ios-ease: cubic-bezier(0.32, 0.72, 0, 1);
+        --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        --spring-soft: cubic-bezier(0.22, 1.18, 0.36, 1);
+
+        --r-xl: 28px;
+        --r-lg: 22px;
+        --r-md: 16px;
+        --r-sm: 12px;
+
+        --shadow-card: 0 1px 2px rgba(60,48,0,0.05), 0 18px 40px -16px rgba(60,48,0,0.28);
+        --shadow-float: 0 10px 30px -8px rgba(0,0,0,0.35);
+
+        /* compat with old variable names */
+        --theme-yellow: var(--yellow);
+        --theme-dark: var(--ink);
+        --theme-white: var(--white);
+        --apple-ease: var(--ios-ease);
+        --shadow-card-hover: var(--shadow-float);
+        --shadow-inner: inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+
+      * { -webkit-tap-highlight-color: transparent; }
+      html { scroll-behavior: smooth; }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%),
+          radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%),
+          var(--yellow);
+        background-attachment: fixed;
+        font-family: 'IBM Plex Sans Thai', 'Sarabun', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--ink);
+        padding: 12px 0 calc(64px + env(safe-area-inset-bottom)) 0;
+        -webkit-font-smoothing: antialiased;
+        overscroll-behavior-y: none;
+      }
+
+      .container { max-width: 880px; }
+
+      .font-mono-title { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; letter-spacing: -0.3px; }
+      .font-pixel { font-family: 'Press Start 2P', 'Space Grotesk', sans-serif; }
+      .text-theme-dark { color: var(--ink) !important; }
+
+      /* =========================================================
+         🎬 MOTION
+      ========================================================= */
+      @keyframes riseIn {
+        0%   { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(4px); }
+        100% { opacity: 1; transform: none; filter: blur(0); }
+      }
+      @keyframes popIn {
+        0%   { opacity: 0; transform: scale(0.92); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      @keyframes chipPop {
+        0%   { transform: scale(0.9); }
+        55%  { transform: scale(1.05); }
+        100% { transform: scale(1); }
+      }
+      @keyframes shimmer {
+        0%   { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      /* Bootstrap tab fade -> iOS rise */
+      .tab-content > .tab-pane.fade { transition: none; }
+      .tab-pane.active > * { animation: riseIn 0.6s var(--ios-ease) both; }
+      .tab-pane.active > *:nth-child(2) { animation-delay: 0.06s; }
+      .tab-pane.active > *:nth-child(3) { animation-delay: 0.12s; }
+      .tab-pane.active > *:nth-child(4) { animation-delay: 0.18s; }
+
+      .dash-item { animation: riseIn 0.6s var(--ios-ease) both; }
+
+      /* =========================================================
+         🧭 SEGMENTED NAV (sticky, glass, sliding glider)
+      ========================================================= */
+      .nav-shell {
+        position: sticky;
+        top: calc(8px + env(safe-area-inset-top));
+        z-index: 1020;
+        max-width: 880px;
+        margin: 0 auto 22px auto;
+        padding: 5px;
+        border-radius: 22px;
+        background: rgba(255,255,255,0.72);
+        backdrop-filter: saturate(180%) blur(22px);
+        -webkit-backdrop-filter: saturate(180%) blur(22px);
+        border: 1px solid rgba(255,255,255,0.7);
+        box-shadow: 0 8px 28px -10px rgba(60,48,0,0.35);
+      }
+      .nav-glider {
+        position: absolute;
+        top: 0; left: 0;
+        width: 0; height: 0;
+        border-radius: 17px;
+        background: var(--ink);
+        box-shadow: 0 6px 16px -4px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+        transition: transform 0.55s var(--spring-soft), width 0.55s var(--spring-soft), height 0.3s var(--ios-ease);
+        will-change: transform, width;
+        z-index: 0;
+      }
+      .nav-pills-custom {
+        position: relative;
+        z-index: 1;
+        margin: 0;
+        padding: 0;
+        flex-wrap: nowrap;
+      }
+      .nav-pills-custom .nav-link {
+        position: relative;
+        background: transparent !important;
+        color: #6E6E73;
+        border-radius: 17px;
+        font-weight: 700;
+        padding: 10px 6px;
+        font-size: 0.84rem;
+        line-height: 1.15;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: color 0.35s var(--ios-ease), transform 0.25s var(--ios-ease);
+        white-space: nowrap;
+      }
+      .nav-pills-custom .nav-link:active { transform: scale(0.94); }
+      .nav-pills-custom .nav-link.active { color: var(--white); box-shadow: none; }
+      .nav-pills-custom .nav-link .nav-ico { font-size: 1.05rem; line-height: 1; }
+
+      @media (max-width: 576px) {
+        .nav-pills-custom .nav-link { flex-direction: column; gap: 3px; font-size: 0.7rem; padding: 8px 2px; }
+        .nav-pills-custom .nav-link .nav-ico { font-size: 1.15rem; }
+      }
+
+      /* =========================================================
+         📰 PAGE HEADER
+      ========================================================= */
+      .page-head { text-align: center; margin: 6px 0 20px; }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 100px;
+        background: rgba(28,28,30,0.08);
+        color: rgba(28,28,30,0.72);
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+      }
+      .eyebrow::before {
+        content: '';
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--ink);
+        box-shadow: 0 0 0 3px rgba(28,28,30,0.12);
+      }
+      .page-title {
+        font-size: clamp(1.6rem, 5vw, 2.1rem);
+        font-weight: 700;
+        letter-spacing: -0.6px;
+        margin: 10px 0 0;
+        color: var(--ink);
+      }
+
+      /* =========================================================
+         🗂️ CARDS
+      ========================================================= */
+      .custom-card {
+        max-width: 880px;
+        margin: 0 auto;
+        border: 1px solid rgba(255,255,255,0.9);
+        border-radius: var(--r-xl);
+        background: rgba(255,255,255,0.94);
+        padding: 26px;
+        box-shadow: var(--shadow-card);
+      }
+      @media (max-width: 576px) {
+        .custom-card { padding: 20px 16px; border-radius: 24px; }
+      }
+
+      .section-title {
+        font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif;
+        font-weight: 700;
+        font-size: 0.92rem;
+        letter-spacing: -0.2px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* =========================================================
+         ✏️ FORM CONTROLS
+      ========================================================= */
+      .field { margin-bottom: 22px; }
+
+      .form-label-custom {
+        font-weight: 700;
+        color: #6E6E73;
+        margin-bottom: 9px;
+        font-size: 0.8rem;
+        letter-spacing: 0.1px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .form-control-dark {
+        background-color: var(--ink);
+        border: 1.5px solid transparent;
+        color: var(--white);
+        border-radius: var(--r-md);
+        padding: 15px 18px;
+        font-weight: 600;
+        font-size: 1rem;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        transition: border-color 0.3s var(--ios-ease), box-shadow 0.3s var(--ios-ease), background-color 0.3s var(--ios-ease);
+      }
+      .form-control-dark::placeholder { color: #7C7C80; font-weight: 500; }
+      .form-control-dark:focus {
+        background-color: var(--ink-2);
+        border-color: var(--yellow);
+        color: var(--white);
+        box-shadow: 0 0 0 4px rgba(255,214,0,0.28);
+      }
+      .form-control-dark[type="file"] { padding: 10px; font-size: 0.85rem; color: var(--gray-2); }
+      .form-control-dark[type="file"]::file-selector-button {
+        background: var(--yellow);
+        color: var(--ink);
+        border: 0;
+        border-radius: 11px;
+        padding: 9px 14px;
+        margin: 0 12px 0 0;
+        font-weight: 700;
+        transition: transform 0.2s var(--ios-ease);
+      }
+      .form-control-dark[type="file"]:hover:not(:disabled)::file-selector-button { background: var(--yellow-soft); }
+      .form-control-dark[type="file"]:active::file-selector-button { transform: scale(0.95); }
+
+      input[type="month"].form-control-dark, input[type="date"].form-control-dark { color-scheme: dark; }
+
+      .hint { color: var(--gray-1); font-weight: 600; font-size: 0.72rem; margin-top: 8px; display: block; }
+
+      /* =========================================================
+         🔘 CHIPS (radio / checkbox)
+      ========================================================= */
+      .grid-3-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .grid-4-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      @media (max-width: 576px) {
+        .grid-3-col { grid-template-columns: repeat(2, 1fr); }
+        .grid-4-col { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      .btn-grid-custom {
+        position: relative;
+        background-color: var(--ink);
+        border: 1.5px solid transparent;
+        color: #A1A1A6;
+        font-weight: 700;
+        padding: 11px 8px;
+        border-radius: 14px;
+        text-align: center;
+        font-size: 0.8rem;
+        line-height: 1.2;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        user-select: none;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+        transition: background-color 0.3s var(--ios-ease), color 0.3s var(--ios-ease),
+                    box-shadow 0.3s var(--ios-ease), transform 0.35s var(--spring);
+      }
+      .btn-grid-custom:hover { color: var(--white); background-color: var(--ink-2); }
+      .btn-grid-custom:active { transform: scale(0.93); transition-duration: 0.12s; }
+
+      .btn-check:focus-visible + .btn-grid-custom { box-shadow: 0 0 0 3px rgba(10,132,255,0.5); }
+      .btn-check:checked + .btn-grid-custom { animation: chipPop 0.42s var(--spring); }
+
+      .btn-check:checked + .btn-brand-yellow {
+        background-color: var(--yellow); color: var(--ink);
+        box-shadow: 0 6px 16px -6px rgba(242,194,0,0.9), inset 0 1px 0 rgba(255,255,255,0.5);
+      }
+      .btn-check:checked + .btn-focus-yellow {
+        background-color: var(--green); color: var(--white);
+        box-shadow: 0 6px 16px -6px rgba(52,199,89,0.9), inset 0 1px 0 rgba(255,255,255,0.3);
+      }
+      .btn-check:checked + .btn-brand-red {
+        background-color: var(--red); color: var(--white);
+        box-shadow: 0 6px 16px -6px rgba(255,59,48,0.9), inset 0 1px 0 rgba(255,255,255,0.3);
+      }
+      .btn-check:checked + .btn-device {
+        background-color: var(--blue); color: var(--white);
+        box-shadow: 0 6px 16px -6px rgba(10,132,255,0.9), inset 0 1px 0 rgba(255,255,255,0.3);
+      }
+      .btn-check:checked + .btn-receiver {
+        background-color: var(--purple); color: var(--white);
+        box-shadow: 0 6px 16px -6px rgba(175,82,222,0.9), inset 0 1px 0 rgba(255,255,255,0.3);
+      }
+
+      .qty-badge {
+        display: inline-block;
+        margin-left: 6px;
+        background: rgba(0,0,0,0.25);
+        padding: 1px 8px;
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-family: 'Space Grotesk', sans-serif;
+        animation: popIn 0.35s var(--spring);
+      }
+      .qty-mark { font-size: 0.62rem; opacity: 0.55; margin-left: 4px; }
+
+      /* =========================================================
+         🟡 BUTTONS
+      ========================================================= */
+      .btn-yellow {
+        background: linear-gradient(180deg, #FFE033 0%, var(--yellow) 100%);
+        color: var(--ink);
+        font-weight: 700;
+        border-radius: 18px;
+        padding: 17px;
+        border: none;
+        width: 100%;
+        font-size: 1.05rem;
+        box-shadow: 0 10px 24px -10px rgba(242,194,0,1), inset 0 1px 0 rgba(255,255,255,0.6);
+        transition: transform 0.35s var(--spring), box-shadow 0.3s var(--ios-ease), filter 0.2s;
+      }
+      .btn-yellow:hover { color: var(--ink); filter: brightness(1.03); }
+      .btn-yellow:active { transform: scale(0.97); transition-duration: 0.1s; }
+      .btn-yellow:disabled { opacity: 0.75; color: var(--ink); }
+
+      .btn-ink {
+        background: var(--ink);
+        color: var(--white);
+        font-weight: 700;
+        border-radius: 18px;
+        padding: 17px;
+        border: none;
+        width: 100%;
+        font-size: 1.05rem;
+        box-shadow: 0 10px 24px -10px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08);
+        transition: transform 0.35s var(--spring), background-color 0.2s;
+      }
+      .btn-ink:hover { background: var(--ink-2); color: var(--white); }
+      .btn-ink:active { transform: scale(0.97); transition-duration: 0.1s; }
+      .btn-ink:disabled { opacity: 0.75; color: var(--white); background: var(--ink); }
+
+      .btn-soft {
+        background: var(--gray-6);
+        color: var(--ink);
+        border: none;
+        border-radius: 14px;
+        font-weight: 700;
+        padding: 12px 22px;
+        transition: transform 0.3s var(--spring), background-color 0.2s;
+      }
+      .btn-soft:hover { background: var(--gray-5); }
+      .btn-soft:active { transform: scale(0.96); }
+
+      .spin {
+        display: inline-block;
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        border: 2.5px solid rgba(28,28,30,0.25);
+        border-top-color: var(--ink);
+        animation: spin 0.8s linear infinite;
+        vertical-align: -3px;
+        margin-right: 6px;
+      }
+      .spin.light { border-color: rgba(255,255,255,0.25); border-top-color: #fff; }
+
+      /* small action buttons */
+      .act-btn {
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.74rem;
+        padding: 6px 10px;
+        line-height: 1.2;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        text-decoration: none;
+        transition: transform 0.3s var(--spring), filter 0.2s;
+      }
+      .act-btn:active { transform: scale(0.92); }
+      .act-btn:hover { filter: brightness(0.96); }
+      .act-img { background: var(--ink); color: #fff; }
+      .act-img:hover { color: #fff; }
+      .act-card { background: #FFF6C2; color: #7A5A00; }
+      .act-edit { background: var(--yellow); color: var(--ink); }
+      .act-del { background: #FFE5E3; color: var(--red); }
+
+      /* =========================================================
+         📷 PHOTO PICKER
+      ========================================================= */
+      .photo-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .photo-btn {
+        color: var(--white);
+        min-height: 84px;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.84rem;
+        width: 100%;
+        border-radius: 18px;
+      }
+      .photo-btn .ico {
+        font-size: 1.35rem;
+        line-height: 1;
+        width: 42px; height: 42px;
+        border-radius: 13px;
+        background: rgba(255,255,255,0.08);
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .photo-btn:hover { color: var(--yellow); }
+
+      .picked-preview {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+        padding: 10px 12px;
+        background: var(--gray-6);
+        border-radius: 18px;
+        animation: popIn 0.4s var(--spring) both;
+      }
+      .picked-preview img { width: 60px; height: 60px; object-fit: cover; border-radius: 12px; flex-shrink: 0; }
+
+      .stamped-img {
+        max-height: 450px;
+        width: auto;
+        object-fit: contain;
+        border-radius: 20px;
+        box-shadow: var(--shadow-float);
+        animation: popIn 0.5s var(--spring) both;
+      }
+
+      .divider { height: 1px; background: var(--gray-5); border: 0; margin: 28px 0 20px; opacity: 1; }
+
+      /* =========================================================
+         🔢 QTY SHEET
+      ========================================================= */
+      .qty-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.38);
+        z-index: 2500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.4s var(--ios-ease), visibility 0s linear 0.4s;
+      }
+      .qty-overlay.open { opacity: 1; visibility: visible; transition: opacity 0.4s var(--ios-ease); }
+      .qty-box {
+        background: var(--white);
+        border-radius: 30px;
+        padding: 26px 22px 20px;
+        width: min(360px, 100%);
+        text-align: center;
+        box-shadow: 0 30px 60px -12px rgba(0,0,0,0.45);
+        transform: translateY(30px) scale(0.94);
+        transition: transform 0.55s var(--spring-soft);
+      }
+      .qty-overlay.open .qty-box { transform: none; }
+      @media (max-width: 576px) {
+        .qty-overlay { align-items: flex-end; padding: 0; }
+        .qty-box {
+          width: 100%;
+          border-radius: 30px 30px 0 0;
+          padding-bottom: calc(20px + env(safe-area-inset-bottom));
+          transform: translateY(100%);
+        }
+      }
+      .grabber { width: 38px; height: 5px; border-radius: 100px; background: #D1D1D6; margin: -12px auto 16px; }
+      @media (min-width: 577px) { .qty-box .grabber { display: none; } }
+
+      .qty-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 20px 0; }
+      .qty-stepper button {
+        width: 56px; height: 56px;
+        border-radius: 50%;
+        border: none;
+        background: var(--ink);
+        color: var(--white);
+        font-size: 1.6rem;
+        font-weight: 600;
+        line-height: 1;
+        transition: transform 0.3s var(--spring);
+      }
+      .qty-stepper button:active { transform: scale(0.86); }
+      .qty-stepper input {
+        width: 96px;
+        text-align: center;
+        font-size: 2.6rem;
+        font-weight: 700;
+        border: none;
+        border-bottom: 3px solid var(--yellow);
+        outline: none;
+        font-family: 'Space Grotesk', sans-serif;
+        background: transparent;
+      }
+      .qty-stepper input.bump { animation: chipPop 0.35s var(--spring); }
+      .qty-quick { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+      .qty-quick button {
+        border: none;
+        background: var(--gray-6);
+        border-radius: 12px;
+        padding: 8px 16px;
+        font-weight: 700;
+        font-family: 'Space Grotesk', sans-serif;
+        transition: transform 0.3s var(--spring), background-color 0.2s;
+      }
+      .qty-quick button:active { transform: scale(0.9); background: var(--yellow); }
+
+      /* =========================================================
+         📊 SHARED DARK BLOCKS (ใช้ในหน้าสรุปงานไม่ผ่าน)
+      ========================================================= */
+      .kpi-card {
+        background: linear-gradient(160deg, var(--ink-2) 0%, var(--ink) 70%);
+        border-radius: 20px;
+        padding: 16px 10px;
+        text-align: center;
+        height: 100%;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 10px 20px -12px rgba(0,0,0,0.6);
+        transition: transform 0.4s var(--spring);
+      }
+      .kpi-card:active { transform: scale(0.97); }
+      .kpi-card small { color: var(--gray-1) !important; letter-spacing: 0.3px; }
+      .kpi-card .h4, .kpi-card .h5 { display: block; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+      .bg-black {
+        background: linear-gradient(170deg, var(--ink-2) 0%, var(--ink) 55%) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+      .bg-black .text-secondary { color: var(--gray-1) !important; }
+      .border-secondary { border-color: rgba(255,255,255,0.08) !important; }
+      .rounded-\[24px\] { border-radius: 24px !important; }
+      .rounded-\[20px\] { border-radius: 20px !important; }
+      .bg-theme-dark { background-color: rgba(255,255,255,0.04) !important; }
+
+      .badge { border-radius: 10px; }
+
+      /* PC App-in target */
+      .pc-target-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px 14px;
+        background: rgba(255,255,255,0.04);
+        border-radius: 14px;
+        margin-bottom: 8px;
+        border: 1px solid rgba(255,255,255,0.06);
+      }
+      .pc-target-bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; margin: 0 10px; }
+      .pc-target-bar-fill { height: 100%; width: 0; border-radius: 100px; transition: width 1.1s var(--ios-ease); }
+
+      /* Loading */
+      .loading-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 14px;
+        border-radius: 100px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--gray-1);
+        background: linear-gradient(90deg, rgba(142,142,147,0.08) 0%, rgba(142,142,147,0.2) 50%, rgba(142,142,147,0.08) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s linear infinite;
+      }
+      .loading-pill .spin { width: 13px; height: 13px; border-width: 2px; border-color: rgba(142,142,147,0.3); border-top-color: var(--gray-1); }
+
+      .empty-note { color: var(--gray-1); font-weight: 600; font-size: 0.82rem; text-align: center; padding: 14px 0; width: 100%; }
+
+      .version-tag { text-align: center; font-size: 0.65rem; opacity: 0.45; margin-top: 26px; font-weight: 700; font-family: 'Space Grotesk', sans-serif; letter-spacing: 0.5px; }
+
+      /* =========================================================
+         📊 DASHBOARD v8 — FOCUS TRACKER
+      ========================================================= */
+      .db-wrap { max-width: 880px; margin: 0 auto; }
+      .db-wrap button { font-family: inherit; cursor: pointer; }
+
+      .db-toolbar { display: flex; align-items: stretch; gap: 8px; margin-bottom: 12px; }
+      .db-date {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        background: var(--ink);
+        border-radius: 18px;
+        padding: 5px;
+        box-shadow: 0 10px 24px -14px rgba(0,0,0,0.7);
+      }
+      .db-date > button {
+        width: 44px; height: 44px;
+        flex-shrink: 0;
+        border: 0;
+        border-radius: 13px;
+        background: rgba(255,255,255,0.07);
+        color: #fff;
+        font-size: 1.4rem;
+        line-height: 1;
+        transition: transform 0.3s var(--spring), opacity 0.2s;
+      }
+      .db-date > button:active { transform: scale(0.88); }
+      .db-date > button:disabled { opacity: 0.25; }
+      .db-date-mid { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+      .db-date-mid input {
+        width: 100%;
+        max-width: 170px;
+        background: transparent;
+        border: 0;
+        outline: none;
+        color: #fff;
+        text-align: center;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 0.95rem;
+        color-scheme: dark;
+        padding: 0;
+      }
+      .db-date-mid span { color: var(--yellow); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.3px; }
+      .db-icon-btn {
+        width: 54px;
+        border: 0;
+        border-radius: 18px;
+        background: var(--ink);
+        color: var(--yellow);
+        font-size: 1.3rem;
+        font-weight: 700;
+        box-shadow: 0 10px 24px -14px rgba(0,0,0,0.7);
+        transition: transform 0.3s var(--spring);
+      }
+      .db-icon-btn:active { transform: scale(0.9); }
+      .db-icon-btn span { display: inline-block; }
+      .db-icon-btn.loading span { animation: spin 0.8s linear infinite; }
+
+      .db-filters { display: none; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+      .db-fchip {
+        border: 0;
+        border-radius: 100px;
+        background: var(--ink);
+        color: #fff;
+        padding: 8px 13px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        animation: popIn 0.3s var(--spring) both;
+      }
+      .db-fchip .x { opacity: 0.55; font-size: 0.7rem; }
+      .db-fchip.clear { background: rgba(28,28,30,0.1); color: var(--ink); }
+
+      .db-panel {
+        background: linear-gradient(170deg, #232325 0%, #141416 60%);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 24px;
+        padding: 18px;
+        color: #fff;
+        margin-bottom: 12px;
+        box-shadow: 0 18px 40px -22px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+      @media (max-width: 576px) { .db-panel { padding: 16px 14px; border-radius: 22px; } }
+      .db-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; margin-bottom: 12px; }
+      .db-title { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+      .db-sub { color: var(--gray-1); font-size: 0.68rem; font-weight: 600; }
+      .db-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+      .db-2col .db-panel { margin-bottom: 0; }
+      @media (max-width: 768px) { .db-2col { grid-template-columns: 1fr; } }
+
+      /* hero */
+      .db-hero { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
+      .db-big {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.85rem, 7vw, 2.7rem);
+        font-weight: 700;
+        letter-spacing: -1.2px;
+        line-height: 1.05;
+        margin-top: 4px;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .db-delta { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 100px; font-size: 0.68rem; font-weight: 700; }
+      .db-delta.up { background: rgba(48,209,88,0.15); color: #30D158; }
+      .db-delta.down { background: rgba(255,69,58,0.15); color: #FF6961; }
+      .db-delta.flat { background: rgba(255,255,255,0.08); color: var(--gray-2); }
+      .db-mini { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+      .db-mini > div { background: rgba(255,255,255,0.05); border-radius: 14px; padding: 10px 12px; min-width: 0; }
+      .db-mini small { display: block; color: var(--gray-1); font-size: 0.62rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .db-mini b { font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; font-variant-numeric: tabular-nums; }
+
+      .db-ring { position: relative; width: 124px; height: 124px; flex-shrink: 0; }
+      .db-ring svg { transform: rotate(-90deg); display: block; }
+      .db-ring .ring-bg { stroke: rgba(255,255,255,0.08); }
+      .db-ring .ring-fg { stroke-linecap: round; transition: stroke-dashoffset 1.3s var(--ios-ease); filter: drop-shadow(0 0 6px currentColor); }
+      .db-ring-c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; line-height: 1.1; }
+      .db-ring-c b { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; }
+      .db-ring-c small { font-size: 0.6rem; color: var(--gray-1); font-weight: 700; }
+      @media (max-width: 400px) { .db-ring { width: 108px; height: 108px; } .db-ring svg { width: 108px; height: 108px; } .db-ring-c b { font-size: 1.35rem; } }
+
+      /* device filter */
+      .db-dev { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+      .db-dev button {
+        border: 0;
+        border-radius: 18px;
+        background: var(--ink);
+        color: #fff;
+        padding: 10px 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+        box-shadow: 0 10px 24px -16px rgba(0,0,0,0.8);
+        transition: transform 0.35s var(--spring), background-color 0.3s var(--ios-ease);
+      }
+      .db-dev button:active { transform: scale(0.93); }
+      .db-dev button.on { background: var(--blue); box-shadow: 0 10px 22px -10px rgba(10,132,255,0.9); }
+      .db-dev .ic { font-size: 0.95rem; }
+      .db-dev .n { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; line-height: 1.1; }
+      .db-dev .l { font-size: 0.58rem; color: var(--gray-2); font-weight: 700; letter-spacing: 0.3px; }
+      .db-dev button.on .l { color: #fff; }
+
+      /* focus cards */
+      .db-fgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+      .db-fcard {
+        position: relative;
+        text-align: left;
+        border: 1px solid rgba(255,255,255,0.07);
+        background: rgba(255,255,255,0.04);
+        border-radius: 18px;
+        padding: 12px 13px;
+        color: #fff;
+        overflow: hidden;
+        animation: riseIn 0.5s var(--ios-ease) both;
+        transition: transform 0.35s var(--spring), background-color 0.2s;
+      }
+      .db-fcard:hover { background: rgba(255,255,255,0.07); }
+      .db-fcard:active { transform: scale(0.95); }
+      .db-fcard .nm { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.76rem; letter-spacing: 0.2px; }
+      .db-fcard .qty { font-size: 0.64rem; color: var(--gray-1); font-weight: 700; white-space: nowrap; }
+      .db-fcard .pc { font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; font-weight: 700; line-height: 1.1; margin-top: 4px; }
+      .db-fcard .pc small { font-size: 0.8rem; opacity: 0.7; }
+      .db-fcard .meta { font-size: 0.66rem; color: var(--gray-2); font-weight: 600; }
+      .db-fcard .miss { color: #FF6961; font-weight: 700; }
+      .db-fcard.bonus { border-style: dashed; border-color: rgba(100,210,255,0.35); }
+      .db-fcard .tag {
+        position: absolute; top: 9px; right: 9px;
+        font-size: 0.58rem; font-weight: 700;
+        padding: 2px 7px; border-radius: 100px;
+        background: rgba(255,69,58,0.18); color: #FF6961;
+      }
+      .db-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; margin: 8px 0 6px; }
+      .db-bar i { display: block; height: 100%; width: 0; border-radius: 100px; transition: width 1.1s var(--ios-ease); }
+      .db-bar.light { background: var(--gray-5); }
+
+      /* heatmap */
+      .db-heat-wrap { overflow-x: auto; margin: 0 -6px; padding: 0 6px 4px; -webkit-overflow-scrolling: touch; }
+      .db-heat { border-collapse: separate; border-spacing: 4px; width: 100%; }
+      .db-heat th { font-size: 0.58rem; color: var(--gray-1); font-weight: 700; text-align: center; white-space: nowrap; padding: 0 2px 2px; letter-spacing: 0.3px; }
+      .db-heat th.rh {
+        text-align: left;
+        color: #fff;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.72rem;
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background: #1A1A1C;
+        padding-right: 6px;
+      }
+      .db-heat th.rh small { color: var(--gray-1); font-weight: 600; }
+      .db-heat td { padding: 0; }
+      .db-heat td button {
+        width: 100%;
+        min-width: 54px;
+        border: 0;
+        border-radius: 10px;
+        padding: 7px 4px;
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 0.76rem;
+        line-height: 1.1;
+        transition: transform 0.3s var(--spring);
+      }
+      .db-heat td button:active { transform: scale(0.9); }
+      .db-heat td button small { display: block; font-size: 0.56rem; opacity: 0.8; font-weight: 600; }
+      .db-heat .na { display: block; text-align: center; color: rgba(255,255,255,0.18); font-size: 0.75rem; }
+      .db-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 0.64rem; color: var(--gray-1); font-weight: 600; }
+      .db-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+
+      /* leaderboard */
+      .db-lb { display: flex; flex-direction: column; gap: 6px; }
+      .db-lb button {
+        display: grid;
+        grid-template-columns: 30px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        border: 1px solid transparent;
+        background: rgba(255,255,255,0.04);
+        border-radius: 14px;
+        padding: 9px 12px;
+        color: #fff;
+        text-align: left;
+        animation: riseIn 0.5s var(--ios-ease) both;
+        transition: transform 0.3s var(--spring), border-color 0.2s;
+      }
+      .db-lb button:active { transform: scale(0.97); }
+      .db-lb button.on { border-color: var(--yellow); background: rgba(255,214,0,0.08); }
+      .db-rank { width: 30px; height: 30px; border-radius: 10px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.82rem; }
+      .db-rank.r1 { background: var(--yellow); color: var(--ink); }
+      .db-rank.r2 { background: #D1D1D6; color: var(--ink); }
+      .db-rank.r3 { background: #C08552; color: #fff; }
+      .db-lb .nm { font-weight: 700; font-size: 0.86rem; }
+      .db-lb .sub { font-size: 0.66rem; color: var(--gray-1); font-weight: 600; }
+      .db-lb .val { text-align: right; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.15rem; line-height: 1; }
+      .db-lb .val small { display: block; font-size: 0.58rem; color: var(--gray-1); font-weight: 600; }
+
+      /* chips (receiver) */
+      .db-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+      .db-chip {
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        border-radius: 100px;
+        padding: 7px 12px;
+        font-weight: 700;
+        font-size: 0.78rem;
+        transition: transform 0.3s var(--spring), background-color 0.2s;
+      }
+      .db-chip:active { transform: scale(0.93); }
+      .db-chip b { color: #BF5AF2; margin-left: 4px; font-family: 'Space Grotesk', sans-serif; }
+      .db-chip.on { background: var(--purple); border-color: var(--purple); }
+      .db-chip.on b { color: #fff; }
+      .db-chips.light .db-chip { background: #FFECEB; border-color: transparent; color: #C4170C; cursor: default; }
+      .db-chips.light .db-chip b { color: #C4170C; }
+
+      /* brand donut + list */
+      .db-donut { position: relative; width: 160px; height: 160px; margin: 0 auto 10px; }
+      .db-donut-c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; line-height: 1.1; }
+      .db-donut-c b { font-family: 'Space Grotesk', sans-serif; font-size: 1.7rem; }
+      .db-donut-c small { font-size: 0.62rem; color: var(--gray-1); font-weight: 700; }
+      .db-brow, .db-brow-head {
+        display: grid;
+        grid-template-columns: 10px 1fr 64px 48px;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        padding: 7px 8px;
+        text-align: left;
+      }
+      .db-brow-head { color: var(--gray-1); font-size: 0.6rem; font-weight: 700; padding-bottom: 2px; }
+      .db-brow { border: 0; background: transparent; color: #fff; border-radius: 10px; font-size: 0.8rem; transition: background-color 0.2s; }
+      .db-brow:hover { background: rgba(255,255,255,0.05); }
+      .db-brow.on { background: rgba(255,255,255,0.1); }
+      .db-brow .dot { width: 10px; height: 10px; border-radius: 3px; }
+      .db-brow .nm { font-family: 'Space Grotesk', sans-serif; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .db-brow .u, .db-brow .cv { font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-align: right; }
+      .db-brow .u small { color: var(--gray-1); font-weight: 600; font-size: 0.62rem; }
+
+      .db-hour { position: relative; height: 170px; }
+
+      /* =========================================================
+         🧱 จัดวาง Dashboard
+         แนวตั้ง: คอลัมน์เป็น display:contents → การ์ดเรียงตามลำดับเดิม (ตาราง 2 ช่องบนจอกว้าง)
+      ========================================================= */
+      .db-land-title { display: none; }
+      .db-cols {
+        display: grid; column-gap: 12px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas: "hero hero" "dev dev" "focus focus" "heat heat" "leader brand" "recv hour" "sales sales";
+      }
+      .db-col { display: contents; }
+      .dbp-hero { grid-area: hero; } .dbp-dev { grid-area: dev; } .dbp-focus { grid-area: focus; } .dbp-heat { grid-area: heat; }
+      .dbp-leader { grid-area: leader; } .dbp-brand { grid-area: brand; } .dbp-recv { grid-area: recv; } .dbp-hour { grid-area: hour; }
+      .dbp-sales { grid-area: sales; width: 100%; }
+      @media (max-width: 768px) {
+        .db-cols { grid-template-columns: minmax(0, 1fr); grid-template-areas: "hero" "dev" "focus" "heat" "leader" "brand" "recv" "hour" "sales"; }
+      }
+
+      /* =========================================================
+         🖥️ แนวนอน (PC 16:9 / iPad แนวนอน): ศูนย์ควบคุมเต็มจอ ไม่ต้องเลื่อนหน้า
+         [สรุป + พนักงาน] [งานโฟกัส + Heatmap] [แบรนด์ + รายชั่วโมง] [รายการขาย]
+         JS ใส่คลาส land-dash ให้ body เมื่ออยู่แท็บ "ยอดวันนี้" บนจอแนวนอน
+      ========================================================= */
+      body.land-dash, body.land-wide { padding-bottom: 12px; }
+      body.land-dash { overflow: hidden; height: 100vh; }
+      body.land-dash .container, body.land-wide .container { max-width: none; padding: 0 20px; }
+      body.land-dash .version-tag { display: none; }
+      body.land-dash #pills-dash .page-head { display: none; }
+      body.land-dash .db-wrap { max-width: none; }
+
+      body.land-dash .db-toolbar { align-items: center; gap: 12px; margin-bottom: 14px; }
+      body.land-dash .db-land-title { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: 1; min-width: 0; }
+      body.land-dash .db-land-title b { font-size: 1.7rem; letter-spacing: -0.6px; line-height: 1; color: var(--ink); }
+      body.land-dash .db-date { flex: 0 0 360px; }
+      body.land-dash .db-filters { margin: -4px 0 12px; }
+
+      body.land-dash .db-cols {
+        grid-template-areas: none; grid-template-rows: minmax(0, 1fr);
+        grid-template-columns: 330px minmax(0, 1fr) 360px 400px;
+        gap: 14px; height: 600px;  /* JS ตั้งความสูงให้พอดีจอ */
+      }
+      body.land-dash .db-col {
+        display: flex; flex-direction: column; gap: 12px; min-height: 0; min-width: 0;
+        overflow-y: auto; overflow-x: hidden; scrollbar-width: none; overscroll-behavior: contain;
+        padding: 0 2px 4px; margin: 0 -2px;
+      }
+      body.land-dash .db-col::-webkit-scrollbar { display: none; }
+      body.land-dash .db-col > * { margin: 0 !important; flex-shrink: 0; }
+      body.land-dash .dbp-leader { flex: 1 1 auto; min-height: 150px; overflow-y: auto; scrollbar-width: none; }
+      body.land-dash .dbp-heat { flex: 1 1 auto; }
+      body.land-dash .db-colD .dbp-sales {
+        flex: 1 1 auto; min-height: 0; max-width: none; display: flex; flex-direction: column; padding: 18px;
+      }
+      body.land-dash #dbSalesList { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: none; margin: 0 -4px; padding: 0 4px; }
+      body.land-dash #dbSalesList::-webkit-scrollbar, body.land-dash .dbp-leader::-webkit-scrollbar { display: none; }
+
+      /* การ์ดภาพรวมในคอลัมน์แคบ */
+      body.land-dash .dbp-hero { padding: 18px 16px; }
+      body.land-dash .db-big { font-size: 1.75rem; }
+      body.land-dash .db-ring, body.land-dash .db-ring svg { width: 108px; height: 108px; }
+      body.land-dash .db-ring-c b { font-size: 1.35rem; }
+      body.land-dash .db-mini { gap: 6px; }
+      body.land-dash .db-mini > div { padding: 8px 9px; }
+      body.land-dash .db-mini b { font-size: 0.98rem; }
+      body.land-dash .db-dev button { padding: 8px 4px; }
+      body.land-dash .db-dev .n { font-size: 1.15rem; }
+      body.land-dash .db-fgrid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      body.land-dash .db-fcard { padding: 10px 12px; }
+      body.land-dash .db-fcard .pc { font-size: 1.35rem; margin-top: 2px; }
+      body.land-dash .db-fcard .db-bar { margin: 6px 0 5px; }
+      body.land-dash .db-heat { border-spacing: 3px; }
+      body.land-dash .db-heat td button { padding: 5px 3px; font-size: 0.72rem; }
+      body.land-dash .db-delta { white-space: nowrap; font-size: 0.62rem; padding: 3px 7px; }
+      body.land-dash .dbp-hero .db-sub.ms-1 { display: none; }
+      body.land-dash .db-panel { padding: 16px; }
+      body.land-dash .db-head { margin-bottom: 10px; }
+
+      /* แบรนด์สูงตามเนื้อหา · กราฟรายชั่วโมงยืดเต็มที่เหลือ */
+      body.land-dash .dbp-brand { flex: 0 0 auto; }
+      body.land-dash .dbp-hour { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 200px; }
+      body.land-dash .dbp-hour .db-hour { flex: 1 1 auto; height: auto; min-height: 140px; }
+      body.land-dash .db-donut { width: 150px; height: 150px; }
+
+      /* จอเตี้ย (โน้ตบุ๊ก): ย่อหัวเรื่องให้เหลือที่ให้ข้อมูลมากขึ้น */
+      @media (max-height: 820px) {
+        body.land-dash .nav-shell { margin-bottom: 12px; }
+        body.land-dash .db-land-title .eyebrow { display: none; }
+        body.land-dash .db-land-title b { font-size: 1.3rem; }
+        body.land-dash .db-toolbar { margin-bottom: 10px; }
+        body.land-dash .db-date > button { width: 38px; height: 38px; }
+        body.land-dash .db-icon-btn { width: 48px; }
+        body.land-dash .db-donut { width: 120px; height: 120px; }
+        body.land-dash .dbp-hour { min-height: 170px; }
+      }
+
+      /* จอแนวนอนที่แคบกว่า 1650px: รวมแบรนด์ + รายการขายเป็นคอลัมน์ขวาเดียว */
+      @media (max-width: 1649px) {
+        body.land-dash .db-cols { grid-template-columns: 310px minmax(0, 1fr) 370px; grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); }
+        body.land-dash .db-colA { grid-column: 1; grid-row: 1 / -1; }
+        body.land-dash .db-colB { grid-column: 2; grid-row: 1 / -1; }
+        body.land-dash .db-colC { grid-column: 3; grid-row: 1; }
+        body.land-dash .db-colD { grid-column: 3; grid-row: 2; }
+      }
+
+      /* สรุปงานไม่ผ่าน แนวนอน: รายเดือน | รายวัน คู่กัน */
+      body.land-wide .tab-content > #pills-fail-summary.active {
+        display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 18px; align-items: start;
+        max-width: 1600px; margin: 0 auto;
+      }
+      body.land-wide #pills-fail-summary > .page-head { grid-column: 1 / -1; }
+      body.land-wide #pills-fail-summary > .custom-card { max-width: none; margin: 0 !important; }
+
+      /* sales list */
+      .db-search {
+        width: 100%;
+        border: 0;
+        outline: none;
+        border-radius: 14px;
+        background: var(--gray-6);
+        padding: 12px 14px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+        transition: box-shadow 0.2s;
+      }
+      .db-search:focus { box-shadow: 0 0 0 3px rgba(255,214,0,0.5); }
+      .db-sale {
+        display: grid;
+        grid-template-columns: 44px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        border: 0;
+        background: var(--gray-6);
+        border-radius: 16px;
+        padding: 11px 12px;
+        margin-bottom: 8px;
+        text-align: left;
+        color: var(--ink);
+        font-family: inherit;
+        animation: riseIn 0.45s var(--ios-ease) both;
+        transition: transform 0.3s var(--spring), background-color 0.2s;
+      }
+      .db-sale:hover { background: #EBEBF0; }
+      .db-sale:active { transform: scale(0.98); }
+      .db-sale .tm { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.78rem; color: var(--gray-1); }
+      .db-sale .md { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-weight: 700; font-size: 0.9rem; }
+      .db-sale .who { font-size: 0.7rem; color: var(--gray-1); font-weight: 600; }
+      .db-sale .pr { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: #248A3D; font-size: 0.88rem; }
+      .db-sale .cv { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.72rem; }
+      .db-dots { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px; }
+      .db-dots i { width: 9px; height: 9px; border-radius: 3px; background: #D1D1D6; }
+      .db-dots i.ok { background: var(--green); }
+      .db-dots i.no { background: #FFB4AE; }
+      .db-dots i.bn { background: #64D2FF; }
+      .db-dots i.hl { outline: 2px solid var(--ink); outline-offset: 1px; }
+      .db-dot-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.66rem; color: var(--gray-1); font-weight: 600; margin-bottom: 10px; }
+      .db-dot-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+
+      /* sheet content */
+      .db-sum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 6px; }
+      .db-sum > div { background: var(--gray-6); border-radius: 16px; padding: 12px 6px; text-align: center; }
+      .db-sum small { display: block; font-size: 0.66rem; color: var(--gray-1); font-weight: 700; }
+      .db-sum b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 1.6rem; line-height: 1.15; }
+      .db-sum span { font-size: 0.64rem; color: var(--gray-1); font-weight: 600; }
+      .db-sh-title { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-weight: 700; font-size: 0.84rem; margin: 18px 0 8px; }
+      .db-back { border: 0; background: var(--gray-6); border-radius: 100px; padding: 7px 14px; font-weight: 700; font-size: 0.76rem; margin-bottom: 12px; }
+      .db-photo { border-radius: 18px; overflow: hidden; background: #111; display: flex; justify-content: center; cursor: zoom-in; margin-bottom: 12px; }
+      .db-photo img { width: 100%; max-height: 280px; object-fit: contain; display: block; }
+      .db-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .db-info > div { background: var(--gray-6); border-radius: 12px; padding: 8px 11px; min-width: 0; }
+      .db-info small { display: block; color: var(--gray-1); font-size: 0.64rem; font-weight: 700; }
+      .db-info b { display: block; font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .db-check { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .db-check > div { border-radius: 12px; padding: 8px 10px; font-weight: 700; font-size: 0.78rem; display: flex; gap: 8px; align-items: center; min-width: 0; }
+      .db-check span { flex-shrink: 0; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #fff; }
+      .db-check .ok { background: #E3F9E8; color: #1E7B34; }
+      .db-check .ok span { background: var(--green); }
+      .db-check .no { background: #FFECEB; color: #C4170C; }
+      .db-check .no span { background: var(--red); }
+      .db-check .bn { background: #E5F3FF; color: #0062CC; }
+      .db-check .bn span { background: var(--blue); }
+      .db-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+      .db-actions .act-btn { padding: 11px 14px; font-size: 0.8rem; border-radius: 12px; }
+
+      /* =========================================================
+         🪟 MODAL -> iOS SHEET
+      ========================================================= */
+      .modal.fade { transition: opacity 0.42s var(--ios-ease); }
+      .modal.fade .modal-dialog { transform: translateY(26px) scale(0.95); transition: transform 0.6s var(--spring-soft); }
+      .modal.show .modal-dialog { transform: none; }
+      .modal-backdrop { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+      .modal-backdrop.fade { transition: opacity 0.42s var(--ios-ease); }
+      .modal-backdrop.show { opacity: 0.38; }
+      .sheet-content {
+        background: var(--white);
+        border: none;
+        border-radius: 30px;
+        box-shadow: 0 30px 60px -12px rgba(0,0,0,0.4);
+      }
+      .sheet-content .grabber { display: none; }
+      @media (max-width: 576px) {
+        .modal-dialog { margin: 0; height: 100% !important; min-height: 100% !important; display: flex; align-items: flex-end !important; }
+        .modal.fade .modal-dialog { transform: translateY(100%); transition: transform 0.55s var(--ios-ease); }
+        .modal.show .modal-dialog { transform: none; }
+        .sheet-content { border-radius: 30px 30px 0 0; max-height: 92vh; padding-bottom: env(safe-area-inset-bottom); }
+        .sheet-content .grabber { display: block; margin: 10px auto 0; }
+      }
+
+      /* =========================================================
+         🔔 TOAST
+      ========================================================= */
+      #toastRoot {
+        position: fixed;
+        top: calc(12px + env(safe-area-inset-top));
+        left: 0; right: 0;
+        z-index: 4000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        pointer-events: none;
+        padding: 0 16px;
+      }
+      .ios-toast {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        max-width: 420px;
+        padding: 11px 16px 11px 11px;
+        border-radius: 100px;
+        background: rgba(28,28,30,0.88);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.86rem;
+        white-space: pre-line;
+        box-shadow: 0 14px 30px -10px rgba(0,0,0,0.5);
+        transform: translateY(-140%) scale(0.9);
+        opacity: 0;
+        transition: transform 0.6s var(--spring-soft), opacity 0.35s var(--ios-ease);
+      }
+      .ios-toast.in { transform: none; opacity: 1; }
+      .ios-toast.out { transform: translateY(-60%) scale(0.92); opacity: 0; transition-duration: 0.4s; }
+      .ios-toast .t-ico {
+        flex-shrink: 0;
+        width: 26px; height: 26px;
+        border-radius: 50%;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-weight: 800; font-size: 0.85rem;
+      }
+      .ios-toast.ok .t-ico { background: var(--green); }
+      .ios-toast.error .t-ico { background: var(--red); }
+      .ios-toast.warn .t-ico { background: var(--yellow); color: var(--ink); }
+      .ios-toast.info .t-ico { background: var(--blue); }
+      .ios-toast:not(.ok):not(.warn) { border-radius: 20px; }
+
+      /* =========================================================
+         🎴 POKÉMON-STYLE RARITY CARD SYSTEM
+      ========================================================= */
+      .pkm-overlay {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at 50% 20%, rgba(40,40,45,0.92), rgba(0,0,0,0.95));
+        z-index: 3000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 24px 16px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        animation: pkmFadeIn 0.45s var(--ios-ease) forwards;
+      }
+      .pkm-overlay.closing { animation: pkmFadeOut 0.32s var(--ios-ease) forwards; }
+      @keyframes pkmFadeIn { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes pkmFadeOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(1.03); } }
+
+      .pkm-close-btn {
+        position: absolute;
+        top: calc(16px + env(safe-area-inset-top));
+        right: 16px;
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.14);
+        backdrop-filter: blur(10px);
+        color: #fff;
+        border: none;
+        font-size: 1rem;
+        display: flex; align-items: center; justify-content: center;
+        transition: transform 0.3s var(--spring);
+      }
+      .pkm-close-btn:active { transform: scale(0.88); }
+
+      .pkm-tier-title { text-align: center; margin-bottom: 18px; animation: riseIn 0.6s var(--ios-ease) 0.1s both; }
+      .pkm-tier-title .th { color: #fff; font-weight: 700; font-size: 1.05rem; margin-top: 6px; }
+
+      .pkm-stars { display: flex; gap: 6px; justify-content: center; margin-bottom: 18px; min-height: 26px; }
+      .pkm-star { font-size: 20px; opacity: 0.15; transform: scale(0.4); filter: grayscale(1); }
+      .pkm-star.lit {
+        opacity: 1;
+        filter: grayscale(0) drop-shadow(0 0 2px gold);
+        animation: starPop 0.5s var(--spring) forwards, starFlash 1.6s ease-in-out infinite;
+      }
+      @keyframes starPop { to { transform: scale(1); } }
+      @keyframes starFlash {
+        0%, 100% { filter: grayscale(0) drop-shadow(0 0 2px gold); }
+        50% { filter: grayscale(0) drop-shadow(0 0 12px gold); }
+      }
+
+      .pkm-stage { perspective: 1400px; width: min(80vw, 300px); }
+
+      .pkm-card {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        transform-style: preserve-3d;
+        transform: rotateY(180deg) rotateX(0deg);
+        cursor: grab;
+        touch-action: none;
+        will-change: transform;
+      }
+      .pkm-card.spinning { animation: pkmSpinUp 3.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+      @keyframes pkmSpinUp {
+        0%   { transform: translateY(54px) scale(0.86) rotateY(180deg) rotateX(-8deg); filter: brightness(0.65); }
+        20%  { transform: translateY(30px) scale(0.9) rotateY(300deg) rotateX(-5deg); filter: brightness(0.78); }
+        45%  { transform: translateY(-14px) scale(1.03) rotateY(470deg) rotateX(4deg); filter: brightness(0.95); }
+        68%  { transform: translateY(-6px) scale(1.02) rotateY(610deg) rotateX(2deg); filter: brightness(1.02); }
+        86%  { transform: translateY(-1px) scale(1.005) rotateY(690deg) rotateX(0.5deg); filter: brightness(1); }
+        100% { transform: translateY(0) scale(1) rotateY(720deg) rotateX(0deg); filter: brightness(1); }
+      }
+      .pkm-card.revealed { transform: rotateY(0deg) rotateX(0deg); transition: transform 0.5s var(--spring-soft); }
+      .pkm-card.dragging { transition: none; }
+
+      .pkm-face {
+        position: absolute;
+        inset: 0;
+        border-radius: 22px;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        overflow: hidden;
+        box-shadow: 0 25px 55px rgba(0,0,0,0.55);
+      }
+      .pkm-back {
+        background: #0C0C0E;
+        border: 6px solid var(--yellow);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 10px;
+        transform: rotateY(180deg);
+      }
+      .pkm-back .l1 { color: var(--yellow); font-size: 13px; text-align: center; }
+      .pkm-back .l2 { color: #fff; font-size: 10px; text-align: center; opacity: 0.85; }
+
+      .pkm-front { position: relative; overflow: hidden; padding: 9px; box-sizing: border-box; }
+
+      .pkm-shine {
+        position: absolute;
+        inset: -60%;
+        background: linear-gradient(75deg, transparent 40%, rgba(255,255,255,0.55) 47%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,0.55) 53%, transparent 60%);
+        mix-blend-mode: overlay;
+        pointer-events: none;
+        z-index: 1;
+        animation: shineSweep 3.6s ease-in-out infinite;
+      }
+      @keyframes shineSweep {
+        0%, 100% { transform: translate(-45%, -22%) rotate(3deg); }
+        50%      { transform: translate(45%, 22%) rotate(3deg); }
+      }
+
+      .pkm-galaxy-wrap { position: absolute; inset: 0; overflow: hidden; border-radius: 16px; z-index: 0; }
+      .pkm-galaxy {
+        position: absolute;
+        top: -65%; left: -65%;
+        width: 230%; height: 230%;
+        background: conic-gradient(from 0deg, #ff3ad4, #6a3aff, #00c3ff, #35ffb0, #ffe600, #ff8a00, #ff3ad4);
+        filter: saturate(1.35) blur(0.3px);
+        animation: galaxySpin 10s linear infinite;
+      }
+      @keyframes galaxySpin { to { transform: rotate(360deg); } }
+
+      .pkm-sparkle {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 5;
+        mix-blend-mode: screen;
+        background-image:
+          radial-gradient(circle, rgba(255,255,255,0.95) 0 1px, transparent 1.6px),
+          radial-gradient(circle, rgba(255,255,255,0.85) 0 1px, transparent 1.4px),
+          radial-gradient(circle, rgba(255,255,255,0.7) 0 0.8px, transparent 1.1px);
+        background-size: 46px 46px, 31px 31px, 23px 23px;
+        background-position: 3px 8px, 18px 26px, 9px 2px;
+        animation: sparkleTwinkle 2.6s ease-in-out infinite;
+      }
+      @keyframes sparkleTwinkle { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.85; } }
+
+      .pkm-front-inner {
+        position: relative;
+        width: 100%; height: 100%;
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        border: 3px solid rgba(255,255,255,0.55);
+        z-index: 2;
+      }
+      .pkm-photo-wrap { position: relative; flex: 1 1 68%; overflow: hidden; background: #000; }
+      .pkm-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+      .pkm-info { flex: 1 1 32%; padding: 10px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+      .pkm-info .model { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.95rem; }
+      .pkm-info .emp { font-size: 0.72rem; opacity: 0.85; }
+
+      .pkm-tab {
+        position: absolute;
+        left: 0;
+        bottom: 32%;
+        transform: translateY(50%);
+        padding: 7px 14px 7px 10px;
+        border-radius: 0 14px 14px 0;
+        font-size: 8px;
+        line-height: 1.4;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        z-index: 3;
+      }
+
+      .pkm-holo {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 0.35s ease, background-position 0.05s linear;
+        mix-blend-mode: color-dodge;
+        background-image:
+          repeating-linear-gradient(115deg,
+            rgba(255,0,150,0.55) 0%, rgba(255,231,0,0.55) 8%,
+            rgba(0,255,200,0.55) 16%, rgba(0,140,255,0.55) 24%,
+            rgba(200,0,255,0.55) 32%, rgba(255,0,150,0.55) 40%),
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="90" height="90"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%25" height="100%25" filter="url(%23n)" opacity="0.5"/></svg>');
+        background-size: 320% 320%, 140px 140px;
+        background-position: var(--px, 50%) var(--py, 50%), var(--px, 50%) var(--py, 50%);
+        background-blend-mode: screen, overlay;
+      }
+      .pkm-holo::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        mix-blend-mode: overlay;
+        background: radial-gradient(circle at var(--px, 50%) var(--py, 50%), rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.25) 22%, transparent 55%);
+      }
+      .pkm-holo.on { opacity: 0.85; }
+
+      .pkm-actions { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; justify-content: center; animation: riseIn 0.6s var(--ios-ease) 0.25s both; }
+      .pkm-actions .btn { border-radius: 100px; font-weight: 700; font-size: 0.8rem; padding: 11px 18px; width: auto; }
+      .pkm-actions .btn-glass {
+        background: rgba(255,255,255,0.12);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.18);
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s var(--spring);
+      }
+      .pkm-actions .btn-glass:active { transform: scale(0.95); }
+      .pkm-hint { color: rgba(255,255,255,0.5); font-size: 0.7rem; margin-top: 14px; text-align: center; }
+
+      /* =========================================================
+         ♿ Reduced motion
+      ========================================================= */
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toastRoot"></div>
+
+    <div class="container">
+
+      <!-- Nav Menu -->
+      <div class="nav-shell" id="navShell">
+        <div class="nav-glider" id="navGlider"></div>
+        <ul class="nav nav-pills nav-pills-custom nav-justified" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <button class="nav-link active" id="pills-sales-tab" data-bs-toggle="pill" data-bs-target="#pills-sales" type="button"><span class="nav-ico">📝</span><span>บันทึกขาย</span></button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="pills-dash-tab" data-bs-toggle="pill" data-bs-target="#pills-dash" type="button" onclick="loadDashboard()"><span class="nav-ico">📊</span><span>ยอดวันนี้</span></button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="pills-fail-tab" data-bs-toggle="pill" data-bs-target="#pills-fail" type="button"><span class="nav-ico">⚠️</span><span>งานไม่ผ่าน</span></button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link" id="pills-fail-summary-tab" data-bs-toggle="pill" data-bs-target="#pills-fail-summary" type="button" onclick="loadFailedSummary(); loadDailyFailedSummary();"><span class="nav-ico">📈</span><span>สรุปไม่ผ่าน</span></button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="tab-content" id="pills-tabContent">
+
+        <!-- PAGE 1: บันทึกการขาย -->
+        <div class="tab-pane fade show active" id="pills-sales">
+          <div class="page-head">
+            <span class="eyebrow">STORE OPERATIONS · CHECKLIST</span>
+            <h1 class="page-title">บันทึกการขายประจำวัน</h1>
+          </div>
+
+          <div class="card custom-card">
+            <form id="salesForm" onsubmit="handleSalesSubmit(event)">
+              <div class="field">
+                <label class="form-label-custom">👤 ชื่อพนักงานขาย</label>
+                <input type="text" id="empName" class="form-control form-control-dark" placeholder="ระบุชื่อพนักงาน" required>
+              </div>
+
+              <!-- 🙋 พนักงานผู้รับเคส (บันทึกลงคอลัมน์ H) -->
+              <div class="field">
+                <label class="form-label-custom">🙋 พนักงานผู้รับเคส</label>
+                <div class="grid-3-col">
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_wut" value="วุฒิ" required>
+                  <label class="btn-grid-custom btn-receiver" for="r_wut">วุฒิ</label>
+
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_big" value="บิ๊ก">
+                  <label class="btn-grid-custom btn-receiver" for="r_big">บิ๊ก</label>
+
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_punim" value="ปูนิ่ม">
+                  <label class="btn-grid-custom btn-receiver" for="r_punim">ปูนิ่ม</label>
+
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_aom" value="ออม">
+                  <label class="btn-grid-custom btn-receiver" for="r_aom">ออม</label>
+
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_cha_om" value="ชะอม">
+                  <label class="btn-grid-custom btn-receiver" for="r_cha_om">ชะอม</label>
+
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_tong" value="ต้อง">
+                  <label class="btn-grid-custom btn-receiver" for="r_tong">ต้อง</label>
+
+                  <input type="radio" class="btn-check" name="caseReceiver" id="r_boston" value="บอสตัน">
+                  <label class="btn-grid-custom btn-receiver" for="r_boston">บอสตัน</label>
+                </div>
+              </div>
+
+              <div class="row g-3 field">
+                <div class="col-md-7">
+                  <label class="form-label-custom">📱 รุ่นที่ขาย</label>
+                  <input type="text" id="modelName" class="form-control form-control-dark" placeholder="เช่น iPhone 15 Pro Max, C85" required>
+                </div>
+                <div class="col-md-5">
+                  <label class="form-label-custom">💵 ราคาขาย (บาท)</label>
+                  <input type="number" id="price" inputmode="numeric" class="form-control form-control-dark" placeholder="ระบุราคา" required>
+                </div>
+              </div>
+
+              <!-- 📦 ประเภทสินค้า (ต่อท้ายชื่อรุ่น) -->
+              <div class="field">
+                <label class="form-label-custom">📦 ประเภทสินค้า</label>
+                <div class="grid-4-col">
+                  <input type="radio" class="btn-check" name="deviceType" id="d_phone" value="" checked>
+                  <label class="btn-grid-custom btn-device" for="d_phone">SMARTPHONE / iPhone</label>
+
+                  <input type="radio" class="btn-check" name="deviceType" id="d_tablet" value="TABLET">
+                  <label class="btn-grid-custom btn-device" for="d_tablet">TABLET</label>
+
+                  <input type="radio" class="btn-check" name="deviceType" id="d_ipad" value="iPad">
+                  <label class="btn-grid-custom btn-device" for="d_ipad">iPad</label>
+
+                  <input type="radio" class="btn-check" name="deviceType" id="d_watch" value="APPLE WATCH">
+                  <label class="btn-grid-custom btn-device" for="d_watch">APPLE WATCH</label>
+                </div>
+                <small class="hint">ไม่ได้เลือก = Smartphone / iPhone ปกติ · ถ้าเลือก ระบบจะต่อท้ายชื่อรุ่น เช่น "iPad A16, iPad"</small>
+              </div>
+
+              <div class="field">
+                <label class="form-label-custom">🏷️ แบรนด์</label>
+                <div class="grid-3-col">
+                  <input type="radio" class="btn-check" name="brand" id="b_apple" value="APPLE" required>
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_apple">APPLE</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_samsung" value="SAMSUNG">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_samsung">SAMSUNG</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_oppo" value="OPPO">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_oppo">OPPO</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_vivo" value="VIVO / IQOO">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_vivo">VIVO / IQOO</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_realme" value="REALME">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_realme">REALME</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_xiaomi" value="XIAOMI">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_xiaomi">XIAOMI</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_infinix" value="INFINIX">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_infinix">INFINIX</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_honor" value="HONOR">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_honor">HONOR</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_alldocube" value="ALLDOCUBE">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_alldocube">ALLDOCUBE</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_tcl" value="TCL">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_tcl">TCL</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_zte" value="ZTE">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_zte">ZTE</label>
+
+                  <input type="radio" class="btn-check" name="brand" id="b_nothing" value="NOTHING">
+                  <label class="btn-grid-custom btn-brand-yellow" for="b_nothing">NOTHING</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="form-label-custom">🎯 งานโฟกัสที่ขายได้ <span style="font-weight:500">(เลือกได้หลายรายการ)</span></label>
+                <div class="grid-3-col">
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_sim" value="SIM">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_sim">SIM</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_bright" value="FILM BRIGHT">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_bright">FILM BRIGHT</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_pvl" value="FILM PVL">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_pvl">FILM PVL</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_sandisk" value="SANDISK">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_sandisk">SANDISK</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_ultracare" value="ULTRA CARE+">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_ultracare">ULTRA CARE+</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_socialcare" value="SOCIAL CARE">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_socialcare">SOCIAL CARE</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_7care" value="7CARE+">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_7care">7CARE+</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_ufund" value="U-FUND">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_ufund">U-FUND</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_ufund_student" value="U-FUND STUDENT">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_ufund_student">U-FUND STUDENT</label>
+
+                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_pencil" value="APPLE PENCIL">
+                  <label class="btn-grid-custom btn-focus-yellow" for="f_pencil">APPLE PENCIL</label>
+                </div>
+                <small class="hint">🔢 = มีช่องให้กรอกจำนวน · กดซ้ำที่ปุ่มเพื่อเอาออก</small>
+              </div>
+
+              <!-- 📷 ถ่ายรูป หรือ อัปโหลดจากคลังรูป -->
+              <div class="field" style="margin-bottom:28px">
+                <label class="form-label-custom">📷 รูปเช็คลิสต์กระดาษ / รูปเครื่อง</label>
+                <div class="photo-picker">
+                  <button type="button" class="btn-grid-custom photo-btn" onclick="document.getElementById('paperCam').click()">
+                    <span class="ico">📷</span>ถ่ายรูป
+                  </button>
+                  <button type="button" class="btn-grid-custom photo-btn" onclick="document.getElementById('paperGallery').click()">
+                    <span class="ico">🖼️</span>เลือกจากคลังรูป
+                  </button>
+                </div>
+                <input type="file" id="paperCam" class="visually-hidden" accept="image/*" capture="environment">
+                <input type="file" id="paperGallery" class="visually-hidden" accept="image/*">
+                <div id="paperPicked" class="picked-preview" style="display:none;"></div>
+              </div>
+
+              <button type="submit" class="btn btn-yellow font-mono-title" id="btnSubmitSales">บันทึกข้อมูลการขาย</button>
+
+              <div id="previewContainer" class="text-center" style="display: none;">
+                <hr class="divider">
+                <div class="section-title justify-content-center">📸 รูปพร้อมส่งงาน <span class="text-secondary fw-normal" style="font-size:0.75rem">(แตะค้างที่รูปเพื่อบันทึก)</span></div>
+                <img id="stampedPreview" src="" alt="Stamped Preview" class="img-fluid stamped-img">
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- PAGE 2: DASHBOARD v8 -->
+        <div class="tab-pane fade" id="pills-dash">
+          <div class="page-head">
+            <span class="eyebrow">REALTIME · FOCUS TRACKER</span>
+            <h1 class="page-title">ยอดขายประจำวัน</h1>
+          </div>
+
+          <div class="db-wrap">
+            <!-- เลือกวัน + รีเฟรช -->
+            <div class="db-toolbar">
+              <div class="db-land-title">
+                <span class="eyebrow">REALTIME · FOCUS TRACKER</span>
+                <b>ยอดขายประจำวัน</b>
+              </div>
+              <div class="db-date">
+                <button type="button" onclick="dbShiftDate(-1)" aria-label="วันก่อนหน้า">‹</button>
+                <div class="db-date-mid">
+                  <input type="date" id="dbDate" onchange="loadDashboard()">
+                  <span id="dbDateLabel">วันนี้</span>
+                </div>
+                <button type="button" id="dbNextBtn" onclick="dbShiftDate(1)" aria-label="วันถัดไป">›</button>
+              </div>
+              <button type="button" class="db-icon-btn" id="dbRefresh" onclick="loadDashboard()" aria-label="รีเฟรช"><span>↻</span></button>
+            </div>
+
+            <!-- ตัวกรองที่เลือกอยู่ -->
+            <div class="db-filters" id="dbFilters"></div>
+
+            <!-- แนวตั้ง: เรียงบนลงล่างเหมือนเดิม | แนวนอน: 4 คอลัมน์เต็มจอ ไม่ต้องเลื่อนหน้า -->
+            <div class="db-cols">
+              <div class="db-col db-colA">
+                <!-- ภาพรวม -->
+                <div class="db-panel dbp-hero" id="dbHero">
+                  <span class="loading-pill"><span class="spin"></span>กำลังโหลดข้อมูล</span>
+                </div>
+
+                <!-- ประเภทสินค้า (แตะเพื่อกรอง) -->
+                <div class="db-dev dbp-dev" id="dbDevices"></div>
+
+                <!-- พนักงาน -->
+                <div class="db-panel dbp-leader">
+                  <div class="db-head">
+                    <div class="db-title">🏆 พนักงานขาย</div>
+                    <div class="db-sub">แตะชื่อเพื่อกรอง</div>
+                  </div>
+                  <div id="dbLeader"></div>
+                </div>
+
+                <!-- ผู้รับเคส -->
+                <div class="db-panel dbp-recv">
+                  <div class="db-head">
+                    <div class="db-title">🙋 ผู้รับเคส</div>
+                    <div class="db-sub">แตะเพื่อกรอง</div>
+                  </div>
+                  <div id="dbReceivers"></div>
+                </div>
+              </div>
+
+              <div class="db-col db-colB">
+                <!-- งานโฟกัส -->
+                <div class="db-panel dbp-focus">
+                  <div class="db-head">
+                    <div class="db-title">🎯 งานโฟกัส</div>
+                    <div class="db-sub">แตะการ์ด → ดูว่าเครื่องไหนยังขาด</div>
+                  </div>
+                  <div id="dbFocusGrid"><span class="loading-pill"><span class="spin"></span>กำลังประมวลผล</span></div>
+                </div>
+
+                <!-- Heatmap แบรนด์ x งานโฟกัส -->
+                <div class="db-panel dbp-heat">
+                  <div class="db-head">
+                    <div class="db-title">🧩 แบรนด์ × งานโฟกัส</div>
+                    <div class="db-sub">ปิดได้ / เครื่องที่เป็นเป้า</div>
+                  </div>
+                  <div id="dbHeat"><span class="loading-pill"><span class="spin"></span>กำลังประมวลผล</span></div>
+                </div>
+              </div>
+
+              <div class="db-col db-colC">
+                <!-- แบรนด์ -->
+                <div class="db-panel dbp-brand">
+                  <div class="db-head">
+                    <div class="db-title">📊 สัดส่วนแบรนด์</div>
+                    <div class="db-sub">แตะเพื่อกรอง</div>
+                  </div>
+                  <div class="db-donut">
+                    <canvas id="brandPieChart"></canvas>
+                    <div class="db-donut-c"><b id="dbDonutTotal">0</b><small>เครื่อง</small></div>
+                  </div>
+                  <div id="dbBrandList"></div>
+                </div>
+
+                <!-- รายชั่วโมง -->
+                <div class="db-panel dbp-hour">
+                  <div class="db-head">
+                    <div class="db-title">⏱️ ยอดรายชั่วโมง</div>
+                    <div class="db-sub" id="dbPeak"></div>
+                  </div>
+                  <div class="db-hour"><canvas id="dbHourChart"></canvas></div>
+                </div>
+              </div>
+
+              <div class="db-col db-colD">
+                <!-- รายการขาย -->
+                <div class="card custom-card dbp-sales">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="section-title mb-0">📋 รายการขาย</div>
+                    <span class="db-sub" id="dbSalesCount"></span>
+                  </div>
+                  <input type="search" class="db-search" id="dbSearch" placeholder="🔍 ค้นหารุ่น / พนักงาน / แบรนด์ / งานโฟกัส" oninput="dash.q = this.value; renderSalesList(dashRows());">
+                  <div class="db-dot-legend">
+                    <span><i style="background:var(--green)"></i>ปิดได้</span>
+                    <span><i style="background:#FFB4AE"></i>ยังขาด</span>
+                    <span><i style="background:#64D2FF"></i>นอกเป้า</span>
+                    <span>· แตะรายการเพื่อดู / แก้ไข</span>
+                  </div>
+                  <div id="dbSalesList"><span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูล</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE 3: หลักฐานงานไม่ผ่าน -->
+        <div class="tab-pane fade" id="pills-fail">
+          <div class="page-head">
+            <span class="eyebrow">SIM BL · U-FUND · SF+</span>
+            <h1 class="page-title">หลักฐานงานไม่ผ่าน</h1>
+          </div>
+
+          <div class="card custom-card">
+            <form id="failForm" onsubmit="handleFailSubmit(event)">
+              <div class="field">
+                <label class="form-label-custom">👤 ชื่อพนักงาน</label>
+                <input type="text" id="empNameFailed" class="form-control form-control-dark" placeholder="ระบุชื่อพนักงาน" required>
+              </div>
+
+              <div class="field">
+                <label class="form-label-custom">🏷️ แบรนด์</label>
+                <div class="grid-3-col">
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_apple" value="APPLE" required>
+                  <label class="btn-grid-custom btn-brand-red" for="fb_apple">APPLE</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_samsung" value="SAMSUNG">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_samsung">SAMSUNG</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_oppo" value="OPPO">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_oppo">OPPO</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_vivo" value="VIVO / IQOO">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_vivo">VIVO / IQOO</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_realme" value="REALME">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_realme">REALME</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_xiaomi" value="XIAOMI">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_xiaomi">XIAOMI</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_infinix" value="INFINIX">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_infinix">INFINIX</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_honor" value="HONOR">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_honor">HONOR</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_alldocube" value="ALLDOCUBE">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_alldocube">ALLDOCUBE</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_tcl" value="TCL">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_tcl">TCL</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_zte" value="ZTE">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_zte">ZTE</label>
+
+                  <input type="radio" class="btn-check" name="brandFailed" id="fb_nothing" value="NOTHING">
+                  <label class="btn-grid-custom btn-brand-red" for="fb_nothing">NOTHING</label>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="form-label-custom">📸 รูป SIM BL</label>
+                <input type="file" id="simImg" class="form-control form-control-dark" accept="image/*">
+              </div>
+
+              <div class="field">
+                <label class="form-label-custom">📸 รูป U-FUND (App in ไม่ผ่าน)</label>
+                <input type="file" id="ufundImg" class="form-control form-control-dark" accept="image/*">
+              </div>
+
+              <div class="field" style="margin-bottom:28px">
+                <label class="form-label-custom">📸 รูป SAMSUNG FINANCE+ (App in ไม่ผ่าน)</label>
+                <input type="file" id="sfImg" class="form-control form-control-dark" accept="image/*">
+              </div>
+
+              <button type="submit" class="btn btn-ink font-mono-title" id="btnSubmitFail">บันทึกหลักฐานงานไม่ผ่าน</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- PAGE 4: สรุปงานไม่ผ่านประจำเดือนและประจำวัน -->
+        <div class="tab-pane fade" id="pills-fail-summary">
+          <div class="page-head">
+            <span class="eyebrow">MONTHLY · DAILY</span>
+            <h1 class="page-title">สรุปงานไม่ผ่าน</h1>
+          </div>
+
+          <!-- กล่องสรุปรายเดือน -->
+          <div class="custom-card mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 p-3 px-4 bg-black rounded-[24px] gap-2">
+              <label class="form-label-custom text-white mb-0">📅 เดือนที่สรุป</label>
+              <input type="month" id="selectFailedMonth" class="form-control form-control-dark w-auto text-center font-mono-title" style="background:#2C2C2E" onchange="loadFailedSummary()">
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SIM BL รวม</small>
+                  <span id="kpiMonthSimBL" class="h4 fw-bold font-mono-title mb-0" style="color:#FF453A">0</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (APPLE)</small>
+                  <span id="kpiMonthApple" class="h4 fw-bold text-white font-mono-title mb-0">0</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (ANDROID)</small>
+                  <span id="kpiMonthAndroid" class="h4 fw-bold font-mono-title mb-0" style="color:var(--yellow)">0</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SS FINANCE+</small>
+                  <span id="kpiMonthSF" class="h4 fw-bold font-mono-title mb-0" style="color:#64D2FF">0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-black rounded-[24px] border border-secondary mb-3">
+              <div class="section-title text-white">🏷️ เคสไม่ผ่านแยกตามแบรนด์ (รายเดือน)</div>
+              <div id="failedBrandContainer" class="text-start">
+                <span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูลสรุป</span>
+              </div>
+            </div>
+
+            <div class="p-4 bg-black rounded-[24px] border border-secondary">
+              <div class="section-title mb-1" style="color:var(--yellow)">🎯 เป้า PC APP-IN (รายเดือน)</div>
+              <p class="text-secondary small mb-3" style="font-size:0.7rem">เป้ารวมของเดือน คำนวณจากจำนวนวันธรรมดา/วันหยุดจริง เทียบกับเคส App-in ที่บันทึกไว้</p>
+              <div id="pcTargetMonthContainer">
+                <span class="loading-pill"><span class="spin"></span>กำลังคำนวณเป้าหมาย</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- กล่องสรุปรายวัน -->
+          <div class="custom-card mb-3">
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 p-3 px-4 bg-black rounded-[24px] gap-2">
+              <label class="form-label-custom text-white mb-0">🗓️ วันที่สรุป</label>
+              <input type="date" id="selectFailedDate" class="form-control form-control-dark w-auto text-center font-mono-title" style="background:#2C2C2E" onchange="loadDailyFailedSummary()">
+            </div>
+
+            <div class="row g-2 mb-3">
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SIM BL</small>
+                  <span id="kpiDailySimBL" class="h4 fw-bold font-mono-title mb-0" style="color:#FF453A">0</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (APPLE)</small>
+                  <span id="kpiDailyApple" class="h4 fw-bold text-white font-mono-title mb-0">0</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (ANDROID)</small>
+                  <span id="kpiDailyAndroid" class="h4 fw-bold font-mono-title mb-0" style="color:var(--yellow)">0</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="kpi-card">
+                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SS FINANCE+</small>
+                  <span id="kpiDailySF" class="h4 fw-bold font-mono-title mb-0" style="color:#64D2FF">0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 bg-black rounded-[24px] border border-secondary mb-3">
+              <div class="section-title text-white">🏷️ เคสไม่ผ่านแยกตามแบรนด์ (รายวัน)</div>
+              <div id="failedDailyBrandContainer" class="text-start">
+                <span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูลสรุป</span>
+              </div>
+            </div>
+
+            <div class="p-4 bg-black rounded-[24px] border border-secondary">
+              <div class="section-title mb-1" style="color:var(--yellow)">🎯 เป้า PC APP-IN (รายวัน)</div>
+              <p class="text-secondary small mb-3" style="font-size:0.7rem" id="pcTargetDayTypeLabel">เป้าหมายของวันที่เลือก</p>
+              <div id="pcTargetDayContainer">
+                <span class="loading-pill"><span class="spin"></span>กำลังคำนวณเป้าหมาย</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 📊 Dashboard Detail Sheet (ใช้ร่วมกัน: งานโฟกัส / รายการขาย) -->
+    <div class="modal fade" id="dashSheet" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content sheet-content">
+          <div class="grabber"></div>
+          <div class="modal-header border-0 pb-0 pt-4 px-4 align-items-start">
+            <div style="min-width:0">
+              <h6 class="modal-title font-mono-title fw-bold text-truncate" id="dashSheetTitle"></h6>
+              <div class="hint mt-1" id="dashSheetSub"></div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body px-4 pt-3 pb-4" id="dashSheetBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Focus Sheet -->
+    <div class="modal fade" id="editFocusModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content sheet-content">
+          <div class="grabber"></div>
+          <div class="modal-header border-0 pb-0 pt-4 px-4">
+            <h6 class="modal-title font-mono-title fw-bold">✏️ อัปเดตงานโฟกัสย้อนหลัง</h6>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body px-4 pt-3 pb-2">
+            <input type="hidden" id="editRowIdx">
+            <input type="hidden" id="editBrand">
+            <p class="text-secondary small mb-3 fw-bold">รุ่นที่แก้ไข: <span id="editModelName" class="text-theme-dark"></span></p>
+
+            <label class="form-label-custom">เลือกงานโฟกัสที่ปิดได้</label>
+            <div class="grid-3-col mb-3">
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_sim" value="SIM"><label class="btn-grid-custom btn-focus-yellow" for="e_sim">SIM</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_bright" value="FILM BRIGHT"><label class="btn-grid-custom btn-focus-yellow" for="e_bright">FILM BRIGHT</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_pvl" value="FILM PVL"><label class="btn-grid-custom btn-focus-yellow" for="e_pvl">FILM PVL</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_sandisk" value="SANDISK"><label class="btn-grid-custom btn-focus-yellow" for="e_sandisk">SANDISK</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_ultracare" value="ULTRA CARE+"><label class="btn-grid-custom btn-focus-yellow" for="e_ultracare">ULTRA CARE+</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_socialcare" value="SOCIAL CARE"><label class="btn-grid-custom btn-focus-yellow" for="e_socialcare">SOCIAL CARE</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_7care" value="7CARE+"><label class="btn-grid-custom btn-focus-yellow" for="e_7care">7CARE+</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_ufund" value="U-FUND"><label class="btn-grid-custom btn-focus-yellow" for="e_ufund">U-FUND</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_ufund_student" value="U-FUND STUDENT"><label class="btn-grid-custom btn-focus-yellow" for="e_ufund_student">U-FUND STUDENT</label>
+              <input type="checkbox" class="btn-check edit-focus-chk" id="e_pencil" value="APPLE PENCIL"><label class="btn-grid-custom btn-focus-yellow" for="e_pencil">APPLE PENCIL</label>
+            </div>
+
+            <hr class="divider" style="margin:20px 0 16px">
+            <label class="form-label-custom">📷 รูปใหม่เพื่อสร้างสแตมป์ใหม่ (ไม่บังคับ)</label>
+            <p class="hint mt-0 mb-3">ไม่เลือกรูปใหม่ ระบบจะแก้เฉพาะรายการงานโฟกัส</p>
+            <div class="photo-picker">
+              <button type="button" class="btn-grid-custom photo-btn" onclick="document.getElementById('editPaperCam').click()">
+                <span class="ico">📷</span>ถ่ายรูป
+              </button>
+              <button type="button" class="btn-grid-custom photo-btn" onclick="document.getElementById('editPaperGallery').click()">
+                <span class="ico">🖼️</span>เลือกจากคลังรูป
+              </button>
+            </div>
+            <input type="file" id="editPaperCam" class="visually-hidden" accept="image/*" capture="environment">
+            <input type="file" id="editPaperGallery" class="visually-hidden" accept="image/*">
+            <div id="editPicked" class="picked-preview" style="display:none;"></div>
+
+            <div id="editPreviewContainer" class="mt-4 text-center" style="display: none;">
+              <div class="section-title justify-content-center">📸 รูปใหม่พร้อมส่งงาน</div>
+              <img id="editStampedPreview" src="" class="img-fluid stamped-img" style="max-height: 300px;">
+            </div>
+          </div>
+          <div class="modal-footer border-0 px-4 pb-4 pt-2 gap-2 flex-nowrap">
+            <button type="button" class="btn btn-soft flex-fill" data-bs-dismiss="modal">ยกเลิก</button>
+            <button type="button" class="btn btn-yellow flex-fill" id="btnSaveEdit" onclick="saveEditFocus()" style="border-radius:14px; padding:12px 22px; font-size:1rem;">บันทึกการแก้ไข</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🔢 Sheet กรอกจำนวนงานโฟกัส -->
+    <div class="qty-overlay" id="qtyOverlay" onclick="if (event.target === this) qtyCancel()">
+      <div class="qty-box">
+        <div class="grabber"></div>
+        <div class="font-mono-title fw-bold" id="qtyTitle" style="font-size:1.25rem">SANDISK</div>
+        <div class="text-secondary small fw-bold">ระบุจำนวนที่ขายได้</div>
+        <div class="qty-stepper">
+          <button type="button" onclick="qtyStep(-1)">−</button>
+          <input type="number" id="qtyInput" min="1" value="1" inputmode="numeric">
+          <button type="button" onclick="qtyStep(1)">+</button>
+        </div>
+        <div class="qty-quick">
+          <button type="button" onclick="qtySet(1)">1</button>
+          <button type="button" onclick="qtySet(2)">2</button>
+          <button type="button" onclick="qtySet(3)">3</button>
+          <button type="button" onclick="qtySet(5)">5</button>
+        </div>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-soft flex-fill" style="padding:14px;" onclick="qtyCancel()">ยกเลิก</button>
+          <button type="button" class="btn btn-yellow flex-fill" style="border-radius:14px; padding:14px; font-size:1rem;" onclick="qtyConfirm()">ตกลง</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🎴 Pokémon-style Rarity Card Overlay (built dynamically) -->
+    <div id="pkmOverlayRoot"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let brandChartInstance = null;
+      var todayItems = [];
+
+      window.onload = function() {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        document.getElementById('selectFailedMonth').value = `${yyyy}-${mm}`;
+        document.getElementById('selectFailedDate').value = `${yyyy}-${mm}-${dd}`;
+
+        // 📊 Dashboard: ตั้งค่าวันที่เริ่มต้น = วันนี้
+        const dbDate = document.getElementById('dbDate');
+        dbDate.value = `${yyyy}-${mm}-${dd}`;
+        dbDate.max = `${yyyy}-${mm}-${dd}`;
+
+        initQtyCheckboxes();
+        initNavGlider();
+        initHaptics();
+        checkServerVersion();
+        const vtag = document.createElement('div');
+        vtag.className = 'version-tag';
+        vtag.innerText = 'SYSTEM 1326 · ' + APP_VERSION;
+        document.querySelector('.container').appendChild(vtag);
+        bindPhotoPicker('paper', 'paperCam', 'paperGallery', 'paperPicked');
+        bindPhotoPicker('edit', 'editPaperCam', 'editPaperGallery', 'editPicked');
+      };
+
+      const APP_VERSION = '2026-10-03-v8';
+
+      // =========================================================
+      // ✨ iOS UI HELPERS
+      // =========================================================
+
+      // แถบเมนูแบบ segmented: ไฮไลต์สีดำเลื่อนตามแท็บแบบสปริง
+      function moveNavGlider(targetBtn, instant) {
+        const shell = document.getElementById('navShell');
+        const glider = document.getElementById('navGlider');
+        const btn = targetBtn || shell.querySelector('.nav-link.active');
+        if (!btn) return;
+        const s = shell.getBoundingClientRect();
+        const r = btn.getBoundingClientRect();
+        if (instant) glider.style.transition = 'none';
+        glider.style.width = r.width + 'px';
+        glider.style.height = r.height + 'px';
+        glider.style.transform = 'translate(' + (r.left - s.left - shell.clientLeft) + 'px,' + (r.top - s.top - shell.clientTop) + 'px)';
+        if (instant) { void glider.offsetWidth; glider.style.transition = ''; }
+      }
+
+      function initNavGlider() {
+        moveNavGlider(null, true);
+        document.querySelectorAll('#pills-tab .nav-link').forEach(btn => {
+          btn.addEventListener('show.bs.tab', e => moveNavGlider(e.target));
+          btn.addEventListener('shown.bs.tab', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        });
+        window.addEventListener('resize', () => moveNavGlider(null, true));
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => moveNavGlider(null, true));
+      }
+
+      // สั่นเบา ๆ ตอนกดเลือก (Android) — iOS จะข้ามไปเอง
+      function tapFeedback() {
+        try { if (navigator.vibrate) navigator.vibrate(8); } catch (e) {}
+      }
+      function initHaptics() {
+        document.addEventListener('change', e => {
+          if (e.target && e.target.classList && e.target.classList.contains('btn-check')) tapFeedback();
+        });
+      }
+
+      // ตัวเลขวิ่งขึ้นนุ่ม ๆ
+      function animateNumber(el, to, opts) {
+        if (!el) return;
+        opts = opts || {};
+        const dec = opts.decimals || 0;
+        const target = Number(to) || 0;
+        const from = Number(el.dataset.val || 0);
+        const dur = opts.duration || 900;
+        const t0 = performance.now();
+        const fmt = n => (opts.prefix || '') + n.toLocaleString('th-TH', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (opts.suffix || '');
+        function step(now) {
+          const p = Math.min(1, (now - t0) / dur);
+          const eased = 1 - Math.pow(1 - p, 4);
+          el.textContent = fmt(from + (target - from) * eased);
+          if (p < 1) requestAnimationFrame(step); else el.dataset.val = target;
+        }
+        requestAnimationFrame(step);
+      }
+
+      // แจ้งเตือนแบบ iOS (แทน alert)
+      function showToast(msg, kind, ms) {
+        kind = kind || 'ok';
+        const root = document.getElementById('toastRoot');
+        const t = document.createElement('div');
+        t.className = 'ios-toast ' + kind;
+        const ico = { ok: '✓', error: '!', warn: '!', info: 'i' }[kind] || '✓';
+        t.innerHTML = '<span class="t-ico">' + ico + '</span><span class="t-msg">' + escapeHtml(msg) + '</span>';
+        root.appendChild(t);
+        requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('in')));
+        const close = () => {
+          if (t.dataset.closing) return;
+          t.dataset.closing = '1';
+          t.classList.remove('in');
+          t.classList.add('out');
+          setTimeout(() => t.remove(), 420);
+        };
+        t.addEventListener('click', close);
+        setTimeout(close, ms || (kind === 'error' ? 4500 : 2600));
+        if (kind === 'error' || kind === 'warn') tapFeedback();
+      }
+
+      function loadingHTML(text) {
+        return '<span class="loading-pill"><span class="spin"></span>' + escapeHtml(text) + '</span>';
+      }
+
+      function setBtnLoading(btn, text, light) {
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spin' + (light ? ' light' : '') + '"></span>' + escapeHtml(text);
+      }
+      function resetBtn(btn, text) {
+        btn.disabled = false;
+        btn.innerText = text;
+      }
+
+      // เช็คเวอร์ชันแบบเงียบ ๆ: แจ้งเฉพาะใน Console (F12) ไม่แสดงบนหน้าจอพนักงาน
+      function checkServerVersion() {
+        google.script.run
+          .withSuccessHandler(function(v) {
+            if (v !== APP_VERSION) console.warn('Code.gs version ' + v + ' / Index.html version ' + APP_VERSION);
+          })
+          .withFailureHandler(function(err) { console.warn('getAppVersion failed', err); })
+          .getAppVersion();
+      }
+
+      // ตั้งเวลา ถ้าเซิร์ฟเวอร์ไม่ตอบภายในเวลาที่กำหนด ให้แจ้งบนจอ
+      function withTimeout(where, targetIds, ms) {
+        let done = false;
+        setTimeout(function() {
+          if (!done) showLoadError(where, 'เซิร์ฟเวอร์ไม่ตอบกลับภายใน ' + Math.round(ms / 1000) + ' วินาที', targetIds);
+        }, ms);
+        return function() { done = true; };
+      }
+
+      // แสดง error จริงบนหน้าจอ แทนที่จะค้าง "กำลังโหลด"
+      function showLoadError(where, err, targetIds) {
+        const msg = (err && err.message) ? err.message : String(err);
+        console.error(where, err);
+        const html = `<div class="small fw-bold py-3 text-center w-100" style="color:#FF453A">⚠️ โหลดข้อมูลไม่สำเร็จ (${escapeHtml(where)})<br><span style="font-weight:500">${escapeHtml(msg)}</span></div>`;
+        (targetIds || []).forEach(id => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.innerHTML = el.tagName === 'TBODY' ? `<tr><td colspan="6">${html}</td></tr>` : html;
+        });
+      }
+
+      function safeHandler(where, fn, targetIds) {
+        return function(res) {
+          try { fn(res); } catch (e) { showLoadError(where, e, targetIds); }
+        };
+      }
+
+      // หมายเหตุ: ห้ามพิมพ์รหัส HTML entity ตรง ๆ ในสคริปต์ เพราะ Apps Script จะแปลงก่อนส่งให้เบราว์เซอร์
+      const ENT = { 38: 'amp', 60: 'lt', 62: 'gt', 34: 'quot', 39: '#39' };
+      function escapeHtml(s) {
+        const t = String(s == null ? '' : s);
+        let out = '';
+        for (let i = 0; i < t.length; i++) {
+          const code = t.charCodeAt(i);
+          out += ENT[code] ? ('&' + ENT[code] + ';') : t.charAt(i);
+        }
+        return out;
+      }
+
+      // =========================================================
+      // 📷 เลือกรูป: ถ่ายรูป หรือ อัปโหลดจากคลังรูป
+      // =========================================================
+      const pickedPhotos = { paper: null, edit: null };
+
+      function bindPhotoPicker(key, camId, galleryId, previewId) {
+        [camId, galleryId].forEach(id => {
+          const input = document.getElementById(id);
+          if (!input) return;
+          input.addEventListener('change', (e) => {
+            const f = e.target.files && e.target.files[0];
+            if (!f) return;
+            pickedPhotos[key] = f;
+            showPickedPhoto(key, previewId);
+            e.target.value = ''; // เคลียร์ เพื่อให้เลือกรูปเดิมซ้ำได้
+          });
+        });
+      }
+
+      function showPickedPhoto(key, previewId) {
+        const f = pickedPhotos[key];
+        const el = document.getElementById(previewId);
+        if (!el) return;
+        if (!f) { el.style.display = 'none'; el.innerHTML = ''; return; }
+        const url = URL.createObjectURL(f);
+        el.innerHTML = `
+          <img src="${url}" alt="preview">
+          <div class="flex-grow-1 text-start" style="min-width:0">
+            <div class="fw-bold" style="color:#34C759">✓ เลือกรูปแล้ว</div>
+            <small class="text-secondary d-block text-truncate">${escapeHtml(f.name || 'photo.jpg')}</small>
+          </div>
+          <button type="button" class="act-btn act-del" onclick="clearPickedPhoto('${key}', '${previewId}')">ลบ</button>
+        `;
+        el.style.display = 'flex';
+        el.style.animation = 'none';
+        void el.offsetWidth;
+        el.style.animation = '';
+      }
+
+      function clearPickedPhoto(key, previewId) {
+        pickedPhotos[key] = null;
+        showPickedPhoto(key, previewId);
+      }
+
+      // =========================================================
+      // 🔢 งานโฟกัสที่ต้องกรอกจำนวน
+      // =========================================================
+      const QTY_FOCUS_ITEMS = ['SANDISK', 'FILM BRIGHT', 'FILM PVL', 'SOCIAL CARE', 'APPLE PENCIL'];
+      let qtyTargetChk = null;
+
+      function isQtyItem(value) {
+        return QTY_FOCUS_ITEMS.includes(String(value || '').toUpperCase());
+      }
+
+      // "SANDISK x2" -> { name: 'SANDISK', qty: 2 }
+      function parseFocusItem(s) {
+        const t = String(s || '').trim();
+        const m = t.match(/^(.*?)\s+[x×]\s*(\d+)$/i);
+        if (m) return { name: m[1].trim().toUpperCase(), qty: Number(m[2]) || 1 };
+        return { name: t.toUpperCase(), qty: 1 };
+      }
+
+      function initQtyCheckboxes() {
+        document.querySelectorAll('input[name="focusCheck"], .edit-focus-chk').forEach(chk => {
+          if (!isQtyItem(chk.value)) return;
+          chk.dataset.qty = '';
+          refreshQtyLabel(chk);
+          chk.addEventListener('change', () => {
+            if (chk.checked) {
+              openQtyPopup(chk);
+            } else {
+              chk.dataset.qty = '';
+              refreshQtyLabel(chk);
+            }
+          });
+        });
+      }
+
+      function refreshQtyLabel(chk) {
+        const lbl = document.querySelector(`label[for="${chk.id}"]`);
+        if (!lbl) return;
+        const q = Number(chk.dataset.qty) || 0;
+        lbl.innerHTML = escapeHtml(chk.value) +
+          (chk.checked && q ? ` <span class="qty-badge">×${q}</span>` : ' <span class="qty-mark">🔢</span>');
+      }
+
+      function refreshAllQtyLabels(selector) {
+        document.querySelectorAll(selector).forEach(chk => {
+          if (isQtyItem(chk.value)) refreshQtyLabel(chk);
+        });
+      }
+
+      function resetQtyChecks(selector) {
+        document.querySelectorAll(selector).forEach(chk => {
+          if (isQtyItem(chk.value)) chk.dataset.qty = '';
+        });
+        refreshAllQtyLabels(selector);
+      }
+
+      function openQtyPopup(chk) {
+        qtyTargetChk = chk;
+        document.getElementById('qtyTitle').innerText = chk.value;
+        const input = document.getElementById('qtyInput');
+        input.value = Number(chk.dataset.qty) || 1;
+        document.getElementById('qtyOverlay').classList.add('open');
+        setTimeout(() => input.select(), 80);
+      }
+
+      function closeQtyPopup() {
+        document.getElementById('qtyOverlay').classList.remove('open');
+        qtyTargetChk = null;
+      }
+
+      function bumpQty() {
+        const input = document.getElementById('qtyInput');
+        input.classList.remove('bump');
+        void input.offsetWidth;
+        input.classList.add('bump');
+        tapFeedback();
+      }
+
+      function qtyStep(d) {
+        const input = document.getElementById('qtyInput');
+        input.value = Math.max(1, (parseInt(input.value, 10) || 1) + d);
+        bumpQty();
+      }
+
+      function qtySet(n) {
+        document.getElementById('qtyInput').value = n;
+        bumpQty();
+      }
+
+      function qtyConfirm() {
+        if (!qtyTargetChk) return closeQtyPopup();
+        let q = parseInt(document.getElementById('qtyInput').value, 10);
+        if (!(q >= 1)) q = 1;
+        qtyTargetChk.dataset.qty = q;
+        refreshQtyLabel(qtyTargetChk);
+        closeQtyPopup();
+      }
+
+      function qtyCancel() {
+        if (qtyTargetChk) {
+          qtyTargetChk.checked = false;
+          qtyTargetChk.dataset.qty = '';
+          refreshQtyLabel(qtyTargetChk);
+        }
+        closeQtyPopup();
+      }
+
+      document.getElementById('qtyInput').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); qtyConfirm(); }
+      });
+
+      // รวบรวมงานโฟกัสที่เลือก -> ["SIM", "SANDISK x2", "FILM BRIGHT"]
+      function collectFocus(selector) {
+        const list = [];
+        document.querySelectorAll(selector).forEach(chk => {
+          if (!chk.checked) return;
+          const q = Number(chk.dataset.qty) || 1;
+          list.push(isQtyItem(chk.value) && q > 1 ? `${chk.value} x${q}` : chk.value);
+        });
+        return list;
+      }
+
+      function compressAndBase64(file, maxWidth = 1024, quality = 0.7) {
+        return new Promise((resolve, reject) => {
+          if (!file) { resolve(''); return; }
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = () => {
+              let width = img.width;
+              let height = img.height;
+              if (width > maxWidth) {
+                height = Math.round((height * maxWidth) / width);
+                width = maxWidth;
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = (error) => reject(error);
+          };
+          reader.onerror = (error) => reject(error);
+        });
+      }
+
+      function stampImageAndBase64(file, modelName, brand, focusList) {
+        return new Promise((resolve, reject) => {
+          if (!file) { resolve(''); return; }
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = (event) => {
+            const img = new Image();
+            img.src = event.target.result;
+            img.onload = async () => {
+              await document.fonts.ready;
+
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+
+              let width = img.width;
+              let height = img.height;
+              const MAX_WIDTH = 1200;
+              if (width > MAX_WIDTH) {
+                height = Math.round((height * MAX_WIDTH) / width);
+                width = MAX_WIDTH;
+              }
+              canvas.width = width;
+              canvas.height = height;
+
+              ctx.drawImage(img, 0, 0, width, height);
+
+              const baseFontSize = Math.max(14, Math.floor(width * 0.018));
+              const paddingX = baseFontSize * 2.2;
+              const paddingY = baseFontSize * 2.2;
+              const lineSpacing = baseFontSize * 1.5;
+
+              const fontTitle = `700 ${baseFontSize * 1.1}px 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif`;
+              const fontSubtitle = `600 ${baseFontSize * 0.85}px 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif`;
+              const fontNormal = `600 ${baseFontSize}px 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif`;
+              const fontBold = `700 ${baseFontSize}px 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif`;
+
+              const colorYellow = "#FFD600";
+              const colorWhite = "#FFFFFF";
+              const colorGray = "#CCCCCC";
+
+              const texts = [
+                { text: `ID1326 BN FUTURE PARK RANGSIT 2.2`, font: fontTitle, color: colorYellow },
+                { text: `แนะนำบริการเสริม และ สิทธิ์แลกซื้อให้แก่ลูกค้าแล้วครับ`, font: fontSubtitle, color: colorGray },
+                { text: `รุ่น: ${modelName}`, font: fontBold, color: colorWhite }
+              ];
+
+              if (focusList.length > 0) {
+                texts.push({ text: " ", font: fontNormal, color: "transparent", isSpace: true });
+                texts.push({ text: `งานโฟกัสที่ได้:`, font: fontBold, color: colorWhite });
+                focusList.forEach(item => {
+                  texts.push({ text: `  ✅ ${item}`, font: fontNormal, color: colorWhite });
+                });
+              }
+
+              let maxTextWidth = 0;
+              texts.forEach(t => {
+                ctx.font = t.font;
+                let w = ctx.measureText(t.text).width;
+                if (w > maxTextWidth) maxTextWidth = w;
+              });
+
+              const boxWidth = maxTextWidth + (paddingX * 2);
+
+              let boxHeight = (texts.length * lineSpacing) + (paddingY * 1.8);
+              texts.forEach(t => {
+                if (t.isSpace) boxHeight -= (lineSpacing * 0.5);
+              });
+
+              const startX = paddingX;
+              const startY = height - boxHeight - paddingY;
+
+              ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+              ctx.shadowBlur = 20;
+              ctx.shadowOffsetX = 0;
+              ctx.shadowOffsetY = 10;
+
+              ctx.fillStyle = 'rgba(28, 28, 30, 0.9)';
+              ctx.beginPath();
+              const borderRadius = baseFontSize * 1.8;
+              if (ctx.roundRect) {
+                ctx.roundRect(startX, startY, boxWidth, boxHeight, borderRadius);
+              } else {
+                ctx.fillRect(startX, startY, boxWidth, boxHeight);
+              }
+              ctx.fill();
+
+              ctx.shadowColor = 'transparent';
+              ctx.textBaseline = 'top';
+              let currentY = startY + paddingY;
+
+              texts.forEach((item) => {
+                ctx.font = item.font;
+                ctx.fillStyle = item.color;
+                if (item.isSpace) {
+                  currentY += (lineSpacing * 0.5);
+                } else {
+                  ctx.fillText(item.text, startX + paddingX, currentY);
+                  currentY += lineSpacing;
+                }
+              });
+
+              resolve(canvas.toDataURL('image/jpeg', 0.85));
+            };
+            img.onerror = (error) => reject(error);
+          };
+          reader.onerror = (error) => reject(error);
+        });
+      }
+
+      async function handleSalesSubmit(e) {
+        e.preventDefault();
+
+        var paperFile = pickedPhotos.paper;
+        if (!paperFile) {
+          showToast('กรุณาถ่ายรูป หรือเลือกรูปเช็คลิสต์ก่อนบันทึก', 'warn');
+          return;
+        }
+
+        var btn = document.getElementById('btnSubmitSales');
+        setBtnLoading(btn, 'กำลังบันทึก...');
+
+        document.getElementById('previewContainer').style.display = 'none';
+
+        try {
+          var empName = document.getElementById('empName').value;
+          var modelName = document.getElementById('modelName').value.trim();
+          var price = document.getElementById('price').value;
+
+          var brandEl = document.querySelector('input[name="brand"]:checked');
+          var brand = brandEl ? brandEl.value : '';
+
+          var receiverEl = document.querySelector('input[name="caseReceiver"]:checked');
+          var caseReceiver = receiverEl ? receiverEl.value : '';
+
+          // 📦 ต่อท้ายประเภทสินค้า เช่น "iPad A16, iPad"
+          var deviceEl = document.querySelector('input[name="deviceType"]:checked');
+          var deviceType = deviceEl ? deviceEl.value : '';
+          var finalModel = deviceType ? (modelName + ', ' + deviceType) : modelName;
+
+          var focusList = collectFocus('input[name="focusCheck"]');
+          var focusWork = focusList.length > 0 ? focusList.join(', ') : 'ไม่มี';
+
+          var paperBase64 = await stampImageAndBase64(paperFile, finalModel, brand, focusList);
+
+          document.getElementById('stampedPreview').src = paperBase64;
+          document.getElementById('previewContainer').style.display = 'block';
+
+          var payload = {
+            empName: empName,
+            modelName: finalModel,
+            price: price,
+            brand: brand,
+            focusWork: focusWork,
+            paperBase64: paperBase64,
+            caseReceiver: caseReceiver
+          };
+
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (res.status === 'success') {
+                document.getElementById('salesForm').reset();
+                resetQtyChecks('input[name="focusCheck"]');
+                clearPickedPhoto('paper', 'paperPicked');
+                showToast('บันทึกข้อมูลการขายเรียบร้อย');
+                document.getElementById('previewContainer').scrollIntoView({ behavior: 'smooth' });
+                // 🎴 เปิดการ์ดสุ่มระดับตามงานโฟกัสที่ขายได้
+                openPokemonCard({
+                  imageUrl: paperBase64,
+                  modelName: finalModel,
+                  empName: empName,
+                  focusList: focusList,
+                  downloadUrl: paperBase64,
+                  downloadName: 'Sale_' + finalModel.replace(/[\s,]+/g,'_') + '.jpg'
+                });
+              } else {
+                showToast('ERROR: ' + res.message, 'error');
+              }
+              resetBtn(btn, 'บันทึกข้อมูลการขาย');
+            })
+            .withFailureHandler(function(err) {
+              showToast('ส่งข้อมูลไม่สำเร็จ: ' + err.message, 'error');
+              resetBtn(btn, 'บันทึกข้อมูลการขาย');
+            })
+            .saveSaleData(payload);
+
+        } catch (err) {
+          showToast('ERROR: ' + err.message, 'error');
+          resetBtn(btn, 'บันทึกข้อมูลการขาย');
+        }
+      }
+
+      async function handleFailSubmit(e) {
+        e.preventDefault();
+
+        var btn = document.getElementById('btnSubmitFail');
+        setBtnLoading(btn, 'กำลังบันทึกข้อมูล...', true);
+
+        try {
+          var empNameFailed = document.getElementById('empNameFailed').value;
+
+          var brandEl = document.querySelector('input[name="brandFailed"]:checked');
+          var brandFailed = brandEl ? brandEl.value : '';
+
+          var simFile = document.getElementById('simImg').files[0];
+          var ufundFile = document.getElementById('ufundImg').files[0];
+          var sfFile = document.getElementById('sfImg').files[0];
+
+          var simBase64 = simFile ? await compressAndBase64(simFile) : '';
+          let ufundBase64 = ufundFile ? await compressAndBase64(ufundFile) : '';
+          let sfBase64 = sfFile ? await compressAndBase64(sfFile) : '';
+
+          if (brandFailed === 'SAMSUNG') {
+            if (ufundBase64 && !sfBase64) {
+              sfBase64 = ufundBase64;
+              ufundBase64 = '';
+            } else if (ufundBase64 && sfBase64) {
+              ufundBase64 = '';
+            }
+          } else {
+            if (sfBase64 && !ufundBase64) {
+              ufundBase64 = sfBase64;
+              sfBase64 = '';
+            } else if (ufundBase64 && sfBase64) {
+              sfBase64 = '';
+            }
+          }
+
+          var payload = {
+            empNameFailed: empNameFailed,
+            brandFailed: brandFailed,
+            simBase64: simBase64,
+            ufundBase64: ufundBase64,
+            sfBase64: sfBase64
+          };
+
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (res.status === 'success') {
+                showToast(res.message);
+                document.getElementById('failForm').reset();
+              } else {
+                showToast('เกิดข้อผิดพลาด: ' + res.message, 'error');
+              }
+              resetBtn(btn, 'บันทึกหลักฐานงานไม่ผ่าน');
+            })
+            .withFailureHandler(function(err) {
+              showToast('การส่งข้อมูลล้มเหลว: ' + err.message, 'error');
+              resetBtn(btn, 'บันทึกหลักฐานงานไม่ผ่าน');
+            })
+            .saveFailedData(payload);
+
+        } catch (err) {
+          showToast('ERROR: ' + err.message, 'error');
+          resetBtn(btn, 'บันทึกหลักฐานงานไม่ผ่าน');
+        }
+      }
+
+      function openEditFromIndex(i) {
+        const it = todayItems[i];
+        if (!it) return;
+        openEditModal(it.rowIdx, it.model, it.focus, it.brand);
+      }
+
+      function openEditModal(rowIdx, modelName, currentFocus, brand) {
+        document.getElementById('editRowIdx').value = rowIdx;
+        document.getElementById('editBrand').value = brand;
+        document.getElementById('editModelName').innerText = modelName;
+
+        clearPickedPhoto('edit', 'editPicked');
+        document.getElementById('editPreviewContainer').style.display = 'none';
+
+        const items = (currentFocus && currentFocus !== 'ไม่มี' && currentFocus !== '-')
+          ? currentFocus.split(',').map(parseFocusItem).filter(it => it.name)
+          : [];
+
+        document.querySelectorAll('.edit-focus-chk').forEach(chk => {
+          const found = items.find(it => it.name === chk.value.toUpperCase());
+          chk.checked = !!found;
+          if (isQtyItem(chk.value)) chk.dataset.qty = found ? found.qty : '';
+        });
+        refreshAllQtyLabels('.edit-focus-chk');
+
+        var editModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('editFocusModal'));
+        editModal.show();
+      }
+
+      async function saveEditFocus() {
+        var rowIdx = document.getElementById('editRowIdx').value;
+        var brand = document.getElementById('editBrand').value;
+        var modelName = document.getElementById('editModelName').innerText;
+        var btn = document.getElementById('btnSaveEdit');
+
+        var selected = collectFocus('.edit-focus-chk');
+        var newFocus = selected.length > 0 ? selected.join(', ') : 'ไม่มี';
+
+        var file = pickedPhotos.edit;
+
+        setBtnLoading(btn, 'กำลังบันทึก...');
+
+        let base64Data = null;
+        if (file) {
+          base64Data = await stampImageAndBase64(file, modelName, brand, selected);
+          document.getElementById('editStampedPreview').src = base64Data;
+          document.getElementById('editPreviewContainer').style.display = 'block';
+        }
+
+        google.script.run
+          .withSuccessHandler(function(res) {
+            resetBtn(btn, 'บันทึกการแก้ไข');
+            if (res.status === 'success') {
+              bootstrap.Modal.getInstance(document.getElementById('editFocusModal')).hide();
+              showToast('อัปเดตงานโฟกัสเรียบร้อย');
+              if (file) {
+                openPokemonCard({
+                  imageUrl: base64Data,
+                  modelName: modelName,
+                  empName: '',
+                  focusList: selected,
+                  downloadUrl: base64Data,
+                  downloadName: 'EditSale_' + modelName.replace(/[\s,]+/g,'_') + '.jpg'
+                });
+              }
+              loadDashboard();
+            } else {
+              showToast('ERROR: ' + res.message, 'error');
+            }
+          })
+          .withFailureHandler(function(err) {
+            resetBtn(btn, 'บันทึกการแก้ไข');
+            showToast('FAILED: ' + err.message, 'error');
+          })
+          .updateSaleRecord(rowIdx, newFocus, base64Data, modelName);
+      }
+
+      function confirmDelete(rowIdx) {
+        var pass = prompt("⚠️ ต้องการลบข้อมูลนี้ใช่หรือไม่?\n\nกรุณากรอกรหัสผ่านเพื่อยืนยันการลบ:");
+        if (pass === null) return;
+
+        if (pass === "15628") {
+          google.script.run
+            .withSuccessHandler(function(res) {
+              if (res.status === 'success') {
+                showToast(res.message);
+                loadDashboard();
+              } else {
+                showToast("เกิดข้อผิดพลาด: " + res.message, 'error');
+              }
+            })
+            .withFailureHandler(function(err) { showToast('ลบไม่สำเร็จ: ' + err.message, 'error'); })
+            .deleteSaleRecord(rowIdx);
+        } else {
+          showToast("รหัสผ่านไม่ถูกต้อง ไม่สามารถลบข้อมูลได้", 'error');
+        }
+      }
+
+      // =========================================================
+      // 📊 DASHBOARD v8 — ดูย้อนหลังได้ / แตะเพื่อกรอง / แตะเพื่อดูรายละเอียด
+      // ทุกตัวเลขคำนวณจากรายการขายของวันที่เลือก
+      //   % ปิดงานโฟกัส = จำนวนงานโฟกัสที่ปิดได้ ÷ จำนวนงานโฟกัสที่เป็นเป้าของทุกเครื่อง
+      //   % ของแต่ละงาน = เครื่องที่ปิดได้ ÷ เครื่องที่งานนั้นเป็นเป้า (APPLE / แบรนด์อื่น ใช้เป้าคนละชุด)
+      // =========================================================
+      var dash = {
+        date: '',
+        rows: [],
+        prev: null,
+        targets: { APPLE: [], DEFAULT: [] },
+        f: { brand: '', emp: '', device: '', receiver: '' },
+        q: ''
+      };
+      let hourChartInstance = null;
+      let dashLastFocus = null;
+
+      const FOCUS_ORDER = ['SIM', 'FILM BRIGHT', 'FILM PVL', 'SANDISK', 'ULTRA CARE+', '7CARE+', 'SOCIAL CARE', 'U-FUND', 'U-FUND STUDENT', 'APPLE PENCIL'];
+      const FOCUS_SHORT = { 'SIM': 'SIM', 'FILM BRIGHT': 'BRIGHT', 'FILM PVL': 'PVL', 'SANDISK': 'SANDISK', 'ULTRA CARE+': 'ULTRA+', '7CARE+': '7CARE+', 'SOCIAL CARE': 'SOCIAL', 'U-FUND': 'U-FUND' };
+      const DEVICE_META = [
+        { key: 'SMARTPHONE', label: 'SMARTPHONE', ico: '📱' },
+        { key: 'TABLET', label: 'TABLET', ico: '📟' },
+        { key: 'IPAD', label: 'iPad', ico: '🍎' },
+        { key: 'APPLE WATCH', label: 'WATCH', ico: '⌚' }
+      ];
+      const FILTER_ICON = { brand: '🏷️', emp: '👤', device: '📦', receiver: '🙋' };
+      const BRAND_COLOR_MAP = {
+        'APPLE': '#E5E5EA', 'SAMSUNG': '#0A84FF', 'OPPO': '#30D158', 'VIVO / IQOO': '#64D2FF',
+        'REALME': '#FFD60A', 'XIAOMI': '#FF9F0A', 'INFINIX': '#BF5AF2', 'HONOR': '#5E5CE6',
+        'TCL': '#FF375F', 'ZTE': '#AC8E68', 'NOTHING': '#8E8E93', 'ALLDOCUBE': '#66D4CF'
+      };
+      const FALLBACK_COLORS = ['#FFD600', '#FF6961', '#7D7AFF', '#63E6E2', '#A2845E'];
+
+      function brandColor(b, i) { return BRAND_COLOR_MAP[b] || FALLBACK_COLORS[(i || 0) % FALLBACK_COLORS.length]; }
+      function deviceLabel(k) { const d = DEVICE_META.find(x => x.key === k); return d ? d.label : k; }
+      function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+      function shiftYmd(s, n) { const p = s.split('-').map(Number); return ymd(new Date(p[0], p[1] - 1, p[2] + n)); }
+      function baht(n) { return '฿' + Math.round(Number(n) || 0).toLocaleString('th-TH'); }
+      function pct(a, b) { return b > 0 ? (a / b) * 100 : 0; }
+      function pctTone(p) { return p >= 70 ? '48,209,88' : (p >= 40 ? '255,214,10' : '255,69,58'); }
+      function pctColor(p) { return 'rgb(' + pctTone(p) + ')'; }
+      function pctColorOnLight(p) { return p >= 70 ? '#248A3D' : (p >= 40 ? '#B25000' : '#D70015'); }
+      function anyFilter() { return Object.keys(dash.f).some(k => dash.f[k]); }
+      function focusIdx(n) { const i = FOCUS_ORDER.indexOf(n); return i === -1 ? 99 : i; }
+      function emptyNote(t) { return '<div class="empty-note">' + escapeHtml(t) + '</div>'; }
+
+      // ---------- โหลดข้อมูล ----------
+      function dbShiftDate(n) {
+        const input = document.getElementById('dbDate');
+        const today = ymd(new Date());
+        let next = shiftYmd(input.value || today, n);
+        if (next > today) next = today;
+        input.value = next;
+        loadDashboard();
+      }
+
+      function updateDateUI() {
+        const today = ymd(new Date());
+        let txt;
+        if (dash.date === today) txt = 'วันนี้';
+        else if (dash.date === shiftYmd(today, -1)) txt = 'เมื่อวาน';
+        else {
+          const p = dash.date.split('-').map(Number);
+          txt = new Date(p[0], p[1] - 1, p[2]).toLocaleDateString('th-TH', { weekday: 'long' });
+        }
+        document.getElementById('dbDateLabel').textContent = txt;
+        document.getElementById('dbNextBtn').disabled = dash.date >= today;
+      }
+
+      function loadDashboard() {
+        const input = document.getElementById('dbDate');
+        if (!input.value) input.value = ymd(new Date());
+        dash.date = input.value;
+        updateDateUI();
+
+        const refreshBtn = document.getElementById('dbRefresh');
+        refreshBtn.classList.add('loading');
+        const ids = ['dbHero', 'dbFocusGrid', 'dbSalesList'];
+        const done = withTimeout('getDashboardData', ids, 25000);
+        const requested = dash.date;
+
+        google.script.run
+          .withSuccessHandler(safeHandler('getDashboardData', function(res) {
+            done();
+            refreshBtn.classList.remove('loading');
+            if (requested !== dash.date) return; // ผู้ใช้เปลี่ยนวันระหว่างโหลด
+            if (!res || res.status !== 'success') {
+              showLoadError('getDashboardData', (res && res.message) || 'เซิร์ฟเวอร์ไม่ได้ส่งข้อมูลกลับมา (ลอง Deploy Code.gs เวอร์ชันใหม่)', ids);
+              return;
+            }
+            if (res.targets) dash.targets = res.targets;
+            dash.prev = res.prev || null;
+            dash.rows = (res.rows || []).map(enrichRow);
+            todayItems = dash.rows;
+            renderDash();
+          }, ids))
+          .withFailureHandler(function(err) {
+            done();
+            refreshBtn.classList.remove('loading');
+            showLoadError('getDashboardData', err, ids);
+          })
+          .getDashboardData(dash.date);
+      }
+
+      // เตรียมข้อมูลแต่ละเครื่อง: ปิดอะไรได้ / ขาดอะไร / นอกเป้า
+      function enrichRow(r, i) {
+        r.i = i;
+        r.emp = r.emp || 'ไม่ระบุ';
+        const f = String(r.focus || '').trim();
+        r.items = (f && f !== 'ไม่มี' && f !== '-')
+          ? f.split(',').map(parseFocusItem).filter(it => it.name && it.name !== 'ไม่มี')
+          : [];
+        r.names = r.items.map(it => it.name);
+        r.targets = (r.brand === 'APPLE' ? dash.targets.APPLE : dash.targets.DEFAULT) || [];
+        r.hit = r.targets.filter(t => r.names.indexOf(t) !== -1);
+        r.miss = r.targets.filter(t => r.names.indexOf(t) === -1);
+        r.bonus = r.names.filter(n => r.targets.indexOf(n) === -1);
+        r.cov = r.targets.length ? Math.round(pct(r.hit.length, r.targets.length)) : 0;
+        return r;
+      }
+
+      // กรองตามตัวกรองที่เลือก (except = ไม่ใช้ตัวกรองนี้ เพื่อให้กดสลับตัวเลือกในหมวดเดียวกันได้)
+      function dashRows(except) {
+        const f = dash.f;
+        return dash.rows.filter(r => ['brand', 'emp', 'device', 'receiver'].every(k => k === except || !f[k] || r[k] === f[k]));
+      }
+
+      function toggleFilter(key, val) {
+        dash.f[key] = (!val || dash.f[key] === val) ? '' : val;
+        tapFeedback();
+        renderDash();
+      }
+      function clearFilters() {
+        Object.keys(dash.f).forEach(k => dash.f[k] = '');
+        tapFeedback();
+        renderDash();
+      }
+
+      function computeStats(rows) {
+        const st = { units: 0, revenue: 0, opp: 0, hit: 0, focusTypes: 0, focus: {}, brand: {}, emp: {}, receiver: {}, device: {}, hours: {}, hoursRev: {} };
+        const F = n => st.focus[n] || (st.focus[n] = { name: n, eligible: 0, hit: 0, qty: 0, devices: 0 });
+        const G = (obj, k) => obj[k] || (obj[k] = { key: k, units: 0, revenue: 0, opp: 0, hit: 0 });
+        DEVICE_META.forEach(d => G(st.device, d.key));
+
+        rows.forEach(r => {
+          st.units++;
+          st.revenue += r.price;
+          st.opp += r.targets.length;
+          st.hit += r.hit.length;
+          st.focusTypes += r.names.length;
+
+          r.targets.forEach(t => { const f = F(t); f.eligible++; if (r.hit.indexOf(t) !== -1) f.hit++; });
+          r.items.forEach(it => { const f = F(it.name); f.qty += it.qty; f.devices++; });
+
+          [[st.brand, r.brand], [st.emp, r.emp], [st.device, r.device]].forEach(pair => {
+            const g = G(pair[0], pair[1]);
+            g.units++; g.revenue += r.price; g.opp += r.targets.length; g.hit += r.hit.length;
+          });
+          if (r.receiver) { const g = G(st.receiver, r.receiver); g.units++; g.revenue += r.price; }
+
+          st.hours[r.hour] = (st.hours[r.hour] || 0) + 1;
+          st.hoursRev[r.hour] = (st.hoursRev[r.hour] || 0) + r.price;
+        });
+        return st;
+      }
+
+      // ให้หลอด/วงแหวนวิ่งหลังใส่ HTML
+      function kickAnimations(root) {
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          root.querySelectorAll('[data-w]').forEach(b => { b.style.width = b.dataset.w + '%'; });
+          root.querySelectorAll('[data-off]').forEach(c => { c.style.strokeDashoffset = c.dataset.off; });
+        }));
+      }
+
+      // =========================================================
+      // 🖥️ โหมดแนวนอน
+      // =========================================================
+      const LAND_MQ = window.matchMedia('(orientation: landscape) and (min-width: 1100px) and (min-height: 560px)');
+
+      function activeTabTarget() {
+        const a = document.querySelector('#pills-tab .nav-link.active');
+        return a ? a.getAttribute('data-bs-target') : '';
+      }
+
+      function applyLandMode() {
+        const on = LAND_MQ.matches;
+        const tab = activeTabTarget();
+        const wasDash = document.body.classList.contains('land-dash');
+        document.body.classList.toggle('land-dash', on && tab === '#pills-dash');
+        document.body.classList.toggle('land-wide', on && tab === '#pills-fail-summary');
+        if (document.body.classList.contains('land-dash') && !wasDash) window.scrollTo(0, 0);
+        sizeDashLand();
+        moveNavGlider(null, true);
+      }
+
+      // ความสูงของ 4 คอลัมน์ = พอดีกับจอที่เหลือ (ทั้งหน้าไม่ต้องเลื่อน)
+      function sizeDashLand() {
+        const cols = document.querySelector('.db-cols');
+        if (!cols) return;
+        if (!document.body.classList.contains('land-dash')) { cols.style.height = ''; return; }
+        const top = cols.getBoundingClientRect().top;
+        cols.style.height = Math.max(380, Math.floor(window.innerHeight - top - 14)) + 'px';
+      }
+
+      (function initLandMode() {
+        if (LAND_MQ.addEventListener) LAND_MQ.addEventListener('change', applyLandMode); else LAND_MQ.addListener(applyLandMode);
+        let t = null;
+        window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(applyLandMode, 120); });
+        document.querySelectorAll('#pills-tab .nav-link').forEach(btn => btn.addEventListener('shown.bs.tab', applyLandMode));
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyLandMode); else applyLandMode();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeDashLand);
+      })();
+
+      function renderDash() {
+        const rows = dashRows();
+        const st = computeStats(rows);
+        renderFilterBar();
+        renderHero(st);
+        renderDevices(computeStats(dashRows('device')));
+        renderFocusGrid(st);
+        renderHeatmap(rows);
+        renderLeaderboard(computeStats(dashRows('emp')));
+        renderBrands(computeStats(dashRows('brand')));
+        renderReceivers(computeStats(dashRows('receiver')));
+        renderHourChart(st);
+        renderSalesList(rows);
+        kickAnimations(document.getElementById('pills-dash'));
+        sizeDashLand();
+      }
+
+      // ---------- ตัวกรองที่เลือกอยู่ ----------
+      function renderFilterBar() {
+        const el = document.getElementById('dbFilters');
+        const keys = Object.keys(dash.f).filter(k => dash.f[k]);
+        if (!keys.length) { el.innerHTML = ''; el.style.display = 'none'; return; }
+        el.style.display = 'flex';
+        let h = keys.map(k => {
+          const v = k === 'device' ? deviceLabel(dash.f[k]) : dash.f[k];
+          return `<button type="button" class="db-fchip" data-f="${k}" onclick="toggleFilter(this.dataset.f, '')">${FILTER_ICON[k]} ${escapeHtml(v)} <span class="x">✕</span></button>`;
+        }).join('');
+        h += '<button type="button" class="db-fchip clear" onclick="clearFilters()">ล้างตัวกรองทั้งหมด</button>';
+        el.innerHTML = h;
+      }
+
+      // ---------- ภาพรวม ----------
+      function deltaChip(label, now, before, isMoney) {
+        const d = now - before;
+        const cls = d > 0 ? 'up' : (d < 0 ? 'down' : 'flat');
+        const arrow = d > 0 ? '▲' : (d < 0 ? '▼' : '•');
+        let txt;
+        if (isMoney && before > 0) txt = Math.abs(Math.round(d / before * 100)) + '%';
+        else txt = isMoney ? baht(Math.abs(d)) : (Math.abs(d) + ' เครื่อง');
+        return `<span class="db-delta ${cls}">${arrow} ${label} ${txt}</span>`;
+      }
+
+      function ringHTML(p, hit, opp) {
+        const c = 2 * Math.PI * 50;
+        const off = c * (1 - Math.min(100, p) / 100);
+        const col = pctColor(p);
+        return `<div class="db-ring">
+          <svg viewBox="0 0 120 120" width="124" height="124">
+            <circle class="ring-bg" cx="60" cy="60" r="50" fill="none" stroke-width="11"></circle>
+            <circle class="ring-fg" cx="60" cy="60" r="50" fill="none" stroke-width="11" stroke="${col}" style="color:${col}"
+              stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${c.toFixed(1)}" data-off="${off.toFixed(1)}"></circle>
+          </svg>
+          <div class="db-ring-c"><b style="color:${col}">${Math.round(p)}%</b><small>ปิดงานโฟกัส</small><small>${hit}/${opp} งาน</small></div>
+        </div>`;
+      }
+
+      function renderHero(st) {
+        const el = document.getElementById('dbHero');
+        const cov = pct(st.hit, st.opp);
+        const avg = st.units ? st.revenue / st.units : 0;
+        const perUnit = st.units ? (st.focusTypes / st.units) : 0;
+
+        let chips = '';
+        if (anyFilter()) {
+          chips = `<span class="db-delta flat">กรองอยู่ · ${st.units} จาก ${dash.rows.length} เครื่อง</span>`;
+        } else if (dash.prev) {
+          chips = deltaChip('ยอด', st.revenue, dash.prev.revenue, true) + ' ' + deltaChip('', st.units, dash.prev.units, false) +
+                  '<span class="db-sub ms-1">เทียบวันก่อน</span>';
+        }
+
+        el.innerHTML = `
+          <div class="db-hero">
+            <div style="min-width:0">
+              <div class="db-sub">💰 ยอดขายรวม</div>
+              <div class="db-big" id="dbRev">฿0</div>
+              <div class="d-flex flex-wrap align-items-center gap-1 mt-2">${chips}</div>
+            </div>
+            ${ringHTML(cov, st.hit, st.opp)}
+          </div>
+          <div class="db-mini">
+            <div><small>📱 จำนวนเครื่อง</small><b id="dbUnits">0</b></div>
+            <div><small>🧾 เฉลี่ย/เครื่อง</small><b id="dbAvg">฿0</b></div>
+            <div><small>🎯 งานโฟกัส/เครื่อง</small><b id="dbPerUnit">0</b></div>
+          </div>`;
+        animateNumber(document.getElementById('dbRev'), st.revenue, { prefix: '฿' });
+        animateNumber(document.getElementById('dbUnits'), st.units);
+        animateNumber(document.getElementById('dbAvg'), Math.round(avg), { prefix: '฿' });
+        animateNumber(document.getElementById('dbPerUnit'), perUnit, { decimals: 1 });
+      }
+
+      // ---------- ประเภทสินค้า ----------
+      function renderDevices(st) {
+        document.getElementById('dbDevices').innerHTML = DEVICE_META.map(d => {
+          const n = st.device[d.key].units;
+          return `<button type="button" class="${dash.f.device === d.key ? 'on' : ''}" data-k="${d.key}" onclick="toggleFilter('device', this.dataset.k)">
+            <span class="ic">${d.ico}</span><span class="n">${n}</span><span class="l">${d.label}</span></button>`;
+        }).join('');
+      }
+
+      // ---------- การ์ดงานโฟกัส ----------
+      function renderFocusGrid(st) {
+        const el = document.getElementById('dbFocusGrid');
+        if (!st.units) { el.innerHTML = emptyNote('ยังไม่มีรายการขายในวันที่เลือก'); return; }
+
+        const names = Object.keys(st.focus);
+        const targets = names.filter(n => st.focus[n].eligible > 0).sort((a, b) => focusIdx(a) - focusIdx(b));
+        const bonus = names.filter(n => st.focus[n].eligible === 0).sort((a, b) => focusIdx(a) - focusIdx(b));
+
+        // งานที่ % ต่ำสุด (และยังขาดอยู่) = ต้องเร่ง
+        let worst = '', worstP = 101;
+        targets.forEach(n => {
+          const f = st.focus[n];
+          const p = pct(f.hit, f.eligible);
+          if (f.hit < f.eligible && p < worstP) { worstP = p; worst = n; }
+        });
+
+        let h = '<div class="db-fgrid">';
+        targets.forEach((n, i) => {
+          const f = st.focus[n];
+          const p = pct(f.hit, f.eligible);
+          const miss = f.eligible - f.hit;
+          const col = pctColor(p);
+          h += `<button type="button" class="db-fcard" style="animation-delay:${i * 0.03}s" data-k="${escapeHtml(n)}" onclick="openFocusSheet(this.dataset.k)">
+            ${n === worst ? '<span class="tag">🔥 ต้องเร่ง</span>' : ''}
+            <div class="nm">${escapeHtml(n)}</div>
+            <div class="pc" style="color:${col}">${Math.round(p)}<small>%</small></div>
+            <div class="db-bar"><i data-w="${p.toFixed(1)}" style="background:${col}"></i></div>
+            <div class="meta">ปิด ${f.hit}/${f.eligible} ${miss ? `· <span class="miss">ขาด ${miss}</span>` : '· ครบ ✓'}</div>
+            <div class="qty">${f.qty} ชิ้น</div>
+          </button>`;
+        });
+        bonus.forEach((n, i) => {
+          const f = st.focus[n];
+          h += `<button type="button" class="db-fcard bonus" style="animation-delay:${(targets.length + i) * 0.03}s" data-k="${escapeHtml(n)}" onclick="openFocusSheet(this.dataset.k)">
+            <div class="nm">${escapeHtml(n)}</div>
+            <div class="pc" style="color:#64D2FF">${f.qty}<small> ชิ้น</small></div>
+            <div class="meta">${f.devices} เครื่อง · นอกเป้า / โบนัส</div>
+          </button>`;
+        });
+        h += '</div>';
+        el.innerHTML = h;
+      }
+
+      // ---------- Heatmap แบรนด์ x งานโฟกัส ----------
+      function renderHeatmap(rows) {
+        const el = document.getElementById('dbHeat');
+        if (!rows.length) { el.innerHTML = emptyNote('ยังไม่มีข้อมูล'); return; }
+
+        const all = (dash.targets.APPLE || []).concat(dash.targets.DEFAULT || []);
+        const cols = FOCUS_ORDER.filter(n => all.indexOf(n) !== -1);
+        const brands = {};
+        rows.forEach(r => {
+          const b = brands[r.brand] || (brands[r.brand] = { units: 0, cell: {} });
+          b.units++;
+          r.targets.forEach(t => {
+            const c = b.cell[t] || (b.cell[t] = { e: 0, h: 0 });
+            c.e++;
+            if (r.hit.indexOf(t) !== -1) c.h++;
+          });
+        });
+        const order = Object.keys(brands).sort((a, b) => brands[b].units - brands[a].units);
+
+        let h = '<div class="db-heat-wrap"><table class="db-heat"><thead><tr><th class="rh"></th>' +
+          cols.map(c => `<th>${escapeHtml(FOCUS_SHORT[c] || c)}</th>`).join('') + '</tr></thead><tbody>';
+        order.forEach(b => {
+          h += `<tr><th class="rh">${escapeHtml(b)} <small>${brands[b].units}</small></th>`;
+          cols.forEach(c => {
+            const cell = brands[b].cell[c];
+            if (!cell) { h += '<td><span class="na">–</span></td>'; return; }
+            const p = pct(cell.h, cell.e);
+            const tone = pctTone(p);
+            h += `<td><button type="button" style="background:rgba(${tone},0.18); color:rgb(${tone}); box-shadow:inset 0 0 0 1px rgba(${tone},0.3)"
+                    data-k="${escapeHtml(c)}" data-b="${escapeHtml(b)}" onclick="openFocusSheet(this.dataset.k, this.dataset.b)">
+                    ${Math.round(p)}%<small>${cell.h}/${cell.e}</small></button></td>`;
+          });
+          h += '</tr>';
+        });
+        h += '</tbody></table></div>';
+        h += `<div class="db-legend">
+          <span><i style="background:rgb(48,209,88)"></i>70%+</span>
+          <span><i style="background:rgb(255,214,10)"></i>40–69%</span>
+          <span><i style="background:rgb(255,69,58)"></i>ต่ำกว่า 40%</span>
+          <span>– = ไม่ใช่เป้าของแบรนด์นี้</span>
+        </div>`;
+        el.innerHTML = h;
+      }
+
+      // ---------- พนักงานขาย ----------
+      function renderLeaderboard(st) {
+        const el = document.getElementById('dbLeader');
+        const list = Object.values(st.emp).sort((a, b) => (b.units - a.units) || (b.revenue - a.revenue));
+        if (!list.length) { el.innerHTML = emptyNote('ยังไม่มีข้อมูล'); return; }
+        el.innerHTML = '<div class="db-lb">' + list.map((e, i) => {
+          const c = pct(e.hit, e.opp);
+          const rk = i < 3 ? ' r' + (i + 1) : '';
+          return `<button type="button" class="${dash.f.emp === e.key ? 'on' : ''}" style="animation-delay:${i * 0.03}s" data-k="${escapeHtml(e.key)}" onclick="toggleFilter('emp', this.dataset.k)">
+            <span class="db-rank${rk}">${i + 1}</span>
+            <span style="min-width:0">
+              <span class="nm d-block text-truncate">${escapeHtml(e.key)}</span>
+              <span class="sub d-block">${baht(e.revenue)} · ปิดโฟกัส <b style="color:${pctColor(c)}">${Math.round(c)}%</b></span>
+            </span>
+            <span class="val">${e.units}<small>เครื่อง</small></span>
+          </button>`;
+        }).join('') + '</div>';
+      }
+
+      // ---------- แบรนด์ ----------
+      function renderBrands(st) {
+        const wrap = document.getElementById('dbBrandList');
+        const list = Object.values(st.brand).sort((a, b) => b.units - a.units);
+        document.getElementById('dbDonutTotal').textContent = st.units;
+        if (brandChartInstance) { brandChartInstance.destroy(); brandChartInstance = null; }
+        if (!list.length) { wrap.innerHTML = emptyNote('ยังไม่มีข้อมูล'); return; }
+
+        const sel = dash.f.brand;
+        const colors = list.map((b, i) => brandColor(b.key, i));
+        brandChartInstance = new Chart(document.getElementById('brandPieChart').getContext('2d'), {
+          type: 'doughnut',
+          data: {
+            labels: list.map(b => b.key),
+            datasets: [{
+              data: list.map(b => b.units),
+              backgroundColor: colors.map((c, i) => (!sel || list[i].key === sel) ? c : c + '33'),
+              borderColor: '#1A1A1C',
+              borderWidth: 3,
+              borderRadius: 5,
+              hoverOffset: 8
+            }]
+          },
+          options: {
+            cutout: '72%',
+            plugins: { legend: { display: false } },
+            animation: { animateScale: true, animateRotate: true, duration: 900, easing: 'easeOutQuart' },
+            onClick: function(evt, els) { if (els && els.length) toggleFilter('brand', list[els[0].index].key); }
+          }
+        });
+
+        wrap.innerHTML = '<div class="db-brow-head"><span></span><span>แบรนด์</span><span style="text-align:right">เครื่อง</span><span style="text-align:right">โฟกัส</span></div>' +
+          list.map((b, i) => {
+            const c = pct(b.hit, b.opp);
+            return `<button type="button" class="db-brow ${sel === b.key ? 'on' : ''}" data-k="${escapeHtml(b.key)}" onclick="toggleFilter('brand', this.dataset.k)">
+              <span class="dot" style="background:${colors[i]}"></span>
+              <span class="nm">${escapeHtml(b.key)}</span>
+              <span class="u">${b.units} <small>${Math.round(pct(b.units, st.units))}%</small></span>
+              <span class="cv" style="color:${pctColor(c)}">${Math.round(c)}%</span>
+            </button>`;
+          }).join('');
+      }
+
+      // ---------- ผู้รับเคส ----------
+      function renderReceivers(st) {
+        const el = document.getElementById('dbReceivers');
+        const list = Object.values(st.receiver).sort((a, b) => b.units - a.units);
+        if (!list.length) { el.innerHTML = emptyNote('ยังไม่มีข้อมูลผู้รับเคส'); return; }
+        el.innerHTML = '<div class="db-chips">' + list.map(x =>
+          `<button type="button" class="db-chip ${dash.f.receiver === x.key ? 'on' : ''}" data-k="${escapeHtml(x.key)}" onclick="toggleFilter('receiver', this.dataset.k)">🙋 ${escapeHtml(x.key)}<b>${x.units}</b></button>`
+        ).join('') + '</div>';
+      }
+
+      // ---------- รายชั่วโมง ----------
+      function renderHourChart(st) {
+        const hrs = Object.keys(st.hours).map(Number);
+        const start = Math.min.apply(null, [10].concat(hrs));
+        const end = Math.max.apply(null, [21].concat(hrs));
+        const labels = [], data = [];
+        for (let h = start; h <= end; h++) { labels.push(h + ':00'); data.push(st.hours[h] || 0); }
+        const max = Math.max.apply(null, data);
+        const peakIdx = data.indexOf(max);
+        document.getElementById('dbPeak').textContent = max > 0 ? ('พีค ' + labels[peakIdx] + ' · ' + max + ' เครื่อง') : '';
+
+        if (hourChartInstance) hourChartInstance.destroy();
+        hourChartInstance = new Chart(document.getElementById('dbHourChart').getContext('2d'), {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: data.map(v => (v === max && v > 0) ? '#FFD600' : 'rgba(255,214,0,0.32)'),
+              borderRadius: 6,
+              maxBarThickness: 22
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 700, easing: 'easeOutQuart' },
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: c => c.parsed.y + ' เครื่อง · ' + baht(st.hoursRev[start + c.dataIndex] || 0) } }
+            },
+            scales: {
+              x: { ticks: { color: '#8E8E93', font: { size: 10 }, maxRotation: 0, autoSkipPadding: 6 }, grid: { display: false } },
+              y: { beginAtZero: true, ticks: { color: '#8E8E93', precision: 0, font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.06)' } }
+            }
+          }
+        });
+      }
+
+      // ---------- รายการขาย ----------
+      function saleRowHTML(r, hl, fromFocus) {
+        const dots = r.targets.map(t => `<i class="${r.hit.indexOf(t) !== -1 ? 'ok' : 'no'}${t === hl ? ' hl' : ''}" title="${escapeHtml(t)}"></i>`).join('') +
+                     r.bonus.map(b => `<i class="bn${b === hl ? ' hl' : ''}" title="${escapeHtml(b)}"></i>`).join('');
+        return `<button type="button" class="db-sale" onclick="openSaleSheet(${r.i}, ${fromFocus ? 'true' : 'false'})">
+          <span class="tm">${escapeHtml(r.time)}</span>
+          <span style="min-width:0">
+            <span class="md d-block text-truncate">${escapeHtml(r.model)}</span>
+            <span class="who d-block text-truncate">👤 ${escapeHtml(r.emp)} · ${escapeHtml(r.brand)}${r.receiver ? ' · 🙋 ' + escapeHtml(r.receiver) : ''}</span>
+            <span class="db-dots">${dots}</span>
+          </span>
+          <span class="text-end">
+            <span class="pr d-block">${baht(r.price)}</span>
+            <span class="cv" style="color:${pctColorOnLight(r.cov)}">${r.hit.length}/${r.targets.length}</span>
+          </span>
+        </button>`;
+      }
+
+      function renderSalesList(rows) {
+        const el = document.getElementById('dbSalesList');
+        const q = (dash.q || '').trim().toLowerCase();
+        let list = rows.slice().sort((a, b) => b.time.localeCompare(a.time));
+        if (q) list = list.filter(r => (r.model + ' ' + r.emp + ' ' + r.brand + ' ' + r.receiver + ' ' + r.focus).toLowerCase().indexOf(q) !== -1);
+        document.getElementById('dbSalesCount').textContent = list.length + ' รายการ';
+        el.innerHTML = list.length
+          ? list.map((r, i) => saleRowHTML(r, '', false).replace('class="db-sale"', `class="db-sale" style="animation-delay:${Math.min(i, 12) * 0.03}s"`)).join('')
+          : emptyNote(q ? 'ไม่พบรายการที่ค้นหา' : 'ยังไม่มีรายการขายในวันที่เลือก');
+      }
+
+      // ---------- Sheet รายละเอียด ----------
+      function openSheet(title, sub, html) {
+        document.getElementById('dashSheetTitle').textContent = title;
+        document.getElementById('dashSheetSub').textContent = sub || '';
+        const body = document.getElementById('dashSheetBody');
+        body.innerHTML = html;
+        body.scrollTop = 0;
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('dashSheet')).show();
+        kickAnimations(body);
+      }
+
+      // แตะงานโฟกัส → เครื่องไหนยังขาด / ปิดได้แล้ว / ใครขาดบ่อย
+      function openFocusSheet(name, brand) {
+        dashLastFocus = { name: name, brand: brand || '' };
+        const rows = dashRows().filter(r => !brand || r.brand === brand);
+        const eligible = rows.filter(r => r.targets.indexOf(name) !== -1);
+        const isTarget = eligible.length > 0;
+        const hitRows = (isTarget ? eligible : rows).filter(r => r.names.indexOf(name) !== -1);
+        const missRows = isTarget ? eligible.filter(r => r.names.indexOf(name) === -1) : [];
+        const qty = hitRows.reduce((s, r) => s + r.items.filter(it => it.name === name).reduce((a, it) => a + it.qty, 0), 0);
+        const p = pct(hitRows.length, eligible.length);
+
+        let h = `<div class="db-sum">
+          <div><small>ปิดได้</small><b style="color:#248A3D">${hitRows.length}</b><span>เครื่อง</span></div>
+          <div><small>ยังขาด</small><b style="color:#D70015">${missRows.length}</b><span>เครื่อง</span></div>
+          <div><small>ขายได้รวม</small><b>${qty}</b><span>ชิ้น</span></div>
+        </div>`;
+        if (isTarget) {
+          h += `<div class="db-bar light" style="height:8px"><i data-w="${p.toFixed(1)}" style="background:${pctColorOnLight(p)}"></i></div>`;
+        }
+
+        if (missRows.length) {
+          const by = {};
+          missRows.forEach(r => { by[r.emp] = (by[r.emp] || 0) + 1; });
+          const keys = Object.keys(by).sort((a, b) => by[b] - by[a]);
+          h += '<div class="db-sh-title">👤 ใครยังขาดงานนี้</div><div class="db-chips light">' +
+            keys.map(k => `<span class="db-chip">${escapeHtml(k)}<b>${by[k]}</b></span>`).join('') + '</div>';
+          h += `<div class="db-sh-title">🔥 ยังไม่ได้ ${escapeHtml(name)} (${missRows.length})</div>` +
+            missRows.map(r => saleRowHTML(r, name, true)).join('');
+        }
+        if (hitRows.length) {
+          h += `<div class="db-sh-title">✅ ปิดได้แล้ว (${hitRows.length})</div>` +
+            hitRows.map(r => saleRowHTML(r, name, true)).join('');
+        }
+        if (!missRows.length && !hitRows.length) h += emptyNote('ไม่มีรายการ');
+
+        const sub = (brand ? brand + ' · ' : '') + (isTarget ? ('ปิดได้ ' + Math.round(p) + '% ของเครื่องที่เป็นเป้า') : 'นอกเป้า / โบนัส');
+        openSheet('🎯 ' + name, sub, h);
+      }
+
+      // แตะรายการขาย → รูป / เช็คลิสต์งานโฟกัส / ปุ่มจัดการ
+      function openSaleSheet(i, fromFocus) {
+        const r = dash.rows[i];
+        if (!r) return;
+        const thumb = driveThumbnailUrl(r.img);
+        const cell = (label, val) => `<div><small>${label}</small><b>${escapeHtml(val)}</b></div>`;
+
+        let h = '';
+        if (fromFocus && dashLastFocus) {
+          h += `<button type="button" class="db-back" onclick="openFocusSheet(dashLastFocus.name, dashLastFocus.brand)">‹ กลับไป ${escapeHtml(dashLastFocus.name)}</button>`;
+        }
+        if (thumb) {
+          h += `<div class="db-photo" data-u="${escapeHtml(r.img)}" onclick="window.open(this.dataset.u, '_blank')"><img src="${escapeHtml(thumb)}" alt="sale photo" loading="lazy"></div>`;
+        }
+        h += '<div class="db-info">' +
+          cell('💵 ราคา', baht(r.price)) + cell('🏷️ แบรนด์', r.brand) +
+          cell('📦 ประเภท', deviceLabel(r.device)) + cell('🕒 เวลา', r.time) +
+          cell('👤 พนักงานขาย', r.emp) + cell('🙋 ผู้รับเคส', r.receiver || '-') +
+          '</div>';
+
+        h += `<div class="db-sh-title">🎯 งานโฟกัส ${r.hit.length}/${r.targets.length} <span style="color:${pctColorOnLight(r.cov)}">(${r.cov}%)</span></div><div class="db-check">`;
+        r.targets.forEach(t => {
+          const it = r.items.find(x => x.name === t);
+          h += `<div class="${it ? 'ok' : 'no'}"><span>${it ? '✓' : '✕'}</span>${escapeHtml(t)}${it && it.qty > 1 ? ' ×' + it.qty : ''}</div>`;
+        });
+        r.items.filter(it => r.targets.indexOf(it.name) === -1).forEach(it => {
+          h += `<div class="bn"><span>+</span>${escapeHtml(it.name)}${it.qty > 1 ? ' ×' + it.qty : ''}</div>`;
+        });
+        h += '</div>';
+
+        h += '<div class="db-actions">' +
+          (r.img ? `<a class="act-btn act-img" href="${escapeHtml(r.img)}" target="_blank">🖼️ รูปเต็ม</a>` : '') +
+          `<button type="button" class="act-btn act-card" onclick="dbAction('card', ${i})">🎴 การ์ด</button>` +
+          `<button type="button" class="act-btn act-edit" onclick="dbAction('edit', ${i})">✏️ แก้ไขงานโฟกัส</button>` +
+          `<button type="button" class="act-btn act-del" onclick="dbAction('del', ${i})">🗑️ ลบ</button>` +
+          '</div>';
+
+        openSheet(r.model, r.emp + ' · ' + r.time, h);
+      }
+
+      // ปิด sheet ก่อน แล้วค่อยเปิดหน้าแก้ไข / การ์ด / ลบ (กัน modal ซ้อนกัน)
+      function dbAction(kind, i) {
+        const go = () => {
+          if (kind === 'card') viewSaleCard(todayItems[i]);
+          else if (kind === 'edit') openEditFromIndex(i);
+          else if (kind === 'del' && todayItems[i]) confirmDelete(todayItems[i].rowIdx);
+        };
+        const el = document.getElementById('dashSheet');
+        const m = bootstrap.Modal.getInstance(el);
+        if (m && el.classList.contains('show')) {
+          el.addEventListener('hidden.bs.modal', go, { once: true });
+          m.hide();
+        } else {
+          go();
+        }
+      }
+
+      // เปิดการ์ดย้อนหลังจากรายการขาย (ใช้รูป thumbnail จาก Google Drive แทน base64)
+      function viewSaleCard(item) {
+        if (!item) return;
+        const focusList = (item.focus && item.focus !== 'ไม่มี' && item.focus !== '-')
+          ? item.focus.split(',').map(s => s.trim())
+          : [];
+        const thumbUrl = driveThumbnailUrl(item.img) || item.img;
+
+        openPokemonCard({
+          imageUrl: thumbUrl,
+          modelName: item.model,
+          empName: item.emp,
+          focusList: focusList,
+          downloadUrl: item.img,       // ลิงก์ไฟล์จริงบน Drive (เปิดแท็บใหม่เพื่อดาวน์โหลด)
+          downloadName: 'Sale_' + String(item.model || 'device').replace(/[\s,]+/g,'_') + '.jpg',
+          isDriveLink: true
+        });
+      }
+
+      function driveThumbnailUrl(url) {
+        if (!url) return '';
+        const m = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+        if (!m) return '';
+        // หมายเหตุ: แยก "https:" กับ "//" ออกจากกัน เพราะ Apps Script ตัดข้อความหลัง // ทิ้งเหมือนเป็นคอมเมนต์
+        const SLASH2 = '/' + '/';
+        return 'https:' + SLASH2 + 'drive.google.com/thumbnail?id=' + m[1] + '&sz=w1000';
+      }
+
+      // =========================================================
+      // 📈 สรุปงานไม่ผ่าน
+      // =========================================================
+      function loadFailedSummary() {
+        const monthVal = document.getElementById('selectFailedMonth').value;
+        document.getElementById('failedBrandContainer').innerHTML = loadingHTML('กำลังประมวลผลข้อมูล');
+        document.getElementById('pcTargetMonthContainer').innerHTML = loadingHTML('กำลังคำนวณเป้าหมาย');
+
+        google.script.run
+          .withSuccessHandler(safeHandler('getFailedSummaryData', renderFailedSummary, ['failedBrandContainer','pcTargetMonthContainer']))
+          .withFailureHandler(function(err) { showLoadError('getFailedSummaryData', err, ['failedBrandContainer','pcTargetMonthContainer']); })
+          .getFailedSummaryData(monthVal);
+      }
+
+      function failedBrandCardsHTML(brandSummary, emptyText) {
+        const brands = Object.keys(brandSummary || {});
+        if (brands.length === 0) return `<div class="empty-note">${emptyText}</div>`;
+        let html = '';
+        brands.forEach((b, i) => {
+          const item = brandSummary[b];
+          const ufundLabel = (b === 'APPLE') ? 'U-FUND (APPLE)' : 'U-FUND';
+          const ufundColor = (b === 'APPLE') ? '#FFFFFF' : '#FFD600';
+          html += `
+            <div class="mb-2 p-3 rounded-[20px] bg-theme-dark border border-secondary dash-item" style="animation-delay:${i * 0.05}s">
+              <div class="fw-bold text-white mb-2 font-mono-title" style="font-size:0.9rem">📱 ${escapeHtml(b)}</div>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-theme-dark p-2 font-mono-title" style="color:#FF453A; border:1px solid rgba(255,69,58,0.5); font-size:0.74rem; font-weight:600">SIM BL: <strong>${item.simBL || 0} เคส</strong></span>
+                <span class="badge bg-theme-dark p-2 font-mono-title" style="color:${ufundColor}; border:1px solid rgba(255,255,255,0.25); font-size:0.74rem; font-weight:600">${ufundLabel}: <strong>${item.ufundFailed || 0} เคส</strong></span>
+                <span class="badge bg-theme-dark p-2 font-mono-title" style="color:#64D2FF; border:1px solid rgba(100,210,255,0.5); font-size:0.74rem; font-weight:600">SS Finance+: <strong>${item.sfFailed || 0} เคส</strong></span>
+              </div>
+            </div>
+          `;
+        });
+        return html;
+      }
+
+      function renderFailedSummary(res) {
+        if (!res || res.status !== 'success') {
+          document.getElementById('failedBrandContainer').innerHTML = '<div class="empty-note">ไม่พบข้อมูลในเดือนนี้</div>';
+          document.getElementById('pcTargetMonthContainer').innerHTML = '<div class="empty-note">ไม่พบข้อมูลในเดือนนี้</div>';
+          return;
+        }
+
+        animateNumber(document.getElementById('kpiMonthSimBL'), res.totalSimBL);
+        animateNumber(document.getElementById('kpiMonthApple'), res.totalAppleUfund);
+        animateNumber(document.getElementById('kpiMonthAndroid'), res.totalAndroidUfund);
+        animateNumber(document.getElementById('kpiMonthSF'), res.totalSFFailed);
+
+        document.getElementById('failedBrandContainer').innerHTML = failedBrandCardsHTML(res.brandSummary, 'ไม่มีประวัติงานไม่ผ่านในเดือนนี้');
+
+        if (res.pcTarget) {
+          setPCTarget('pcTargetMonthContainer', res.pcTarget, `จ-ศ ${res.pcTarget.weekdayCount} วัน · ส-อา ${res.pcTarget.weekendCount} วัน`);
+        }
+      }
+
+      function loadDailyFailedSummary() {
+        const dateVal = document.getElementById('selectFailedDate').value;
+        document.getElementById('failedDailyBrandContainer').innerHTML = loadingHTML('กำลังประมวลผลข้อมูลรายวัน');
+        document.getElementById('pcTargetDayContainer').innerHTML = loadingHTML('กำลังคำนวณเป้าหมาย');
+
+        google.script.run
+          .withSuccessHandler(safeHandler('getDailyFailedSummaryData', renderDailyFailedSummary, ['failedDailyBrandContainer','pcTargetDayContainer']))
+          .withFailureHandler(function(err) { showLoadError('getDailyFailedSummaryData', err, ['failedDailyBrandContainer','pcTargetDayContainer']); })
+          .getDailyFailedSummaryData(dateVal);
+      }
+
+      function renderDailyFailedSummary(res) {
+        if (!res || res.status !== 'success') {
+          document.getElementById('failedDailyBrandContainer').innerHTML = '<div class="empty-note">ไม่พบข้อมูลในวันนี้</div>';
+          document.getElementById('pcTargetDayContainer').innerHTML = '<div class="empty-note">ไม่พบข้อมูลในวันนี้</div>';
+          return;
+        }
+
+        animateNumber(document.getElementById('kpiDailySimBL'), res.totalSimBL);
+        animateNumber(document.getElementById('kpiDailyApple'), res.totalAppleUfund);
+        animateNumber(document.getElementById('kpiDailyAndroid'), res.totalAndroidUfund);
+        animateNumber(document.getElementById('kpiDailySF'), res.totalSFFailed);
+
+        document.getElementById('failedDailyBrandContainer').innerHTML = failedBrandCardsHTML(res.brandSummary, 'ไม่มีประวัติงานไม่ผ่านในวันนี้');
+
+        if (res.pcTarget) {
+          const dayLabel = res.pcTarget.isWeekend ? 'วันหยุด (เสาร์-อาทิตย์)' : 'วันธรรมดา (จันทร์-ศุกร์)';
+          document.getElementById('pcTargetDayTypeLabel').innerText = `เป้าหมายของวันที่เลือก — ${dayLabel}`;
+          setPCTarget('pcTargetDayContainer', res.pcTarget, '');
+        }
+      }
+
+      // ใส่ HTML เป้า PC แล้วค่อยให้หลอดวิ่งขึ้น
+      function setPCTarget(containerId, pcTarget, subtitle) {
+        const el = document.getElementById(containerId);
+        el.innerHTML = renderPCTargetHTML(pcTarget, subtitle);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          el.querySelectorAll('.pc-target-bar-fill').forEach(bar => { bar.style.width = bar.dataset.w + '%'; });
+        }));
+      }
+
+      // สร้าง HTML แสดงผล เป้า vs เคส App-in จริงของ PC แยกตามแบรนด์
+      function renderPCTargetHTML(pcTarget, subtitle) {
+        const brands = pcTarget.brands || [];
+        let rows = '';
+        brands.forEach((b, i) => {
+          const target = pcTarget.targets[b] || 0;
+          const actual = pcTarget.actual[b] || 0;
+          const pct = target > 0 ? Math.min(100, Math.round((actual / target) * 100)) : 0;
+          const barColor = pct >= 100 ? '#34C759' : (pct >= 50 ? '#FFD600' : '#FF453A');
+
+          rows += `
+            <div class="pc-target-row dash-item" style="animation-delay:${i * 0.05}s">
+              <span class="text-white font-mono-title fw-bold" style="font-size:0.8rem; min-width:88px;">${escapeHtml(b)}</span>
+              <div class="pc-target-bar-track">
+                <div class="pc-target-bar-fill" data-w="${pct}" style="background-color:${barColor};"></div>
+              </div>
+              <span class="font-mono-title fw-bold text-nowrap" style="font-size:0.8rem; color:${barColor};">${actual} / ${target}</span>
+            </div>
+          `;
+        });
+        const subtitleHtml = subtitle ? `<p class="text-secondary small mb-3" style="font-size:0.68rem">${subtitle}</p>` : '';
+        return subtitleHtml + rows;
+      }
+
+      // =========================================================
+      // 🎴 POKÉMON-STYLE RARITY CARD ENGINE
+      // =========================================================
+      const RARITY_TIERS = [
+        { key: 0, en: 'JUST SOLD', th: 'โห่ขายอย่างงี้', tabBg: '#E5E5EA', tabText: '#FF3B30',
+          cardBg: 'linear-gradient(150deg, #FFFFFF, #F2F2F2 55%, #E5E5EA)', infoText: '#1C1C1E',
+          effect: 'none', sparkle: false, holo: false, stars: 0 },
+
+        { key: 1, en: 'COMMON', th: 'ธรรมดา', tabBg: '#8E8E93', tabText: '#111111',
+          cardBg: 'linear-gradient(120deg, #F5F6F8 0%, #CDD0D6 16%, #FFFFFF 30%, #9A9EA6 45%, #F0F1F4 60%, #B4B7BE 75%, #F7F8FA 100%)',
+          infoText: '#111111', effect: 'metal', sparkle: false, holo: false, stars: 1 },
+
+        { key: 2, en: 'RARE', th: 'หายาก', tabBg: '#D9291C', tabText: '#FFFFFF',
+          cardBg: 'linear-gradient(120deg, #FF9C8F 0%, #E1392A 16%, #FF6E5E 30%, #A81C10 45%, #F0473A 60%, #8A140A 75%, #FF7A6B 100%)',
+          infoText: '#FFFFFF', effect: 'metal', sparkle: true, holo: false, stars: 2 },
+
+        { key: 3, en: 'SPECIAL', th: 'พิเศษ', tabBg: '#7A431F', tabText: '#FFE7C2',
+          cardBg: 'linear-gradient(120deg, #F0B27A 0%, #A2611F 16%, #FFD8A6 30%, #7A3F17 45%, #E39A57 60%, #5C3010 75%, #F3BE87 100%)',
+          infoText: '#FFF3E0', effect: 'metal', sparkle: true, holo: true, stars: 3 },
+
+        { key: 4, en: 'SUPER RARE', th: 'ซุปเปอร์แรร์', tabBg: '#B8860B', tabText: '#111111',
+          cardBg: 'linear-gradient(120deg, #FFF3C4 0%, #DDA426 16%, #FFE7A0 30%, #9C6E09 45%, #FFDE87 60%, #7A5507 75%, #FFF0BE 100%)',
+          infoText: '#3A2A00', effect: 'metal', sparkle: true, holo: true, stars: 4 },
+
+        { key: 5, en: 'ULTRA RARE', th: 'อัลตร้าแรร์', tabBg: '#1C1C1E', tabText: '#FFD600',
+          cardBg: '#151018', infoText: '#FFD600', effect: 'galaxy', sparkle: true, holo: true, stars: 5 },
+
+        { key: 6, en: 'OVER SPEC', th: 'โอเวอร์สเปค', tabBg: '#000000', tabText: '#FFFFFF',
+          cardBg: '#0d0d10', infoText: '#FFFFFF', effect: 'galaxy', sparkle: true, holo: true, stars: 6 }
+      ];
+
+      // ระดับการ์ดนับจาก "จำนวนชนิด" งานโฟกัส (จำนวนชิ้นไม่ทำให้ระดับเพิ่ม)
+      function getFocusTier(focusList) {
+        const names = (focusList || [])
+          .map(x => parseFocusItem(x).name)
+          .filter(x => x && x !== 'ไม่มี' && x !== '-');
+        if (names.length === 0) return 0;
+        if (names.length === 1 && names[0] === 'FILM BRIGHT') return 0;
+        return Math.min(names.length, 6);
+      }
+
+      let pkmGyroHandler = null;
+      let pkmDownload = null;
+
+      function openPokemonCard(opts) {
+        const tierIdx = getFocusTier(opts.focusList);
+        const tier = RARITY_TIERS[tierIdx];
+        pkmDownload = { url: opts.downloadUrl || '', name: opts.downloadName || 'photo.jpg', isDrive: !!opts.isDriveLink };
+
+        const root = document.getElementById('pkmOverlayRoot');
+        root.innerHTML = `
+          <div class="pkm-overlay" id="pkmOverlay">
+            <button class="pkm-close-btn" onclick="closePokemonCard()">✕</button>
+
+            <div class="pkm-tier-title">
+              <div class="font-pixel" style="color:${tier.tabBg === '#000000' ? '#FFD600' : tier.tabBg}; font-size: 0.75rem;">${tier.en}</div>
+              <div class="th">${tier.th}</div>
+            </div>
+
+            <div class="pkm-stars" id="pkmStars"></div>
+
+            <div class="pkm-stage">
+              <div class="pkm-card" id="pkmCard">
+                <div class="pkm-face pkm-back">
+                  <div class="font-pixel l1">SUPER APP</div>
+                  <div class="font-pixel l2">BNN 1326</div>
+                </div>
+                <div class="pkm-face pkm-front" style="background:${tier.cardBg};">
+                  ${tier.effect === 'metal' ? '<div class="pkm-shine"></div>' : ''}
+                  ${tier.effect === 'galaxy' ? '<div class="pkm-galaxy-wrap"><div class="pkm-galaxy"></div></div>' : ''}
+                  <div class="pkm-front-inner">
+                    <div class="pkm-tab font-pixel" style="background:${tier.tabBg}; color:${tier.tabText};">${tier.en}</div>
+                    <div class="pkm-photo-wrap">
+                      <img src="${escapeHtml(opts.imageUrl)}" alt="sale photo">
+                      <div class="pkm-holo" id="pkmHolo"></div>
+                    </div>
+                    <div class="pkm-info" style="color:${tier.infoText};">
+                      <div class="model">${escapeHtml(opts.modelName || '')}</div>
+                      <div class="emp">${opts.empName ? '👤 ' + escapeHtml(opts.empName) : ''}</div>
+                    </div>
+                  </div>
+                  ${tier.sparkle ? '<div class="pkm-sparkle"></div>' : ''}
+                </div>
+              </div>
+            </div>
+
+            <div class="pkm-actions">
+              <button class="btn btn-yellow" onclick="downloadPokemonPhoto()">⬇️ ดาวน์โหลดรูป (ไม่มีกรอบการ์ด)</button>
+              <button class="btn btn-glass" id="pkmGyroBtn" onclick="enablePokemonGyro()">🔮 เปิดเอฟเฟค Gyro</button>
+            </div>
+            <div class="pkm-hint">ลากนิ้ว หรือ เอียงมือถือ เพื่อดูแสงสะท้อนบนการ์ด</div>
+          </div>
+        `;
+
+        // stars
+        const starsEl = document.getElementById('pkmStars');
+        let starHtml = '';
+        for (let i = 0; i < 6; i++) {
+          starHtml += `<span class="pkm-star" data-i="${i}">★</span>`;
+        }
+        starsEl.innerHTML = starHtml;
+
+        const cardEl = document.getElementById('pkmCard');
+        const SPIN_MS = 3400;
+
+        // ลอยหมุนขึ้นมาช้าๆ แบบเปิดกาชา แล้วค่อยโชว์หน้าการ์ด
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            cardEl.classList.add('spinning');
+            let revealDone = false;
+
+            const finishReveal = () => {
+              if (revealDone) return;
+              revealDone = true;
+              cardEl.classList.remove('spinning');
+              cardEl.classList.add('revealed');
+              tapFeedback();
+
+              // ดาวไล่ติดทีละดวงหลังการ์ดหันหน้ามาแล้ว
+              setTimeout(() => {
+                const starEls = starsEl.querySelectorAll('.pkm-star');
+                starEls.forEach((el, i) => {
+                  if (i < tier.stars) {
+                    setTimeout(() => el.classList.add('lit'), i * 140);
+                  }
+                });
+              }, 150);
+
+              if (tier.holo) {
+                setTimeout(() => {
+                  const holo = document.getElementById('pkmHolo');
+                  if (holo) holo.classList.add('on');
+                }, 250);
+              }
+            };
+
+            cardEl.addEventListener('animationend', finishReveal, { once: true });
+            // สำรองกรณี animationend ไม่ยิง (เช่นถูกปิดแท็บ/สลับแอป)
+            setTimeout(finishReveal, SPIN_MS + 300);
+          }, 200);
+        });
+
+        attachCardTilt(cardEl);
+      }
+
+      function closePokemonCard() {
+        const overlay = document.getElementById('pkmOverlay');
+        if (pkmGyroHandler) {
+          window.removeEventListener('deviceorientation', pkmGyroHandler);
+          pkmGyroHandler = null;
+        }
+        if (!overlay) return;
+        overlay.classList.add('closing');
+        setTimeout(() => overlay.remove(), 300);
+      }
+
+      function downloadPokemonPhoto() {
+        const d = pkmDownload;
+        if (!d || !d.url) return;
+        if (d.isDrive) {
+          // ลิงก์ไฟล์จริงบน Drive (รูปย้อนหลัง) — เปิดแท็บใหม่เพื่อดูและบันทึกเอง
+          window.open(d.url, '_blank');
+          return;
+        }
+        // รูปที่เพิ่งถ่าย (base64) — ดาวน์โหลดตรงได้เลย ไม่มีกรอบการ์ด
+        const a = document.createElement('a');
+        a.href = d.url;
+        a.download = d.name || 'photo.jpg';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+
+      function attachCardTilt(cardEl) {
+        let rect = null;
+        let dragging = false;
+
+        function updateTilt(px, py) {
+          // px, py: 0..1 relative position within card
+          const rotY = (px - 0.5) * 26;
+          const rotX = (0.5 - py) * 26;
+          const isRevealed = cardEl.classList.contains('revealed');
+          cardEl.style.transform = `rotateY(${isRevealed ? 0 : 180}deg) rotateX(${rotX}deg) rotateY(${isRevealed ? rotY : 0}deg)`;
+          const holo = document.getElementById('pkmHolo');
+          if (holo) {
+            holo.style.setProperty('--px', (px * 100) + '%');
+            holo.style.setProperty('--py', (py * 100) + '%');
+          }
+        }
+
+        function resetTilt() {
+          const isRevealed = cardEl.classList.contains('revealed');
+          cardEl.style.transform = `rotateY(${isRevealed ? 0 : 180}deg) rotateX(0deg)`;
+        }
+
+        cardEl.addEventListener('pointerdown', (e) => {
+          if (cardEl.classList.contains('spinning')) return; // อย่าให้ลากขัดจังหวะตอนการ์ดกำลังหมุนขึ้น
+          dragging = true;
+          cardEl.classList.add('dragging');
+          rect = cardEl.getBoundingClientRect();
+          cardEl.setPointerCapture(e.pointerId);
+        });
+
+        cardEl.addEventListener('pointermove', (e) => {
+          if (!dragging || !rect) return;
+          const px = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+          const py = Math.min(1, Math.max(0, (e.clientY - rect.top) / rect.height));
+          updateTilt(px, py);
+        });
+
+        // ปล่อยนิ้วแล้วการ์ดเด้งกลับแบบสปริง (ไม่ใช่ดีดกลับทันที)
+        function endDrag() {
+          if (!dragging) return;
+          dragging = false;
+          cardEl.classList.remove('dragging');
+          resetTilt();
+        }
+        cardEl.addEventListener('pointerup', endDrag);
+        cardEl.addEventListener('pointerleave', endDrag);
+        cardEl.addEventListener('pointercancel', endDrag);
+      }
+
+      function enablePokemonGyro() {
+        const btn = document.getElementById('pkmGyroBtn');
+        const cardEl = document.getElementById('pkmCard');
+
+        function startListening() {
+          cardEl.classList.add('dragging');
+          pkmGyroHandler = function(e) {
+            if (e.beta === null || e.gamma === null) return;
+            // beta: front-back tilt (-180..180), gamma: left-right tilt (-90..90)
+            const py = Math.min(1, Math.max(0, (e.beta + 45) / 90));
+            const px = Math.min(1, Math.max(0, (e.gamma + 45) / 90));
+            const rotY = (px - 0.5) * 26;
+            const rotX = (0.5 - py) * 26;
+            cardEl.style.transform = `rotateY(0deg) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+            const holo = document.getElementById('pkmHolo');
+            if (holo) {
+              holo.style.setProperty('--px', (px * 100) + '%');
+              holo.style.setProperty('--py', (py * 100) + '%');
+            }
+          };
+          window.addEventListener('deviceorientation', pkmGyroHandler);
+          if (btn) { btn.innerText = '🔮 Gyro เปิดใช้งานแล้ว'; btn.disabled = true; }
+        }
+
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+          // iOS 13+ ต้องขออนุญาตก่อน
+          DeviceOrientationEvent.requestPermission().then(state => {
+            if (state === 'granted') {
+              startListening();
+            } else {
+              showToast('ไม่ได้รับอนุญาตให้ใช้เซนเซอร์ ลองลากนิ้วบนการ์ดแทนได้ครับ', 'info');
+            }
+          }).catch(() => {
+            showToast('อุปกรณ์นี้ไม่รองรับ Gyro ลองลากนิ้วบนการ์ดแทนได้ครับ', 'info');
+          });
+        } else if (window.DeviceOrientationEvent) {
+          startListening();
+        } else {
+          showToast('อุปกรณ์นี้ไม่รองรับ Gyro ลองลากนิ้วบนการ์ดแทนได้ครับ', 'info');
+        }
+      }
+    </script>
+  </body>
+</html>

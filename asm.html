@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASM Track</title>
+  <script>window.GAS_APP = 'asm';</script>
+  <script src="gas.js"></script>
+    <style>
+    :root {
+      --bg-dark: #090a0f; 
+      --card-container: #15161e; 
+      --box-bg: #232533; 
+      --border-color: #2e3142;
+      --text-main: #ffffff;
+      --text-sub: #9ba1ad;
+      --accent-yellow: #ffd60a;
+      --soft-shadow: 6px 8px 16px rgba(0, 0, 0, 0.45);
+    }
+    body {
+      background-color: var(--bg-dark); color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0; padding: 16px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .header-box { text-align: center; margin-bottom: 24px; padding-top: 8px;}
+    .header-box h2 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px;}
+    .header-box p { margin: 0; color: var(--text-sub); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
+    
+    .tab-container { display: flex; background: var(--card-container); border-radius: 50px; padding: 6px; margin-bottom: 24px; box-shadow: var(--soft-shadow); max-width: 500px; margin-left: auto; margin-right: auto;}
+    .tab-btn { flex: 1; text-align: center; padding: 12px; border-radius: 50px; color: var(--text-sub); font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.3s ease;}
+    .tab-btn.active { background: #32364a; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3);}
+
+    .main-card-container { background: var(--card-container); border-radius: 24px; padding: 20px 16px; margin-bottom: 24px; box-shadow: 0 10px 24px rgba(0,0,0,0.25);}
+    
+    .title-input { 
+      background: transparent; color: var(--accent-yellow); font-size: 18px; font-weight: 800; 
+      text-align: center; border: none; outline: none; width: 100%; margin-bottom: 24px; 
+      letter-spacing: 0.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;
+    }
+    .title-input:focus { border-bottom: 1px solid var(--accent-yellow); }
+
+    .task-header-row { display: flex; gap: 8px; margin-bottom: 12px; padding: 0 8px; color: var(--text-sub); font-size: 13px; font-weight: 700; letter-spacing: 0.5px;}
+    .th-id { width: 25%; text-align: left; padding-left: 12px;}
+    .th-name { width: 45%; text-align: left; padding-left: 8px;}
+    .th-status { width: 30%; text-align: center; }
+
+    .task-row { display: flex; gap: 8px; margin-bottom: 12px; }
+    .task-box { border-radius: 50px; padding: 14px 16px; display: flex; align-items: center; font-size: 15px; font-weight: 700; box-shadow: var(--soft-shadow);}
+    .tb-id { width: 25%; background: var(--box-bg); justify-content: flex-start; color: #fff;}
+    .tb-name { width: 45%; background: var(--box-bg); justify-content: flex-start; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+    
+    .tb-status { width: 30%; justify-content: center; font-size: 14px; cursor: pointer; user-select: none; transition: transform 0.1s;}
+    .tb-status:active { transform: scale(0.92); }
+    
+    .status-green { background: linear-gradient(135deg, #28c76f, #128a43); color: #ffffff; }
+    .status-red { background: linear-gradient(135deg, #ff4d4f, #cb2027); color: #ffffff; }
+    .status-yellow { background: linear-gradient(135deg, #ffc107, #d39e00); color: #000000; }
+
+    .date-report-row { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 24px;}
+    .date-input { background: var(--box-bg); color: #fff; border: none; padding: 12px 20px; border-radius: 50px; font-family: inherit; font-size: 15px; font-weight: 700; outline: none; box-shadow: var(--soft-shadow); margin:0;}
+    .btn-report-inline { background: var(--accent-yellow); color: #000; border: none; border-radius: 50px; padding: 0 20px; height: 46px; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: var(--soft-shadow); transition: 0.2s; display: flex; align-items: center; justify-content: center;}
+    .btn-report-inline:active { transform: scale(0.95); }
+
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+    
+    .schedule-card { 
+      position: relative;
+      background: var(--box-bg); color: var(--text-sub); border-radius: 20px; 
+      padding: 16px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s, background 0.15s; 
+      box-shadow: var(--soft-shadow); user-select: none;
+    }
+    .schedule-card:active { transform: scale(0.96) translateY(2px); box-shadow: 1px 2px 5px rgba(0,0,0,0.6); }
+    
+    .shift-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      pointer-events: none;
+      z-index: 10;
+    }
+    
+    .schedule-card .badge-duty { background: #ffd60a !important; color: #000000 !important; }
+    .schedule-card .badge-off { background: #ffffff !important; color: #000000 !important; }
+    .schedule-card .badge-checkedin { background: #128a43 !important; color: #ffffff !important; }
+    .schedule-card .badge-unreachable { background: #000000 !important; color: #ffd60a !important; }
+    
+    .shift-H { background: #ff4d4f !important; border:none; } 
+    .shift-sick { background: #b71c1c !important; border:none; } 
+    .shift-M { background: #0a84ff !important; border:none; } 
+    .shift-V { background: #32a1ce !important; border:none; } 
+    .shift-H *, .shift-sick *, .shift-M *, .shift-V * { color: #ffffff !important; }
+    
+    .checked-in { background: #ffffff !important; box-shadow: 0 4px 15px rgba(255,255,255,0.3) !important;}
+    .checked-in > div:not(.shift-badge) { color: #000000 !important; }
+    
+    .status-unreachable { background: #ffd60a !important; box-shadow: 0 4px 15px rgba(255,214,10,0.3) !important;}
+    .status-unreachable > div:not(.shift-badge) { color: #000000 !important; }
+
+    .sch-name { font-weight: 800; font-size: 17px; margin-bottom: 2px; pointer-events: none;}
+    .sch-branch { font-size: 13px; font-weight: 600; margin-bottom: 10px; opacity: 0.8; pointer-events: none;}
+    .sch-shift { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; padding-right: 20px;}
+
+    .report-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--accent-yellow); font-size: 16px; font-weight: 800;}
+    .report-item { background: var(--box-bg); border-radius: 16px; padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: var(--soft-shadow);}
+    .report-badge { background: var(--accent-yellow); color: #000; padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 800; white-space: nowrap;}
+
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(5px);}
+    .modal-content { background: var(--card-container); padding: 24px; border-radius: 24px; width: 90%; max-width: 380px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
+    .modal-content select, .modal-content input { width: 100%; padding: 16px; margin: 8px 0 20px 0; border-radius: 12px; border: none; background: var(--box-bg); color: #fff; box-sizing: border-box; font-size: 15px; font-weight: 600; box-shadow: inset 2px 4px 8px rgba(0,0,0,0.3);}
+    .btn-submit { background: linear-gradient(135deg, #28c76f, #128a43); color: #fff; width: 100%; padding: 16px; border: none; border-radius: 50px; font-weight: 800; font-size: 16px; margin-bottom: 12px; box-shadow: var(--soft-shadow);}
+    .btn-close { background: transparent; color: #ff4d4f; width: 100%; padding: 14px; border: 2px solid #ff4d4f; border-radius: 50px; font-size: 16px; font-weight: 700;}
+    
+    /* ควบคุมการแสดงผลแต่ละหน้าแท็บ (ค่าเริ่มต้นซ่อนงานตารางงานไว้ก่อน) */
+    #view-schedule { display: none; }
+
+    /* =========================================
+       ปรับแต่งเฉพาะจอคอมพิวเตอร์ (Desktop 16:9)
+       ========================================= */
+    @media (min-width: 992px) {
+      /* หน้าส่งงาน ASM: จัดกึ่งกลาง ควบคุมความกว้างไม่ให้ยืดเต็มจอจนเกินไป */
+      #view-task .main-card-container {
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* หน้างานตารางงาน: จัด Layout เป็น 2 คอลัมน์ ซ้าย-ขวา สวยงาม */
+      #view-schedule {
+        max-width: 1500px;
+        margin: 0 auto;
+      }
+      .desktop-schedule-layout {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+      }
+      .desktop-left-pane {
+        flex: 2.3; /* ฝั่งตารางพนักงาน */
+      }
+      .desktop-right-pane {
+        flex: 1; /* ฝั่งรายการแจ้ง Report */
+        position: sticky;
+        top: 24px;
+      }
+      .desktop-left-pane .main-card-container,
+      .desktop-right-pane .main-card-container {
+        margin-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body ontouchstart="">
+
+  <div class="header-box">
+    <h2>ระบบช่วยตามงาน ASM <span style="font-size: 12px; color: var(--text-sub); vertical-align: middle;">v2</span></h2>
+    <p id="head-sub">กำลังโหลดข้อมูล...</p>
+  </div>
+
+  <div class="tab-container">
+    <div class="tab-btn active" onclick="switchTab('task')" id="tab-task">ส่งงาน ASM</div>
+    <div class="tab-btn" onclick="switchTab('schedule')" id="tab-schedule">งานตารางงาน</div>
+  </div>
+
+  <!-- หน้าที่ 1: ส่งงาน ASM -->
+  <div id="view-task">
+    <div class="main-card-container">
+      <input type="text" id="task-dynamic-title" class="title-input" placeholder="กรอกชื่องานตรงนี้..." onchange="saveTitle(this.value)">
+      <div class="task-header-row">
+        <div class="th-id">ID</div>
+        <div class="th-name">NAME</div>
+        <div class="th-status">STATUS</div>
+      </div>
+      <div id="task-list">กำลังโหลดข้อมูล...</div>
+    </div>
+  </div>
+
+  <!-- หน้าที่ 2: งานตารางงาน -->
+  <div id="view-schedule">
+    <div class="date-report-row">
+      <input type="date" id="date-picker" class="date-input" onchange="fetchData()">
+      <button class="btn-report-inline" onclick="openModal()">+ R</button>
+    </div>
+    
+    <!-- โครงสร้างแบ่งซ้าย-ขวา สำหรับ Desktop -->
+    <div class="desktop-schedule-layout">
+      <!-- ฝั่งซ้าย: ตารางกะพนักงาน -->
+      <div class="desktop-left-pane">
+        <div class="main-card-container">
+          <div class="grid-container" id="schedule-list"></div>
+        </div>
+      </div>
+      
+      <!-- ฝั่งขวา: รายการแจ้งคำร้อง -->
+      <div class="desktop-right-pane">
+        <div class="main-card-container">
+          <div class="report-header">📋 รายการแจ้งคำร้อง ประจำวัน</div>
+          <div id="report-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="reportModal">
+    <div class="modal-content">
+      <h3 style="margin-top:0; color:#fff; text-align:center; font-weight:800;">แจ้ง Report ลา/หยุด</h3>
+      <label style="color:var(--text-sub); font-size:14px; font-weight:600;">ชื่อพนักงาน (สาขา):</label>
+      <select id="rep-name"></select>
+      
+      <label style="color:var(--text-sub); font-size:14px; font-weight:600;">ประเภทการแจ้ง:</label>
+      <select id="rep-type">
+        <option>ลากิจ</option>
+        <option>ลาป่วย</option>
+        <option>ใช้นักขัตฤกษ์</option>
+        <option>ออกงานนอกสถานที่</option>
+        <option>สลับหยุด</option>
+        <option>สลับกะงาน</option>
+      </select>
+      
+      <label style="color:var(--text-sub); font-size:14px; font-weight:600;">หมายเหตุ:</label>
+      <input type="text" id="rep-remark" placeholder="ระบุเหตุผล หรือ กะงานที่สลับ...">
+      
+      <button class="btn-submit" onclick="submitForm()">ส่งข้อมูล Report</button>
+      <button class="btn-close" onclick="closeModal()">ยกเลิก</button>
+    </div>
+  </div>
+
+  <script>
+    var globalTeam = [];
+    var checkedInUsers = new Set(); 
+    var unreachableUsers = new Set(); 
+    var clickTimer = null; 
+
+    window.onload = function() {
+      var tzoffset = (new Date()).getTimezoneOffset() * 60000;
+      var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 10);
+      document.getElementById('date-picker').value = localISOTime;
+      fetchData();
+    }
+
+    function fetchData() {
+      var selectedDate = document.getElementById('date-picker').value;
+      document.getElementById('task-list').innerHTML = "<div style='text-align:center; color:#888; font-weight:600;'>กำลังโหลดข้อมูล...</div>";
+      document.getElementById('schedule-list').innerHTML = "<div style='text-align:center; color:#888; font-weight:600;'>กำลังโหลดข้อมูล...</div>";
+      google.script.run.withSuccessHandler(renderApp).getAppData(selectedDate);
+    }
+
+    function renderApp(data) {
+      document.getElementById('head-sub').innerText = data.header.am;
+      document.getElementById('task-dynamic-title').value = data.header.title;
+      
+      var taskHtml = "";
+      data.tasks.forEach(function(t) {
+        var statusClass = 'status-yellow';
+        var displayStatus = '⚠️ ไม่พบสาขา';
+        
+        if (t.status.includes('✅')) { statusClass = 'status-green'; displayStatus = '✅ ส่งแล้ว'; } 
+        else if (t.status.includes('❎') || t.status.includes('❌')) { statusClass = 'status-red'; displayStatus = '❎ ยังไม่ส่ง'; }
+        
+        taskHtml += `
+        <div class="task-row">
+          <div class="task-box tb-id">${t.id}</div>
+          <div class="task-box tb-name">${t.name}</div>
+          <div class="task-box tb-status ${statusClass}" onclick="cycleTaskStatus(this, '${t.id}')">${displayStatus}</div>
+        </div>`;
+      });
+      document.getElementById('task-list').innerHTML = taskHtml;
+
+      globalTeam = data.team;
+      var schHtml = "";
+      var nameOptions = "";
+      var selectedDate = document.getElementById('date-picker').value;
+      
+      data.team.forEach(function(p, index) {
+        var shift = p.shift || "";
+        var cardClass = "schedule-card";
+        var displayShift = shift;
+        
+        var personReport = data.reports.find(r => r.name === p.nickname);
+        var badgeHtml = `<div class="shift-badge badge-duty">ON DUTY</div>`; 
+        
+        if (personReport) {
+            checkedInUsers.delete(p.nickname);
+            unreachableUsers.delete(p.nickname);
+
+            displayShift = personReport.remark ? personReport.remark : personReport.type;
+            
+            if (personReport.type === "ลาป่วย") { 
+                cardClass += " shift-sick"; shift = "REPORTED"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
+            } else if (personReport.type === "ลากิจ" || personReport.type === "ใช้นักขัตฤกษ์") { 
+                cardClass += " shift-V"; shift = "REPORTED"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
+            } else if (personReport.type === "ออกงานนอกสถานที่") { 
+                cardClass += " shift-M"; shift = "REPORTED";
+            } else if (personReport.type === "สลับหยุด") { 
+                cardClass += " shift-H"; shift = "REPORTED"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
+            } else if (personReport.type === "สลับกะงาน") { 
+                shift = "WORK"; 
+            }
+        } else {
+            if (shift === "H") { 
+                cardClass += " shift-H"; displayShift = "หยุดประจำสัปดาห์"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
+            }
+            else if (shift === "V") { 
+                cardClass += " shift-V"; displayShift = "พักร้อน/ลา"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
+            }
+            else if (shift === "M" || shift.toUpperCase() === "NPI") { 
+                cardClass += " shift-M"; displayShift = shift.toUpperCase(); 
+            }
+        }
+
+        if (checkedInUsers.has(p.nickname)) { 
+          cardClass += " checked-in"; 
+          badgeHtml = `<div class="shift-badge badge-checkedin">เข้างานแล้ว</div>`;
+        } else if (unreachableUsers.has(p.nickname)) { 
+          cardClass += " status-unreachable"; 
+          badgeHtml = `<div class="shift-badge badge-unreachable">ติดต่อไม่ได้</div>`;
+        }
+        
+        schHtml += `
+        <div class="${cardClass}" onclick="handleCardClick(this, '${shift}', '${p.nickname}')">
+          ${badgeHtml}
+          <div class="sch-name">${p.nickname}</div>
+          <div class="sch-branch">${p.id}</div>
+          <div class="sch-shift">${displayShift}</div>
+        </div>`;
+        nameOptions += `<option value="${index}">${p.nickname} (${p.branch})</option>`;
+      });
+      document.getElementById('schedule-list').innerHTML = schHtml;
+      document.getElementById('rep-name').innerHTML = nameOptions;
+
+      var repHtml = "";
+      if (data.reports.length === 0) repHtml = "<div style='color:var(--text-sub); font-size:14px; font-weight:600; text-align:center; padding: 10px 0;'>ไม่มีรายการแจ้งวันนี้</div>";
+      
+      data.reports.forEach(function(r) {
+        var personInfo = globalTeam.find(t => t.nickname === r.name) || {};
+        var pId = personInfo.id || "-";
+        var pBranch = personInfo.branch || "-";
+        var dObj = new Date(selectedDate);
+        var thaiDate = dObj.getDate() + "/" + (dObj.getMonth()+1) + "/" + (dObj.getFullYear()+543);
+        var remarkTxt = r.remark ? r.remark : "ไม่มีหมายเหตุ";
+
+        repHtml += `
+        <div class="report-item">
+          <div style="flex:1;">
+            <div style="color:var(--accent-yellow); font-size:12px; font-weight:800; margin-bottom:6px;">
+              🗓 วันที่ ${thaiDate} &nbsp;•&nbsp; 👤 ${r.name}
+            </div>
+            <div style="font-size:13px; color:#fff; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+              <span style="background:#32364a; padding:2px 8px; border-radius:6px; font-size:11px;">${pId}</span>
+              ${pBranch}
+            </div>
+            <div style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:600;">
+              📝 หมายเหตุ: ${remarkTxt}
+            </div>
+          </div>
+          <div style="margin-left:12px;">
+            <span class="report-badge">${r.type}</span>
+          </div>
+        </div>`;
+      });
+      document.getElementById('report-list').innerHTML = repHtml;
+    }
+
+    function cycleTaskStatus(el, branchId) {
+      if (window.navigator && window.navigator.vibrate) { navigator.vibrate(15); }
+      var currentText = el.innerText.trim();
+      var nextStatus = "";
+      var nextClass = "";
+      
+      if(currentText.includes('✅')) {
+          nextStatus = '❎ ยังไม่ส่ง';
+          nextClass = 'status-red';
+      } else if(currentText.includes('❎')) {
+          nextStatus = '⚠️ ไม่พบสาขา';
+          nextClass = 'status-yellow';
+      } else {
+          nextStatus = '✅ ส่งแล้ว';
+          nextClass = 'status-green';
+      }
+      
+      el.innerText = nextStatus;
+      el.className = `task-box tb-status ${nextClass}`;
+      google.script.run.updateTaskStatus(branchId, nextStatus);
+    }
+
+    function saveTitle(newTitle) {
+      google.script.run.updateTaskTitle(newTitle);
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-task').classList.remove('active');
+      document.getElementById('tab-schedule').classList.remove('active');
+      document.getElementById('view-task').style.display = 'none';
+      document.getElementById('view-schedule').style.display = 'none';
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('view-' + tab).style.display = 'block';
+    }
+
+    function updateBadge(el, nickname) {
+      var badgeEl = el.querySelector('.shift-badge');
+      if (!badgeEl) return; 
+      if (el.classList.contains('status-unreachable')) {
+        badgeEl.innerText = 'ติดต่อไม่ได้';
+        badgeEl.className = 'shift-badge badge-unreachable';
+      } else if (el.classList.contains('checked-in')) {
+        badgeEl.innerText = 'เข้างานแล้ว';
+        badgeEl.className = 'shift-badge badge-checkedin';
+      } else {
+        badgeEl.innerText = 'ON DUTY';
+        badgeEl.className = 'shift-badge badge-duty';
+      }
+    }
+
+    function handleCardClick(el, shiftType, nickname) {
+      if(shiftType === "H" || shiftType === "V" || shiftType === "M" || shiftType === "REPORTED") {
+        checkedInUsers.delete(nickname);
+        unreachableUsers.delete(nickname);
+        return;
+      }
+      if (window.navigator && window.navigator.vibrate) { navigator.vibrate(15); }
+      
+      if (clickTimer == null) {
+          var wasYellow = el.classList.contains('status-unreachable');
+          if(wasYellow) {
+              unreachableUsers.delete(nickname);
+              el.classList.remove('status-unreachable');
+          }
+          
+          el.classList.toggle('checked-in');
+          if (el.classList.contains('checked-in')) { checkedInUsers.add(nickname); } 
+          else { checkedInUsers.delete(nickname); }
+
+          clickTimer = setTimeout(function () { clickTimer = null; }, 300); 
+      } else {
+          clearTimeout(clickTimer);
+          clickTimer = null;
+          
+          if(checkedInUsers.has(nickname)) {
+              checkedInUsers.delete(nickname);
+              el.classList.remove('checked-in');
+          }
+          
+          el.classList.toggle('status-unreachable');
+          if (el.classList.contains('status-unreachable')) { unreachableUsers.add(nickname); } 
+          else { unreachableUsers.delete(nickname); }
+      }
+      updateBadge(el, nickname);
+    }
+
+    function openModal() { document.getElementById('reportModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('reportModal').style.display = 'none'; }
+
+    function submitForm() {
+      var selIndex = document.getElementById('rep-name').value;
+      var payload = {
+        name: globalTeam[selIndex].nickname,
+        branch: globalTeam[selIndex].branch,
+        type: document.getElementById('rep-type').value,
+        remark: document.getElementById('rep-remark').value,
+        date: document.getElementById('date-picker').value
+      };
+      
+      document.querySelector('.btn-submit').innerText = "กำลังอัปเดตข้อมูล...";
+      google.script.run.withSuccessHandler(function(){
+        closeModal();
+        document.querySelector('.btn-submit').innerText = "ส่งข้อมูล Report";
+        fetchData();
+      }).submitReport(payload);
+    }
+  </script>
+</body>
+</html>
