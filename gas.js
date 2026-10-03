@@ -5,7 +5,7 @@
    ===================================================================== */
 (function () {
   // ⚠️ ใส่ลิงก์ Web app ของโปรเจกต์ SUPER APP (Deploy → Manage deployments → Web app URL ลงท้าย /exec)
-  var API_URL = 'PASTE_SUPER_APP_WEB_APP_URL_HERE';
+  var API_URL = 'https://script.google.com/macros/s/AKfycbwmALqdO95c1UTHKNGhNIAvyDSercHbETyzd3aCivS_nmxgd6pZ5-iB50F0oHAlUwoyOg/exec';
 
   var TOKEN_KEY = 'system1326_token';
   var APP = window.GAS_APP || 'dash';
