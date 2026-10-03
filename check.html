@@ -5,7 +5,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script src="staff-names.js?v=2026.10.04-2"></script>
+        <script src="staff-names.js?v=2026.10.04-3"></script>
     <script>
       // ปุ่มชื่อพนักงาน — รายชื่ออยู่ในไฟล์ staff-names.js
       function pickedName(radioName) {
@@ -26,7 +26,7 @@
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderNameButtons); else renderNameButtons();
     </script>
     <script>window.GAS_APP = 'check';</script>
-    <script src="gas.js?v=2026.10.04-2"></script>
+    <script src="gas.js?v=2026.10.04-3"></script>
     <title>Check List 1326</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFD600">
@@ -360,8 +360,11 @@
         background-color: var(--blue); color: var(--white);
         box-shadow: 0 6px 16px -6px rgba(10,132,255,0.9), inset 0 1px 0 rgba(255,255,255,0.3);
       }
-      .grid-emp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-      @media (min-width: 768px) { .grid-emp { grid-template-columns: repeat(6, 1fr); } }
+      /* ปุ่มชื่อ: แถวสุดท้ายอยู่กึ่งกลาง (สมมาตร) */
+      .name-grid { --c: 4; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+      .name-grid > label { flex: 0 0 calc((100% - (var(--c) - 1) * 8px) / var(--c)); min-width: 0; }
+      .nm-recv { --c: 3; }
+      @media (min-width: 768px) { .nm-staff { --c: 6; } .nm-recv { --c: 4; } }
       .btn-check:checked + .btn-emp {
         background-color: var(--yellow, #FFD600); color: #1C1C1E;
         box-shadow: 0 6px 16px -6px rgba(255,214,0,0.95), inset 0 1px 0 rgba(255,255,255,0.5);
@@ -657,8 +660,8 @@
       .ts-kv small { color: var(--gray-1); font-weight: 600; }
       .ts-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.12); }
       .ts-more { margin-left: auto; color: var(--yellow); font-weight: 700; font-size: 0.74rem; white-space: nowrap; }
-      .ts-goal { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; scrollbar-width: none; }
-      .ts-goal::-webkit-scrollbar { display: none; }
+      .ts-goal { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+      .ts-goal span.more { background: transparent; color: var(--gray-1); }
       .ts-goal span { flex-shrink: 0; font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 100px; background: rgba(255,255,255,0.07); white-space: nowrap; }
       .ts-goal span b { color: var(--yellow); font-family: 'Space Grotesk', sans-serif; }
       .ts-goal span.ok { color: #6EE7A0; }
@@ -1535,13 +1538,13 @@
             <form id="salesForm" onsubmit="handleSalesSubmit(event)">
               <div class="field">
                 <label class="form-label-custom">👤 ชื่อพนักงานขาย</label>
-                <div class="grid-emp" data-names="SALES_STAFF" data-radio="empPick" data-style="btn-emp"></div>
+                <div class="name-grid nm-staff" data-names="SALES_STAFF" data-radio="empPick" data-style="btn-emp"></div>
               </div>
 
               <!-- 🙋 พนักงานผู้รับเคส (บันทึกลงคอลัมน์ H) -->
               <div class="field">
                 <label class="form-label-custom">🙋 พนักงานผู้รับเคส</label>
-                <div class="grid-3-col" data-names="CASE_RECEIVERS" data-radio="caseReceiver" data-style="btn-receiver"></div>
+                <div class="name-grid nm-recv" data-names="CASE_RECEIVERS" data-radio="caseReceiver" data-style="btn-receiver"></div>
               </div>
 
               <div class="row g-3 field">
@@ -1814,7 +1817,7 @@
             <form id="failForm" onsubmit="handleFailSubmit(event)">
               <div class="field">
                 <label class="form-label-custom">👤 ชื่อพนักงาน</label>
-                <div class="grid-emp" data-names="SALES_STAFF" data-radio="empPickFailed" data-style="btn-emp"></div>
+                <div class="name-grid nm-staff" data-names="SALES_STAFF" data-radio="empPickFailed" data-style="btn-emp"></div>
               </div>
 
               <div class="field">
@@ -3484,7 +3487,8 @@
         if (g) {
           const need = g.focus.filter(f => f.perDay > 0).sort((a, b) => b.perDay - a.perDay);
           let chips = g.sales ? `<span class="money">💰 ต้องขายวันละ <b>${baht(g.sales.perDay)}</b></span>` : '';
-          chips += need.map(f => `<span>🎯 ${escapeHtml(f.name)} <b>${f.perDay}</b>/วัน</span>`).join('');
+          chips += need.slice(0, 4).map(f => `<span>🎯 ${escapeHtml(f.name)} <b>${f.perDay}</b>/วัน</span>`).join('');
+          if (need.length > 4) chips += `<span class="more">+${need.length - 4} งาน · แตะดูทั้งหมด</span>`;
           if (!need.length) chips += '<span class="ok">✅ งานโฟกัสถึงเป้าทุกตัวแล้ว</span>';
           h += `<div class="ts-goal">${chips}</div>`;
         }

@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>window.GAS_APP = 'shift';</script>
-  <script src="gas.js?v=2026.10.04-2"></script>
+  <script src="gas.js?v=2026.10.04-3"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#FFD600">
   <title>ตารางกะงาน 1326</title>
@@ -252,6 +252,22 @@
     .ffoot .btn-main { flex: 1.5; margin-top: 0; }
     .ffoot .btn-soft { background: #E9E9EE; }
 
+
+    /* ===== ฟอร์ม: สมมาตร ===== */
+    .types { display: flex; flex-wrap: wrap; justify-content: center; }
+    .types button { flex: 0 0 calc((100% - 16px) / 3); }
+    .who { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); overflow: visible; padding: 0 0 8px; margin: 0; gap: 4px; }
+    .who button { width: auto; }
+    @media (min-width: 900px) {
+      .sheet .box.fbox { width: min(900px, 100%); max-height: 94vh; display: grid; grid-template-columns: 1fr 1fr; column-gap: 10px;
+        grid-template-areas: "head head" "type who" "date who" "note who" "foot foot"; align-items: start; }
+      .fbox .fs-who { align-self: stretch; }
+      .fbox .fhead { grid-area: head; } .fbox .fs-type { grid-area: type; } .fbox .fs-date { grid-area: date; }
+      .fbox .fs-who { grid-area: who; } .fbox .fs-note { grid-area: note; } .fbox .ffoot { grid-area: foot; }
+      .fbox .grabber { display: none; }
+      .fbox .fsec { margin-bottom: 10px; }
+    }
+
     /* ===== สรุป ===== */
     .seg { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 12px; scrollbar-width: none; }
     .seg::-webkit-scrollbar { display: none; }
@@ -401,12 +417,12 @@
         <button class="xbtn" onclick="closeModal()" aria-label="ปิด">✕</button>
       </div>
 
-      <div class="fsec">
+      <div class="fsec fs-type">
         <div class="fl"><span>1</span>ประเภทคำร้อง</div>
         <div class="types" id="typeGrid"></div>
       </div>
 
-      <div class="fsec">
+      <div class="fsec fs-date">
         <div class="fl"><span>2</span>วันที่</div>
         <div class="dq">
           <button type="button" data-q="0" onclick="quickDate(0)">วันนี้</button>
@@ -415,7 +431,7 @@
         </div>
       </div>
 
-      <div class="fsec">
+      <div class="fsec fs-who">
         <div class="fl"><span>3</span>ใคร <small>แตะชื่อ = เลือกตำแหน่งให้อัตโนมัติ</small></div>
         <div class="who" id="whoList"></div>
         <input type="text" class="inp inp-l" id="name" placeholder="หรือพิมพ์ชื่อเอง..." oninput="clearWho()">
@@ -440,7 +456,7 @@
         </details>
       </div>
 
-      <div class="fsec">
+      <div class="fsec fs-note">
         <div class="fl"><span>4</span>หมายเหตุ <small id="noteHint">ไม่บังคับ</small></div>
         <input type="text" class="inp inp-l" id="note" placeholder="รายละเอียดเพิ่มเติม...">
       </div>
