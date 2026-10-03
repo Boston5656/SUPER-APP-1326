@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
-  <script src="gas.js"></script>
+  <script src="gas.js?v=2026.10.04-2"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -136,6 +136,23 @@
     .focus-bar > i { display: block; height: 100%; width: 0; border-radius: 9999px; transition: width 1.1s var(--ios-ease); }
 
 
+    /* ===== 🎯 ต้องทำต่อวัน (Dashboard) ===== */
+    .ds-goal { grid-column: 1 / -1; background: linear-gradient(170deg, #232325 0%, #141416 60%); color: #fff; border-radius: 26px; padding: 16px 18px;
+      box-shadow: 0 18px 36px -22px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.06); }
+    .ds-goal:empty { display: none; }
+    .dg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+    .dg-head b { font-size: 14px; } .dg-head span { font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .dg-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .dg-kpis > div { background: rgba(255,255,255,.06); border-radius: 16px; padding: 10px 12px; min-width: 0; }
+    .dg-kpis small { display: block; font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .dg-kpis b { display: block; font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 20px; font-weight: 800; color: var(--yellow, #FFD600); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dg-kpis b.neg { color: #FF6B60; } .dg-kpis b.pos { color: #4ADE80; }
+    .dg-kpis em { display: block; font-style: normal; font-size: 10px; color: #A1A1AA; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dg-chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; scrollbar-width: none; }
+    .dg-chips::-webkit-scrollbar { display: none; }
+    .dg-chips span { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 100px; background: rgba(255,255,255,.07); white-space: nowrap; }
+    .dg-chips span b { color: var(--yellow, #FFD600); font-family: var(--f-num, 'Space Grotesk'), sans-serif; }
+    .dg-chips span.ok { color: #4ADE80; }
     /* ===== Market Share tile (หน้า Dashboard) — แนวนอน: พายซ้าย รายการขวา ===== */
     .ds-share { display: flex !important; flex-direction: column; align-items: stretch !important; justify-content: center; gap: 10px; }
     .dsx-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -681,6 +698,18 @@
     .rk-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; color: #8E8E93; font-weight: 600; margin-top: 8px; }
 
     /* single brand (iPhone / iPad) */
+    .rk-fc { margin-top: 14px; }
+    .rk-solo .rk-fc { margin-top: 0; margin-bottom: 14px; }
+    .rk-fc-tot { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+    .rk-fc-tot > div { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.06); border-radius: 14px; padding: 10px; min-width: 0; }
+    .rk-fc-tot small { display: block; font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .rk-fc-tot b { display: block; font-family: var(--f-num); font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-fc-tot > div > span { font-size: 10.5px; font-weight: 700; }
+    .rk-fc-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; margin-top: 10px; font-size: 12px; }
+    .rk-fc-list > div { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .rk-fc-list span:first-child { font-weight: 700; color: #E5E5EA; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-fc-list b { font-family: var(--f-num); }
+    .rk-fc-list > div > span:last-child { font-size: 10.5px; font-weight: 700; }
     .rk-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .rk-kpi { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 12px; min-width: 0; }
     .rk-kpi:first-child { background: rgba(255,214,0,.1); border-color: rgba(255,214,0,.25); }
@@ -783,6 +812,16 @@
     @media (min-width: 640px) { #logout-sheet { align-items: center; } }
     @keyframes lsFade { from { opacity: 0; } }
     @keyframes lsUp { from { opacity: 0; transform: translateY(40px) scale(.96); } }
+    .app-item { position: relative; }
+    .app-badge { position: absolute; top: -7px; left: calc(50% + 26px); min-width: 22px; height: 22px; padding: 0 6px; border-radius: 100px; display: none; align-items: center; justify-content: center;
+      font: 800 11px/1 'Space Grotesk', sans-serif; color: #fff; background: #FF3B30; box-shadow: 0 0 0 2.5px var(--yellow, #FFD600), 0 6px 12px -4px rgba(0,0,0,.5); z-index: 2; }
+    .app-badge.on { display: flex; animation: badgePop .55s var(--spring) both; }
+    .app-badge.info { background: #fff; color: #1C1C1E; }
+    .app-badge.warn { background: #FF9F0A; animation: badgePop .55s var(--spring) both, badgePulse 1.6s ease-in-out .6s infinite; }
+    .app-note { display: block; min-height: 14px; margin-top: -8px; font-size: 10px; font-weight: 700; color: rgba(28,28,30,.55); text-align: center; white-space: nowrap; letter-spacing: 0 !important; }
+    .app-note.on { color: #1C1C1E; }
+    @keyframes badgePop { from { transform: scale(0); } }
+    @keyframes badgePulse { 0%, 100% { box-shadow: 0 0 0 2.5px var(--yellow, #FFD600), 0 0 0 0 rgba(255,159,10,.6); } 50% { box-shadow: 0 0 0 2.5px var(--yellow, #FFD600), 0 0 0 7px rgba(255,159,10,0); } }
     #frame-host { position: absolute; inset: 0; }
     #frame-host iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     #frame-host iframe { display: none; background: #FFD600; }
@@ -892,6 +931,7 @@
 
       <!-- กราฟสรุป 3 กล่อง -->
       <div class="dash-bottom grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="ds-goal dash-sec" id="db-goal"></div>
         <div class="ds-share box-white !mb-0 dash-sec tap cursor-pointer" onclick="showMarketShare()">
           <div class="dsx-head"><h4 class="text-xs font-bold uppercase">Market Share (Unit)</h4><span>แตะดูรายละเอียด ›</span></div>
           <div class="dsx-body">
@@ -977,6 +1017,29 @@
   <script>
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
+    // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
+    const APP_VER = '2026.10.04-2';
+    function checkUpdate(force) {
+      fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
+        if (!j || !j.v || j.v === APP_VER) return;
+        const onHub = !document.getElementById('page-hub').classList.contains('hidden') || !document.getElementById('page-login').classList.contains('hidden');
+        let tried = ''; try { tried = sessionStorage.getItem('sys_upd') || ''; } catch (e) {}
+        if ((onHub || force) && tried !== j.v) { try { sessionStorage.setItem('sys_upd', j.v); } catch (e) {} location.replace(location.pathname + '?v=' + j.v); return; }
+        if (tried === j.v && !force) return;   // GitHub ยังอัปไม่ทัน — ไม่โหลดวนซ้ำ
+        let el = document.getElementById('upd-pill');
+        if (!el) {
+          el = document.createElement('button'); el.id = 'upd-pill'; el.type = 'button';
+          el.textContent = '✨ มีเวอร์ชันใหม่ · แตะเพื่ออัปเดต';
+          el.style.cssText = 'position:fixed;z-index:200;left:50%;top:calc(12px + env(safe-area-inset-top));transform:translateX(-50%);border:0;border-radius:100px;padding:10px 18px;background:#1C1C1E;color:#FFD600;font:700 13px "IBM Plex Sans Thai",sans-serif;box-shadow:0 12px 26px -10px rgba(0,0,0,.6);cursor:pointer';
+          el.onclick = () => location.replace(location.pathname + '?v=' + j.v);
+          document.body.appendChild(el);
+        }
+      }).catch(() => {});
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) checkUpdate(); });
+    window.addEventListener('pageshow', () => checkUpdate());
+    setInterval(checkUpdate, 300000);
+
     const APP_URLS = {
       4: "stock.html",
       5: "check.html",
@@ -1188,13 +1251,15 @@
       APP_DEFS.forEach(app => {
         if (currentUser.apps.includes(app.id)) {
           html += `<div class="app-item flex flex-col items-center gap-3" style="animation-delay:${n * 55}ms" data-app="${app.id}">
-            <div class="app-icon">${app.icon}</div>
+            <div class="app-icon">${app.icon}</div><b class="app-badge" id="badge-${app.id}"></b>
             <span class="text-[11px] font-bold text-zinc-800 uppercase tracking-widest">${app.name}</span>
+            <small class="app-note" id="note-${app.id}"></small>
           </div>`;
           n++;
         }
       });
       grid.innerHTML = html;
+      loadHubBadges();
       grid.querySelectorAll('.app-item').forEach(el => {
         el.addEventListener('pointerdown', () => { el.classList.remove('boing'); el.classList.add('pressed'); haptic(6); });
         ['pointerleave', 'pointercancel'].forEach(ev => el.addEventListener(ev, () => el.classList.remove('pressed')));
@@ -1210,6 +1275,37 @@
       });
     }
 
+
+    // =========================================================
+    // 🔔 ป้ายบนไอคอน — รู้ทันทีโดยไม่ต้องเปิดแอป
+    // =========================================================
+    let hubBadgeT = null;
+    function setBadge(id, txt, cls, note) {
+      const b = document.getElementById('badge-' + id), n = document.getElementById('note-' + id);
+      if (b) { b.textContent = txt || ''; b.className = 'app-badge' + (txt ? ' on ' + (cls || '') : ''); }
+      if (n) { n.textContent = note || ''; n.classList.toggle('on', !!note); }
+    }
+    function loadHubBadges() {
+      clearTimeout(hubBadgeT);
+      hubBadgeT = setTimeout(loadHubBadges, 120000);
+      if (!currentUser || document.getElementById('page-hub').classList.contains('hidden')) return;
+      google.script.run.withSuccessHandler(d => {
+        if (!d) return;
+        const hr = new Date().getHours();
+        if (d.check) {
+          const c = d.check, quiet = c.idleMin != null && c.idleMin >= 120 && hr >= 11 && hr < 22;
+          const noneYet = !c.count && hr >= 12 && hr < 22;
+          setBadge(5, quiet || noneYet ? '!' : (c.count ? String(c.count) : ''), quiet || noneYet ? 'warn' : 'info',
+            noneYet ? 'ยังไม่มีบันทึกขาย' : quiet ? `เงียบ ${Math.floor(c.idleMin / 60)} ชม.` : (c.last ? `ล่าสุด ${c.last}` : ''));
+        }
+        if (d.shift) {
+          const s = d.shift;
+          setBadge(6, s.newToday ? String(s.newToday) : (s.lowStaff ? '!' : ''), s.newToday ? 'red' : 'warn',
+            s.lowStaff ? `คนน้อย (${s.staffOn} คน)` : (s.newToday ? `คำร้องใหม่ ${s.newToday}` : ''));
+        }
+        if (d.asm) setBadge(7, d.asm.pending ? String(d.asm.pending) : '', 'red', d.asm.pending ? `ยังไม่ส่ง ${d.asm.pending}` : '');
+      }).withFailureHandler(() => {}).getHubBadges();
+    }
 
     // =========================================================
     // 🧩 แอปย่อยแบบเปิดซ้อน (เก็บหน้าไว้ — กลับมาเปิดซ้ำได้ทันทีไม่ต้องโหลดใหม่)
@@ -1230,7 +1326,7 @@
         ld.classList.add('on');
         f.addEventListener('load', () => ld.classList.remove('on'), { once: true });
         f.addEventListener('load', () => injectBack(f));
-        f.src = url;
+        f.src = url + (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + APP_VER;
         host.appendChild(f);
         frameCache[id] = f;
       }
@@ -1518,6 +1614,29 @@
         m.classList.add('hidden'); m.classList.remove('closing');
         if (msChart) { msChart.destroy(); msChart = null; }
       }, 220);
+    }
+
+    // ===== 🎯 ต้องทำต่อวัน + คาดการณ์สิ้นเดือน =====
+    function renderDailyGoal(data) {
+      const el = document.getElementById('db-goal'); if (!el) return;
+      const h = data.header, day = Number(h.date.day) || 1, days = Number(h.date.daysInMonth) || 30;
+      const left = Math.max(1, days - day + 1);
+      const tgt = Number(h.target) || 0, cur = Number(h.currentSales) || 0;
+      const fc = Math.round(cur / day * days);
+      const perDay = Math.max(0, Math.round((tgt - cur) / left));
+      const avg = Math.round(cur / day);
+      const gap = fc - tgt;
+      const focus = (data.focus || []).map(f => {
+        const onTrack = f.base > 0 && f.count / f.base * 100 >= f.target;
+        const need = onTrack ? 0 : Math.max(0, Math.ceil(f.target / 100 * (f.base / day * days) - f.count));
+        return { name: f.name, need, per: Math.ceil(need / left) };
+      }).filter(f => f.need > 0).sort((a, b) => b.per - a.per);
+      el.innerHTML = `<div class="dg-head"><b>🎯 ต้องทำต่อวัน</b><span>เหลือ ${left} วัน (รวมวันนี้)</span></div>
+        <div class="dg-kpis">
+          <div><small>ต้องขายวันละ</small><b>${tgt ? '฿' + fmtInt(perDay) : '–'}</b><em>ตอนนี้เฉลี่ย ฿${fmtInt(avg)}/วัน</em></div>
+          <div><small>🔮 คาดจบเดือน</small><b class="${tgt && gap < 0 ? 'neg' : 'pos'}">฿${fmtInt(fc)}</b><em>${tgt ? (gap >= 0 ? '✅ เกินเป้า ฿' + fmtInt(gap) : '⚠️ ขาดเป้า ฿' + fmtInt(-gap)) : ''}</em></div>
+        </div>
+        <div class="dg-chips">${focus.length ? focus.map(f => `<span>${f.name} <b>${f.per}</b>/วัน</span>`).join('') : '<span class="ok">✅ งานโฟกัสถึงเป้าทุกตัว</span>'}</div>`;
     }
 
     // ===== MARKET SHARE (Unit) — iPhone + Smartphone =====
@@ -2052,7 +2171,28 @@
         <td>${rkFmt(total)}</td><td class="hide-m">100%</td><td class="hide-m">${ptot ? ((total - ptot) / ptot * 100 >= 0 ? '+' : '') + ((total - ptot) / ptot * 100).toFixed(1) + '%' : '–'}</td></tr>`;
       t += `</tbody></table></div>
         <div class="rk-legend"><span><b class="a-up">↑</b> ≥ +10%</span><span><b class="a-ur">↗</b> +2–10%</span><span><b class="a-fl">→</b> ±2%</span><span><b class="a-dr">↘</b> −2–10%</span><span><b class="a-dn">↓</b> < −10% / ไม่มียอด</span><span>เทียบเดือนก่อนหน้า · MTD = เดือนนี้ยังไม่จบ (เทียบช่วงวันเดียวกัน)${rkQRunning() ? ' · * Q ยังไม่จบ เทียบช่วงเวลาเดียวกันของ Q ก่อน' : ''}</span></div></div>`;
-      return `<div class="rk-qgrid"><div>${pod}</div><div>${t}</div></div>`;
+      const fcp = rkQRunning() ? rkForecastHTML(ranked) : '';
+      return `<div class="rk-qgrid"><div>${pod}${fcp}</div><div>${t}</div></div>`;
+    }
+
+    // 🔮 คาดการณ์เดือนนี้ (ยอดถึงวันนี้ ÷ วันที่ผ่านไป × วันทั้งเดือน) เทียบเดือนเดียวกันปีก่อน
+    function rkPrevMonthLY(brand, metric) {
+      const P = ((rk.data.prev || {})[rk.cat] || {})[brand];
+      return P && P[metric] ? Number(P[metric][rk.data.curMonth]) || 0 : null;
+    }
+    function rkForecastHTML(rows) {
+      const D = rk.data, cm = D.curMonth, pace = rkPace();
+      const list = rows.map(r => {
+        const cur = r.v[cm] || 0, fc = cur / pace, ly = rkPrevMonthLY(r.name, rk.metric);
+        return { name: r.name, cur, fc, ly };
+      }).filter(x => x.cur > 0 || x.ly).sort((a, b) => b.fc - a.fc);
+      if (!list.length) return '';
+      const tc = list.reduce((a, x) => a + x.fc, 0), tl = list.reduce((a, x) => a + (x.ly || 0), 0);
+      const g = (a, b) => b > 0 ? (a - b) / b * 100 : null;
+      const gt = v => v == null ? '<span style="color:#8E8E93">–</span>' : `<span class="${v >= 0 ? 'a-up' : 'a-dn'}">${v >= 0 ? '▲ +' : '▼ '}${v.toFixed(1)}%</span>`;
+      return `<div class="rk-panel rk-fc"><div class="rk-ph"><b>🔮 คาดจบเดือน ${RK_MON[cm]}</b><span>ข้อมูลถึงวันที่ ${D.day}/${D.daysInMonth} · เทียบ ${RK_MON[cm]} ปีก่อน</span></div>
+        <div class="rk-fc-tot"><div><small>คาดจบเดือน</small><b>${rkFmt(tc, true)}</b></div><div><small>${RK_MON[cm]} ปีก่อน</small><b>${tl ? rkFmt(tl, true) : '–'}</b></div><div><small>เติบโต</small><b>${gt(g(tc, tl))}</b></div></div>
+        ${list.length > 1 ? '<div class="rk-fc-list">' + list.slice(0, 6).map(x => `<div><span>${x.name}</span><b>${rkFmt(x.fc)}</b>${gt(g(x.fc, x.ly))}</div>`).join('') + '</div>' : ''}</div>`;
     }
 
     function rkTop5HTML(items) {
@@ -2108,8 +2248,18 @@
             ${kpi('🏷️', 'ราคาเฉลี่ย/เครื่อง', qu ? rkB(qr / qu) : '–', rkPct(rkAsp(qr, qu), pAsp))}
           </div>
           <div class="rk-months2">${months}</div></div>
-        <div class="rk-panel"><div class="rk-ph"><b>🔥 Top 5 รุ่นขายดี Q${q}</b><span>ยอดบาท · เครื่อง</span></div>${rkTop5HTML(rkTop('APPLE', 'Q' + q))}</div>
+        <div>${rkQRunning() ? rkSoloForecastHTML(S) : ''}
+        <div class="rk-panel"><div class="rk-ph"><b>🔥 Top 5 รุ่นขายดี Q${q}</b><span>ยอดบาท · เครื่อง</span></div>${rkTop5HTML(rkTop('APPLE', 'Q' + q))}</div></div>
       </div>`;
+    }
+    function rkSoloForecastHTML(S) {
+      const D = rk.data, cm = D.curMonth, pace = rkPace();
+      const fr = (S.rev[cm] || 0) / pace, fu = (S.unit[cm] || 0) / pace;
+      const lr = rkPrevMonthLY('APPLE', 'rev'), lu = rkPrevMonthLY('APPLE', 'unit');
+      const g = (a, b) => b > 0 ? (a - b) / b * 100 : null;
+      const gt = v => v == null ? '<span style="color:#8E8E93">ไม่มีข้อมูลปีก่อน</span>' : `<span class="${v >= 0 ? 'a-up' : 'a-dn'}">${v >= 0 ? '▲ +' : '▼ '}${v.toFixed(1)}% vs ปีก่อน</span>`;
+      return `<div class="rk-panel rk-fc"><div class="rk-ph"><b>🔮 คาดจบเดือน ${RK_MON[cm]}</b><span>ข้อมูลถึงวันที่ ${D.day}/${D.daysInMonth}</span></div>
+        <div class="rk-fc-tot"><div><small>💰 ยอดขาย</small><b>${rkB(fr)}</b>${gt(g(fr, lr))}</div><div><small>📦 เครื่อง</small><b>${rkU(fu)}</b>${gt(g(fu, lu))}</div></div></div>`;
     }
     function rkSoloYearHTML() {
       const D = rk.data, cm = D.curMonth, S = rkSoloData(), nm = RK_CAT_NAME[rk.cat];
@@ -2332,6 +2482,7 @@
 
         const momEl = document.getElementById('db-mom'); momEl.innerText = data.header.mom; momEl.className = `text-lg font-black ${gClass(data.header.mom)}`;
         const yoyEl = document.getElementById('db-yoy'); yoyEl.innerText = data.header.yoy; yoyEl.className = `text-lg font-black ${gClass(data.header.yoy)}`;
+        renderDailyGoal(data);
 
         // ----- งานโฟกัส: กล่องละงาน มี เป้า / ทำได้ / ชิ้น / ขาดอีกกี่ชิ้น -----
         let focusHtml = '';

@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>window.GAS_APP = 'shift';</script>
-  <script src="gas.js"></script>
+  <script src="gas.js?v=2026.10.04-2"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#FFD600">
   <title>ตารางกะงาน 1326</title>
@@ -167,6 +167,25 @@
     .row2 .btn-main { flex: 1.4; margin-top: 0; }
 
 
+
+    /* ===== 📌 แถบสรุปวันนี้ + คนน้อย ===== */
+    .sstrip { background: var(--panel); color: #fff; border-radius: 22px; padding: 12px 14px; border: 1px solid rgba(255,255,255,.06); box-shadow: 0 14px 30px -20px rgba(0,0,0,.75); grid-column: 1 / -1; }
+    .sstrip:empty { display: none; }
+    .ss-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 8px; cursor: pointer; }
+    .ss-k { min-width: 0; display: flex; flex-direction: column; }
+    .ss-k small { font-size: .64rem; color: var(--gray-1); font-weight: 700; white-space: nowrap; }
+    .ss-k b { font-family: var(--f-num); font-size: 1.5rem; line-height: 1.1; }
+    .ss-k b.g { color: #4ADE80; } .ss-k b.o { color: var(--orange); }
+    .ss-k em { font-style: normal; font-size: .62rem; color: var(--gray-2); font-weight: 600; white-space: nowrap; }
+    .ss-warn { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; scrollbar-width: none; }
+    .ss-warn::-webkit-scrollbar { display: none; }
+    .ss-warn button { flex-shrink: 0; padding: 6px 12px; border-radius: 100px; background: rgba(255,59,48,.18); color: #FF8A80; font-weight: 700; font-size: .72rem; transition: transform .35s var(--spring); }
+    .ss-warn button:active { transform: scale(.92); }
+    .ss-ok { margin-top: 8px; font-size: .72rem; font-weight: 700; color: #4ADE80; }
+    .day.low:not(.selected) { background: rgba(255,59,48,.16); color: #FF8A80; }
+    .day.low::after { content: ''; position: absolute; top: 5px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+    .legend i.lowi { background: var(--red); }
+
     /* ===== ปุ่มคำร้อง / สรุป ===== */
     .acts { display: grid; grid-template-columns: 1.25fr 1fr; gap: 8px; margin-top: 14px; }
     .act { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 20px; text-align: left; transition: transform .35s var(--spring), box-shadow .25s; }
@@ -324,6 +343,9 @@
       <p id="sheet-month">&nbsp;</p>
     </div>
 
+    <!-- 📌 สรุปวันนี้ -->
+    <div class="sstrip rise" id="sstrip" style="animation-delay:.03s"></div>
+
     <div class="colL">
       <!-- ปฏิทิน -->
       <div class="panel rise" style="animation-delay:.05s">
@@ -332,7 +354,7 @@
           <button class="chip-btn" onclick="DATA && selectDay(DATA.today)">วันนี้</button>
         </div>
         <div class="cal-grid" id="cal-grid"><div style="grid-column:1/-1;padding:30px 0"><span class="loading" style="color:#aaa"><span class="sp"></span>กำลังโหลด</span></div></div>
-        <div class="legend"><span><i></i>มีคำร้องแจ้งลา</span></div>
+        <div class="legend"><span><i></i>มีคำร้องแจ้งลา</span><span><i class="lowi"></i>พนักงานร้านน้อยกว่า 3 คน</span></div>
       </div>
 
       <!-- ข้อความส่งงาน -->
@@ -473,7 +495,25 @@
         .getMonthData();
     }
 
-    function renderAll() { renderCalendar(); renderPeople(); renderCopy(); }
+    function renderAll() { renderCalendar(); renderPeople(); renderCopy(); renderStrip(); }
+    function renderStrip() {
+      const el = document.getElementById('sstrip'); if (!el || !DATA) return;
+      const g = dayPeople(DATA.today);
+      const st = g.on.filter(x => !x.isPC).length, pc = g.on.length - st;
+      const lvCount = g.lv.length + g.extra.filter(r => LEAVE_TYPES.indexOf(r.type) !== -1).length;
+      const total = new Date(DATA.year, DATA.month, 0).getDate();
+      const lows = [];
+      for (let d = DATA.today; d <= Math.min(total, DATA.today + 7); d++) { const c = staffOnCount(d); if (c != null && c < MIN_STAFF) lows.push({ d, c }); }
+      const repsToday = (DATA.reports[DATA.today] || []).length;
+      const dn = d => d === DATA.today ? 'วันนี้' : d === DATA.today + 1 ? 'พรุ่งนี้' : 'วันที่ ' + d;
+      el.innerHTML = `<div class="ss-row" onclick="selectDay(DATA.today)">
+          <span class="ss-k"><small>วันนี้มาทำงาน</small><b class="g">${g.on.length}</b><em>ร้าน ${st} · PC ${pc}</em></span>
+          <span class="ss-k"><small>หยุด</small><b>${g.off.length}</b></span>
+          <span class="ss-k"><small>ลา/อื่นๆ</small><b class="o">${lvCount}</b></span>
+          <span class="ss-k"><small>คำร้องวันนี้</small><b>${repsToday}</b></span>
+        </div>
+        ${lows.length ? `<div class="ss-warn">${lows.map(x => `<button onclick="selectDay(${x.d})">⚠️ ${dn(x.d)} คนน้อย · ร้าน ${x.c} คน</button>`).join('')}</div>` : '<div class="ss-ok">✅ 7 วันข้างหน้าคนพอทุกวัน</div>'}`;
+    }
     function selectDay(d) { selected = d; filter = ''; try { navigator.vibrate && navigator.vibrate(6); } catch (e) {} renderAll(); }
     const pad = n => String(n).padStart(2, '0');
     const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -506,7 +546,9 @@
 
     // ===== ใครมา / หยุด / ลา (รวมคำร้องจากฟอร์ม) =====
     const LEAVE_TYPES = ['ลากิจ', 'ลาป่วย'];
-    const OFF_TYPES = ['ใช้นักขัต'];   // ใช้วันหยุดนักขัตฤกษ์ = ไม่มาทำงาน → ไปอยู่กลุ่ม "หยุด"
+    const OFF_TYPES = ['ใช้นักขัต'];
+    const MIN_STAFF = 3;   // ✏️ พนักงานร้าน (ไม่รวม PC) มาทำงานน้อยกว่านี้ = คนน้อย (ขึ้นสีแดงในปฏิทิน)
+    function staffOnCount(d) { if (!DATA.days[d]) return null; return dayPeople(d).on.filter(x => !x.isPC).length; }   // ใช้วันหยุดนักขัตฤกษ์ = ไม่มาทำงาน → ไปอยู่กลุ่ม "หยุด"
     function matchReport(p, reps) {
       const keys = [p.header, p.pcName].concat(String(p.header).split(/\s*:\s*/)).filter(k => k && k.length > 1).map(s => s.toUpperCase());
       return reps.find(r => { const n = String(r.name || '').toUpperCase().trim(); return n && keys.some(k => n === k || n.indexOf(k) !== -1 || k.indexOf(n) !== -1); });
@@ -551,6 +593,8 @@
         let cls = 'day';
         if (d === selected) cls += ' selected'; else if (d === DATA.today) cls += ' today';
         const dot = (DATA.reports[d] || []).length ? '<span class="dot"></span>' : '';
+        const sc = staffOnCount(d);
+        if (sc != null && sc < MIN_STAFF) cls += ' low';
         html += `<div class="${cls}" onclick="selectDay(${d})">${d}${dot}</div>`;
       }
       document.getElementById('cal-grid').innerHTML = html;
@@ -711,8 +755,8 @@
       const data = { name, position: pos.value, type: reqType, note: document.getElementById('note').value, leaveDate };
       const reset = () => { btn.textContent = 'บันทึกคำร้อง'; btn.disabled = false; };
       google.script.run
-        .withSuccessHandler(() => {
-          toast('บันทึกคำร้องเรียบร้อย');
+        .withSuccessHandler(res => {
+          toast(res && res.queued ? res.message : 'บันทึกคำร้องเรียบร้อย');
           closeModal(); reset();
           document.getElementById('name').value = ''; document.getElementById('note').value = '';
           pos.checked = false; reqType = ''; setPos('');

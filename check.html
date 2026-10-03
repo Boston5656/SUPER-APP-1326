@@ -5,7 +5,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script src="staff-names.js"></script>
+        <script src="staff-names.js?v=2026.10.04-2"></script>
     <script>
       // ปุ่มชื่อพนักงาน — รายชื่ออยู่ในไฟล์ staff-names.js
       function pickedName(radioName) {
@@ -26,7 +26,7 @@
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderNameButtons); else renderNameButtons();
     </script>
     <script>window.GAS_APP = 'check';</script>
-    <script src="gas.js"></script>
+    <script src="gas.js?v=2026.10.04-2"></script>
     <title>Check List 1326</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFD600">
@@ -644,6 +644,54 @@
       .fs-brow .chips span { font-size: 0.64rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(255,255,255,0.06); color: var(--c); white-space: nowrap; }
       .fs-brow .tt { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
       .fs-panel .pc-target-row { padding: 10px 12px; }
+
+
+      /* ===== 📌 แถบสรุปวันนี้ (หน้าบันทึกขาย) ===== */
+      .today-strip { max-width: 880px; margin: 0 auto 14px; background: linear-gradient(170deg, #232325 0%, #141416 60%); color: #fff; border-radius: 22px; padding: 12px 14px;
+        border: 1px solid rgba(255,255,255,0.06); box-shadow: 0 14px 30px -20px rgba(0,0,0,0.75); cursor: pointer; transition: transform .4s var(--spring); }
+      .today-strip:active { transform: scale(0.98); }
+      .ts-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 0.8rem; font-weight: 600; }
+      .ts-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(52,199,89,0.18); flex-shrink: 0; }
+      .ts-dot.warn { background: var(--orange, #FF9F0A); box-shadow: 0 0 0 4px rgba(255,159,10,0.2); }
+      .ts-kv b { font-family: 'Space Grotesk', sans-serif; font-size: 1.05rem; margin-right: 3px; }
+      .ts-kv small { color: var(--gray-1); font-weight: 600; }
+      .ts-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.12); }
+      .ts-more { margin-left: auto; color: var(--yellow); font-weight: 700; font-size: 0.74rem; white-space: nowrap; }
+      .ts-goal { display: flex; gap: 6px; overflow-x: auto; margin-top: 10px; scrollbar-width: none; }
+      .ts-goal::-webkit-scrollbar { display: none; }
+      .ts-goal span { flex-shrink: 0; font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 100px; background: rgba(255,255,255,0.07); white-space: nowrap; }
+      .ts-goal span b { color: var(--yellow); font-family: 'Space Grotesk', sans-serif; }
+      .ts-goal span.ok { color: #6EE7A0; }
+      .ts-goal span.money { background: rgba(255,214,0,0.14); color: var(--yellow); }
+
+      /* ===== 🏆 Leaderboard / 🕘 ประวัติ (ใน sheet) ===== */
+      .lb-seg { display: flex; gap: 6px; margin-bottom: 12px; }
+      .lb-seg button { flex: 1; border: 0; border-radius: 12px; padding: 9px; font-weight: 700; font-size: 0.8rem; background: var(--gray-6); color: #3A3A3C; }
+      .lb-seg button.on { background: var(--ink); color: var(--yellow); }
+      .lb-h { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 0.86rem; margin: 14px 0 8px; }
+      .lb-h small { margin-left: auto; color: var(--gray-1); font-weight: 600; font-size: 0.68rem; }
+      .lb-pod { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 8px; align-items: end; margin-bottom: 8px; }
+      .lb-pc { border-radius: 18px; padding: 10px 6px; text-align: center; background: var(--gray-6); }
+      .lb-pc.r1 { background: linear-gradient(170deg, #FFE45C, #FFD600); padding-top: 16px; }
+      .lb-pc .md { font-size: 1.4rem; line-height: 1; }
+      .lb-pc .nm { font-weight: 800; font-size: 0.86rem; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .lb-pc .sc { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.3rem; }
+      .lb-pc small { display: block; font-size: 0.62rem; color: #6E6E73; font-weight: 600; }
+      .lb-row { display: grid; grid-template-columns: 26px 1fr auto; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 14px; background: var(--gray-6); margin-bottom: 6px; }
+      .lb-row .rk { width: 26px; height: 26px; border-radius: 9px; background: var(--ink); color: var(--yellow); font-weight: 800; font-size: 0.74rem; display: flex; align-items: center; justify-content: center; }
+      .lb-row .nm b { display: block; font-size: 0.86rem; }
+      .lb-row .nm small { color: var(--gray-1); font-size: 0.66rem; font-weight: 600; }
+      .lb-row .sc { text-align: right; font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+      .lb-row .sc small { display: block; font-family: 'IBM Plex Sans Thai', sans-serif; font-size: 0.62rem; color: var(--gray-1); font-weight: 600; }
+      .lb-bar { grid-column: 2 / -1; height: 5px; border-radius: 5px; background: #E5E5EA; overflow: hidden; margin-top: -2px; }
+      .lb-bar i { display: block; height: 100%; background: var(--ink); border-radius: 5px; }
+      .lg-it { padding: 10px 12px; border-radius: 14px; background: var(--gray-6); margin-bottom: 6px; font-size: 0.78rem; }
+      .lg-it .t { display: flex; justify-content: space-between; gap: 8px; font-weight: 800; }
+      .lg-it .t span:last-child { font-size: 0.66rem; padding: 2px 8px; border-radius: 100px; background: var(--ink); color: var(--yellow); white-space: nowrap; }
+      .lg-it .t span.del { background: #FF3B30; color: #fff; }
+      .lg-it .m { color: #6E6E73; font-weight: 600; margin-top: 2px; }
+      .lg-it .f { margin-top: 4px; font-size: 0.72rem; }
+      .lg-it .f s { color: #FF3B30; } .lg-it .f ins { color: #1E8E3E; text-decoration: none; }
 
       /* PC App-in target */
       .pc-target-row {
@@ -1478,6 +1526,11 @@
             <h1 class="page-title">บันทึกการขายประจำวัน</h1>
           </div>
 
+          <!-- 📌 สรุปวันนี้ (แตะ = ดูรายละเอียด) -->
+          <div class="today-strip" id="todayStrip" onclick="openGoalSheet()">
+            <div class="ts-row"><span class="ts-dot"></span><span class="loading-pill" style="background:transparent;padding:0"><span class="spin"></span>กำลังโหลดสรุปวันนี้</span></div>
+          </div>
+
           <div class="card custom-card">
             <form id="salesForm" onsubmit="handleSalesSubmit(event)">
               <div class="field">
@@ -1647,6 +1700,8 @@
                 </div>
                 <button type="button" id="dbNextBtn" onclick="dbShiftDate(1)" aria-label="วันถัดไป">›</button>
               </div>
+              <button type="button" class="db-icon-btn" onclick="openLeaderboard()" aria-label="Leaderboard"><span>🏆</span></button>
+              <button type="button" class="db-icon-btn" onclick="openEditLog()" aria-label="ประวัติแก้ไข"><span>🕘</span></button>
               <button type="button" class="db-icon-btn" id="dbRefresh" onclick="loadDashboard()" aria-label="รีเฟรช"><span>↻</span></button>
             </div>
 
@@ -2534,7 +2589,7 @@
                 document.getElementById('salesForm').reset();
                 resetQtyChecks('input[name="focusCheck"]');
                 clearPickedPhoto('paper', 'paperPicked');
-                showToast('บันทึกข้อมูลการขายเรียบร้อย');
+                showToast(res.queued ? res.message : 'บันทึกข้อมูลการขายเรียบร้อย'); setTimeout(loadTodayStrip, 800);
                 document.getElementById('previewContainer').scrollIntoView({ behavior: 'smooth' });
                 // 🎴 เปิดการ์ดสุ่มระดับตามงานโฟกัสที่ขายได้
                 openPokemonCard({
@@ -3399,6 +3454,122 @@
         // หมายเหตุ: แยก "https:" กับ "//" ออกจากกัน เพราะ Apps Script ตัดข้อความหลัง // ทิ้งเหมือนเป็นคอมเมนต์
         const SLASH2 = '/' + '/';
         return 'https:' + SLASH2 + 'drive.google.com/thumbnail?id=' + m[1] + '&sz=w1000';
+      }
+
+
+      // =========================================================
+      // 📌 สรุปวันนี้ + เป้าที่ต้องทำต่อวัน (หน้าบันทึกขาย)
+      // =========================================================
+      let tsData = { today: null, goal: null };
+      function loadTodayStrip() {
+        google.script.run.withSuccessHandler(r => { tsData.today = r; renderTodayStrip(); })
+          .withFailureHandler(() => {}).getDashboardData('');
+        google.script.run.withSuccessHandler(g => { tsData.goal = g && !g.error ? g : null; renderTodayStrip(); })
+          .withFailureHandler(() => {}).getStoreGoal();
+      }
+      function renderTodayStrip() {
+        const el = document.getElementById('todayStrip'); if (!el) return;
+        const t = tsData.today, g = tsData.goal;
+        const rows = (t && t.rows) || [];
+        const rev = rows.reduce((a, r) => a + (Number(r.price) || 0), 0);
+        const last = rows.map(r => r.time).sort().pop();
+        let idle = null;
+        if (last && t.serverTime) { const a = t.serverTime.split(':').map(Number), b = last.split(':').map(Number); idle = a[0] * 60 + a[1] - (b[0] * 60 + b[1]); }
+        const warn = idle != null && idle >= 120;
+        let h = `<div class="ts-row"><span class="ts-dot ${warn ? 'warn' : ''}"></span>
+          <span class="ts-kv"><b>${rows.length}</b><small>เครื่องวันนี้</small></span><span class="ts-sep"></span>
+          <span class="ts-kv"><b>${baht(rev)}</b></span><span class="ts-sep"></span>
+          <span class="ts-kv"><small>${last ? 'ล่าสุด ' + last + (idle != null ? ` · ${idle >= 60 ? Math.floor(idle / 60) + ' ชม. ' : ''}${idle % 60} นาทีที่แล้ว` : '') : 'ยังไม่มีการขาย'}</small></span>
+          <span class="ts-more">ดูเป้า ›</span></div>`;
+        if (g) {
+          const need = g.focus.filter(f => f.perDay > 0).sort((a, b) => b.perDay - a.perDay);
+          let chips = g.sales ? `<span class="money">💰 ต้องขายวันละ <b>${baht(g.sales.perDay)}</b></span>` : '';
+          chips += need.map(f => `<span>🎯 ${escapeHtml(f.name)} <b>${f.perDay}</b>/วัน</span>`).join('');
+          if (!need.length) chips += '<span class="ok">✅ งานโฟกัสถึงเป้าทุกตัวแล้ว</span>';
+          h += `<div class="ts-goal">${chips}</div>`;
+        }
+        el.innerHTML = h;
+      }
+      function openGoalSheet() {
+        const g = tsData.goal;
+        if (!g) { openLeaderboard(); return; }
+        let h = '';
+        if (g.sales) {
+          h += `<div class="db-sum"><div><small>ต้องขาย/วัน</small><b style="font-size:1.15rem">${baht(g.sales.perDay)}</b></div>
+            <div><small>คาดจบเดือน</small><b style="font-size:1.15rem">${baht(g.sales.forecast)}</b></div>
+            <div><small>เป้าเดือน</small><b style="font-size:1.15rem">${baht(g.sales.target)}</b></div></div>
+            <p class="hint mb-2">${g.sales.forecast >= g.sales.target ? '✅ ถ้าขายแบบนี้ต่อไป ถึงเป้า' : '⚠️ ถ้าขายแบบนี้ต่อไป ขาดเป้า ' + baht(g.sales.target - g.sales.forecast)}</p>`;
+        }
+        h += `<div class="lb-h">🎯 งานโฟกัสที่ต้องทำต่อวัน<small>เหลือ ${g.left} วัน (รวมวันนี้)</small></div>`;
+        g.focus.forEach(f => {
+          const ok = f.need <= 0;
+          h += `<div class="lb-row"><span class="rk" style="${ok ? 'background:#1E8E3E;color:#fff' : ''}">${ok ? '✓' : f.perDay}</span>
+            <span class="nm"><b>${escapeHtml(f.name)}</b><small>ตอนนี้ ${f.cur}% · เป้า ${f.target}% · ทำได้ ${f.count}</small></span>
+            <span class="sc">${ok ? 'ถึงเป้า' : 'ขาด ' + f.need}<small>${ok ? '' : 'วันละ ' + f.perDay}</small></span>
+            <span class="lb-bar"><i style="width:${Math.min(100, f.target ? f.cur / f.target * 100 : 0)}%;background:${ok ? '#1E8E3E' : 'var(--ink)'}"></i></span></div>`;
+        });
+        openSheet('📌 เป้าวันนี้', (g.label || '') + ' · คิดจากยอดสะสมทั้งร้านถึงวันที่ ' + g.day, h);
+      }
+      document.addEventListener('DOMContentLoaded', () => setTimeout(loadTodayStrip, 300));
+      setInterval(() => { if (!document.hidden) loadTodayStrip(); }, 180000);
+
+      // =========================================================
+      // 🏆 LEADERBOARD — แยกพนักงานร้าน / PC
+      // =========================================================
+      let lbRange = 'week';
+      function openLeaderboard(range) {
+        if (range) lbRange = range;
+        openSheet('🏆 Leaderboard งานโฟกัส', 'กำลังโหลด…', '<div class="text-center py-4"><span class="loading-pill"><span class="spin"></span>กำลังจัดอันดับ</span></div>');
+        google.script.run.withSuccessHandler(renderLeaderboard)
+          .withFailureHandler(err => { document.getElementById('dashSheetBody').innerHTML = `<div class="empty-note">โหลดไม่สำเร็จ: ${escapeHtml(err.message)}</div>`; })
+          .getLeaderboard(lbRange, '');
+      }
+      function renderLeaderboard(res) {
+        const body = document.getElementById('dashSheetBody');
+        if (!res || res.status !== 'success') { body.innerHTML = '<div class="empty-note">ไม่มีข้อมูล</div>'; return; }
+        const fmtD = s => { const p = s.split('-'); return +p[2] + '/' + +p[1]; };
+        document.getElementById('dashSheetSub').textContent = `${fmtD(res.start)} – ${fmtD(res.end)} · คะแนน = จำนวนงานโฟกัสที่ปิดได้`;
+        const pcs = (window.PC_STAFF || []).map(x => String(x).trim());
+        const isPC = n => pcs.indexOf(String(n).trim()) !== -1;
+        const sorted = list => list.slice().sort((a, b) => b.focus - a.focus || b.cover - a.cover || b.units - a.units);
+        const groups = [['👤 พนักงานร้าน', sorted(res.list.filter(x => !isPC(x.emp)))], ['🏷️ PC แบรนด์', sorted(res.list.filter(x => isPC(x.emp)))]];
+        let h = `<div class="lb-seg"><button class="${lbRange === 'week' ? 'on' : ''}" onclick="openLeaderboard('week')">สัปดาห์นี้</button><button class="${lbRange === 'month' ? 'on' : ''}" onclick="openLeaderboard('month')">เดือนนี้</button></div>`;
+        groups.forEach(([title, list]) => {
+          h += `<div class="lb-h">${title}<small>${list.length} คน</small></div>`;
+          if (!list.length) { h += '<div class="empty-note">ยังไม่มีข้อมูล</div>'; return; }
+          const max = Math.max(1, ...list.map(x => x.focus));
+          const medal = ['🥇', '🥈', '🥉'];
+          if (list.length >= 2) {
+            h += '<div class="lb-pod">' + [1, 0, 2].map(i => { const x = list[i]; if (!x) return '<div></div>';
+              return `<div class="lb-pc r${i + 1}"><div class="md">${medal[i]}</div><div class="nm">${escapeHtml(x.emp)}</div><div class="sc">${x.focus}</div><small>${x.units} เครื่อง · ปิด ${x.cover}%</small></div>`; }).join('') + '</div>';
+          }
+          list.slice(list.length >= 2 ? 3 : 0).forEach((x, k) => {
+            const i = (list.length >= 2 ? 3 : 0) + k;
+            h += `<div class="lb-row"><span class="rk">${i + 1}</span><span class="nm"><b>${escapeHtml(x.emp)}</b><small>${x.units} เครื่อง · ${baht(x.revenue)} · ปิดโฟกัส ${x.cover}%</small></span>
+              <span class="sc">${x.focus}<small>งานโฟกัส</small></span><span class="lb-bar"><i style="width:${x.focus / max * 100}%"></i></span></div>`;
+          });
+        });
+        body.innerHTML = h;
+        kickAnimations(body);
+      }
+
+      // =========================================================
+      // 🕘 ประวัติแก้ไข / ลบ
+      // =========================================================
+      function openEditLog() {
+        openSheet('🕘 ประวัติแก้ไข / ลบ', 'ล่าสุดอยู่บนสุด', '<div class="text-center py-4"><span class="loading-pill"><span class="spin"></span>กำลังโหลด</span></div>');
+        google.script.run.withSuccessHandler(res => {
+          const body = document.getElementById('dashSheetBody');
+          const rows = (res && res.rows) || [];
+          if (!rows.length) { body.innerHTML = '<div class="empty-note">ยังไม่มีการแก้ไขหรือลบ</div>'; return; }
+          body.innerHTML = rows.map(r => {
+            const del = /ลบ/.test(r.action);
+            return `<div class="lg-it"><div class="t"><span>${escapeHtml(r.model || '-')}</span><span class="${del ? 'del' : ''}">${escapeHtml(r.action)}</span></div>
+              <div class="m">โดย ${escapeHtml(r.by || 'ไม่ทราบ')} · ${escapeHtml(r.at)} — ขายเมื่อ ${escapeHtml(r.saleAt)} · 👤 ${escapeHtml(r.emp)} · ${baht(r.price)}</div>
+              ${del ? `<div class="f">งานโฟกัส: ${escapeHtml(r.before || '-')}</div>` : `<div class="f"><s>${escapeHtml(r.before || '-')}</s> → <ins>${escapeHtml(r.after || '-')}</ins></div>`}</div>`;
+          }).join('');
+        }).withFailureHandler(err => { document.getElementById('dashSheetBody').innerHTML = `<div class="empty-note">โหลดไม่สำเร็จ: ${escapeHtml(err.message)}</div>`; })
+          .getEditLog(80);
       }
 
       // =========================================================
