@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>window.GAS_APP = 'stock';</script>
-  <script src="gas.js?v=2026.10.04-3"></script>
+  <script src="gas.js?v=2026.10.04-5"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ระบบค้นหา STOCK 1326</title>
@@ -109,6 +109,16 @@
     /* ---------- Inputs & buttons ---------- */
     .ios-input { transition: box-shadow 0.3s var(--ios-ease), background-color 0.3s var(--ios-ease); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
     .ios-input:focus { background-color: #2C2C2E; box-shadow: 0 0 0 4px rgba(255,214,0,0.28); outline: none; }
+    .stock-notify { margin: 14px auto 0; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border: 0; border-radius: 18px; cursor: pointer;
+      background: #1C1C1E; color: #fff; text-align: left; box-shadow: 0 12px 24px -14px rgba(0,0,0,.75); }
+    .stock-notify .sn-ic { width: 38px; height: 38px; border-radius: 12px; background: #06C755; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .stock-notify .sn-tx { display: flex; flex-direction: column; line-height: 1.25; }
+    .stock-notify b { font-size: 14px; color: #FFD600; }
+    .stock-notify small { font-size: 11px; color: rgba(255,255,255,.6); font-weight: 600; }
+    .stock-notify:disabled { opacity: .55; }
+    #snToast { position: fixed; left: 50%; top: calc(14px + env(safe-area-inset-top)); z-index: 300; transform: translate(-50%, -160%); padding: 11px 18px; border-radius: 100px;
+      background: rgba(28,28,30,.94); color: #fff; font-weight: 700; font-size: 13.5px; box-shadow: 0 14px 30px -10px rgba(0,0,0,.5); transition: transform .55s cubic-bezier(.22,1.18,.36,1); max-width: 92vw; }
+    #snToast.in { transform: translate(-50%, 0); }
     .press { transition: transform 0.35s var(--spring), filter 0.2s, background-color 0.2s; }
     .press:active { transform: scale(0.95); transition-duration: 0.1s; }
 
@@ -180,6 +190,9 @@
         <span class="eyebrow">STOCK 1326 · REALTIME</span>
         <h1 class="text-[1.7rem] sm:text-4xl font-bold text-theme-dark mt-2.5 mb-1 tracking-tight">ค้นหาสต๊อกสินค้า</h1>
         <p class="text-xs sm:text-sm text-theme-dark/60 font-medium">เช็คจำนวนคงเหลือในคลังได้ทันที</p>
+        <button id="stockNotifyBtn" onclick="notifyStockUpdated()" class="stock-notify press" style="display:none">
+          <span class="sn-ic">📣</span><span class="sn-tx"><b>แจ้งทีม: STOCK อัปเดตแล้ว</b><small>ส่งแจ้งเตือนเข้ากลุ่ม LINE ร้าน</small></span>
+        </button>
       </div>
 
       <div class="glass-card rounded-[1.75rem] p-5 sm:p-7 space-y-4 shadow-sm">
@@ -371,12 +384,23 @@
       <div class="p-6 overflow-y-auto space-y-5">
         <p id="modalProductName" class="text-sm font-bold text-theme-dark bg-gray-100 p-4 rounded-2xl mb-2"></p>
         <div class="space-y-3">
-          <div class="bg-theme-dark rounded-2xl p-5 border-l-4 border-green-400">
-            <p class="text-xs text-green-400 font-bold mb-1 uppercase tracking-wide">💰 ส่วนลดค่าเครื่อง</p>
-            <p id="modalDiscount" class="text-2xl font-black text-white">-</p>
+          <div class="bg-theme-dark rounded-2xl p-5 border-l-4 border-theme-yellow">
+            <p class="text-xs text-theme-yellow font-bold mb-1 uppercase tracking-wide">🏷️ ราคาโปรโมชั่น</p>
+            <p id="modalPromoPrice" class="text-3xl font-black text-theme-yellow font-num">-</p>
+            <p id="modalNormalPrice" class="text-sm text-gray-400 font-bold mt-1"></p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-theme-dark rounded-2xl p-4 border-l-4 border-green-400">
+              <p class="text-[11px] text-green-400 font-bold mb-1 uppercase tracking-wide">💰 ส่วนลด</p>
+              <p id="modalDiscount" class="text-xl font-black text-white font-num">-</p>
+            </div>
+            <div class="bg-theme-dark rounded-2xl p-4 border-l-4 border-sky-400">
+              <p class="text-[11px] text-sky-400 font-bold mb-1 uppercase tracking-wide">🙅 ไม่รับของแถม</p>
+              <p id="modalNoGift" class="text-xl font-black text-white font-num">-</p>
+            </div>
           </div>
           <div class="bg-theme-dark rounded-2xl p-5 border-l-4 border-pink-400">
-            <p class="text-xs text-pink-400 font-bold mb-3 uppercase tracking-wide">🎁 ของแถม (Freebies)</p>
+            <p class="text-xs text-pink-400 font-bold mb-3 uppercase tracking-wide flex justify-between gap-2"><span>🎁 ของแถม (Freebies)</span><span id="modalGiftValue" class="text-gray-400 normal-case"></span></p>
             <ul id="modalFreebies" class="list-disc list-inside text-sm text-gray-200 font-medium space-y-1.5"></ul>
           </div>
         </div>
@@ -521,6 +545,36 @@
     function openSheet(id) { document.getElementById(id).classList.add('open'); }
     function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
 
+    // ---------- 📣 แจ้งทีมใน LINE: STOCK อัปเดตแล้ว (ผู้จัดการ) ----------
+    (function () {
+      try {
+        const ss = JSON.parse(localStorage.getItem('system1326_session') || '{}');
+        if (ss.user && ss.user.role === 'MANAGER') {
+          const show = () => { const b = document.getElementById('stockNotifyBtn'); if (b) b.style.display = 'inline-flex'; };
+          if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show); else show();
+        }
+      } catch (e) {}
+    })();
+    function snToast(msg) {
+      let t = document.getElementById('snToast');
+      if (!t) { t = document.createElement('div'); t.id = 'snToast'; document.body.appendChild(t); }
+      t.textContent = msg; t.classList.add('in');
+      clearTimeout(snToast._t); snToast._t = setTimeout(() => t.classList.remove('in'), 3200);
+    }
+    function notifyStockUpdated() {
+      if (!confirm('ส่งแจ้งเตือน "STOCK อัปเดตแล้ว" เข้ากลุ่ม LINE ร้าน?\n(ใช้โควตา 13 ข้อความ)')) return;
+      const b = document.getElementById('stockNotifyBtn'), tx = b.querySelector('b');
+      b.disabled = true; tx.textContent = 'กำลังส่ง…';
+      google.script.run
+        .withSuccessHandler(r => {
+          b.disabled = false; tx.textContent = 'แจ้งทีม: STOCK อัปเดตแล้ว';
+          if (r && r.ok) { snToast('✅ แจ้งทีมแล้ว · เดือนนี้ส่งได้อีก ' + r.remainSends + ' ครั้ง'); try { navigator.vibrate && navigator.vibrate(12); } catch (e) {} }
+          else snToast('⚠️ ' + ((r && r.error) || 'ส่งไม่สำเร็จ'));
+        })
+        .withFailureHandler(err => { b.disabled = false; tx.textContent = 'แจ้งทีม: STOCK อัปเดตแล้ว'; snToast('⚠️ ' + err.message); })
+        .notifyStockUpdated();
+    }
+
     // ---------- โปรโมชั่น ----------
     function openPromoModal(productCode) {
       const item = globalStockData.find(d => d.code === productCode);
@@ -528,7 +582,12 @@
 
       const p = item.promo;
       document.getElementById('modalProductName').innerText = item.name;
-      document.getElementById('modalDiscount').innerText = p.discount || '-';
+      const fb = n => (n === null || n === undefined || n === '') ? '-' : '฿' + Math.round(n).toLocaleString('en-US');
+      document.getElementById('modalDiscount').innerText = p.discountBaht ? fb(p.discountBaht) : (p.discount || '-');
+      document.getElementById('modalPromoPrice').innerText = fb(p.promoPrice);
+      document.getElementById('modalNormalPrice').innerHTML = p.normalPrice ? (p.promoPrice && p.promoPrice < p.normalPrice ? `ราคาปกติ <s>${fb(p.normalPrice)}</s>` : `ราคาปกติ ${fb(p.normalPrice)}`) : '';
+      document.getElementById('modalNoGift').innerText = fb(p.noGiftPrice);
+      document.getElementById('modalGiftValue').innerText = p.giftValue ? 'มูลค่ารวม ' + fb(p.giftValue) : '';
       document.getElementById('modalRawText').innerText = p.rawText || '';
 
       const fbUl = document.getElementById('modalFreebies');
@@ -736,8 +795,10 @@
           : (item.totalNum > 0 ? 'text-green-400 bg-green-400/10 border-green-400/30' : 'text-red-400 bg-red-400/10 border-red-400/30');
 
         let promoBtnHtml = '';
-        if (item.promo && item.promo.rawText) {
-          promoBtnHtml = `
+        if (item.promo && (item.promo.rawText || item.promo.promoPrice)) {
+          const pp = item.promo.promoPrice, np = item.promo.normalPrice;
+          const ppHtml = pp && np && pp < np ? `<div class="text-[11px] font-black text-green-400 whitespace-nowrap">โปร ฿${Math.round(pp).toLocaleString('en-US')}</div>` : '';
+          promoBtnHtml = ppHtml + `
             <button onclick="openPromoModal(this.dataset.code)" data-code="${esc(item.code)}" class="mt-1.5 px-3 py-1.5 bg-theme-white text-theme-dark text-[10px] font-black rounded-lg shadow-sm transition-all uppercase tracking-wider flex items-center justify-end gap-1 w-full max-w-fit ml-auto hover:bg-gray-200">
               🎁 โปรโมชั่น
             </button>`;
