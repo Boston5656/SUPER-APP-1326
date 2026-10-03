@@ -109,6 +109,39 @@
     /* ---------- Inputs & buttons ---------- */
     .ios-input { transition: box-shadow 0.3s var(--ios-ease), background-color 0.3s var(--ios-ease); box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
     .ios-input:focus { background-color: #2C2C2E; box-shadow: 0 0 0 4px rgba(255,214,0,0.28); outline: none; }
+    /* ===== 🎁 โปรโมชั่น ===== */
+    .pm-search input { width: 100%; padding: 14px 18px; border-radius: 18px; border: 0; background: #1C1C1E; color: #fff; font: 600 15px 'IBM Plex Sans Thai', sans-serif; box-shadow: 0 10px 24px -14px rgba(0,0,0,.7); }
+    .pm-search input:focus { outline: 2px solid #FFD600; }
+    .pm-brands { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+    .pm-brands::-webkit-scrollbar { display: none; }
+    .pm-brands button { flex-shrink: 0; border: 0; border-radius: 100px; padding: 8px 14px; background: rgba(255,255,255,.75); font: 700 12.5px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; cursor: pointer; }
+    .pm-brands button.on { background: #1C1C1E; color: #FFD600; }
+    .pm-brands button b { font-family: 'Space Grotesk', sans-serif; opacity: .55; margin-left: 4px; }
+    .pm-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+    @media (min-width: 760px) { .pm-grid { grid-template-columns: 1fr 1fr; } }
+    .pm-card { background: #1C1C1E; color: #fff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 14px 30px -18px rgba(0,0,0,.8); animation: pmIn .45s cubic-bezier(.22,1.18,.36,1) both; }
+    @keyframes pmIn { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+    .pm-top { display: flex; justify-content: space-between; gap: 10px; align-items: flex-start; }
+    .pm-name { font-weight: 800; font-size: 14.5px; line-height: 1.35; }
+    .pm-sub { font-size: 11px; color: #8E8E93; font-weight: 600; margin-top: 2px; }
+    .pm-brand { flex-shrink: 0; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 100px; background: rgba(255,214,0,.14); color: #FFD600; text-transform: uppercase; }
+    .pm-price { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .pm-price b { font-family: 'Space Grotesk', sans-serif; font-size: 26px; color: #FFD600; letter-spacing: -.5px; }
+    .pm-price s { color: #8E8E93; font-weight: 700; font-size: 13px; }
+    .pm-price .off { font-size: 12px; font-weight: 800; color: #4ADE80; background: rgba(74,222,128,.12); padding: 3px 9px; border-radius: 100px; }
+    .pm-gifts { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pm-gifts span { font-size: 11.5px; font-weight: 600; padding: 4px 9px; border-radius: 10px; background: rgba(255,255,255,.07); color: #E5E5EA; }
+    .pm-gv { font-size: 11px; color: #F9A8D4; font-weight: 700; }
+    .pm-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid rgba(255,255,255,.08); padding-top: 10px; }
+    .pm-nogift { font-size: 12px; color: #93C5FD; font-weight: 700; }
+    .pm-send { border: 0; border-radius: 12px; padding: 8px 12px; background: #06C755; color: #fff; font: 800 12px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .pm-send:disabled { opacity: .5; }
+    .pm-vars { font-size: 11px; color: #A1A1AA; }
+    .pm-vars summary { cursor: pointer; font-weight: 700; color: #D4D4D8; }
+    .pm-vars div { margin-top: 6px; line-height: 1.6; }
+    .pm-more { display: block; margin: 14px auto 0; border: 0; border-radius: 14px; padding: 11px 20px; background: #1C1C1E; color: #FFD600; font: 800 13px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .tab-btn { white-space: nowrap; }
+    @media (max-width: 420px) { .tab-btn { padding-left: 4px !important; padding-right: 4px !important; font-size: 11.5px !important; } }
     .stock-notify { margin: 14px auto 0; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border: 0; border-radius: 18px; cursor: pointer;
       background: #1C1C1E; color: #fff; text-align: left; box-shadow: 0 12px 24px -14px rgba(0,0,0,.75); }
     .stock-notify .sn-ic { width: 38px; height: 38px; border-radius: 12px; background: #06C755; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -173,13 +206,16 @@
     <div id="tabShell" class="tab-shell relative flex justify-center gap-1 p-1.5 rounded-full max-w-md mx-auto mb-6">
       <div id="tabGlider" class="tab-glider"></div>
       <button onclick="switchTab('stock')" id="tabStock" class="tab-btn is-active flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
-        📦 เช็คสต๊อก
+        📦 สต๊อก
       </button>
       <button onclick="switchTab('interest')" id="tabInterest" class="tab-btn flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
-        🧮 คำนวณผ่อน
+        🧮 ผ่อน
       </button>
       <button onclick="switchTab('price')" id="tabPrice" class="tab-btn flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
-        🔍 เช็คราคา
+        🔍 ราคา
+      </button>
+      <button onclick="switchTab('promo')" id="tabPromo" class="tab-btn flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
+        🎁 โปร
       </button>
     </div>
     </div>
@@ -330,6 +366,20 @@
     </div>
 
     <!-- หน้าเมนูที่ 3: PRICE CHECK -->
+    <!-- หน้าเมนูที่ 4: โปรโมชั่น (ชีต Promotion) -->
+    <div id="promoSection" class="hidden space-y-5">
+      <div class="text-center mb-2">
+        <span class="eyebrow">PROMOTION · 1326</span>
+        <h1 class="text-[1.7rem] sm:text-4xl font-bold text-theme-dark mt-2.5 mb-1 tracking-tight">โปรโมชั่น</h1>
+        <p class="text-xs sm:text-sm text-theme-dark/60 font-medium" id="promoMeta">ส่วนลด · ของแถม · ราคาโปร</p>
+      </div>
+      <div class="pm-search">
+        <input type="search" id="promoQ" placeholder="🔍 ค้นหารุ่น เช่น s25 ultra, fold7, reno14" oninput="renderPromos()" autocomplete="off">
+      </div>
+      <div class="pm-brands" id="promoBrands"></div>
+      <div id="promoList"><div class="py-10 text-center"><span class="loading-pill"><span class="spin"></span>กำลังโหลดโปรโมชั่น</span></div></div>
+    </div>
+
     <div id="priceSection" class="hidden max-w-md mx-auto">
       <div class="glass-card rounded-[1.75rem] p-6 sm:p-8 shadow-sm text-center">
         <div class="inline-flex items-center justify-center gap-2 mb-6 bg-theme-dark text-white px-5 py-2.5 rounded-full">
@@ -478,7 +528,7 @@
       const interestSec = document.getElementById('interestSection');
       const priceSec = document.getElementById('priceSection');
 
-      const map = { stock: [stockSec, 'tabStock'], interest: [interestSec, 'tabInterest'], price: [priceSec, 'tabPrice'] };
+      const map = { stock: [stockSec, 'tabStock'], interest: [interestSec, 'tabInterest'], price: [priceSec, 'tabPrice'], promo: [document.getElementById('promoSection'), 'tabPromo'] };
       Object.keys(map).forEach(k => {
         map[k][0].classList.add('hidden');
         map[k][0].classList.remove('section-enter');
@@ -496,6 +546,8 @@
 
       if (tabName === 'interest') {
         calculateInstallment();
+      } else if (tabName === 'promo') {
+        loadPromos();
       } else if (tabName === 'price') {
         setTimeout(() => document.getElementById('barcodeInput').focus(), 100);
       }
@@ -544,6 +596,66 @@
 
     function openSheet(id) { document.getElementById(id).classList.add('open'); }
     function closeSheet(id) { document.getElementById(id).classList.remove('open'); }
+
+
+    // ---------- 🎁 โปรโมชั่น ----------
+    let promoData = null, promoBrand = '', promoLimit = 30;
+    const isMgr = (() => { try { const ss = JSON.parse(localStorage.getItem('system1326_session') || '{}'); return ss.user && ss.user.role === 'MANAGER'; } catch (e) { return false; } })();
+    const pmB = n => (n === null || n === undefined) ? '' : '฿' + Math.round(n).toLocaleString('en-US');
+    function loadPromos(force) {
+      if (promoData && !force) return renderPromos();
+      google.script.run.withSuccessHandler(list => {
+        promoData = list || [];
+        const by = {};
+        promoData.forEach(x => { const b = (x.brand || 'อื่นๆ').toUpperCase(); by[b] = (by[b] || 0) + 1; });
+        const brands = Object.keys(by).sort((a, b) => by[b] - by[a]);
+        document.getElementById('promoBrands').innerHTML = `<button class="on" data-b="" onclick="pickPromoBrand(this)">ทั้งหมด<b>${promoData.length}</b></button>` +
+          brands.map(b => `<button data-b="${esc(b)}" onclick="pickPromoBrand(this)">${esc(b)}<b>${by[b]}</b></button>`).join('');
+        renderPromos();
+      }).withFailureHandler(err => {
+        document.getElementById('promoList').innerHTML = `<div class="py-8 text-center text-sm font-bold text-red-700">โหลดไม่สำเร็จ: ${esc(err.message)}</div>`;
+      }).getPromotions();
+    }
+    function pickPromoBrand(el) {
+      promoBrand = el.dataset.b; promoLimit = 30;
+      document.querySelectorAll('#promoBrands button').forEach(b => b.classList.toggle('on', b === el));
+      tapFeedback(); renderPromos();
+    }
+    function renderPromos() {
+      if (!promoData) return;
+      const q = document.getElementById('promoQ').value.trim().toLowerCase(), q2 = q.replace(/\s+/g, '');
+      const hit = promoData.filter(x => (!promoBrand || (x.brand || 'อื่นๆ').toUpperCase() === promoBrand) &&
+        (!q || (x.name + ' ' + x.code).toLowerCase().includes(q) || (x.name + x.code).toLowerCase().replace(/\s+/g, '').includes(q2)));
+      // รวมรุ่นที่โปรเหมือนกัน (ต่างสี/ความจุ)
+      const g = {}, order = [];
+      hit.forEach(x => { const k = x.detail + '|' + x.promo.promoPrice + '|' + x.promo.noGiftPrice; if (!g[k]) { g[k] = { first: x, items: [] }; order.push(k); } g[k].items.push(x); });
+      const groups = order.map(k => g[k]);
+      document.getElementById('promoMeta').textContent = `${hit.length} รายการ · ${groups.length} แบบโปร`;
+      if (!groups.length) { document.getElementById('promoList').innerHTML = '<div class="py-10 text-center text-sm font-bold text-theme-dark/60">ไม่พบโปรโมชั่น</div>'; return; }
+      const html = groups.slice(0, promoLimit).map((grp, i) => {
+        const x = grp.first, p = x.promo;
+        const off = p.normalPrice && p.promoPrice && p.normalPrice > p.promoPrice ? p.normalPrice - p.promoPrice : (p.discountBaht || 0);
+        const vars = grp.items.length > 1 ? `<details class="pm-vars"><summary>+${grp.items.length - 1} รุ่นย่อย/สี ที่โปรเหมือนกัน</summary><div>${grp.items.map(it => esc(it.name)).join('<br>')}</div></details>` : '';
+        return `<div class="pm-card" style="animation-delay:${Math.min(i, 10) * 0.035}s">
+          <div class="pm-top"><div><div class="pm-name">${esc(x.name)}</div><div class="pm-sub">${esc(x.cat || '')} · ${esc(x.code)}</div></div>${x.brand ? `<span class="pm-brand">${esc(x.brand)}</span>` : ''}</div>
+          <div class="pm-price">${p.promoPrice ? `<b>${pmB(p.promoPrice)}</b>` : ''}${p.normalPrice && p.promoPrice && p.normalPrice > p.promoPrice ? `<s>${pmB(p.normalPrice)}</s>` : ''}${off ? `<span class="off">ลด ${pmB(off)}</span>` : ''}</div>
+          ${p.freebies && p.freebies.length ? `<div><div class="pm-gifts">${p.freebies.map(f => `<span>🎁 ${esc(f)}</span>`).join('')}</div>${p.giftValue ? `<div class="pm-gv" style="margin-top:6px">มูลค่าของแถมรวม ${pmB(p.giftValue)}</div>` : ''}</div>` : ''}
+          ${vars}
+          <div class="pm-foot"><span class="pm-nogift">${p.noGiftPrice ? '🙅 ไม่รับของแถม ' + pmB(p.noGiftPrice) : ''}</span>
+            ${isMgr ? `<button class="pm-send" onclick="notifyPromo('${esc(x.code)}', this)">📣 แจ้งโปรนี้เข้ากลุ่ม</button>` : ''}</div>
+        </div>`;
+      }).join('');
+      document.getElementById('promoList').innerHTML = `<div class="pm-grid">${html}</div>` +
+        (groups.length > promoLimit ? `<button class="pm-more" onclick="promoLimit += 30; renderPromos()">ดูเพิ่ม (${groups.length - promoLimit})</button>` : '');
+    }
+    function notifyPromo(code, btn) {
+      if (!confirm('แจ้งโปรนี้เข้ากลุ่ม LINE ร้าน?\n(ใช้โควตา 13 ข้อความ)')) return;
+      btn.disabled = true; const t = btn.textContent; btn.textContent = 'กำลังส่ง…';
+      google.script.run.withSuccessHandler(r => {
+        btn.disabled = false; btn.textContent = t;
+        snToast(r && r.ok ? '✅ แจ้งโปรแล้ว · เดือนนี้ส่งได้อีก ' + r.remainSends + ' ครั้ง' : '⚠️ ' + ((r && r.error) || 'ส่งไม่สำเร็จ'));
+      }).withFailureHandler(err => { btn.disabled = false; btn.textContent = t; snToast('⚠️ ' + err.message); }).notifyPromo(code);
+    }
 
     // ---------- 📣 แจ้งทีมใน LINE: STOCK อัปเดตแล้ว (ผู้จัดการ) ----------
     (function () {

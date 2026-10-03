@@ -830,6 +830,25 @@
     .ann-tpl button { flex-shrink: 0; border: 0; border-radius: 100px; padding: 8px 13px; background: #fff; font: 700 12.5px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; box-shadow: 0 1px 2px rgba(0,0,0,.06); cursor: pointer; transition: transform .35s var(--spring); }
     .ann-tpl button:active { transform: scale(.92); }
     .ann-tpl button.on { background: #1C1C1E; color: #FFD600; }
+    .ann-sw { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .ann-sw button { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 0; border-radius: 16px; background: #fff; text-align: left; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+    .ann-sw i { position: relative; flex-shrink: 0; width: 40px; height: 24px; border-radius: 100px; background: #D1D1D6; transition: background-color .25s; }
+    .ann-sw i::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,.25); transition: transform .35s var(--spring); }
+    .ann-sw button.on i { background: #34C759; }
+    .ann-sw button.on i::after { transform: translateX(16px); }
+    .ann-sw span { min-width: 0; display: flex; flex-direction: column; }
+    .ann-sw b { font: 800 12.5px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; }
+    .ann-sw small { font: 600 10.5px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; }
+    .ann-promo { display: flex; gap: 6px; margin-bottom: 8px; }
+    .ann-promo input { flex: 1; min-width: 0; border: 0; border-radius: 14px; padding: 10px 12px; font: 600 13.5px 'IBM Plex Sans Thai', sans-serif; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .ann-promo input:focus { outline: 2px solid #FFD600; }
+    .ann-promo button { border: 0; border-radius: 14px; padding: 0 14px; background: #1C1C1E; color: #FFD600; font: 800 13px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .ann-pres { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; max-height: 190px; overflow-y: auto; }
+    .ann-pres:empty { display: none; }
+    .ann-pres button { display: flex; justify-content: space-between; align-items: center; gap: 8px; border: 0; border-radius: 12px; padding: 9px 12px; background: #fff; text-align: left; cursor: pointer; font: 700 12.5px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; }
+    .ann-pres button b { color: #1E8E3E; white-space: nowrap; }
+    .ann-pres button.added { background: #E8F8EE; }
+    .ann-pres .note { font: 600 12px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; padding: 4px 2px; }
     #ann-text { width: 100%; border: 0; border-radius: 18px; padding: 14px; font: 500 15px/1.55 'IBM Plex Sans Thai', sans-serif; background: #fff; color: #1C1C1E; resize: vertical; box-shadow: 0 1px 2px rgba(0,0,0,.05); box-sizing: border-box; }
     #ann-text:focus { outline: 2px solid #FFD600; }
     .ann-img { display: flex; align-items: center; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
@@ -1052,7 +1071,16 @@
         <div><h3>ประกาศเข้ากลุ่มร้าน</h3><small id="ann-status">กำลังเช็คโควตา…</small></div>
         <button class="ann-x" onclick="closeAnnounce()" aria-label="ปิด">✕</button>
       </div>
+      <div class="ann-sw">
+        <button type="button" id="sw-replies" onclick="annToggle('replies')"><i></i><span><b>บอทตอบคำถามในกลุ่ม</b><small id="sw-replies-t">…</small></span></button>
+        <button type="button" id="sw-promo" onclick="annToggle('promoAuto')"><i></i><span><b>แจ้งโปรใหม่อัตโนมัติ</b><small id="sw-promo-t">…</small></span></button>
+      </div>
       <div class="ann-tpl" id="ann-tpl"></div>
+      <div class="ann-promo">
+        <input type="search" id="ann-pq" placeholder="🏷️ ดึงโปรจากชีต — พิมพ์รุ่น เช่น s25 ultra" onkeydown="if(event.key==='Enter'){event.preventDefault();annPromoSearch()}">
+        <button type="button" onclick="annPromoSearch()">ค้นหา</button>
+      </div>
+      <div class="ann-pres" id="ann-pres"></div>
       <textarea id="ann-text" rows="7" placeholder="พิมพ์ข้อความประกาศ…"></textarea>
       <div class="ann-img">
         <label class="ann-pick"><input type="file" accept="image/*" id="ann-file" onchange="annPickImage(this)">🖼️ แนบรูป (ไม่บังคับ)</label>
@@ -1094,7 +1122,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.10.04-5';
+    const APP_VER = '2026.10.04-6';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -1194,10 +1222,41 @@
       document.getElementById('ann-sheet').classList.add('on');
       annRenderCost();
       document.getElementById('ann-status').textContent = 'กำลังเช็คโควตา…';
-      google.script.run.withSuccessHandler(st => { annStatus = st; annRenderCost(); })
+      google.script.run.withSuccessHandler(st => { annStatus = st; annRenderCost(); annRenderSwitches(); })
         .withFailureHandler(err => { document.getElementById('ann-status').textContent = '⚠️ ' + err.message; }).lineStatus();
     }
     function closeAnnounce() { document.getElementById('ann-sheet').classList.remove('on'); }
+    function annRenderSwitches() {
+      const st = annStatus || {};
+      const set = (id, on, onT, offT) => { document.getElementById(id).classList.toggle('on', !!on); document.getElementById(id + '-t').textContent = on ? onT : offT; };
+      set('sw-replies', st.repliesOn, 'เปิด · พนักงานพิมพ์ถามได้ (ฟรี)', 'ปิด · บอทเงียบ (คุณยังถามได้)');
+      set('sw-promo', st.promoAutoOn, 'เปิด · 10 โมง ถ้ามีโปรใหม่ (13 ข้อความ)', 'ปิด · แจ้งเองจากหน้านี้');
+    }
+    function annToggle(k) {
+      if (!annStatus) return;
+      const cur = k === 'replies' ? annStatus.repliesOn : annStatus.promoAutoOn;
+      annStatus[k === 'replies' ? 'repliesOn' : 'promoAutoOn'] = !cur; annRenderSwitches(); haptic(8);
+      google.script.run.withSuccessHandler(st => { annStatus = st; annRenderSwitches(); annRenderCost(); })
+        .withFailureHandler(err => { annStatus[k === 'replies' ? 'repliesOn' : 'promoAutoOn'] = cur; annRenderSwitches(); alert('เปลี่ยนไม่สำเร็จ: ' + err.message); })
+        .lineSetFlags({ [k]: !cur });
+    }
+    function annPromoSearch() {
+      const q = document.getElementById('ann-pq').value.trim(), box = document.getElementById('ann-pres');
+      if (!q) return;
+      box.innerHTML = '<div class="note">กำลังค้นหา…</div>';
+      google.script.run.withSuccessHandler(list => {
+        window._annPromos = list || [];
+        if (!list || !list.length) { box.innerHTML = '<div class="note">ไม่พบโปรของ "' + q.replace(/</g, '&lt;') + '"</div>'; return; }
+        box.innerHTML = list.map((x, i) => `<button type="button" onclick="annAddPromo(${i}, this)"><span>＋ ${x.title.replace(/</g, '&lt;')}</span><b>${x.price ? '฿' + Math.round(x.price).toLocaleString('en-US') : ''}</b></button>`).join('');
+      }).withFailureHandler(err => { box.innerHTML = '<div class="note">⚠️ ' + err.message + '</div>'; }).linePromoSearch(q);
+    }
+    function annAddPromo(i, el) {
+      const x = (window._annPromos || [])[i]; if (!x) return;
+      const ta = document.getElementById('ann-text');
+      if (!ta.value.trim()) ta.value = '🔥 โปรโมชั่นแนะนำ\n';
+      ta.value = ta.value.replace(/\s*$/, '') + '\n\n' + x.text;
+      el.classList.add('added'); haptic(6);
+    }
     function annUseTpl(i, el) {
       const ta = document.getElementById('ann-text');
       if (ta.value.trim() && !confirm('แทนที่ข้อความเดิม?')) return;
