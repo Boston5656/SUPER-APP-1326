@@ -5,8 +5,8 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-title" content="SYSTEM 1326">
-  <meta name="application-name" content="SYSTEM 1326">
+  <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
+  <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
   <script src="gas.js"></script>
   <meta name="theme-color" content="#FFD600">
@@ -14,7 +14,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SYSTEM 1326</title>
+  <title>SUPER APP 1326</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -662,13 +662,43 @@
     #frame-shell.closing { animation: frameOut .3s var(--ios-ease) both; }
     @keyframes frameIn { from { opacity: 0; transform: translateY(24px) scale(.985); } to { opacity: 1; transform: none; } }
     @keyframes frameOut { to { opacity: 0; transform: translateY(16px) scale(.99); } }
-    #frame-host, #frame-host iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    #frame-bar { position: absolute; left: 0; right: 0; top: 0; z-index: 47; height: calc(52px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 10px 0;
+      display: flex; align-items: center; gap: 8px; background: rgba(20,20,22,.94); color: #fff;
+      -webkit-backdrop-filter: saturate(180%) blur(18px); backdrop-filter: saturate(180%) blur(18px); box-shadow: 0 1px 0 rgba(255,255,255,.06), 0 8px 20px -14px rgba(0,0,0,.8); }
+    #frame-mid { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    #frame-title { min-width: 0; text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: .3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #frame-logo { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; }
+    .logout-btn { display: flex; align-items: center; gap: 5px; height: 36px; padding: 0 12px; border-radius: 12px; flex-shrink: 0; border: 0; cursor: pointer;
+      background: rgba(255,69,58,.16); color: #FF6B60; font-weight: 700; font-size: 14px; font-family: inherit; transition: transform .4s var(--spring), background-color .2s; }
+    .logout-btn:hover { background: rgba(255,69,58,.26); }
+    .logout-btn:active { transform: scale(.86); }
+    #page-hub { padding-top: calc(72px + env(safe-area-inset-top)) !important; }
+    #hub-logout { position: fixed; z-index: 30; top: calc(14px + env(safe-area-inset-top)); right: 14px; background: #1C1C1E; color: #FFD600;
+      box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); }
+    #hub-logout:hover { background: #2C2C2E; }
+    #logout-sheet { position: fixed; inset: 0; z-index: 90; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.45);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 16px 16px calc(16px + env(safe-area-inset-bottom)); }
+    #logout-sheet.on { display: flex; animation: lsFade .25s ease both; }
+    #logout-sheet .ls-card { width: 100%; max-width: 380px; background: #1C1C1E; color: #fff; border-radius: 24px; padding: 22px 18px 16px; text-align: center;
+      animation: lsUp .45s var(--spring) both; }
+    #logout-sheet .ls-ico { width: 54px; height: 54px; border-radius: 16px; margin: 0 auto 12px; }
+    #logout-sheet h3 { font-size: 18px; font-weight: 800; margin: 0 0 4px; }
+    #logout-sheet p { font-size: 13.5px; color: rgba(255,255,255,.6); margin: 0 0 18px; }
+    #logout-sheet .ls-row { display: flex; gap: 10px; }
+    #logout-sheet .ls-row button { flex: 1; height: 48px; border-radius: 14px; border: 0; font-weight: 800; font-size: 15px; font-family: inherit; cursor: pointer; transition: transform .35s var(--spring); }
+    #logout-sheet .ls-row button:active { transform: scale(.94); }
+    #logout-sheet .ls-no { background: #2C2C2E; color: #fff; }
+    #logout-sheet .ls-yes { background: #FFD600; color: #1C1C1E; }
+    @media (min-width: 640px) { #logout-sheet { align-items: center; } }
+    @keyframes lsFade { from { opacity: 0; } }
+    @keyframes lsUp { from { opacity: 0; transform: translateY(40px) scale(.96); } }
+    #frame-host { position: absolute; left: 0; right: 0; bottom: 0; top: calc(52px + env(safe-area-inset-top)); }
+    #frame-host iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
     #frame-host iframe { display: none; background: #FFD600; }
     #frame-host iframe.on { display: block; }
-    #frame-back { position: fixed; left: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 47; width: 50px; height: 50px; border-radius: 17px;
-      background: rgba(28,28,30,.88); color: #FFD600; display: flex; align-items: center; justify-content: center;
-      -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 10px 24px -8px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.1);
-      transition: transform .4s var(--spring); }
+    #frame-back { display: flex; align-items: center; gap: 2px; height: 36px; padding: 0 12px 0 6px; border-radius: 12px; flex-shrink: 0;
+      background: rgba(255,214,0,.14); color: #FFD600; font-weight: 700; font-size: 14px; transition: transform .4s var(--spring), background-color .2s; }
+    #frame-back:hover { background: rgba(255,214,0,.22); }
     #frame-back:active { transform: scale(.86); }
     #frame-loading { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; pointer-events: none; z-index: 46; }
     #frame-loading.on { display: flex; }
@@ -680,7 +710,7 @@
 
   <!-- LOGIN -->
   <div id="page-login" class="page-login flex flex-col items-center justify-center p-6">
-    <h1 class="text-3xl font-extrabold text-zinc-800 mb-10 tracking-widest hub-title">SYSTEM 1326</h1>
+    <h1 class="text-3xl font-extrabold text-zinc-800 mb-10 tracking-widest hub-title"><img src="icon-192.png" alt="" style="width:72px;height:72px;border-radius:20px;margin:0 auto 14px;display:block;box-shadow:0 14px 30px -12px rgba(0,0,0,.55)">SUPER APP 1326</h1>
     <div class="login-box p-8 w-full max-w-sm relative" id="loginBox">
       <div class="absolute inset-0 rounded-[32px] inner-shadow pointer-events-none"></div>
       <div class="relative z-10 space-y-8">
@@ -701,6 +731,10 @@
 
   <!-- APP HUB -->
   <div id="page-hub" class="hidden page-login p-6 flex items-center justify-center">
+    <button id="hub-logout" class="logout-btn" onclick="askLogout()" aria-label="ออกจากระบบ">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+      <span>ออกจากระบบ</span>
+    </button>
     <div class="max-w-4xl mx-auto w-full flex flex-col items-center justify-center">
       <h2 class="text-xl font-bold text-zinc-800 mb-10 hub-title" id="welcomeText"></h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 justify-items-center w-full max-w-lg" id="appGrid"></div>
@@ -824,11 +858,32 @@
 
   <!-- 🧩 แอปย่อย (เปิดซ้อนในหน้าเดียว) -->
   <div id="frame-shell" class="hidden">
+    <header id="frame-bar">
+      <button id="frame-back" onclick="frameBack()" aria-label="กลับเมนู">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <span>เมนู</span>
+      </button>
+      <div id="frame-mid"><img id="frame-logo" src="icon-192.png" alt=""><span id="frame-title">SUPER APP 1326</span></div>
+      <button class="logout-btn" onclick="askLogout()" aria-label="ออกจากระบบ">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>ออก</span>
+      </button>
+    </header>
     <div id="frame-host"></div>
-    <button id="frame-back" onclick="history.length > 1 && history.state && history.state.sysApp ? history.back() : closeFrameApp()" aria-label="กลับเมนู">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
-    </button>
     <div id="frame-loading"><span></span></div>
+  </div>
+
+  <!-- ยืนยันออกจากระบบ -->
+  <div id="logout-sheet" onclick="if(event.target===this)closeLogout()">
+    <div class="ls-card">
+      <img class="ls-ico" src="icon-192.png" alt="">
+      <h3>ออกจากระบบ?</h3>
+      <p id="ls-who">ต้องใส่รหัสใหม่เพื่อเข้าใช้งานอีกครั้ง</p>
+      <div class="ls-row">
+        <button class="ls-no" onclick="closeLogout()">ยกเลิก</button>
+        <button class="ls-yes" onclick="closeLogout();forceLogout()">ออกจากระบบ</button>
+      </div>
+    </div>
   </div>
 
   <!-- MODAL (Top 5 / Incentive) -->
@@ -903,6 +958,13 @@
       if (inactivityTimer) clearTimeout(inactivityTimer);
       inactivityTimer = setTimeout(forceLogout, SESSION_TIMEOUT);
     }
+
+    function askLogout() {
+      var who = currentUser && (currentUser.name || currentUser.empId || currentUser.brand);
+      document.getElementById('ls-who').textContent = (who ? who + ' · ' : '') + 'ต้องใส่รหัสใหม่เพื่อเข้าใช้งานอีกครั้ง';
+      document.getElementById('logout-sheet').classList.add('on');
+    }
+    function closeLogout() { document.getElementById('logout-sheet').classList.remove('on'); }
 
     function forceLogout() {
       localStorage.removeItem(SESSION_KEY);
@@ -1076,6 +1138,7 @@
     // 🧩 แอปย่อยแบบเปิดซ้อน (เก็บหน้าไว้ — กลับมาเปิดซ้ำได้ทันทีไม่ต้องโหลดใหม่)
     // =========================================================
     const frameCache = {};
+    function frameBack() { if (history.state && history.state.sysApp) history.back(); else closeFrameApp(); }
     function openFrameApp(id) {
       const url = APP_URLS[id];
       if (!url) return;
@@ -1094,6 +1157,8 @@
         frameCache[id] = f;
       }
       f.classList.add('on');
+      const def = APP_DEFS.find(a => a.id === id);
+      document.getElementById('frame-title').textContent = def ? def.name : 'SUPER APP 1326';
       shell.classList.remove('hidden', 'closing');
       document.body.classList.add('frame-open');
       if (!(history.state && history.state.sysApp)) history.pushState({ sysApp: id }, '');
