@@ -23,7 +23,7 @@
     body {
       margin: 0; min-height: 100vh; color: var(--ink);
       font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased;
-      padding: calc(18px + env(safe-area-inset-top)) 14px calc(90px + env(safe-area-inset-bottom));
+      padding: calc(8px + env(safe-area-inset-top)) 14px calc(90px + env(safe-area-inset-bottom));
       background:
         radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%),
         radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%), var(--yellow);
@@ -40,7 +40,19 @@
     .rise { animation: riseIn .6s var(--ios-ease) both; }
 
     /* header */
-    .head { text-align: center; margin: 2px 0 4px; }
+    .head { text-align: center; margin: 2px 0 4px; position: relative; }
+    .sys-navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 50; display: flex; align-items: stretch; gap: 8px; grid-column: 1 / -1; }
+    [data-sys-back-slot] { display: flex; }
+    [data-sys-back-slot]:empty { display: none; }
+    .topnav { flex: 1; min-width: 0; display: flex; gap: 4px; padding: 5px; border-radius: 22px; background: rgba(255,255,255,.72);
+      -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px); border: 1px solid rgba(255,255,255,.7);
+      box-shadow: 0 10px 30px -14px rgba(60,48,0,.35); }
+    .topnav button { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 6px; border-radius: 17px; background: transparent;
+      color: #6E6E73; font-weight: 700; font-size: .82rem; transition: transform .35s var(--spring), background-color .25s, color .25s; }
+    .topnav button i { font-style: normal; font-size: 1.05rem; line-height: 1; }
+    .topnav button.on { background: var(--ink); color: #fff; box-shadow: 0 8px 18px -8px rgba(0,0,0,.6); }
+    .topnav button:active { transform: scale(.93); }
+    @media (max-width: 576px) { .topnav button { flex-direction: column; gap: 3px; font-size: .7rem; padding: 8px 2px; } .topnav button i { font-size: 1.15rem; } }
     .eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 100px; background: rgba(28,28,30,.08);
       color: rgba(28,28,30,.72); font-family: var(--f-num); font-size: .68rem; font-weight: 700; letter-spacing: .8px; }
     .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px rgba(28,28,30,.12); }
@@ -154,6 +166,123 @@
     .btn-soft:active { transform: scale(.96); }
     .row2 .btn-main { flex: 1.4; margin-top: 0; }
 
+
+    /* ===== ปุ่มคำร้อง / สรุป ===== */
+    .acts { display: grid; grid-template-columns: 1.25fr 1fr; gap: 8px; margin-top: 14px; }
+    .act { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 20px; text-align: left; transition: transform .35s var(--spring), box-shadow .25s; }
+    .act:active { transform: scale(.95); }
+    .act-ic { flex-shrink: 0; width: 40px; height: 40px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; font-weight: 800; }
+    .act-tx { min-width: 0; display: flex; flex-direction: column; }
+    .act-tx b { font-size: .95rem; line-height: 1.2; }
+    .act-tx small { font-size: .66rem; font-weight: 600; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .act-rep { background: linear-gradient(180deg, #FFE033 0%, var(--yellow) 100%); color: var(--ink); box-shadow: 0 10px 24px -12px rgba(242,194,0,1), inset 0 1px 0 rgba(255,255,255,.6); }
+    .act-rep .act-ic { background: var(--ink); color: var(--yellow); }
+    .act-sum { background: var(--ink); color: #fff; box-shadow: 0 10px 24px -14px rgba(0,0,0,.8); }
+    .act-sum .act-ic { background: rgba(255,214,0,.16); }
+
+    /* ===== ฟอร์มใหม่ ===== */
+    .sheet .box.fbox, .sheet .box.sbox { width: min(560px, 100%); padding: 18px 18px 0; background: #F7F7F9; }
+    .sheet .box.sbox { width: min(820px, 100%); padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+    .fhead { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .fhead h3 { margin: 0; font-size: 1.15rem; }
+    .fhead small { font-size: .72rem; color: var(--gray-1); font-weight: 600; }
+    .fhead > div { flex: 1; min-width: 0; }
+    .fhead-ic { width: 44px; height: 44px; border-radius: 14px; background: var(--yellow); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .fhead-ic.dark { background: var(--ink); }
+    .xbtn { width: 34px; height: 34px; border-radius: 50%; background: #E9E9EE; color: #6E6E73; font-weight: 800; flex-shrink: 0; transition: transform .35s var(--spring); }
+    .xbtn:active { transform: scale(.85); }
+    .fsec { background: #fff; border-radius: 22px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+    .fl { display: flex; align-items: center; gap: 8px; font-size: .82rem; font-weight: 800; margin-bottom: 10px; }
+    .fl span { width: 20px; height: 20px; border-radius: 7px; background: var(--ink); color: var(--yellow); font-family: var(--f-num); font-size: .7rem; display: flex; align-items: center; justify-content: center; }
+    .fl small { font-weight: 600; color: var(--gray-1); font-size: .68rem; margin-left: auto; }
+    .types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .types button { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 11px 10px; border-radius: 16px; background: var(--gray-6); color: var(--ink); text-align: left;
+      transition: transform .35s var(--spring), background-color .25s, box-shadow .25s; }
+    .types button:active { transform: scale(.93); }
+    .types button i { font-style: normal; font-size: 1.25rem; line-height: 1; }
+    .types button b { font-size: .82rem; }
+    .types button small { font-size: .6rem; color: var(--gray-1); font-weight: 600; line-height: 1.2; }
+    .types button.on { background: var(--tc); color: #fff; box-shadow: 0 10px 20px -10px var(--tc); }
+    .types button.on small { color: rgba(255,255,255,.85); }
+    .types button.on::after { content: '✓'; position: absolute; top: 8px; right: 9px; width: 18px; height: 18px; border-radius: 50%; background: #fff; color: var(--tc); font-size: .65rem; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+    .dq { display: flex; gap: 8px; }
+    .dq button { flex-shrink: 0; padding: 0 14px; border-radius: 14px; background: var(--gray-6); font-weight: 700; font-size: .82rem; transition: transform .35s var(--spring), background-color .2s; }
+    .dq button.on { background: var(--ink); color: var(--yellow); }
+    .dq button:active { transform: scale(.92); }
+    .inp-l { background: var(--gray-6); color: var(--ink); color-scheme: light; padding: 12px 14px; font-size: .95rem; }
+    .dq .inp-l { flex: 1; min-width: 0; }
+    .who { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 10px; margin: 0 -2px; scrollbar-width: none; }
+    .who::-webkit-scrollbar { display: none; }
+    .who button { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 66px; padding: 8px 2px; border-radius: 16px; background: transparent; transition: transform .35s var(--spring), background-color .2s; }
+    .who button:active { transform: scale(.9); }
+    .who .av { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-family: var(--f-num); font-weight: 700; font-size: .8rem; color: #fff; background: var(--ink); }
+    .who .pc .av { background: var(--blue); }
+    .who b { font-size: .68rem; max-width: 62px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .who small { font-size: .56rem; color: var(--gray-1); font-weight: 700; margin-top: -3px; max-width: 62px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .who button.on { background: #FFF6C2; }
+    .who button.on .av { background: var(--yellow); color: var(--ink); box-shadow: 0 6px 14px -6px rgba(242,194,0,1); }
+    .posbox { margin-top: 10px; }
+    .posbox summary { cursor: pointer; font-size: .78rem; font-weight: 600; color: #6E6E73; list-style: none; padding: 4px 2px; }
+    .posbox summary::-webkit-details-marker { display: none; }
+    .posbox summary b { color: var(--ink); }
+    .posbox summary::after { content: ' · เปลี่ยน ›'; color: var(--blue); font-weight: 700; }
+    .posbox .chips { margin-top: 8px; }
+    .fbox .chips label { background: var(--gray-6); color: #3A3A3C; }
+    .ffoot { position: sticky; bottom: 0; display: flex; gap: 8px; padding: 12px 0 calc(16px + env(safe-area-inset-bottom)); margin-top: 4px;
+      background: linear-gradient(180deg, rgba(247,247,249,0) 0%, #F7F7F9 30%); }
+    .ffoot .btn-main { flex: 1.5; margin-top: 0; }
+    .ffoot .btn-soft { background: #E9E9EE; }
+
+    /* ===== สรุป ===== */
+    .seg { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 12px; scrollbar-width: none; }
+    .seg::-webkit-scrollbar { display: none; }
+    .seg button { flex-shrink: 0; padding: 8px 13px; border-radius: 100px; background: #E9E9EE; font-weight: 700; font-size: .76rem; color: #3A3A3C; transition: transform .35s var(--spring), background-color .2s; }
+    .seg button.on { background: var(--ink); color: var(--yellow); }
+    .seg button:active { transform: scale(.92); }
+    .stiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 12px; }
+    .stile { border-radius: 18px; padding: 10px; background: #fff; text-align: left; box-shadow: 0 1px 2px rgba(0,0,0,.04); transition: transform .35s var(--spring), box-shadow .25s; position: relative; overflow: hidden; }
+    .stile::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--tc); }
+    .stile:active { transform: scale(.94); }
+    .stile.on { box-shadow: inset 0 0 0 2px var(--tc); }
+    .stile i { font-style: normal; font-size: 1rem; }
+    .stile small { display: block; font-size: .64rem; font-weight: 700; color: var(--gray-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .stile b { display: block; font-family: var(--f-num); font-size: 1.6rem; line-height: 1.05; color: var(--ink); }
+    .scard { background: #fff; border-radius: 22px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.04); animation: riseIn .45s var(--ios-ease) both; }
+    .scard h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: .86rem; }
+    .scard h4 small { margin-left: auto; font-size: .68rem; color: var(--gray-1); font-weight: 600; }
+    .sp-row { border-radius: 16px; background: var(--gray-6); margin-bottom: 6px; overflow: hidden; }
+    .sp-head { width: 100%; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: transparent; text-align: left; }
+    .sp-head .av { width: 34px; height: 34px; border-radius: 12px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--f-num); font-weight: 700; font-size: .76rem; flex-shrink: 0; }
+    .sp-head .nm { flex: 1; min-width: 0; }
+    .sp-head .nm b { display: block; font-size: .86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sp-head .nm small { font-size: .66rem; color: var(--gray-1); font-weight: 600; }
+    .pills { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; }
+    .pill { display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px; border-radius: 100px; font-size: .66rem; font-weight: 800; color: #fff; background: var(--tc); white-space: nowrap; }
+    .sp-head .chev { color: var(--gray-2); font-weight: 800; transition: transform .3s var(--ios-ease); }
+    .sp-row.open .chev { transform: rotate(90deg); }
+    .sp-list { display: none; padding: 0 12px 10px 56px; }
+    .sp-row.open .sp-list { display: block; animation: riseIn .35s var(--ios-ease) both; }
+    .sp-it { display: flex; gap: 8px; align-items: baseline; padding: 6px 0; border-top: 1px solid #E5E5EA; font-size: .76rem; }
+    .sp-it .d { font-family: var(--f-num); font-weight: 700; min-width: 74px; color: var(--ink); }
+    .sp-it .t { font-weight: 800; color: var(--tc); white-space: nowrap; }
+    .sp-it .n { color: #6E6E73; min-width: 0; }
+    .rtab { width: 100%; border-collapse: separate; border-spacing: 0 4px; font-size: .78rem; }
+    .rtab th { font-size: .64rem; color: var(--gray-1); font-weight: 700; text-align: center; padding: 0 4px; }
+    .rtab th:first-child { text-align: left; }
+    .rtab td { background: var(--gray-6); padding: 8px 6px; text-align: center; font-family: var(--f-num); font-weight: 700; }
+    .rtab td:first-child { text-align: left; border-radius: 12px 0 0 12px; font-family: inherit; }
+    .rtab td:last-child { border-radius: 0 12px 12px 0; }
+    .rtab td small { display: block; font-size: .6rem; color: var(--gray-1); font-weight: 600; font-family: 'IBM Plex Sans Thai', sans-serif; }
+    .rtab .z { color: #C7C7CC; font-weight: 600; }
+    .scopy { display: flex; justify-content: flex-end; margin: -2px 0 10px; }
+    .note-warn { font-size: .72rem; font-weight: 600; color: #8A5A00; background: #FFF4E5; border-radius: 14px; padding: 9px 12px; margin-bottom: 10px; }
+    @media (max-width: 600px) {
+      .stiles { grid-template-columns: repeat(3, 1fr); }
+      .sheet .box.fbox, .sheet .box.sbox { width: 100%; padding: 16px 14px 0; }
+      .sheet .box.sbox { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+    }
+    @media (min-width: 760px) { .sbox .twocol { display: grid; grid-template-columns: 1.15fr 1fr; gap: 10px; align-items: start; } }
+
     /* toast */
     #toast { position: fixed; left: 50%; top: calc(14px + env(safe-area-inset-top)); z-index: 200; transform: translate(-50%, -150%); opacity: 0;
       display: flex; align-items: center; gap: 10px; padding: 11px 16px 11px 11px; border-radius: 100px; background: rgba(28,28,30,.9); color: #fff; font-weight: 600; font-size: .86rem;
@@ -181,6 +310,14 @@
   <div id="toast"><span class="ic">✓</span><span id="toastMsg"></span></div>
 
   <div class="wrap">
+    <div class="sys-navrow rise">
+      <span data-sys-back-slot></span>
+      <nav class="topnav">
+        <button class="on" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i>📅</i><span>ตารางกะ</span></button>
+        <button onclick="openModal()"><i>📝</i><span>แจ้งคำร้อง</span></button>
+        <button onclick="openSummary()"><i>📊</i><span>สรุป</span></button>
+      </nav>
+    </div>
     <div class="head rise">
       <span class="eyebrow">SHIFT · ID1326</span>
       <h1>ตารางกะงาน</h1>
@@ -217,58 +354,94 @@
         </div>
         <div class="sum" id="sum"></div>
         <div id="people"><div style="text-align:center;padding:20px 0"><span class="loading"><span class="sp"></span>กำลังโหลดข้อมูล</span></div></div>
-        <button class="btn-main" onclick="openModal()">＋ แจ้งลา / หยุด / สลับกะ</button>
+        <div class="acts">
+          <button class="act act-rep" onclick="openModal()">
+            <span class="act-ic">＋</span>
+            <span class="act-tx"><b>แจ้งคำร้อง</b><small>ลา · สาย · สลับกะ · นักขัต</small></span>
+          </button>
+          <button class="act act-sum" onclick="openSummary()">
+            <span class="act-ic">📊</span>
+            <span class="act-tx"><b>สรุป</b><small>ใครใช้อะไรไปบ้าง</small></span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- ฟอร์มแจ้งลา -->
+  <!-- ฟอร์มแจ้งคำร้อง -->
   <div class="sheet" id="formModal">
     <div class="bd" onclick="closeModal()"></div>
-    <div class="box">
+    <div class="box fbox">
       <div class="grabber"></div>
-      <h3>📝 แบบฟอร์มแจ้งลา</h3>
-      <div style="font-size:.75rem;color:var(--gray-1);font-weight:600">บันทึกลงชีต REPORT</div>
-
-      <label class="lbl">📅 วันที่ลา</label>
-      <input type="date" class="inp" id="leaveDate">
-
-      <label class="lbl">👤 ชื่อ-นามสกุล / ชื่อเล่น</label>
-      <input type="text" class="inp" id="name" placeholder="พิมพ์ชื่อ...">
-
-      <label class="lbl">💼 ตำแหน่ง</label>
-      <div class="chips">
-        <input type="radio" name="pos" id="p1" value="BSM"><label for="p1">BSM</label>
-        <input type="radio" name="pos" id="p13" value="ABSM"><label for="p13">ABSM</label>
-        <input type="radio" name="pos" id="p2" value="PIA"><label for="p2">PIA</label>
-        <input type="radio" name="pos" id="p3" value="SUPER SALE"><label for="p3">SUPER SALE</label>
-        <input type="radio" name="pos" id="p4" value="MSC"><label for="p4">MSC</label>
-        <input type="radio" name="pos" id="p14" value="INTERN"><label for="p14">INTERN</label>
-        <input type="radio" name="pos" id="p5" value="ทวิภาคี"><label for="p5">ทวิภาคี</label>
-        <input type="radio" name="pos" id="p6" value="PC SAMSUNG"><label for="p6">PC SAMSUNG</label>
-        <input type="radio" name="pos" id="p7" value="PC OPPO"><label for="p7">PC OPPO</label>
-        <input type="radio" name="pos" id="p8" value="PC VIVO"><label for="p8">PC VIVO</label>
-        <input type="radio" name="pos" id="p9" value="PC XIAOMI"><label for="p9">PC XIAOMI</label>
-        <input type="radio" name="pos" id="p10" value="PC HONOR"><label for="p10">PC HONOR</label>
-        <input type="radio" name="pos" id="p11" value="PC REALME"><label for="p11">PC REALME</label>
-        <input type="radio" name="pos" id="p12" value="PC INFINIX"><label for="p12">PC INFINIX</label>
+      <div class="fhead">
+        <span class="fhead-ic">📝</span>
+        <div><h3>แจ้งคำร้อง</h3><small>บันทึกลงชีต REPORT อัตโนมัติ</small></div>
+        <button class="xbtn" onclick="closeModal()" aria-label="ปิด">✕</button>
       </div>
 
-      <label class="lbl">🗂️ ประเภทคำร้อง</label>
-      <div class="chips tp" style="grid-template-columns:repeat(2,1fr)">
-        <input type="radio" name="type" id="t1" value="ลากิจ"><label for="t1">ลากิจ</label>
-        <input type="radio" name="type" id="t2" value="ลาป่วย"><label for="t2">ลาป่วย</label>
-        <input type="radio" name="type" id="t3" value="เข้าสาย"><label for="t3">เข้าสาย</label>
-        <input type="radio" name="type" id="t4" value="สลับกะงาน"><label for="t4">สลับกะงาน</label>
+      <div class="fsec">
+        <div class="fl"><span>1</span>ประเภทคำร้อง</div>
+        <div class="types" id="typeGrid"></div>
       </div>
 
-      <label class="lbl">💬 หมายเหตุ / สาเหตุ</label>
-      <input type="text" class="inp" id="note" placeholder="รายละเอียดเพิ่มเติม...">
+      <div class="fsec">
+        <div class="fl"><span>2</span>วันที่</div>
+        <div class="dq">
+          <button type="button" data-q="0" onclick="quickDate(0)">วันนี้</button>
+          <button type="button" data-q="1" onclick="quickDate(1)">พรุ่งนี้</button>
+          <input type="date" class="inp inp-l" id="leaveDate" onchange="markQuick()">
+        </div>
+      </div>
 
-      <div class="row2">
+      <div class="fsec">
+        <div class="fl"><span>3</span>ใคร <small>แตะชื่อ = เลือกตำแหน่งให้อัตโนมัติ</small></div>
+        <div class="who" id="whoList"></div>
+        <input type="text" class="inp inp-l" id="name" placeholder="หรือพิมพ์ชื่อเอง..." oninput="clearWho()">
+        <details class="posbox" id="posBox">
+          <summary>💼 ตำแหน่ง: <b id="posLabel">ยังไม่เลือก</b></summary>
+          <div class="chips">
+            <input type="radio" name="pos" id="p1" value="BSM"><label for="p1">BSM</label>
+            <input type="radio" name="pos" id="p13" value="ABSM"><label for="p13">ABSM</label>
+            <input type="radio" name="pos" id="p2" value="PIA"><label for="p2">PIA</label>
+            <input type="radio" name="pos" id="p3" value="SUPER SALE"><label for="p3">SUPER SALE</label>
+            <input type="radio" name="pos" id="p4" value="MSC"><label for="p4">MSC</label>
+            <input type="radio" name="pos" id="p14" value="INTERN"><label for="p14">INTERN</label>
+            <input type="radio" name="pos" id="p5" value="ทวิภาคี"><label for="p5">ทวิภาคี</label>
+            <input type="radio" name="pos" id="p6" value="PC SAMSUNG"><label for="p6">PC SAMSUNG</label>
+            <input type="radio" name="pos" id="p7" value="PC OPPO"><label for="p7">PC OPPO</label>
+            <input type="radio" name="pos" id="p8" value="PC VIVO"><label for="p8">PC VIVO</label>
+            <input type="radio" name="pos" id="p9" value="PC XIAOMI"><label for="p9">PC XIAOMI</label>
+            <input type="radio" name="pos" id="p10" value="PC HONOR"><label for="p10">PC HONOR</label>
+            <input type="radio" name="pos" id="p11" value="PC REALME"><label for="p11">PC REALME</label>
+            <input type="radio" name="pos" id="p12" value="PC INFINIX"><label for="p12">PC INFINIX</label>
+          </div>
+        </details>
+      </div>
+
+      <div class="fsec">
+        <div class="fl"><span>4</span>หมายเหตุ <small id="noteHint">ไม่บังคับ</small></div>
+        <input type="text" class="inp inp-l" id="note" placeholder="รายละเอียดเพิ่มเติม...">
+      </div>
+
+      <div class="ffoot">
         <button class="btn-soft" onclick="closeModal()">ยกเลิก</button>
-        <button class="btn-main" onclick="submitForm()" id="submitBtn">บันทึกข้อมูล</button>
+        <button class="btn-main" onclick="submitForm()" id="submitBtn">บันทึกคำร้อง</button>
       </div>
+    </div>
+  </div>
+
+  <!-- สรุป -->
+  <div class="sheet" id="sumModal">
+    <div class="bd" onclick="closeSummary()"></div>
+    <div class="box sbox">
+      <div class="grabber"></div>
+      <div class="fhead">
+        <span class="fhead-ic dark">📊</span>
+        <div><h3>สรุปคำร้อง & วันหยุด</h3><small id="sumSub">กำลังโหลด…</small></div>
+        <button class="xbtn" onclick="closeSummary()" aria-label="ปิด">✕</button>
+      </div>
+      <div class="seg" id="sumPeriod"></div>
+      <div id="sumBody"><div style="text-align:center;padding:30px 0"><span class="loading"><span class="sp"></span>กำลังโหลดสรุป</span></div></div>
     </div>
   </div>
 
@@ -333,6 +506,7 @@
 
     // ===== ใครมา / หยุด / ลา (รวมคำร้องจากฟอร์ม) =====
     const LEAVE_TYPES = ['ลากิจ', 'ลาป่วย'];
+    const OFF_TYPES = ['ใช้นักขัต'];   // ใช้วันหยุดนักขัตฤกษ์ = ไม่มาทำงาน → ไปอยู่กลุ่ม "หยุด"
     function matchReport(p, reps) {
       const keys = [p.header, p.pcName].concat(String(p.header).split(/\s*:\s*/)).filter(k => k && k.length > 1).map(s => s.toUpperCase());
       return reps.find(r => { const n = String(r.name || '').toUpperCase().trim(); return n && keys.some(k => n === k || n.indexOf(k) !== -1 || k.indexOf(n) !== -1); });
@@ -357,6 +531,7 @@
         const item = { name, sub, isPC, rep };
         if (st.duty) {
           if (rep && LEAVE_TYPES.indexOf(rep.type) !== -1) { item.kind = 'lv'; item.label = rep.type; lv.push(item); }
+          else if (rep && OFF_TYPES.indexOf(rep.type) !== -1) { item.kind = 'off'; item.label = 'ใช้นักขัต'; off.push(item); }
           else { item.kind = 'on'; item.label = st.shift; on.push(item); }
         } else if (st.kind === 'off' || st.kind === 'vac') { item.kind = st.kind; item.label = st.label; off.push(item); }
         else { item.kind = st.kind; item.label = st.label; lv.push(item); }
@@ -412,7 +587,7 @@
           ${pc.length ? `<div class="plist">${pc.map(personHTML).join('')}</div>` : '<div class="empty">ไม่มี</div>'}</div>`;
       }
       if (show('off')) {
-        h += `<div class="grp"><h4><span class="sw" style="background:#8E8E93"></span>หยุด (DAY OFF / VACATION)<span class="cnt">${g.off.length}</span></h4>
+        h += `<div class="grp"><h4><span class="sw" style="background:#8E8E93"></span>หยุด (DAY OFF / VACATION / นักขัต)<span class="cnt">${g.off.length}</span></h4>
           ${g.off.length ? `<div class="plist">${g.off.map(personHTML).join('')}</div>` : '<div class="empty">ไม่มีคนหยุด</div>'}</div>`;
       }
       if (show('lv')) {
@@ -453,36 +628,218 @@
       }
     }
 
+    // ===================== แจ้งคำร้อง =====================
+    // ✏️ เพิ่ม/แก้ประเภทคำร้องได้ที่นี่ (value = ข้อความที่บันทึกลงชีต REPORT)
+    const REQ_TYPES = [
+      { v: 'ลากิจ',     ic: '📄', c: '#FF9F0A', d: 'ธุระส่วนตัว' },
+      { v: 'ลาป่วย',    ic: '🤒', c: '#FF3B30', d: 'ไม่สบาย' },
+      { v: 'เข้าสาย',   ic: '⏰', c: '#AF52DE', d: 'มาช้ากว่ากะ' },
+      { v: 'สลับกะงาน', ic: '🔁', c: '#0A84FF', d: 'แลกกะกับเพื่อน', hint: 'สลับกับใคร / กะไหน' },
+      { v: 'ใช้นักขัต', ic: '🎌', c: '#34C759', d: 'ใช้วันหยุดนักขัตฯ', hint: 'นักขัตวันไหน' }
+    ];
+    const typeMeta = t => REQ_TYPES.find(x => x.v === t) || { v: t || 'อื่นๆ', ic: '📝', c: '#8E8E93' };
+    let reqType = '';
+
+    function renderTypes() {
+      document.getElementById('typeGrid').innerHTML = REQ_TYPES.map(t =>
+        `<button type="button" class="${reqType === t.v ? 'on' : ''}" style="--tc:${t.c}" onclick="pickType('${t.v}')"><i>${t.ic}</i><b>${t.v}</b><small>${t.d}</small></button>`).join('');
+    }
+    function pickType(v) {
+      reqType = v; renderTypes();
+      const t = typeMeta(v);
+      document.getElementById('noteHint').textContent = t.hint ? 'เช่น ' + t.hint : 'ไม่บังคับ';
+      try { navigator.vibrate && navigator.vibrate(6); } catch (e) {}
+    }
+    function personList() {
+      return (DATA ? DATA.people : []).map(p => {
+        const hp = String(p.header).split(/\s*:\s*/);
+        const isPC = p.group === 'PC';
+        const brand = hp.length > 1 ? hp[0] : p.header;
+        const name = isPC ? (p.pcName || (hp.length > 1 ? hp.slice(1).join(' ') : p.header)) : (hp.length > 1 ? hp.slice(1).join(' ') : p.header);
+        const pos = isPC ? 'PC ' + brand : ((p.role && p.role !== 'STAFF') ? p.role : (hp.length > 1 ? hp[0] : ''));
+        return { name, pos, isPC };
+      });
+    }
+    function renderWho() {
+      const nm = document.getElementById('name').value.trim().toUpperCase();
+      document.getElementById('whoList').innerHTML = personList().map((p, i) =>
+        `<button type="button" class="${p.isPC ? 'pc' : ''} ${nm && nm === p.name.toUpperCase() ? 'on' : ''}" onclick="pickWho(${i})"><span class="av">${esc(initials(p.name))}</span><b>${esc(p.name)}</b><small>${esc(p.pos)}</small></button>`).join('');
+    }
+    function setPos(v) {
+      let found = false;
+      document.querySelectorAll('input[name="pos"]').forEach(r => { r.checked = r.value === v; if (r.checked) found = true; });
+      document.getElementById('posLabel').textContent = found ? v : (v ? v + ' (ไม่มีในรายการ — เลือกเอง)' : 'ยังไม่เลือก');
+      document.getElementById('posBox').open = !found;
+    }
+    function pickWho(i) {
+      const p = personList()[i];
+      document.getElementById('name').value = p.name;
+      setPos(p.pos);
+      renderWho();
+      try { navigator.vibrate && navigator.vibrate(6); } catch (e) {}
+    }
+    function clearWho() { renderWho(); }
+    document.addEventListener('change', e => {
+      if (e.target && e.target.name === 'pos') document.getElementById('posLabel').textContent = e.target.value;
+    });
+    const isoDate = dt => `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+    function quickDate(n) { const d = new Date(); d.setDate(d.getDate() + n); document.getElementById('leaveDate').value = isoDate(d); markQuick(); }
+    function markQuick() {
+      const v = document.getElementById('leaveDate').value;
+      document.querySelectorAll('.dq button').forEach(b => { const d = new Date(); d.setDate(d.getDate() + +b.dataset.q); b.classList.toggle('on', isoDate(d) === v); });
+    }
+
     function openModal() {
       if (!DATA) return;
       document.getElementById('leaveDate').value = `${DATA.year}-${pad(DATA.month)}-${pad(selected)}`;
+      markQuick(); renderTypes(); renderWho();
       document.getElementById('formModal').classList.add('open');
     }
     function closeModal() { document.getElementById('formModal').classList.remove('open'); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeSummary(); } });
 
     function submitForm() {
       const name = document.getElementById('name').value.trim();
       const pos = document.querySelector('input[name="pos"]:checked');
-      const type = document.querySelector('input[name="type"]:checked');
       const leaveDate = document.getElementById('leaveDate').value;
-      if (!name || !pos || !type || !leaveDate) { toast('กรุณากรอกข้อมูลให้ครบถ้วน', true); return; }
+      if (!reqType) { toast('เลือกประเภทคำร้องก่อน', true); return; }
+      if (!leaveDate) { toast('เลือกวันที่ก่อน', true); return; }
+      if (!name) { toast('เลือกหรือพิมพ์ชื่อก่อน', true); return; }
+      if (!pos) { document.getElementById('posBox').open = true; toast('เลือกตำแหน่งก่อน', true); return; }
       const btn = document.getElementById('submitBtn');
       btn.textContent = 'กำลังบันทึก...'; btn.disabled = true;
-      const data = { name, position: pos.value, type: type.value, note: document.getElementById('note').value, leaveDate };
-      const reset = () => { btn.textContent = 'บันทึกข้อมูล'; btn.disabled = false; };
+      const data = { name, position: pos.value, type: reqType, note: document.getElementById('note').value, leaveDate };
+      const reset = () => { btn.textContent = 'บันทึกคำร้อง'; btn.disabled = false; };
       google.script.run
         .withSuccessHandler(() => {
           toast('บันทึกคำร้องเรียบร้อย');
           closeModal(); reset();
           document.getElementById('name').value = ''; document.getElementById('note').value = '';
-          pos.checked = false; type.checked = false;
+          pos.checked = false; reqType = ''; setPos('');
+          SUM.cache = {};
           const [y, m, d] = leaveDate.split('-').map(Number);
           if (y === DATA.year && m === DATA.month) selected = d;
           loadData();
         })
         .withFailureHandler(err => { reset(); toast('บันทึกไม่สำเร็จ: ' + err.message, true); })
         .saveData(data);
+    }
+
+    // ===================== สรุป =====================
+    const TH_MS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const TH_DS = ['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+    const SUM = { cache: {}, year: 0, period: 'm', typeF: '', open: {} };
+
+    function openSummary() {
+      if (!DATA) return;
+      SUM.year = SUM.year || DATA.year;
+      SUM.period = SUM.period === 'y' ? 'y' : 'm' + DATA.month;
+      SUM.typeF = '';
+      document.getElementById('sumModal').classList.add('open');
+      loadSummary();
+    }
+    function closeSummary() { document.getElementById('sumModal').classList.remove('open'); }
+    function loadSummary() {
+      const y = SUM.year;
+      if (SUM.cache[y]) { renderSummary(); return; }
+      document.getElementById('sumBody').innerHTML = '<div style="text-align:center;padding:30px 0"><span class="loading"><span class="sp"></span>กำลังโหลดสรุป</span></div>';
+      google.script.run
+        .withSuccessHandler(res => { SUM.cache[y] = { rows: (res && res.rows) || [], full: true }; renderSummary(); })
+        .withFailureHandler(() => {
+          // หลังบ้านยังไม่อัปเดต → ใช้คำร้องเดือนนี้ที่มีอยู่แล้วไปก่อน
+          const rows = [];
+          Object.keys(DATA.reports || {}).forEach(d => (DATA.reports[d] || []).forEach(r =>
+            rows.push({ name: r.name, position: r.position, type: r.type, note: r.note === '-' ? '' : r.note, date: `${DATA.year}-${pad(DATA.month)}-${pad(+d)}` })));
+          SUM.cache[y] = { rows, full: false }; renderSummary();
+        })
+        .getReportSummary(y);
+    }
+    function setPeriod(p) { SUM.period = p; SUM.typeF = ''; try { navigator.vibrate && navigator.vibrate(6); } catch (e) {} renderSummary(); }
+    function setSumType(t) { SUM.typeF = SUM.typeF === t ? '' : t; renderSummary(); }
+    function togglePerson(k) { SUM.open[k] = !SUM.open[k]; renderSummary(); }
+
+    // นับจากตารางกะ (ชีต RUN — มีเฉพาะเดือนปัจจุบัน)
+    function runCounts() {
+      const out = DATA.people.map(() => ({ off: 0, offPast: 0, vac: 0, meet: 0, lv: 0, lvTxt: {} }));
+      Object.keys(DATA.days).forEach(d => {
+        DATA.days[d].values.forEach((v, i) => {
+          const st = classify(v); if (!st || st.duty) return;
+          const o = out[i];
+          if (st.kind === 'off') { o.off++; if (+d <= DATA.today) o.offPast++; }
+          else if (st.kind === 'vac') o.vac++;
+          else if (st.kind === 'meet') o.meet++;
+          else { o.lv++; o.lvTxt[st.label] = (o.lvTxt[st.label] || 0) + 1; }
+        });
+      });
+      return out;
+    }
+
+    function renderSummary() {
+      const data = SUM.cache[SUM.year]; if (!data) return;
+      const y = SUM.year;
+      const months = new Set(data.rows.map(r => +r.date.slice(5, 7)));
+      if (y === DATA.year) months.add(DATA.month);
+      let seg = [...months].sort((a, b) => a - b).map(m => `<button class="${SUM.period === 'm' + m ? 'on' : ''}" onclick="setPeriod('m${m}')">${TH_MS[m - 1]}${m === DATA.month && y === DATA.year ? ' · เดือนนี้' : ''}</button>`).join('');
+      seg += `<button class="${SUM.period === 'y' ? 'on' : ''}" onclick="setPeriod('y')">ทั้งปี ${y + 543}</button>`;
+      document.getElementById('sumPeriod').innerHTML = seg;
+
+      const pm = SUM.period === 'y' ? 0 : +SUM.period.slice(1);
+      let rows = data.rows.filter(r => !pm || +r.date.slice(5, 7) === pm);
+      document.getElementById('sumSub').textContent = (pm ? `${TH_MONTHS[pm - 1]} ${y + 543}` : `ทั้งปี ${y + 543}`) + ` · ${rows.length} คำร้อง`;
+
+      // tiles
+      const tc = {}; rows.forEach(r => tc[r.type] = (tc[r.type] || 0) + 1);
+      const tileTypes = REQ_TYPES.map(t => t.v).concat(Object.keys(tc).filter(k => !REQ_TYPES.some(t => t.v === k)));
+      let h = data.full ? '' : '<div class="note-warn">⚠️ ตอนนี้เห็นแค่คำร้องของเดือนนี้ — อัปเดต Shift.gs + API.gs ในหลังบ้าน แล้ว Deploy (New version) เพื่อดูย้อนหลังทั้งปี</div>';
+      h += '<div class="stiles">' + tileTypes.map(t => { const m = typeMeta(t);
+        return `<button class="stile ${SUM.typeF === t ? 'on' : ''}" style="--tc:${m.c}" onclick="setSumType('${esc(t)}')"><i>${m.ic}</i><small>${esc(t)}</small><b>${tc[t] || 0}</b></button>`; }).join('') + '</div>';
+      if (SUM.typeF) rows = rows.filter(r => r.type === SUM.typeF);
+
+      // ต่อคน
+      const by = {};
+      rows.forEach(r => { const k = String(r.name).trim().toUpperCase(); (by[k] = by[k] || { name: String(r.name).trim(), pos: r.position, items: [] }).items.push(r); });
+      const plist = Object.keys(by).map(k => Object.assign({ k }, by[k])).sort((a, b) => b.items.length - a.items.length || a.name.localeCompare(b.name));
+      let card = `<div class="scard"><h4>👤 ใครแจ้งอะไรไปบ้าง <small>แตะชื่อดูวันที่</small></h4>`;
+      if (!plist.length) card += `<div class="empty">ไม่มีคำร้อง${SUM.typeF ? ' ประเภทนี้' : ''}ในช่วงนี้ 🎉</div>`;
+      plist.forEach(p => {
+        const cnt = {}; p.items.forEach(r => cnt[r.type] = (cnt[r.type] || 0) + 1);
+        const pills = Object.keys(cnt).map(t => { const m = typeMeta(t); return `<span class="pill" style="--tc:${m.c}">${m.ic} ${esc(t)} ${cnt[t]}</span>`; }).join('');
+        const items = p.items.slice().sort((a, b) => a.date < b.date ? -1 : 1).map(r => {
+          const dt = new Date(r.date + 'T00:00:00'); const m = typeMeta(r.type);
+          return `<div class="sp-it" style="--tc:${m.c}"><span class="d">${TH_DS[dt.getDay()]} ${dt.getDate()} ${TH_MS[dt.getMonth()]}</span><span class="t">${m.ic} ${esc(r.type)}</span><span class="n">${r.note ? esc(r.note) : ''}</span></div>`;
+        }).join('');
+        card += `<div class="sp-row ${SUM.open[p.k] ? 'open' : ''}"><button class="sp-head" onclick="togglePerson('${esc(p.k).replace(/'/g, "\\'")}')">
+          <span class="av">${esc(initials(p.name))}</span><span class="nm"><b>${esc(p.name)}</b><small>${esc(p.pos)} · ${p.items.length} ครั้ง</small></span>
+          <span class="pills">${pills}</span><span class="chev">›</span></button><div class="sp-list">${items}</div></div>`;
+      });
+      card += '</div>';
+
+      // จากตารางกะ (เดือนปัจจุบันเท่านั้น)
+      let runCard = '';
+      if (y === DATA.year && pm === DATA.month && !SUM.typeF) {
+        const rc = runCounts();
+        const z = n => n ? n : '<span class="z">–</span>';
+        runCard = `<div class="scard"><h4>🗓️ วันหยุดจากตารางกะ <small>${TH_MONTHS[DATA.month - 1]}</small></h4>
+          <table class="rtab"><thead><tr><th>ชื่อ</th><th>หยุด (H)</th><th>พักร้อน (V)</th><th>ประชุม (M)</th><th>ลา/อื่นๆ</th></tr></thead><tbody>` +
+          personList().map((p, i) => { const o = rc[i];
+            const lvT = Object.keys(o.lvTxt).map(k => `${k} ${o.lvTxt[k]}`).join(', ');
+            return `<tr><td><b>${esc(p.name)}</b><small>${esc(p.pos)}</small></td><td>${z(o.off)}${o.off ? `<small>ใช้แล้ว ${o.offPast}</small>` : ''}</td><td>${z(o.vac)}</td><td>${z(o.meet)}</td><td>${z(o.lv)}${lvT ? `<small>${esc(lvT)}</small>` : ''}</td></tr>`; }).join('') +
+          '</tbody></table></div>';
+      }
+      h += `<div class="scopy"><button class="btn-copy" id="sumCopyBtn" onclick="copySummary()">คัดลอกสรุป</button></div>`;
+      h += runCard ? `<div class="twocol">${card}${runCard}</div>` : card;
+      document.getElementById('sumBody').innerHTML = h;
+      SUM.lastText = [`📊 สรุปคำร้อง ${document.getElementById('sumSub').textContent}`, SHOP_LINE, ''].concat(
+        plist.map(p => { const cnt = {}; p.items.forEach(r => cnt[r.type] = (cnt[r.type] || 0) + 1);
+          return `• ${p.name} (${p.pos}) — ` + Object.keys(cnt).map(t => `${t} ${cnt[t]}`).join(', ') + '\n' +
+            p.items.slice().sort((a, b) => a.date < b.date ? -1 : 1).map(r => { const dt = new Date(r.date + 'T00:00:00'); return `   - ${dt.getDate()} ${TH_MS[dt.getMonth()]} ${r.type}${r.note ? ' : ' + r.note : ''}`; }).join('\n'); })
+      ).join('\n');
+    }
+    function copySummary() {
+      const text = SUM.lastText || '';
+      const done = () => { const b = document.getElementById('sumCopyBtn'); if (b) { b.textContent = '✓ คัดลอกแล้ว'; b.classList.add('done'); } toast('คัดลอกสรุปแล้ว'); };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done).catch(() => toast('คัดลอกไม่สำเร็จ', true));
+      else { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) {} ta.remove(); }
     }
   </script>
 </body>

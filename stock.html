@@ -84,6 +84,10 @@
     .eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #1C1C1E; box-shadow: 0 0 0 3px rgba(28,28,30,0.12); }
 
     /* ---------- Segmented tab bar ---------- */
+    .sys-navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 40; display: flex; align-items: stretch; gap: 8px; max-width: 28rem; margin: 0 auto 1.5rem; }
+    .sys-navrow > .tab-shell { position: relative !important; top: auto !important; flex: 1; min-width: 0; margin: 0 !important; max-width: none !important; }
+    [data-sys-back-slot]:empty { display: none; }
+    [data-sys-back-slot] { display: flex; }
     .tab-shell {
       position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 40;
       background: rgba(255,255,255,0.72);
@@ -154,6 +158,8 @@
 
   <div class="w-full max-w-2xl">
 
+    <div class="sys-navrow">
+    <span data-sys-back-slot></span>
     <div id="tabShell" class="tab-shell relative flex justify-center gap-1 p-1.5 rounded-full max-w-md mx-auto mb-6">
       <div id="tabGlider" class="tab-glider"></div>
       <button onclick="switchTab('stock')" id="tabStock" class="tab-btn is-active flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
@@ -165,6 +171,7 @@
       <button onclick="switchTab('price')" id="tabPrice" class="tab-btn flex-1 py-2.5 px-3 rounded-full text-xs sm:text-sm font-bold">
         🔍 เช็คราคา
       </button>
+    </div>
     </div>
 
     <!-- หน้าเมนูที่ 1: เช็คสต๊อกสินค้า -->

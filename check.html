@@ -5,7 +5,27 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script>window.GAS_APP = 'check';</script>
+        <script src="staff-names.js"></script>
+    <script>
+      // ปุ่มชื่อพนักงาน — รายชื่ออยู่ในไฟล์ staff-names.js
+      function pickedName(radioName) {
+        var el = document.querySelector('input[name="' + radioName + '"]:checked');
+        return el ? el.value : '';
+      }
+      function renderNameButtons() {
+        document.querySelectorAll('[data-names]').forEach(function (box) {
+          var list = window[box.dataset.names] || [];
+          var rn = box.dataset.radio, cls = box.dataset.style;
+          box.innerHTML = list.map(function (n, i) {
+            var id = rn + '_' + i;
+            return '<input type="radio" class="btn-check" name="' + rn + '" id="' + id + '" value="' + String(n).replace(/"/g, '&quot;') + '"' + (i === 0 ? ' required' : '') + '>' +
+                   '<label class="btn-grid-custom ' + cls + '" for="' + id + '">' + n + '</label>';
+          }).join('');
+        });
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderNameButtons); else renderNameButtons();
+    </script>
+    <script>window.GAS_APP = 'check';</script>
     <script src="gas.js"></script>
     <title>Check List 1326</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -115,6 +135,10 @@
       /* =========================================================
          🧭 SEGMENTED NAV (sticky, glass, sliding glider)
       ========================================================= */
+      .sys-navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 1020; display: flex; align-items: stretch; gap: 8px; max-width: 880px; margin: 0 auto 22px auto; }
+      .sys-navrow > .nav-shell { position: relative !important; top: auto !important; flex: 1; min-width: 0; margin: 0 !important; }
+      [data-sys-back-slot]:empty { display: none; }
+      [data-sys-back-slot] { display: flex; }
       .nav-shell {
         position: sticky;
         top: calc(8px + env(safe-area-inset-top));
@@ -335,6 +359,12 @@
       .btn-check:checked + .btn-device {
         background-color: var(--blue); color: var(--white);
         box-shadow: 0 6px 16px -6px rgba(10,132,255,0.9), inset 0 1px 0 rgba(255,255,255,0.3);
+      }
+      .grid-emp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      @media (min-width: 768px) { .grid-emp { grid-template-columns: repeat(6, 1fr); } }
+      .btn-check:checked + .btn-emp {
+        background-color: var(--yellow, #FFD600); color: #1C1C1E;
+        box-shadow: 0 6px 16px -6px rgba(255,214,0,0.95), inset 0 1px 0 rgba(255,255,255,0.5);
       }
       .btn-check:checked + .btn-receiver {
         background-color: var(--purple); color: var(--white);
@@ -994,7 +1024,7 @@
 
       /* จอเตี้ย (โน้ตบุ๊ก): ย่อหัวเรื่องให้เหลือที่ให้ข้อมูลมากขึ้น */
       @media (max-height: 820px) {
-        body.land-dash .nav-shell { margin-bottom: 12px; }
+        body.land-dash .sys-navrow { margin-bottom: 12px; }
         body.land-dash .db-land-title .eyebrow { display: none; }
         body.land-dash .db-land-title b { font-size: 1.3rem; }
         body.land-dash .db-toolbar { margin-bottom: 10px; }
@@ -1389,7 +1419,9 @@
 
     <div class="container">
 
-      <!-- Nav Menu -->
+      <!-- Nav Menu (ช่องซ้ายสุด = ปุ่มกลับเมนู เวลาเปิดจาก SUPER APP) -->
+      <div class="sys-navrow">
+      <span data-sys-back-slot></span>
       <div class="nav-shell" id="navShell">
         <div class="nav-glider" id="navGlider"></div>
         <ul class="nav nav-pills nav-pills-custom nav-justified" id="pills-tab" role="tablist">
@@ -1407,6 +1439,7 @@
           </li>
         </ul>
       </div>
+      </div>
 
       <div class="tab-content" id="pills-tabContent">
 
@@ -1421,34 +1454,13 @@
             <form id="salesForm" onsubmit="handleSalesSubmit(event)">
               <div class="field">
                 <label class="form-label-custom">👤 ชื่อพนักงานขาย</label>
-                <input type="text" id="empName" class="form-control form-control-dark" placeholder="ระบุชื่อพนักงาน" required>
+                <div class="grid-emp" data-names="SALES_STAFF" data-radio="empPick" data-style="btn-emp"></div>
               </div>
 
               <!-- 🙋 พนักงานผู้รับเคส (บันทึกลงคอลัมน์ H) -->
               <div class="field">
                 <label class="form-label-custom">🙋 พนักงานผู้รับเคส</label>
-                <div class="grid-3-col">
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_wut" value="วุฒิ" required>
-                  <label class="btn-grid-custom btn-receiver" for="r_wut">วุฒิ</label>
-
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_big" value="บิ๊ก">
-                  <label class="btn-grid-custom btn-receiver" for="r_big">บิ๊ก</label>
-
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_punim" value="ปูนิ่ม">
-                  <label class="btn-grid-custom btn-receiver" for="r_punim">ปูนิ่ม</label>
-
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_aom" value="ออม">
-                  <label class="btn-grid-custom btn-receiver" for="r_aom">ออม</label>
-
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_cha_om" value="ชะอม">
-                  <label class="btn-grid-custom btn-receiver" for="r_cha_om">ชะอม</label>
-
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_tong" value="ต้อง">
-                  <label class="btn-grid-custom btn-receiver" for="r_tong">ต้อง</label>
-
-                  <input type="radio" class="btn-check" name="caseReceiver" id="r_boston" value="บอสตัน">
-                  <label class="btn-grid-custom btn-receiver" for="r_boston">บอสตัน</label>
-                </div>
+                <div class="grid-3-col" data-names="CASE_RECEIVERS" data-radio="caseReceiver" data-style="btn-receiver"></div>
               </div>
 
               <div class="row g-3 field">
@@ -1719,7 +1731,7 @@
             <form id="failForm" onsubmit="handleFailSubmit(event)">
               <div class="field">
                 <label class="form-label-custom">👤 ชื่อพนักงาน</label>
-                <input type="text" id="empNameFailed" class="form-control form-control-dark" placeholder="ระบุชื่อพนักงาน" required>
+                <div class="grid-emp" data-names="SALES_STAFF" data-radio="empPickFailed" data-style="btn-emp"></div>
               </div>
 
               <div class="field">
@@ -2486,7 +2498,7 @@
         document.getElementById('previewContainer').style.display = 'none';
 
         try {
-          var empName = document.getElementById('empName').value;
+          var empName = pickedName('empPick');
           var modelName = document.getElementById('modelName').value.trim();
           var price = document.getElementById('price').value;
 
@@ -2560,7 +2572,7 @@
         setBtnLoading(btn, 'กำลังบันทึกข้อมูล...', true);
 
         try {
-          var empNameFailed = document.getElementById('empNameFailed').value;
+          var empNameFailed = pickedName('empPickFailed');
 
           var brandEl = document.querySelector('input[name="brandFailed"]:checked');
           var brandFailed = brandEl ? brandEl.value : '';
