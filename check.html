@@ -617,6 +617,34 @@
 
       .badge { border-radius: 10px; }
 
+
+      /* ===== สรุปงานไม่ผ่าน — สไตล์เดียวกับแผง "รายชั่วโมง" ===== */
+      .fs-sec { max-width: 880px; margin: 0 auto 22px; }
+      .fs-sec-head { margin: 0 2px 8px; }
+      .fs-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 100px; background: var(--ink); color: var(--yellow); font-weight: 700; font-size: 0.74rem; }
+      .fs-tag.day { background: rgba(28,28,30,0.1); color: var(--ink); }
+      .fs-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+      .fs-kpi { position: relative; overflow: hidden; background: linear-gradient(170deg, #232325 0%, #141416 60%); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 12px 12px 12px 16px;
+        box-shadow: 0 14px 30px -20px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.05); transition: transform .4s var(--spring); }
+      .fs-kpi::before { content: ''; position: absolute; left: 0; top: 12px; bottom: 12px; width: 4px; border-radius: 0 4px 4px 0; background: var(--c); }
+      .fs-kpi:active { transform: scale(0.96); }
+      .fs-kpi small { display: block; color: var(--gray-1); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .fs-kpi b { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; line-height: 1.1; color: var(--c); font-variant-numeric: tabular-nums; }
+      @media (max-width: 576px) { .fs-kpis { grid-template-columns: repeat(2, 1fr); } }
+      .fs-panel { margin-bottom: 0; }
+      .fs-panel .db-title { white-space: nowrap; }
+      .fs-panel .db-head { flex-wrap: wrap; }
+      .fs-chart { position: relative; height: 190px; margin-bottom: 10px; }
+      .fs-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 0.66rem; color: var(--gray-1); font-weight: 600; margin-bottom: 10px; }
+      .fs-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+      .fs-brow { display: grid; grid-template-columns: minmax(70px, 96px) 1fr auto; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px; background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.06); margin-bottom: 6px; }
+      .fs-brow .nm { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .fs-brow .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+      .fs-brow .chips span { font-size: 0.64rem; font-weight: 700; padding: 2px 8px; border-radius: 100px; background: rgba(255,255,255,0.06); color: var(--c); white-space: nowrap; }
+      .fs-brow .tt { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; }
+      .fs-panel .pc-target-row { padding: 10px 12px; }
+
       /* PC App-in target */
       .pc-target-row {
         display: flex;
@@ -1802,102 +1830,71 @@
             <h1 class="page-title">สรุปงานไม่ผ่าน</h1>
           </div>
 
-          <!-- กล่องสรุปรายเดือน -->
-          <div class="custom-card mb-3">
-            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 p-3 px-4 bg-black rounded-[24px] gap-2">
-              <label class="form-label-custom text-white mb-0">📅 เดือนที่สรุป</label>
-              <input type="month" id="selectFailedMonth" class="form-control form-control-dark w-auto text-center font-mono-title" style="background:#2C2C2E" onchange="loadFailedSummary()">
-            </div>
 
-            <div class="row g-2 mb-3">
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SIM BL รวม</small>
-                  <span id="kpiMonthSimBL" class="h4 fw-bold font-mono-title mb-0" style="color:#FF453A">0</span>
-                </div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (APPLE)</small>
-                  <span id="kpiMonthApple" class="h4 fw-bold text-white font-mono-title mb-0">0</span>
-                </div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (ANDROID)</small>
-                  <span id="kpiMonthAndroid" class="h4 fw-bold font-mono-title mb-0" style="color:var(--yellow)">0</span>
-                </div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SS FINANCE+</small>
-                  <span id="kpiMonthSF" class="h4 fw-bold font-mono-title mb-0" style="color:#64D2FF">0</span>
-                </div>
+          <!-- รายเดือน -->
+          <div class="fs-sec" id="fsSecMonth">
+            <div class="fs-sec-head"><span class="fs-tag ">📅 รายเดือน</span></div>
+            <div class="db-toolbar">
+              <div class="db-date">
+                <button type="button" onclick="fsShift('m', -1)" aria-label="ก่อนหน้า">‹</button>
+                <div class="db-date-mid"><input type="month" id="selectFailedMonth" onchange="loadFailedSummary()"><span id="fsMonthLabel">เดือนนี้</span></div>
+                <button type="button" onclick="fsShift('m', 1)" aria-label="ถัดไป">›</button>
               </div>
             </div>
-
-            <div class="p-4 bg-black rounded-[24px] border border-secondary mb-3">
-              <div class="section-title text-white">🏷️ เคสไม่ผ่านแยกตามแบรนด์ (รายเดือน)</div>
-              <div id="failedBrandContainer" class="text-start">
-                <span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูลสรุป</span>
-              </div>
+            <div class="fs-kpis">
+              <div class="fs-kpi" style="--c:#FF453A"><small>SIM BL รวม</small><b id="kpiMonthSimBL">0</b></div>
+              <div class="fs-kpi" style="--c:#FFFFFF"><small>U-FUND (APPLE)</small><b id="kpiMonthApple">0</b></div>
+              <div class="fs-kpi" style="--c:#FFD600"><small>U-FUND (ANDROID)</small><b id="kpiMonthAndroid">0</b></div>
+              <div class="fs-kpi" style="--c:#64D2FF"><small>SS FINANCE+</small><b id="kpiMonthSF">0</b></div>
             </div>
-
-            <div class="p-4 bg-black rounded-[24px] border border-secondary">
-              <div class="section-title mb-1" style="color:var(--yellow)">🎯 เป้า PC APP-IN (รายเดือน)</div>
-              <p class="text-secondary small mb-3" style="font-size:0.7rem">เป้ารวมของเดือน คำนวณจากจำนวนวันธรรมดา/วันหยุดจริง เทียบกับเคส App-in ที่บันทึกไว้</p>
-              <div id="pcTargetMonthContainer">
-                <span class="loading-pill"><span class="spin"></span>กำลังคำนวณเป้าหมาย</span>
+            <div class="db-2col">
+              <div class="db-panel fs-panel">
+                <div class="db-head">
+                  <div class="db-title">🏷️ เคสไม่ผ่านแยกแบรนด์</div>
+                  <div class="db-sub" id="failedBrandContainerPeak"></div>
+                </div>
+                <div id="failedBrandContainer"><span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูลสรุป</span></div>
+              </div>
+              <div class="db-panel fs-panel">
+                <div class="db-head">
+                  <div class="db-title" style="color:var(--yellow)">🎯 เป้า PC APP-IN</div>
+                  <span class="db-sub">คิดจากวันธรรมดา/วันหยุดจริง</span>
+                </div>
+                <div id="pcTargetMonthContainer"><span class="loading-pill"><span class="spin"></span>กำลังคำนวณเป้าหมาย</span></div>
               </div>
             </div>
           </div>
 
-          <!-- กล่องสรุปรายวัน -->
-          <div class="custom-card mb-3">
-            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-3 p-3 px-4 bg-black rounded-[24px] gap-2">
-              <label class="form-label-custom text-white mb-0">🗓️ วันที่สรุป</label>
-              <input type="date" id="selectFailedDate" class="form-control form-control-dark w-auto text-center font-mono-title" style="background:#2C2C2E" onchange="loadDailyFailedSummary()">
-            </div>
-
-            <div class="row g-2 mb-3">
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SIM BL</small>
-                  <span id="kpiDailySimBL" class="h4 fw-bold font-mono-title mb-0" style="color:#FF453A">0</span>
-                </div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (APPLE)</small>
-                  <span id="kpiDailyApple" class="h4 fw-bold text-white font-mono-title mb-0">0</span>
-                </div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">U-FUND (ANDROID)</small>
-                  <span id="kpiDailyAndroid" class="h4 fw-bold font-mono-title mb-0" style="color:var(--yellow)">0</span>
-                </div>
-              </div>
-              <div class="col-6 col-md-3">
-                <div class="kpi-card">
-                  <small class="d-block mb-1 font-mono-title fw-bold" style="font-size:0.64rem">SS FINANCE+</small>
-                  <span id="kpiDailySF" class="h4 fw-bold font-mono-title mb-0" style="color:#64D2FF">0</span>
-                </div>
+          <!-- รายวัน -->
+          <div class="fs-sec" id="fsSecDaily">
+            <div class="fs-sec-head"><span class="fs-tag day">🗓️ รายวัน</span></div>
+            <div class="db-toolbar">
+              <div class="db-date">
+                <button type="button" onclick="fsShift('d', -1)" aria-label="ก่อนหน้า">‹</button>
+                <div class="db-date-mid"><input type="date" id="selectFailedDate" onchange="loadDailyFailedSummary()"><span id="fsDayLabel">วันนี้</span></div>
+                <button type="button" onclick="fsShift('d', 1)" aria-label="ถัดไป">›</button>
               </div>
             </div>
-
-            <div class="p-4 bg-black rounded-[24px] border border-secondary mb-3">
-              <div class="section-title text-white">🏷️ เคสไม่ผ่านแยกตามแบรนด์ (รายวัน)</div>
-              <div id="failedDailyBrandContainer" class="text-start">
-                <span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูลสรุป</span>
-              </div>
+            <div class="fs-kpis">
+              <div class="fs-kpi" style="--c:#FF453A"><small>SIM BL</small><b id="kpiDailySimBL">0</b></div>
+              <div class="fs-kpi" style="--c:#FFFFFF"><small>U-FUND (APPLE)</small><b id="kpiDailyApple">0</b></div>
+              <div class="fs-kpi" style="--c:#FFD600"><small>U-FUND (ANDROID)</small><b id="kpiDailyAndroid">0</b></div>
+              <div class="fs-kpi" style="--c:#64D2FF"><small>SS FINANCE+</small><b id="kpiDailySF">0</b></div>
             </div>
-
-            <div class="p-4 bg-black rounded-[24px] border border-secondary">
-              <div class="section-title mb-1" style="color:var(--yellow)">🎯 เป้า PC APP-IN (รายวัน)</div>
-              <p class="text-secondary small mb-3" style="font-size:0.7rem" id="pcTargetDayTypeLabel">เป้าหมายของวันที่เลือก</p>
-              <div id="pcTargetDayContainer">
-                <span class="loading-pill"><span class="spin"></span>กำลังคำนวณเป้าหมาย</span>
+            <div class="db-2col">
+              <div class="db-panel fs-panel">
+                <div class="db-head">
+                  <div class="db-title">🏷️ เคสไม่ผ่านแยกแบรนด์</div>
+                  <div class="db-sub" id="failedDailyBrandContainerPeak"></div>
+                </div>
+                <div id="failedDailyBrandContainer"><span class="loading-pill"><span class="spin"></span>กำลังดึงข้อมูลสรุป</span></div>
+              </div>
+              <div class="db-panel fs-panel">
+                <div class="db-head">
+                  <div class="db-title" style="color:var(--yellow)">🎯 เป้า PC APP-IN</div>
+                  <span class="db-sub" id="pcTargetDayTypeLabel">เป้าหมายของวันที่เลือก</span>
+                </div>
+                <div id="pcTargetDayContainer"><span class="loading-pill"><span class="spin"></span>กำลังคำนวณเป้าหมาย</span></div>
               </div>
             </div>
           </div>
@@ -3408,7 +3405,7 @@
       // 📈 สรุปงานไม่ผ่าน
       // =========================================================
       function loadFailedSummary() {
-        const monthVal = document.getElementById('selectFailedMonth').value;
+        const monthVal = document.getElementById('selectFailedMonth').value; fsLabels();
         document.getElementById('failedBrandContainer').innerHTML = loadingHTML('กำลังประมวลผลข้อมูล');
         document.getElementById('pcTargetMonthContainer').innerHTML = loadingHTML('กำลังคำนวณเป้าหมาย');
 
@@ -3418,26 +3415,76 @@
           .getFailedSummaryData(monthVal);
       }
 
-      function failedBrandCardsHTML(brandSummary, emptyText) {
+      // แยกแบรนด์: กราฟแท่งซ้อน (แบบเดียวกับกราฟรายชั่วโมง) + รายการแบรนด์
+      const FS_SERIES = [
+        { k: 'simBL', label: 'SIM BL', color: '#FF453A' },
+        { k: 'ufundFailed', label: 'U-FUND', color: '#FFD600' },
+        { k: 'sfFailed', label: 'SS Finance+', color: '#64D2FF' }
+      ];
+      const fsCharts = {};
+      function failedBrandCardsHTML(brandSummary, emptyText, cid) {
         const brands = Object.keys(brandSummary || {});
-        if (brands.length === 0) return `<div class="empty-note">${emptyText}</div>`;
-        let html = '';
+        const peakEl = document.getElementById(cid + 'Peak');
+        if (brands.length === 0) { if (peakEl) peakEl.textContent = ''; return `<div class="empty-note" style="color:var(--gray-1)">${emptyText} 🎉</div>`; }
+        const tot = b => FS_SERIES.reduce((a, s) => a + (Number(brandSummary[b][s.k]) || 0), 0);
+        brands.sort((x, y) => tot(y) - tot(x));
+        if (peakEl) peakEl.textContent = tot(brands[0]) > 0 ? `มากสุด ${brands[0]} · ${tot(brands[0])} เคส` : '';
+        let html = `<div class="fs-chart"><canvas id="${cid}Chart"></canvas></div>
+          <div class="fs-legend">${FS_SERIES.map(s => `<span><i style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>`;
         brands.forEach((b, i) => {
-          const item = brandSummary[b];
-          const ufundLabel = (b === 'APPLE') ? 'U-FUND (APPLE)' : 'U-FUND';
-          const ufundColor = (b === 'APPLE') ? '#FFFFFF' : '#FFD600';
-          html += `
-            <div class="mb-2 p-3 rounded-[20px] bg-theme-dark border border-secondary dash-item" style="animation-delay:${i * 0.05}s">
-              <div class="fw-bold text-white mb-2 font-mono-title" style="font-size:0.9rem">📱 ${escapeHtml(b)}</div>
-              <div class="d-flex flex-wrap gap-2">
-                <span class="badge bg-theme-dark p-2 font-mono-title" style="color:#FF453A; border:1px solid rgba(255,69,58,0.5); font-size:0.74rem; font-weight:600">SIM BL: <strong>${item.simBL || 0} เคส</strong></span>
-                <span class="badge bg-theme-dark p-2 font-mono-title" style="color:${ufundColor}; border:1px solid rgba(255,255,255,0.25); font-size:0.74rem; font-weight:600">${ufundLabel}: <strong>${item.ufundFailed || 0} เคส</strong></span>
-                <span class="badge bg-theme-dark p-2 font-mono-title" style="color:#64D2FF; border:1px solid rgba(100,210,255,0.5); font-size:0.74rem; font-weight:600">SS Finance+: <strong>${item.sfFailed || 0} เคส</strong></span>
-              </div>
-            </div>
-          `;
+          const it = brandSummary[b];
+          html += `<div class="fs-brow dash-item" style="animation-delay:${i * 0.04}s">
+            <span class="nm">📱 ${escapeHtml(b)}</span>
+            <span class="chips">${FS_SERIES.map(s => (it[s.k] || 0) ? `<span style="--c:${s.k === 'ufundFailed' && b === 'APPLE' ? '#fff' : s.color}">${s.label} ${it[s.k]}</span>` : '').join('')}</span>
+            <span class="tt">${tot(b)}</span></div>`;
         });
         return html;
+      }
+      function drawFailChart(cid, brandSummary) {
+        const el = document.getElementById(cid + 'Chart');
+        if (fsCharts[cid]) { try { fsCharts[cid].destroy(); } catch (e) {} fsCharts[cid] = null; }
+        if (!el || typeof Chart === 'undefined') return;
+        const brands = Object.keys(brandSummary || {}).sort((x, y) =>
+          FS_SERIES.reduce((a, s) => a + (brandSummary[y][s.k] || 0), 0) - FS_SERIES.reduce((a, s) => a + (brandSummary[x][s.k] || 0), 0));
+        fsCharts[cid] = new Chart(el.getContext('2d'), {
+          type: 'bar',
+          data: { labels: brands, datasets: FS_SERIES.map(s => ({ label: s.label, data: brands.map(b => brandSummary[b][s.k] || 0),
+            backgroundColor: s.color, borderRadius: 6, maxBarThickness: 26, stack: 'x' })) },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            animation: { duration: 700, easing: 'easeOutQuart' },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.dataset.label + ': ' + c.parsed.y + ' เคส' } } },
+            scales: {
+              x: { stacked: true, ticks: { color: '#8E8E93', font: { size: 10 }, maxRotation: 0, autoSkipPadding: 4 }, grid: { display: false } },
+              y: { stacked: true, beginAtZero: true, ticks: { color: '#8E8E93', precision: 0, font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.06)' } }
+            }
+          }
+        });
+      }
+      // ปุ่ม ‹ › เลื่อนเดือน/วัน
+      function fsShift(kind, n) {
+        if (kind === 'm') {
+          const el = document.getElementById('selectFailedMonth');
+          const [y, m] = (el.value || '').split('-').map(Number); if (!y) return;
+          const d = new Date(y, m - 1 + n, 1);
+          el.value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+          loadFailedSummary();
+        } else {
+          const el = document.getElementById('selectFailedDate');
+          const d = new Date((el.value || '') + 'T00:00:00'); if (isNaN(d)) return;
+          d.setDate(d.getDate() + n);
+          el.value = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          loadDailyFailedSummary();
+        }
+      }
+      function fsLabels() {
+        const now = new Date();
+        const ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+        const mv = document.getElementById('selectFailedMonth').value, dv = document.getElementById('selectFailedDate').value;
+        const TH_M = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+        const TH_D = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสฯ','ศุกร์','เสาร์'];
+        if (mv) { const [y, m] = mv.split('-').map(Number); document.getElementById('fsMonthLabel').textContent = mv === ym ? 'เดือนนี้' : TH_M[m - 1] + ' ' + (y + 543); }
+        if (dv) { const d = new Date(dv + 'T00:00:00'); document.getElementById('fsDayLabel').textContent = dv === ym + '-' + String(now.getDate()).padStart(2, '0') ? 'วันนี้' : 'วัน' + TH_D[d.getDay()]; }
       }
 
       function renderFailedSummary(res) {
@@ -3452,7 +3499,8 @@
         animateNumber(document.getElementById('kpiMonthAndroid'), res.totalAndroidUfund);
         animateNumber(document.getElementById('kpiMonthSF'), res.totalSFFailed);
 
-        document.getElementById('failedBrandContainer').innerHTML = failedBrandCardsHTML(res.brandSummary, 'ไม่มีประวัติงานไม่ผ่านในเดือนนี้');
+        document.getElementById('failedBrandContainer').innerHTML = failedBrandCardsHTML(res.brandSummary, 'ไม่มีประวัติงานไม่ผ่านในเดือนนี้', 'failedBrandContainer');
+        drawFailChart('failedBrandContainer', res.brandSummary);
 
         if (res.pcTarget) {
           setPCTarget('pcTargetMonthContainer', res.pcTarget, `จ-ศ ${res.pcTarget.weekdayCount} วัน · ส-อา ${res.pcTarget.weekendCount} วัน`);
@@ -3460,7 +3508,7 @@
       }
 
       function loadDailyFailedSummary() {
-        const dateVal = document.getElementById('selectFailedDate').value;
+        const dateVal = document.getElementById('selectFailedDate').value; fsLabels();
         document.getElementById('failedDailyBrandContainer').innerHTML = loadingHTML('กำลังประมวลผลข้อมูลรายวัน');
         document.getElementById('pcTargetDayContainer').innerHTML = loadingHTML('กำลังคำนวณเป้าหมาย');
 
@@ -3482,11 +3530,12 @@
         animateNumber(document.getElementById('kpiDailyAndroid'), res.totalAndroidUfund);
         animateNumber(document.getElementById('kpiDailySF'), res.totalSFFailed);
 
-        document.getElementById('failedDailyBrandContainer').innerHTML = failedBrandCardsHTML(res.brandSummary, 'ไม่มีประวัติงานไม่ผ่านในวันนี้');
+        document.getElementById('failedDailyBrandContainer').innerHTML = failedBrandCardsHTML(res.brandSummary, 'ไม่มีประวัติงานไม่ผ่านในวันนี้', 'failedDailyBrandContainer');
+        drawFailChart('failedDailyBrandContainer', res.brandSummary);
 
         if (res.pcTarget) {
           const dayLabel = res.pcTarget.isWeekend ? 'วันหยุด (เสาร์-อาทิตย์)' : 'วันธรรมดา (จันทร์-ศุกร์)';
-          document.getElementById('pcTargetDayTypeLabel').innerText = `เป้าหมายของวันที่เลือก — ${dayLabel}`;
+          document.getElementById('pcTargetDayTypeLabel').innerText = dayLabel;
           setPCTarget('pcTargetDayContainer', res.pcTarget, '');
         }
       }

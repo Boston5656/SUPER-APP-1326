@@ -681,6 +681,28 @@
     .rk-legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; color: #8E8E93; font-weight: 600; margin-top: 8px; }
 
     /* single brand (iPhone / iPad) */
+    .rk-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .rk-kpi { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.07); border-radius: 16px; padding: 12px; min-width: 0; }
+    .rk-kpi:first-child { background: rgba(255,214,0,.1); border-color: rgba(255,214,0,.25); }
+    .rk-kpi small { display: block; font-size: 10.5px; color: #8E8E93; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-kpi b { display: block; font-family: var(--f-num); font-size: 24px; font-weight: 700; letter-spacing: -.6px; margin: 3px 0 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-kpi:first-child b { color: var(--yellow); }
+    .rk-kpi b small { display: inline; font-size: 11px; color: #8E8E93; }
+    .rk-kpi > div { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }
+    .rk-kpi .dl { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 100px; }
+    .rk-kpi em { font-style: normal; font-size: 10px; color: #8E8E93; font-weight: 600; }
+    .rk-months2 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+    .rk-mc2 { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 10px; cursor: pointer; min-width: 0; transition: transform .4s var(--spring); }
+    .rk-mc2:active { transform: scale(.95); }
+    .rk-mc2.fut { opacity: .45; cursor: default; }
+    .rk-mc2 .h { display: flex; align-items: center; gap: 6px; font-family: var(--f-num); font-size: 11px; color: #8E8E93; }
+    .rk-mc2 .h b { color: #E5E5EA; }
+    .rk-mc2 .rv { font-family: var(--f-num); font-weight: 700; font-size: 17px; margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-mc2 .ru { font-size: 11.5px; font-weight: 700; color: #E5E5EA; margin-top: 2px; }
+    .rk-mc2 .ra { font-size: 10px; color: #8E8E93; font-weight: 600; margin-top: 1px; min-height: 14px; }
+    .rk-mc2 .hb { height: 5px; border-radius: 100px; background: rgba(255,255,255,.08); margin-top: 8px; overflow: hidden; }
+    .rk-mc2 .hb i { display: block; height: 100%; background: var(--yellow); border-radius: 100px; }
+    @media (max-width: 640px) { .rk-kpi b { font-size: 18px; } .rk-kpi { padding: 10px; } .rk-mc2 .rv { font-size: 14px; } .rk-kpis { gap: 6px; } }
     .rk-solo { display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; }
     .rk-big { font-family: var(--f-num); font-weight: 700; font-size: 38px; letter-spacing: -1.4px; color: var(--yellow); line-height: 1.05; }
     .rk-months { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
@@ -1975,8 +1997,9 @@
       if (!rk.data) return;
       const solo = rk.cat === 'IPHONE' || rk.cat === 'IPAD';
       rkCharts.forEach(c => { try { c.destroy(); } catch (e) {} }); rkCharts = [];
+      const mt = document.getElementById('rk-metric'); if (mt) mt.style.display = solo && rk.period !== 'YOY' ? 'none' : '';
       if (rk.period === 'YOY') { body.innerHTML = '<div class="rk-yoyg">' + rkYoyHTML(solo) + '</div>'; rkYoyCharts(solo); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
-      body.innerHTML = rk.period === 'Y' ? rkYearHTML(solo) : (solo ? rkSoloQHTML() : rkQHTML());
+      body.innerHTML = rk.period === 'Y' ? (solo ? rkSoloYearHTML() : rkYearHTML(false)) : (solo ? rkSoloQHTML() : rkQHTML());
       animateIn(body.querySelectorAll('.rk-pc, .rk-panel, .rk-mc'), 'ios-in', 50, 0, 400);
       requestAnimationFrame(() => body.querySelectorAll('[data-h]').forEach(i => { i.style.height = i.dataset.h + '%'; }));
     }
@@ -2038,27 +2061,94 @@
         <span class="r">฿${formatBaht(it.revenue)}<small>${fmtUnit(it.unit)} เครื่อง</small></span></div>`).join('') + '</div>';
     }
 
+    // ---------- iPhone / iPad: โชว์ ยอดบาท + เครื่อง + ราคาเฉลี่ย พร้อมกัน ----------
+    function rkSoloData() {
+      const z = new Array(12).fill(0);
+      const c = (rk.data.cats[rk.cat] || {}).APPLE || {};
+      return { name: 'APPLE', rev: c.rev || z, unit: c.unit || z };
+    }
+    const rkB = v => '฿' + formatBaht(Math.round(Number(v) || 0));
+    const rkBc = v => { v = Math.round(Number(v) || 0); return rkCompact() && Math.abs(v) >= 1e6 ? '฿' + (v / 1e6).toFixed(2) + 'M' : rkCompact() && Math.abs(v) >= 1e4 ? '฿' + Math.round(v / 1000) + 'K' : '฿' + formatBaht(v); };
+    const rkBy = v => { v = Math.round(Number(v) || 0); if (window.innerWidth >= 1800 || Math.abs(v) < 1e4) return '฿' + formatBaht(v); return Math.abs(v) >= 1e6 ? '฿' + (v / 1e6).toFixed(2) + 'M' : '฿' + (v / 1000).toFixed(1) + 'K'; };
+    const rkU = v => fmtUnit(Math.round(Number(v) || 0));
+    const rkAsp = (r, u) => u > 0 ? r / u : 0;
+    function rkPct(cur, prev) {
+      if (prev == null) return '<span class="dl fl">–</span>';
+      if (!(prev > 0)) return cur > 0 ? '<span class="dl up">ใหม่</span>' : '<span class="dl fl">–</span>';
+      const p = (cur - prev) / prev * 100, c = p > 0.5 ? 'up' : (p < -0.5 ? 'dn' : 'fl');
+      return `<span class="dl ${c}">${p > 0 ? '▲' : (p < 0 ? '▼' : '•')} ${Math.abs(p).toFixed(1)}%</span>`;
+    }
     function rkSoloQHTML() {
       const D = rk.data, q = Number(rk.period.slice(1)), m0 = (q - 1) * 3;
-      const r = rkRows()[0] || { name: 'APPLE', v: new Array(12).fill(0) };
       if (m0 > D.curMonth) return `<div class="rk-panel rk-empty" style="color:#8E8E93">Q${q} ยังไม่เริ่ม — ข้อมูลล่าสุดถึง ${D.updated}</div>`;
-      const qv = rkSum(r.v, m0, m0 + 3), pq = rkPrevQ(r, q);
-      const maxM = Math.max(1, ...r.v.slice(m0, m0 + 3));
+      const S = rkSoloData(), nm = RK_CAT_NAME[rk.cat];
+      const qr = rkSum(S.rev, m0, m0 + 3), qu = rkSum(S.unit, m0, m0 + 3);
+      const pr = rkPrevQ({ v: S.rev }, q), pu = rkPrevQ({ v: S.unit }, q);
+      const pAsp = pr != null && pu > 0 ? pr / pu : null;
+      const vsTxt = q > 1 ? `vs Q${q - 1}${rkQRunning() ? ' (ช่วงเดียวกัน)' : ''}` : '';
+      const kpi = (ic, lb, val, d) => `<div class="rk-kpi"><small>${ic} ${lb}</small><b>${val}</b><div>${d}${vsTxt && d.indexOf('–') === -1 ? `<em>${vsTxt}</em>` : ''}</div></div>`;
+      const fut = m => m > D.curMonth;
+      const maxR = Math.max(1, ...S.rev.slice(m0, m0 + 3));
       let months = '';
       for (let k = 0; k < 3; k++) {
-        const m = m0 + k, f = m > D.curMonth;
-        months += `<div class="rk-mc" ${f ? '' : `onclick="rkShowTop('${r.name}',${m},'${RK_MON[m]}')"`}>
-          <small>${RK_MON[m]}${m === D.curMonth ? ' · MTD' : ''}</small>
-          <b>${f ? '–' : rkArrow(r.v[m], rkPrevMonth(r, m)) + rkFmt(r.v[m], true)}</b>
-          <div class="hb"><i style="width:${f ? 0 : (r.v[m] / maxM * 100).toFixed(0)}%"></i></div></div>`;
+        const m = m0 + k, f = fut(m);
+        const r = S.rev[m], u = S.unit[m];
+        months += `<div class="rk-mc2 ${f ? 'fut' : ''}" ${f ? '' : `onclick="rkShowTop('APPLE',${m},'${RK_MON[m]}')"`}>
+          <div class="h"><b>${RK_MON[m]}</b>${m === D.curMonth ? '<span class="rk-mtd">MTD</span>' : ''}</div>
+          <div class="rv">${f ? '–' : rkArrow(r, rkPrevMonth({ v: S.rev }, m)) + rkBc(r)}</div>
+          <div class="ru">${f ? '' : `📦 ${rkU(u)} เครื่อง`}</div>
+          <div class="ra">${f || !u ? '' : `เฉลี่ย ${rkB(r / u)}`}</div>
+          <div class="hb"><i style="width:${f ? 0 : (r / maxR * 100).toFixed(0)}%"></i></div></div>`;
       }
       return `<div class="rk-solo">
-        <div class="rk-panel"><div class="rk-ph"><b>${RK_CAT_NAME[rk.cat]} · Q${q} ${D.year}</b><span>แตะเดือน = Top 5 รุ่น</span></div>
-          <div class="rk-big">${rkFmt(qv, true)}</div>
-          <div style="margin-top:8px">${rkDelta(qv, pq)}</div>
-          <div class="rk-months">${months}</div></div>
-        <div class="rk-panel"><div class="rk-ph"><b>🔥 Top 5 รุ่นขายดี Q${q}</b><span>ยอดบาท</span></div>${rkTop5HTML(rkTop(r.name, 'Q' + q))}</div>
+        <div class="rk-panel"><div class="rk-ph"><b>${nm} · Q${q} ${D.year}</b><span>แตะเดือน = Top 5 รุ่น</span></div>
+          <div class="rk-kpis">
+            ${kpi('💰', 'ยอดขาย', rkB(qr), rkPct(qr, pr))}
+            ${kpi('📦', 'จำนวนเครื่อง', rkU(qu) + ' <small>เครื่อง</small>', rkPct(qu, pu))}
+            ${kpi('🏷️', 'ราคาเฉลี่ย/เครื่อง', qu ? rkB(qr / qu) : '–', rkPct(rkAsp(qr, qu), pAsp))}
+          </div>
+          <div class="rk-months2">${months}</div></div>
+        <div class="rk-panel"><div class="rk-ph"><b>🔥 Top 5 รุ่นขายดี Q${q}</b><span>ยอดบาท · เครื่อง</span></div>${rkTop5HTML(rkTop('APPLE', 'Q' + q))}</div>
       </div>`;
+    }
+    function rkSoloYearHTML() {
+      const D = rk.data, cm = D.curMonth, S = rkSoloData(), nm = RK_CAT_NAME[rk.cat];
+      const qs = a => [0, 1, 2, 3].map(i => rkSum(a, i * 3, i * 3 + 3));
+      const yr = rkSum(S.rev, 0, cm + 1), yu = rkSum(S.unit, 0, cm + 1);
+      const rows = [
+        { k: 'rev', lb: '💰 ยอดขาย', a: S.rev, f: v => rkBy(v) },
+        { k: 'unit', lb: '📦 เครื่อง', a: S.unit, f: rkU },
+        { k: 'asp', lb: '🏷️ เฉลี่ย/เครื่อง', a: S.rev.map((r, i) => rkAsp(r, S.unit[i])), f: v => v ? rkBy(v) : '–' }
+      ];
+      let t = `<div class="rk-panel"><div class="rk-ph"><b>📅 ${nm} · ทั้งปี ${D.year}</b><span>แตะตัวเลขเดือน = Top 5 รุ่น · AVG = เฉลี่ยต่อเดือน</span></div>
+        <div class="rk-kpis">
+          <div class="rk-kpi"><small>💰 ยอดขายสะสม (YTD)</small><b>${rkB(yr)}</b><div><em>เฉลี่ย ${rkB(yr / (cm + 1))} / เดือน</em></div></div>
+          <div class="rk-kpi"><small>📦 เครื่องสะสม (YTD)</small><b>${rkU(yu)} <small>เครื่อง</small></b><div><em>เฉลี่ย ${rkU(yu / (cm + 1))} / เดือน</em></div></div>
+          <div class="rk-kpi"><small>🏷️ ราคาเฉลี่ย/เครื่อง</small><b>${yu ? rkB(yr / yu) : '–'}</b><div><em>ทั้งปีถึงปัจจุบัน</em></div></div>
+        </div>
+        <div class="rk-tw" style="margin-top:12px"><table class="rk-t rk-ty"><thead><tr><th class="l">${nm}</th>`;
+      RK_MON.forEach(m => t += `<th>${m}</th>`);
+      t += '<th>Q1</th><th>Q2</th><th>Q3</th><th>Q4</th><th>AVG</th><th>YTD</th></tr></thead><tbody>';
+      rows.forEach(row => {
+        t += `<tr class="${row.k === 'rev' ? 'top1' : ''}"><td class="l br">${row.lb}</td>`;
+        row.a.forEach((v, m) => {
+          t += m > cm ? '<td class="fut">–</td>'
+            : `<td class="cl" onclick="rkShowTop('APPLE',${m},'${RK_MON[m]}')">${row.k === 'asp' ? '' : rkArrow(v, rkPrevMonth({ v: row.a }, m))}${row.f(v)}</td>`;
+        });
+        if (row.k === 'asp') {
+          const qr = qs(S.rev), qu = qs(S.unit);
+          qr.forEach((v, i) => t += `<td class="qx">${i * 3 > cm ? '–' : row.f(rkAsp(v, qu[i]))}</td>`);
+          t += `<td>–</td><td class="tot">${row.f(rkAsp(yr, yu))}</td></tr>`;
+        } else {
+          const tot = rkSum(row.a, 0, cm + 1);
+          qs(row.a).forEach((v, i) => t += `<td class="qx">${i * 3 > cm ? '–' : row.f(v)}</td>`);
+          t += `<td>${row.f(tot / (cm + 1))}</td><td class="tot">${row.f(tot)}</td></tr>`;
+        }
+      });
+      t += `</tbody></table></div>
+        <div class="rk-legend"><span><b class="a-up">↑</b> ≥ +10%</span><span><b class="a-ur">↗</b> +2–10%</span><span><b class="a-fl">→</b> ±2%</span><span><b class="a-dr">↘</b> −2–10%</span><span><b class="a-dn">↓</b> < −10% / ไม่มียอด</span><span>เทียบเดือนก่อนหน้า</span></div></div>`;
+      t += `<div class="rk-panel"><div class="rk-ph"><b>🔥 Top 5 รุ่นขายดีทั้งปี</b><span>ยอดบาท · เครื่อง</span></div>${rkTop5HTML(rkTop('APPLE', 'Y'))}</div>`;
+      return t;
     }
 
     function rkYearHTML(solo) {
