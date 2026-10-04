@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
-  <script src="gas.js?v=2026.10.04-5"></script>
+  <script src="gas.js?v=2026.10.04-7"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1122,7 +1122,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.10.04-6';
+    const APP_VER = '2026.10.04-7';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
