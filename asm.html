@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
   <meta charset="UTF-8">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD600">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
   <title>ASM Track</title>
   <script>window.GAS_APP = 'asm';</script>
-  <script src="gas.js?v=2026.10.04-5"></script>
+  <script src="gas.js?v=2026.10.05-8"></script>
     <style>
     :root {
       --bg-dark: #090a0f; 
@@ -158,30 +160,192 @@
         margin-bottom: 0;
       }
     }
+
+    /* =========================================================
+       🎨 สไตล์ SUPER APP 1326 (เหลือง · การ์ดดำ · สปริง)
+       ========================================================= */
+    :root { --y:#FFD600; --d:#1C1C1E; --d2:#2A2A2D; --g:#8E8E93; --cream:#FFFBEA;
+      --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); --spring-soft:cubic-bezier(.22,1.18,.36,1);
+      --ok:#30D158; --no:#FF453A; --warn:#FF9F0A; }
+    .navrow, .navrow *, #view-task, #view-task *, .toast { box-sizing: border-box; }
+    body { color: var(--d); font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased;
+      background: radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%), radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%), #FFD600;
+      background-attachment: fixed; padding: calc(8px + env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom)); min-height: 100vh; }
+    .kn { font-family: 'Kanit', 'IBM Plex Sans Thai', sans-serif; }
+    @keyframes riseIn { 0% { opacity: 0; transform: translateY(16px) scale(.985); filter: blur(4px); } 100% { opacity: 1; transform: none; filter: none; } }
+    @keyframes popIn { 0% { transform: scale(.82); } 60% { transform: scale(1.08); } 100% { transform: scale(1); } }
+    @keyframes blink { 50% { opacity: .25; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .rise { animation: riseIn .6s var(--ios-ease) both; }
+    .wrap { max-width: 760px; margin: 0 auto; }
+    #view-schedule { max-width: 1500px; margin: 0 auto; }
+
+    /* แถบบน: ปุ่มกลับ + สลับหน้า */
+    .navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 50; display: flex; gap: 8px; align-items: stretch; max-width: 760px; margin: 0 auto 18px; }
+    [data-sys-back-slot] { display: flex; } [data-sys-back-slot]:empty { display: none; }
+    .seg { position: relative; flex: 1; display: flex; gap: 2px; padding: 5px; border-radius: 100px; background: rgba(255,255,255,.72);
+      -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px); border: 1px solid rgba(255,255,255,.7); box-shadow: 0 8px 28px -10px rgba(60,48,0,.35); }
+    .seg .glider { position: absolute; top: 5px; bottom: 5px; left: 0; width: 0; border-radius: 100px; background: var(--d); box-shadow: 0 6px 16px -4px rgba(0,0,0,.45); transition: transform .55s var(--spring-soft), width .55s var(--spring-soft); }
+    .seg button { position: relative; z-index: 1; flex: 1; border: 0; background: none; border-radius: 100px; padding: 11px 6px; font: 700 14px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; cursor: pointer; transition: color .35s var(--ios-ease), transform .25s; }
+    .seg button.on { color: #fff; } .seg button:active { transform: scale(.94); }
+
+    /* หัวเรื่อง */
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 100px; background: rgba(28,28,30,.08); font: 700 11.5px 'Kanit', sans-serif; letter-spacing: 1.2px; color: rgba(28,28,30,.75); }
+    .eyebrow .ic { width: 24px; height: 24px; border-radius: 8px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .eyebrow .live { width: 7px; height: 7px; border-radius: 50%; background: var(--d); animation: blink 1.6s infinite; }
+    .h-title { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0 6px; }
+    .h-title h1 { margin: 0; font: 800 30px/1.1 'Kanit', sans-serif; letter-spacing: -.3px; }
+    .title-pill { width: auto; background: var(--d); color: var(--y); border: 0; outline: none; border-radius: 12px; padding: 6px 14px; font: 700 16px 'Kanit', sans-serif; min-width: 120px; max-width: 100%;
+      box-shadow: 0 8px 18px -10px rgba(0,0,0,.6); transition: box-shadow .25s; }
+    .title-pill:focus { box-shadow: 0 0 0 3px rgba(28,28,30,.25); }
+    .title-pill::placeholder { color: rgba(255,214,0,.5); }
+    .h-sub { font-weight: 600; font-size: 13px; color: rgba(28,28,30,.6); margin-bottom: 14px; }
+    .h-row { display: flex; gap: 10px; align-items: stretch; margin-bottom: 14px; }
+    .datebox { display: flex; align-items: center; gap: 4px; background: var(--d); border-radius: 22px; padding: 6px; box-shadow: 0 12px 26px -14px rgba(0,0,0,.7); }
+    .datebox .lbl { text-align: center; padding: 0 12px; color: #fff; min-width: 150px; }
+    .datebox .lbl b { display: block; font: 700 17px 'Kanit', sans-serif; }
+    .datebox .lbl small { color: var(--y); font-weight: 700; font-size: 11.5px; }
+    .rbtn { width: 52px; border: 0; border-radius: 50%; background: var(--d); color: var(--y); font-size: 22px; cursor: pointer; box-shadow: 0 12px 26px -14px rgba(0,0,0,.7); transition: transform .3s var(--spring); }
+    .rbtn:active { transform: scale(.88); } .rbtn.spin span { display: inline-block; animation: spin .8s linear infinite; }
+
+    /* การ์ดความคืบหน้า */
+    .pcard { background: var(--d); color: #fff; border-radius: 28px; padding: 20px; box-shadow: 0 22px 44px -22px rgba(0,0,0,.75); position: relative; overflow: hidden; margin-bottom: 14px; }
+    .pcard::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 60% at 15% 0%, rgba(255,214,0,.12), transparent 70%); pointer-events: none; }
+    .pcard h3 { margin: 0 0 14px; display: flex; justify-content: space-between; align-items: center; font: 700 17px 'Kanit', sans-serif; }
+    .pcard h3 small { color: var(--g); font: 600 12.5px 'IBM Plex Sans Thai', sans-serif; max-width: 55%; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prow { display: flex; align-items: center; gap: 22px; }
+    .ring { position: relative; width: 150px; height: 150px; flex-shrink: 0; }
+    .ring svg { transform: rotate(-90deg); }
+    .ring .trk { stroke: #2C2C2E; } .ring .bar { stroke: var(--y); stroke-linecap: round; transition: stroke-dashoffset 1.1s var(--ios-ease); }
+    .ring .c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ring .c b { font: 800 34px 'Kanit', sans-serif; color: var(--y); line-height: 1; }
+    .ring .c small { color: #AEAEB2; font-weight: 600; font-size: 12px; margin-top: 4px; }
+    .pnum small { color: #AEAEB2; font-weight: 600; font-size: 13px; }
+    .pnum .big { font: 800 40px/1.05 'Kanit', sans-serif; } .pnum .big span { color: #8E8E93; font-size: 24px; }
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+    .kpi { background: var(--d2); border-radius: 18px; padding: 12px 14px; cursor: pointer; border: 2px solid transparent; transition: border-color .25s, transform .3s var(--spring); }
+    .kpi:active { transform: scale(.95); } .kpi.on { border-color: rgba(255,214,0,.6); }
+    .kpi small { display: flex; align-items: center; gap: 6px; color: #AEAEB2; font-weight: 600; font-size: 12.5px; white-space: nowrap; }
+    .kpi small i { width: 8px; height: 8px; border-radius: 50%; }
+    .kpi b { display: block; font: 800 28px 'Kanit', sans-serif; margin-top: 2px; }
+    .kpi.k-ok b { color: #fff; } .kpi.k-no b { color: #FF8A80; } .kpi.k-warn b { color: #FFD60A; }
+    .pfoot { margin-top: 12px; text-align: right; color: #6E6E73; font-weight: 600; font-size: 12.5px; }
+
+    /* ตัวกรอง + คัดลอก */
+    .fcard { background: var(--d); border-radius: 28px; padding: 12px; margin-bottom: 14px; box-shadow: 0 22px 44px -22px rgba(0,0,0,.75); }
+    .fseg { position: relative; display: flex; background: #2C2C2E; border-radius: 100px; padding: 5px; }
+    .fseg .glider { position: absolute; top: 5px; bottom: 5px; left: 0; width: 0; border-radius: 100px; background: var(--y); transition: transform .55s var(--spring-soft), width .55s var(--spring-soft); }
+    .fseg button { position: relative; z-index: 1; flex: 1; border: 0; background: none; padding: 11px 4px; border-radius: 100px; font: 700 14px 'IBM Plex Sans Thai', sans-serif; color: #AEAEB2; cursor: pointer; transition: color .35s; }
+    .fseg button.on { color: var(--d); }
+    .copybtn { width: 100%; margin-top: 10px; border: 0; border-radius: 100px; padding: 15px; background: linear-gradient(180deg, #FFE45C, #FFD600); color: var(--d); font: 700 15.5px 'Kanit', sans-serif; cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6), 0 10px 22px -12px rgba(255,214,0,.7); transition: transform .3s var(--spring); }
+    .copybtn:active { transform: scale(.96); } .copybtn.done { background: var(--ok); color: #fff; }
+
+    /* รายสาขา */
+    .lcard { background: rgba(255,251,234,.92); border-radius: 30px; padding: 18px 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); }
+    .lcard h3 { margin: 0 4px 12px; display: flex; justify-content: space-between; align-items: center; font: 700 17px 'Kanit', sans-serif; }
+    .lcard h3 small { color: #6E6E73; font: 600 13px 'IBM Plex Sans Thai', sans-serif; }
+    .search { display: flex; align-items: center; gap: 10px; background: #FFF0B3; border-radius: 18px; padding: 0 16px; margin-bottom: 14px; }
+    .search input { flex: 1; min-width: 0; border: 0; background: none; outline: none; padding: 15px 0; font: 600 15px 'IBM Plex Sans Thai', sans-serif; color: var(--d); }
+    .search input::placeholder { color: #9A8F66; }
+    .br { display: flex; align-items: center; gap: 12px; background: #FFFDF5; border-radius: 22px; padding: 14px 14px 14px 18px; margin-bottom: 10px;
+      box-shadow: 0 8px 18px -14px rgba(90,70,0,.5); animation: riseIn .5s var(--ios-ease) both; }
+    .br .t { flex: 1; min-width: 0; }
+    .br .t b { display: block; font: 800 19px 'Kanit', sans-serif; letter-spacing: -.2px; }
+    .br .t span { display: block; color: #6E6E73; font-size: 13.5px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .st { flex-shrink: 0; border: 0; border-radius: 100px; padding: 8px 14px 8px 12px; font: 700 13.5px 'Kanit', sans-serif; display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+      transition: transform .3s var(--spring), background .25s, color .25s; user-select: none; }
+    .st i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .st:active { transform: scale(.88); } .st.pop { animation: popIn .45s var(--spring); }
+    .st.s-ok { background: #D9F7E3; color: #15803D; } .st.s-no { background: #FFE1DD; color: #C0261C; } .st.s-warn { background: #FFF0C2; color: #A15C00; }
+    .empty { text-align: center; color: #8A8270; font-weight: 600; padding: 22px 0 10px; }
+    .hint { text-align: center; color: rgba(28,28,30,.55); font-size: 12px; font-weight: 600; margin: 12px 0 0; }
+    .toast { position: fixed; left: 50%; top: calc(70px + env(safe-area-inset-top)); transform: translate(-50%, -20px); opacity: 0; z-index: 300; background: var(--d); color: var(--y); font-weight: 700; font-size: 13.5px; padding: 11px 18px; border-radius: 100px; box-shadow: 0 12px 26px -10px rgba(0,0,0,.6); transition: all .45s var(--spring); pointer-events: none; white-space: nowrap; }
+    .toast.on { opacity: 1; transform: translate(-50%, 0); }
+    .loading { color: #8A8270; font-weight: 600; text-align: center; padding: 18px 0; }
+    @media (min-width: 980px) {
+      .navrow { max-width: 1180px; }
+      #view-task.wrap { max-width: 1180px; display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 18px; align-items: start; }
+      #view-task .lft { position: sticky; top: calc(76px + env(safe-area-inset-top)); }
+      #view-task .lcard { min-height: 60vh; }
+      #task-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+      #task-list .empty { grid-column: 1 / -1; }
+      .ring, .ring svg { width: 130px; height: 130px; }
+    }
+    @media (max-width: 420px) { .ring { width: 124px; height: 124px; } .ring svg { width: 124px; height: 124px; } .ring .c b { font-size: 28px; } .pnum .big { font-size: 34px; } .h-title h1 { font-size: 26px; } .kpi b { font-size: 24px; } .kpi { padding: 10px; } }
+
+    /* 🗓 หน้าตารางงาน = หน้าตาเดิมทุกอย่าง (พื้นดำ ฟอนต์เดิม แถบสลับแบบเดิม) */
+    body.sch { background: var(--bg-dark); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: calc(8px + env(safe-area-inset-top)) 16px 16px; }
+    body.sch .navrow { max-width: 500px; margin-bottom: 24px; }
+    body.sch .seg { background: var(--card-container); border: 0; border-radius: 50px; padding: 6px; box-shadow: var(--soft-shadow); -webkit-backdrop-filter: none; backdrop-filter: none; }
+    body.sch .seg .glider { top: 6px; bottom: 6px; background: #32364a; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+    body.sch .seg button { font: 700 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--text-sub); padding: 12px; }
+    body.sch .seg button.on { color: #fff; }
+    #schHead { display: none; } body.sch #schHead { display: block; }
   </style>
 </head>
 <body ontouchstart="">
 
-  <div class="header-box">
+  <div class="header-box" id="schHead">
     <h2>ระบบช่วยตามงาน ASM <span style="font-size: 12px; color: var(--text-sub); vertical-align: middle;">v2</span></h2>
-    <p id="head-sub">กำลังโหลดข้อมูล...</p>
+    <p id="head-sub2">กำลังโหลดข้อมูล...</p>
   </div>
 
-  <div class="tab-container">
-    <div class="tab-btn active" onclick="switchTab('task')" id="tab-task">ส่งงาน ASM</div>
-    <div class="tab-btn" onclick="switchTab('schedule')" id="tab-schedule">งานตารางงาน</div>
+  <div class="navrow rise">
+    <span data-sys-back-slot></span>
+    <div class="seg" id="tabSeg">
+      <div class="glider" id="tabGlider"></div>
+      <button type="button" class="on" onclick="switchTab('task')" id="tab-task">📋 ติดตามงาน</button>
+      <button type="button" onclick="switchTab('schedule')" id="tab-schedule">งานตารางงาน</button>
+    </div>
   </div>
 
-  <!-- หน้าที่ 1: ส่งงาน ASM -->
-  <div id="view-task">
-    <div class="main-card-container">
-      <input type="text" id="task-dynamic-title" class="title-input" placeholder="กรอกชื่องานตรงนี้..." onchange="saveTitle(this.value)">
-      <div class="task-header-row">
-        <div class="th-id">ID</div>
-        <div class="th-name">NAME</div>
-        <div class="th-status">STATUS</div>
+  <!-- หน้าที่ 1: ติดตามงาน (ส่งงาน ASM) -->
+  <div id="view-task" class="wrap">
+   <div class="lft">
+    <div class="rise">
+      <span class="eyebrow"><span class="ic">⬆</span>ASM TRACK · <i class="live"></i> REALTIME</span>
+      <div class="h-title"><h1>รายงานส่งงาน</h1>
+        <input type="text" id="task-dynamic-title" class="title-pill" placeholder="ชื่องาน…" onchange="saveTitle(this.value)" oninput="fitTitle()" onkeydown="if(event.key==='Enter')this.blur()"></div>
+      <div class="h-sub" id="head-sub">กำลังโหลดข้อมูล...</div>
+      <div class="h-row">
+        <div class="datebox"><div class="lbl"><b id="tDate">-</b><small>วันนี้</small></div></div>
+        <button class="rbtn" type="button" id="tRefresh" onclick="fetchData(true)" aria-label="รีเฟรช"><span>↻</span></button>
       </div>
-      <div id="task-list">กำลังโหลดข้อมูล...</div>
+    </div>
+
+    <div class="pcard rise" style="animation-delay:.06s">
+      <h3>🎯 ความคืบหน้า <small id="pTitle"></small></h3>
+      <div class="prow">
+        <div class="ring"><svg width="150" height="150" viewBox="0 0 150 150"><circle class="trk" cx="75" cy="75" r="62" fill="none" stroke-width="14"/><circle class="bar" id="ringBar" cx="75" cy="75" r="62" fill="none" stroke-width="14" stroke-dasharray="389.6" stroke-dashoffset="389.6"/></svg>
+          <div class="c"><b id="pPct">0%</b><small>ส่งแล้ว</small></div></div>
+        <div class="pnum"><small>สาขาที่ส่งงาน</small><div class="big"><b id="pDone">0</b> <span>/ <b id="pAll">0</b></span></div><small id="pNote">-</small></div>
+      </div>
+      <div class="kpis">
+        <div class="kpi k-ok" data-f="ok" onclick="setFilter('ok')"><small><i style="background:var(--ok)"></i>ส่งแล้ว</small><b id="kOk">0</b></div>
+        <div class="kpi k-no" data-f="no" onclick="setFilter('no')"><small><i style="background:var(--no)"></i>ยังไม่ส่ง</small><b id="kNo">0</b></div>
+        <div class="kpi k-warn" data-f="warn" onclick="setFilter('warn')"><small><i style="background:var(--warn)"></i>ไม่พบสาขา</small><b id="kWarn">0</b></div>
+      </div>
+      <div class="pfoot" id="pUpd">อัปเดตล่าสุด -</div>
+    </div>
+
+    <div class="fcard rise" style="animation-delay:.12s">
+      <div class="fseg" id="fSeg">
+        <div class="glider" id="fGlider"></div>
+        <button type="button" data-f="all" class="on" onclick="setFilter('all')">ทั้งหมด</button>
+        <button type="button" data-f="ok" onclick="setFilter('ok')">ส่งแล้ว</button>
+        <button type="button" data-f="no" onclick="setFilter('no')">ยังไม่ส่ง</button>
+      </div>
+      <button type="button" class="copybtn" id="copyBtn" onclick="copySummary()">📋 คัดลอกสรุปส่ง LINE</button>
+    </div>
+   </div>
+
+    <div class="lcard rise" style="animation-delay:.18s">
+      <h3>🏬 สถานะรายสาขา <small id="lCount">-</small></h3>
+      <div class="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E6E73" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="q" placeholder="ค้นหา ID / ชื่อสาขา" oninput="renderTasks()"></div>
+      <div id="task-list"><div class="loading">กำลังโหลดข้อมูล...</div></div>
+      <div class="hint">แตะป้ายสถานะเพื่อเปลี่ยน: ส่งแล้ว → ยังไม่ส่ง → ไม่พบสาขา</div>
     </div>
   </div>
 
@@ -210,6 +374,8 @@
       </div>
     </div>
   </div>
+
+  <div class="toast" id="toast"></div>
 
   <div class="modal-overlay" id="reportModal">
     <div class="modal-content">
@@ -246,36 +412,47 @@
       var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 10);
       document.getElementById('date-picker').value = localISOTime;
       fetchData();
+      requestAnimationFrame(function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); });
     }
 
-    function fetchData() {
+    // =========================================================
+    // 📋 ติดตามงาน
+    // =========================================================
+    var TASKS = [], FILTER = 'all', LAST_EDIT = 0, LAST_DATA = null;
+    var ST_TXT = { ok: '✅ ส่งแล้ว', no: '❎ ยังไม่ส่ง', warn: '⚠️ ไม่พบสาขา' };
+    var ST_LBL = { ok: 'ส่งแล้ว', no: 'ยังไม่ส่ง', warn: 'ไม่พบสาขา' };
+    function stKey(s) { s = String(s || ''); return s.indexOf('✅') !== -1 ? 'ok' : (s.indexOf('❎') !== -1 || s.indexOf('❌') !== -1) ? 'no' : 'warn'; }
+    function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function toast(m) { var t = document.getElementById('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove('on'); }, 1900); }
+    function thDate(iso) {
+      var d = iso ? new Date(iso + 'T00:00:00') : new Date();
+      var days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์'], mon = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      return days[d.getDay()] + ' ' + d.getDate() + ' ' + mon[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+
+    function fetchData(manual) {
       var selectedDate = document.getElementById('date-picker').value;
-      document.getElementById('task-list').innerHTML = "<div style='text-align:center; color:#888; font-weight:600;'>กำลังโหลดข้อมูล...</div>";
+      if (!TASKS.length) document.getElementById('task-list').innerHTML = "<div class='loading'>กำลังโหลดข้อมูล...</div>";
       document.getElementById('schedule-list').innerHTML = "<div style='text-align:center; color:#888; font-weight:600;'>กำลังโหลดข้อมูล...</div>";
-      google.script.run.withSuccessHandler(renderApp).getAppData(selectedDate);
+      var rb = document.getElementById('tRefresh'); if (manual) rb.classList.add('spin');
+      google.script.run.withSuccessHandler(function (d) { rb.classList.remove('spin'); renderApp(d); if (manual) toast('อัปเดตแล้ว'); })
+        .withFailureHandler(function (e) { rb.classList.remove('spin'); toast('โหลดไม่สำเร็จ: ' + (e && e.message || '')); })
+        .getAppData(selectedDate);
     }
 
     function renderApp(data) {
-      document.getElementById('head-sub').innerText = data.header.am;
-      document.getElementById('task-dynamic-title').value = data.header.title;
-      
-      var taskHtml = "";
-      data.tasks.forEach(function(t) {
-        var statusClass = 'status-yellow';
-        var displayStatus = '⚠️ ไม่พบสาขา';
-        
-        if (t.status.includes('✅')) { statusClass = 'status-green'; displayStatus = '✅ ส่งแล้ว'; } 
-        else if (t.status.includes('❎') || t.status.includes('❌')) { statusClass = 'status-red'; displayStatus = '❎ ยังไม่ส่ง'; }
-        
-        taskHtml += `
-        <div class="task-row">
-          <div class="task-box tb-id">${t.id}</div>
-          <div class="task-box tb-name">${t.name}</div>
-          <div class="task-box tb-status ${statusClass}" onclick="cycleTaskStatus(this, '${t.id}')">${displayStatus}</div>
-        </div>`;
-      });
-      document.getElementById('task-list').innerHTML = taskHtml;
-
+      LAST_DATA = data;
+      document.getElementById('head-sub').innerText = data.header.am || '';
+      document.getElementById('head-sub2').innerText = data.header.am || '';
+      var ti = document.getElementById('task-dynamic-title');
+      if (document.activeElement !== ti) ti.value = data.header.title || '';
+      fitTitle();
+      document.getElementById('pTitle').textContent = data.header.title || '';
+      TASKS = (data.tasks || []).map(function (t) { return { id: String(t.id), name: String(t.name || ''), k: stKey(t.status) }; });
+      var n = new Date();
+      document.getElementById('pUpd').textContent = 'อัปเดตล่าสุด ' + String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0') + ' น.';
+      document.getElementById('tDate').textContent = thDate();
+      renderProgress(); renderTasks();
       globalTeam = data.team;
       var schHtml = "";
       var nameOptions = "";
@@ -371,39 +548,87 @@
       document.getElementById('report-list').innerHTML = repHtml;
     }
 
+    function fitTitle() {
+      var ti = document.getElementById('task-dynamic-title'), c = fitTitle.c || (fitTitle.c = document.createElement('canvas').getContext('2d'));
+      c.font = '700 16px Kanit, "IBM Plex Sans Thai", sans-serif';
+      ti.style.width = Math.min(ti.parentElement.clientWidth, Math.max(120, c.measureText(ti.value || ti.placeholder).width + 40)) + 'px';
+    }
+    function renderProgress() {
+      var c = { ok: 0, no: 0, warn: 0 }; TASKS.forEach(function (t) { c[t.k]++; });
+      var all = TASKS.length, pct = all ? Math.round(c.ok / all * 100) : 0;
+      document.getElementById('pPct').textContent = pct + '%';
+      document.getElementById('pDone').textContent = c.ok; document.getElementById('pAll').textContent = all;
+      document.getElementById('pNote').textContent = c.no ? 'เหลืออีก ' + c.no + ' สาขา' : (all ? 'ครบทุกสาขาแล้ว 🎉' : '-');
+      document.getElementById('kOk').textContent = c.ok; document.getElementById('kNo').textContent = c.no; document.getElementById('kWarn').textContent = c.warn;
+      var C = 2 * Math.PI * 62; document.getElementById('ringBar').style.strokeDashoffset = C * (1 - pct / 100);
+    }
+    function renderTasks() {
+      var q = (document.getElementById('q').value || '').trim().toLowerCase();
+      var list = TASKS.filter(function (t) { return (FILTER === 'all' || t.k === FILTER) && (!q || (t.id + ' ' + t.name).toLowerCase().indexOf(q) !== -1); });
+      document.getElementById('lCount').textContent = list.length + ' สาขา';
+      document.getElementById('task-list').innerHTML = list.length ? list.map(function (t, i) {
+        return '<div class="br" style="animation-delay:' + Math.min(i * 35, 400) + 'ms"><div class="t"><b>' + esc(t.id) + '</b><span>' + esc(t.name) + '</span></div>' +
+          '<button type="button" class="st s-' + t.k + '" data-id="' + esc(t.id) + '" onclick="cycleTaskStatus(this, this.dataset.id)"><i></i>' + ST_LBL[t.k] + '</button></div>';
+      }).join('') : '<div class="empty">' + (TASKS.length ? 'ไม่มีสาขาในกลุ่มนี้' : 'ยังไม่มีรายการ') + '</div>';
+    }
+    function moveGlider(segId, gId) {
+      var on = document.querySelector('#' + segId + ' button.on'), g = document.getElementById(gId);
+      if (!on || !g) return; g.style.width = on.offsetWidth + 'px'; g.style.transform = 'translateX(' + (on.offsetLeft - 5) + 'px)';
+    }
+    function setFilter(f) {
+      FILTER = (FILTER === f && f !== 'all') ? 'all' : f;
+      document.querySelectorAll('#fSeg button').forEach(function (b) { b.classList.toggle('on', b.dataset.f === FILTER || (FILTER === 'warn' && false)); });
+      if (!document.querySelector('#fSeg button.on')) document.querySelector('#fSeg button[data-f="all"]').classList.add('on');
+      document.querySelectorAll('.kpi').forEach(function (k) { k.classList.toggle('on', k.dataset.f === FILTER); });
+      moveGlider('fSeg', 'fGlider'); renderTasks();
+      if (navigator.vibrate) navigator.vibrate(6);
+    }
     function cycleTaskStatus(el, branchId) {
       if (window.navigator && window.navigator.vibrate) { navigator.vibrate(15); }
-      var currentText = el.innerText.trim();
-      var nextStatus = "";
-      var nextClass = "";
-      
-      if(currentText.includes('✅')) {
-          nextStatus = '❎ ยังไม่ส่ง';
-          nextClass = 'status-red';
-      } else if(currentText.includes('❎')) {
-          nextStatus = '⚠️ ไม่พบสาขา';
-          nextClass = 'status-yellow';
-      } else {
-          nextStatus = '✅ ส่งแล้ว';
-          nextClass = 'status-green';
-      }
-      
-      el.innerText = nextStatus;
-      el.className = `task-box tb-status ${nextClass}`;
-      google.script.run.updateTaskStatus(branchId, nextStatus);
+      var t = TASKS.find(function (x) { return x.id === String(branchId); }); if (!t) return;
+      t.k = t.k === 'ok' ? 'no' : t.k === 'no' ? 'warn' : 'ok';
+      LAST_EDIT = Date.now();
+      el.className = 'st s-' + t.k; el.innerHTML = '<i></i>' + ST_LBL[t.k];
+      void el.offsetWidth; el.classList.add('pop');
+      renderProgress();
+      google.script.run.withFailureHandler(function () { toast('บันทึกสถานะไม่สำเร็จ ลองใหม่'); }).updateTaskStatus(branchId, ST_TXT[t.k]);
     }
+    function copySummary() {
+      var title = document.getElementById('task-dynamic-title').value || 'งาน';
+      var ok = TASKS.filter(function (t) { return t.k === 'ok'; }), no = TASKS.filter(function (t) { return t.k === 'no'; }), wn = TASKS.filter(function (t) { return t.k === 'warn'; });
+      var lines = ['📋 ' + title, '📅 ' + thDate(), '✅ ส่งแล้ว ' + ok.length + '/' + TASKS.length + ' สาขา'];
+      if (no.length) { lines.push('', '❎ ยังไม่ส่ง (' + no.length + ')'); no.forEach(function (t) { lines.push('• ' + t.id + ' ' + t.name); }); }
+      if (wn.length) { lines.push('', '⚠️ ไม่พบสาขา (' + wn.length + ')'); wn.forEach(function (t) { lines.push('• ' + t.id + ' ' + t.name); }); }
+      if (!no.length && !wn.length) lines.push('', 'ครบทุกสาขาแล้ว ขอบคุณทุกคนครับ 🙏');
+      var txt = lines.join('\n'), btn = document.getElementById('copyBtn');
+      var done = function () { btn.classList.add('done'); btn.textContent = '✓ คัดลอกแล้ว — วางในไลน์ได้เลย'; setTimeout(function () { btn.classList.remove('done'); btn.textContent = '📋 คัดลอกสรุปส่ง LINE'; }, 2200); };
+      var fallback = function () { var a = document.createElement('textarea'); a.value = txt; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('คัดลอกไม่ได้'); } a.remove(); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+    }
+    // REALTIME: ดึงใหม่ทุก 60 วิ เฉพาะตอนเปิดดูหน้านี้อยู่ (และไม่ทับตอนเพิ่งกดเปลี่ยนสถานะ)
+    function appVisible() {
+      if (document.hidden) return false;
+      try { var f = window.frameElement; if (f && (!f.classList.contains('on') || window.parent.document.getElementById('frame-shell').classList.contains('hidden'))) return false; } catch (e) {}
+      return document.getElementById('view-task').style.display !== 'none';
+    }
+    setInterval(function () { if (appVisible() && Date.now() - LAST_EDIT > 8000) fetchData(false); }, 60000);
+    window.addEventListener('message', function (e) { if (e.origin === location.origin && e.data && e.data.type === 'sys1326-show' && Date.now() - LAST_EDIT > 8000) fetchData(false); });
+    window.addEventListener('resize', function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); fitTitle(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); });
 
     function saveTitle(newTitle) {
       google.script.run.updateTaskTitle(newTitle);
     }
 
     function switchTab(tab) {
-      document.getElementById('tab-task').classList.remove('active');
-      document.getElementById('tab-schedule').classList.remove('active');
-      document.getElementById('view-task').style.display = 'none';
-      document.getElementById('view-schedule').style.display = 'none';
-      document.getElementById('tab-' + tab).classList.add('active');
-      document.getElementById('view-' + tab).style.display = 'block';
+      ['task', 'schedule'].forEach(function (k) {
+        document.getElementById('tab-' + k).classList.toggle('on', k === tab);
+        document.getElementById('view-' + k).style.display = k === tab ? 'block' : 'none';
+      });
+      document.body.classList.toggle('sch', tab === 'schedule');
+      moveGlider('tabSeg', 'tabGlider');
+      if (tab === 'task') setTimeout(function () { moveGlider('fSeg', 'fGlider'); }, 30);
+      if (navigator.vibrate) navigator.vibrate(6);
     }
 
     function updateBadge(el, nickname) {
