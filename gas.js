@@ -111,18 +111,22 @@
     }
     var body = JSON.stringify({ app: APP, fn: fn, args: args, token: getToken() });
     var tries = 0;
+    // คำสั่งลบ/แก้ตามแถว ห้ามส่งซ้ำอัตโนมัติ (กันลบ/แก้ผิดแถว)
+    var retryable = !/^(delete|update)[A-Z]|Record$/.test(fn);
     function go() {
       tries++;
+      slot(function (done) {
       // text/plain = ไม่ให้เบราว์เซอร์บล็อกการส่งข้ามเว็บ (ไม่มี preflight)
       fetch(API_URL, { method: 'POST', body: body, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow' })
-        .then(function (r) { return r.text(); })
+        .then(function (r) { done(); return r.text(); }, function (e) { done(); throw e; })
         .then(function (txt) {
           var res;
           try { res = JSON.parse(txt); } catch (e) {
-            var hint = /doPost/i.test(txt) ? 'หลังบ้านยังไม่มี API.gs หรือยังไม่ได้ Deploy เป็น New version'
-              : /accounts\.google|signin|ServiceLogin/i.test(txt) ? 'Deploy ยังตั้งสิทธิ์ไม่ใช่ "Anyone" (ทุกคน)'
-              : 'หลังบ้านตอบกลับไม่ใช่ข้อมูล — เช็ก Deploy (New version + Anyone)';
-            throw new Error(hint + ' · ' + txt.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 140));
+            if (/doPost/i.test(txt)) throw new Error('หลังบ้านยังไม่มี API.gs หรือยังไม่ได้ Deploy เป็น New version');
+            if (/accounts\.google|signin|ServiceLogin/i.test(txt)) throw new Error('Deploy ยังตั้งสิทธิ์ไม่ใช่ "Anyone" (ทุกคน)');
+            // หน้า error ของ Google (คนใช้พร้อมกันเยอะ / Google ไม่ว่าง) → รอแป๊บแล้วลองใหม่เอง
+            var busy = new Error('Google ไม่ว่างชั่วคราว (ใช้งานพร้อมกันเยอะ) — กด ↻ ลองใหม่อีกครั้งนะครับ');
+            busy.gBusy = true; throw busy;
           }
           if (res.ok) {
             if (fn === 'authenticateUser' && res.data && res.data.token) setToken(res.data.token);
@@ -134,6 +138,7 @@
           }
         })
         .catch(function (e) {
+          if (e && e.gBusy && retryable && tries < 4) { setTimeout(go, [0, 1200, 2600, 5000][tries] + Math.random() * 800); return; }
           if (tries < 2 && /Failed to fetch|NetworkError|Load failed/i.test(String(e && e.message))) { setTimeout(go, 800); return; }
           if (queueable && isNetErr(e)) {
             qAdd({ id: args[0].clientId || uid(), app: APP, fn: fn, args: args, t: Date.now() }, function (saved) {
@@ -146,8 +151,20 @@
             ? 'ติดต่อหลังบ้านไม่ได้ (มักเกิดจาก Deploy ยังไม่ใช่ "Anyone" หรือยังไม่ได้กด New version) — ' + (e && e.message) : (e && e.message) || String(e));
           if (fail) fail(err); else console.error(err);
         });
+      });
     }
     go();
+  }
+
+  // ส่งพร้อมกันได้ไม่เกิน 3 คำขอต่อหน้า ที่เหลือต่อคิว (Google จำกัดจำนวนที่รันพร้อมกัน)
+  var MAX_INFLIGHT = 3, inflight = 0, waiting = [];
+  function slot(run) {
+    var start = function () {
+      inflight++;
+      var released = false;
+      run(function () { if (released) return; released = true; inflight--; if (waiting.length) waiting.shift()(); });
+    };
+    if (inflight < MAX_INFLIGHT) start(); else waiting.push(start);
   }
 
   function runner(ok, fail) {
