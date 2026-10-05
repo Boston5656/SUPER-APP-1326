@@ -5,7 +5,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script src="staff-names.js?v=2026.10.05-4"></script>
+        <script src="staff-names.js?v=2026.10.05-6"></script>
     <script>
       // ปุ่มชื่อพนักงาน — รายชื่ออยู่ในไฟล์ staff-names.js
       function pickedName(radioName) {
@@ -19,10 +19,13 @@
         window.CASE_RECEIVERS = (st.receivers || []).slice();
         window.PC_STAFF = (st.pc || []).slice();
         if (st.brands && st.brands.length) window.BRANDS = st.brands.slice();
+        if (Array.isArray(st.types)) window.DEVICE_TYPES = st.types.slice();
+        if (st.focus && st.focus.length) { window.FOCUS_ITEMS = st.focus.slice(); window.FOCUS_QTY = (st.focusQty || []).slice(); }
         window.CHECK_SETTINGS_META = { by: st.updatedBy || '', at: st.updatedAt || '' };
         return true;
       }
-      window.__CS_FILE_DEFAULTS = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice() };
+      window.__CS_FILE_DEFAULTS = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice(),
+        types: (window.DEVICE_TYPES || []).slice(), focus: (window.FOCUS_ITEMS || []).slice(), focusQty: (window.FOCUS_QTY || []).slice() };
       try { applyCheckSettings(JSON.parse(localStorage.getItem('chk1326_settings') || 'null')); } catch (e) {}
       function renderNameButtons() {
         document.querySelectorAll('[data-names]').forEach(function (box) {
@@ -37,10 +40,38 @@
           }).join('');
         });
       }
+      // 📦 ประเภท + 🎯 งานโฟกัส (สร้างจากรายการในตั้งค่า)
+      function escAttr(t) { return String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
+      function renderTypeFocus() {
+        var tg = document.getElementById('typeGrid');
+        if (tg) {
+          var kt = document.querySelector('input[name="deviceType"]:checked'); kt = kt ? kt.value : '';
+          var types = [{ v: '', l: 'SMARTPHONE / iPhone' }].concat((window.DEVICE_TYPES || []).map(function (t) { return { v: t, l: t }; }));
+          tg.innerHTML = types.map(function (t, i) {
+            return '<input type="radio" class="btn-check" name="deviceType" id="d_' + i + '" value="' + escAttr(t.v) + '"' + (t.v === kt ? ' checked' : '') + (i === 0 ? ' data-default="1"' : '') + '>' +
+                   '<label class="btn-grid-custom btn-device" for="d_' + i + '">' + escAttr(t.l) + '</label>';
+          }).join('');
+          var d0 = document.getElementById('d_0'); if (d0) d0.defaultChecked = true;
+        }
+        [['focusGrid', 'f_', 'name="focusCheck"'], ['editFocusGrid', 'e_', 'class="btn-check edit-focus-chk"']].forEach(function (g) {
+          var box = document.getElementById(g[0]); if (!box) return;
+          var keep = {};
+          box.querySelectorAll('input:checked').forEach(function (x) { keep[x.value] = x.dataset.qty || ''; });
+          box.innerHTML = (window.FOCUS_ITEMS || []).map(function (n, i) {
+            var id = g[1] + i;
+            return '<input type="checkbox" ' + (g[1] === 'f_' ? 'class="btn-check" name="focusCheck"' : g[2]) + ' id="' + id + '" value="' + escAttr(n) + '"' + (n in keep ? ' checked' : '') + '>' +
+                   '<label class="btn-grid-custom btn-focus-yellow" for="' + id + '">' + escAttr(n) + '</label>';
+          }).join('');
+          box.querySelectorAll('input').forEach(function (x) { if (x.value in keep) x.dataset.qty = keep[x.value]; });
+        });
+        if (typeof initQtyCheckboxes === 'function' && window.__qtyReady) initQtyCheckboxes();
+      }
+      var __renderNamesOnly = renderNameButtons;
+      renderNameButtons = function () { __renderNamesOnly(); renderTypeFocus(); };
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderNameButtons); else renderNameButtons();
     </script>
     <script>window.GAS_APP = 'check';</script>
-    <script src="gas.js?v=2026.10.05-4"></script>
+    <script src="gas.js?v=2026.10.05-6"></script>
     <title>Check List 1326</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFD600">
@@ -1567,7 +1598,7 @@
           <div class="page-head">
             <span class="eyebrow">STORE OPERATIONS · CHECKLIST</span>
             <h1 class="page-title">บันทึกการขายประจำวัน</h1>
-            <button type="button" class="st-gear" id="stGear" onclick="openCheckSettings()" style="display:none">⚙️ ตั้งค่ารายชื่อ / แบรนด์</button>
+            <button type="button" class="st-gear" id="stGear" onclick="openCheckSettings()" style="display:none">⚙️ ตั้งค่า รายชื่อ · แบรนด์ · งานโฟกัส</button>
           </div>
 
           <!-- 📌 สรุปวันนี้ (แตะ = ดูรายละเอียด) -->
@@ -1602,19 +1633,7 @@
               <!-- 📦 ประเภทสินค้า (ต่อท้ายชื่อรุ่น) -->
               <div class="field">
                 <label class="form-label-custom">📦 ประเภทสินค้า</label>
-                <div class="grid-4-col">
-                  <input type="radio" class="btn-check" name="deviceType" id="d_phone" value="" checked>
-                  <label class="btn-grid-custom btn-device" for="d_phone">SMARTPHONE / iPhone</label>
-
-                  <input type="radio" class="btn-check" name="deviceType" id="d_tablet" value="TABLET">
-                  <label class="btn-grid-custom btn-device" for="d_tablet">TABLET</label>
-
-                  <input type="radio" class="btn-check" name="deviceType" id="d_ipad" value="iPad">
-                  <label class="btn-grid-custom btn-device" for="d_ipad">iPad</label>
-
-                  <input type="radio" class="btn-check" name="deviceType" id="d_watch" value="APPLE WATCH">
-                  <label class="btn-grid-custom btn-device" for="d_watch">APPLE WATCH</label>
-                </div>
+                <div class="grid-4-col" id="typeGrid"></div>
                 <small class="hint">ไม่ได้เลือก = Smartphone / iPhone ปกติ · ถ้าเลือก ระบบจะต่อท้ายชื่อรุ่น เช่น "iPad A16, iPad"</small>
               </div>
 
@@ -1625,37 +1644,7 @@
 
               <div class="field">
                 <label class="form-label-custom">🎯 งานโฟกัสที่ขายได้ <span style="font-weight:500">(เลือกได้หลายรายการ)</span></label>
-                <div class="grid-3-col">
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_sim" value="SIM">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_sim">SIM</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_bright" value="FILM BRIGHT">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_bright">FILM BRIGHT</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_pvl" value="FILM PVL">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_pvl">FILM PVL</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_sandisk" value="SANDISK">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_sandisk">SANDISK</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_ultracare" value="ULTRA CARE+">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_ultracare">ULTRA CARE+</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_socialcare" value="SOCIAL CARE">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_socialcare">SOCIAL CARE</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_7care" value="7CARE+">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_7care">7CARE+</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_ufund" value="U-FUND">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_ufund">U-FUND</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_ufund_student" value="U-FUND STUDENT">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_ufund_student">U-FUND STUDENT</label>
-
-                  <input type="checkbox" class="btn-check" name="focusCheck" id="f_pencil" value="APPLE PENCIL">
-                  <label class="btn-grid-custom btn-focus-yellow" for="f_pencil">APPLE PENCIL</label>
-                </div>
+                <div class="grid-3-col" id="focusGrid"></div>
                 <small class="hint">🔢 = มีช่องให้กรอกจำนวน · กดซ้ำที่ปุ่มเพื่อเอาออก</small>
               </div>
 
@@ -1963,18 +1952,7 @@
             <p class="text-secondary small mb-3 fw-bold">รุ่นที่แก้ไข: <span id="editModelName" class="text-theme-dark"></span></p>
 
             <label class="form-label-custom">เลือกงานโฟกัสที่ปิดได้</label>
-            <div class="grid-3-col mb-3">
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_sim" value="SIM"><label class="btn-grid-custom btn-focus-yellow" for="e_sim">SIM</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_bright" value="FILM BRIGHT"><label class="btn-grid-custom btn-focus-yellow" for="e_bright">FILM BRIGHT</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_pvl" value="FILM PVL"><label class="btn-grid-custom btn-focus-yellow" for="e_pvl">FILM PVL</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_sandisk" value="SANDISK"><label class="btn-grid-custom btn-focus-yellow" for="e_sandisk">SANDISK</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_ultracare" value="ULTRA CARE+"><label class="btn-grid-custom btn-focus-yellow" for="e_ultracare">ULTRA CARE+</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_socialcare" value="SOCIAL CARE"><label class="btn-grid-custom btn-focus-yellow" for="e_socialcare">SOCIAL CARE</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_7care" value="7CARE+"><label class="btn-grid-custom btn-focus-yellow" for="e_7care">7CARE+</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_ufund" value="U-FUND"><label class="btn-grid-custom btn-focus-yellow" for="e_ufund">U-FUND</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_ufund_student" value="U-FUND STUDENT"><label class="btn-grid-custom btn-focus-yellow" for="e_ufund_student">U-FUND STUDENT</label>
-              <input type="checkbox" class="btn-check edit-focus-chk" id="e_pencil" value="APPLE PENCIL"><label class="btn-grid-custom btn-focus-yellow" for="e_pencil">APPLE PENCIL</label>
-            </div>
+            <div class="grid-3-col mb-3" id="editFocusGrid"></div>
 
             <hr class="divider" style="margin:20px 0 16px">
             <label class="form-label-custom">📷 รูปใหม่เพื่อสร้างสแตมป์ใหม่ (ไม่บังคับ)</label>
@@ -2252,11 +2230,11 @@
       // =========================================================
       // 🔢 งานโฟกัสที่ต้องกรอกจำนวน
       // =========================================================
-      const QTY_FOCUS_ITEMS = ['SANDISK', 'FILM BRIGHT', 'FILM PVL', 'SOCIAL CARE', 'APPLE PENCIL'];
+      // 🔢 งานโฟกัสที่ต้องกรอกจำนวน — มาจากตั้งค่า (FOCUS_QTY)
       let qtyTargetChk = null;
 
       function isQtyItem(value) {
-        return QTY_FOCUS_ITEMS.includes(String(value || '').toUpperCase());
+        return (window.FOCUS_QTY || []).map(x => String(x).toUpperCase()).includes(String(value || '').toUpperCase());
       }
 
       // "SANDISK x2" -> { name: 'SANDISK', qty: 2 }
@@ -2268,9 +2246,11 @@
       }
 
       function initQtyCheckboxes() {
+        window.__qtyReady = true;
         document.querySelectorAll('input[name="focusCheck"], .edit-focus-chk').forEach(chk => {
-          if (!isQtyItem(chk.value)) return;
-          chk.dataset.qty = '';
+          if (!isQtyItem(chk.value) || chk.dataset.qtyInit) return;
+          chk.dataset.qtyInit = '1';
+          if (!chk.checked) chk.dataset.qty = '';
           refreshQtyLabel(chk);
           chk.addEventListener('change', () => {
             if (chk.checked) {
@@ -3313,10 +3293,13 @@
       const CS_SECS = [
         { k: 'sales', title: '👤 พนักงานขาย', note: 'ปุ่มชื่อในหน้า บันทึกขาย และ งานไม่ผ่าน · แตะ ⭐ = เป็น PC แบรนด์ (แยกตาราง Leaderboard)', ph: 'ชื่อพนักงานใหม่' },
         { k: 'receivers', title: '🙋 ผู้รับเคส', note: 'ปุ่มผู้รับเคสในหน้า บันทึกขาย', ph: 'ชื่อผู้รับเคส' },
-        { k: 'brands', title: '🏷️ แบรนด์', note: 'ปุ่มแบรนด์ในหน้า บันทึกขาย และ งานไม่ผ่าน (ตัวพิมพ์ใหญ่อัตโนมัติ)', ph: 'เช่น HUAWEI' }
+        { k: 'brands', title: '🏷️ แบรนด์', note: 'ปุ่มแบรนด์ในหน้า บันทึกขาย และ งานไม่ผ่าน (ตัวพิมพ์ใหญ่อัตโนมัติ)', ph: 'เช่น HUAWEI' },
+        { k: 'types', title: '📦 ประเภทสินค้า', note: '“SMARTPHONE / iPhone” มีให้เสมอ · ประเภทที่เลือกจะต่อท้ายชื่อรุ่น เช่น “iPad A16, iPad”', ph: 'เช่น AIRPODS' },
+        { k: 'focus', title: '🎯 งานโฟกัส', note: 'ปุ่มหน้า บันทึกขาย และหน้าต่างแก้ไข · แตะ 🔢 = ให้กรอกจำนวน (เช่น SANDISK x2)', ph: 'เช่น CASE' }
       ];
       function openCheckSettings() {
-        csDraft = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice() };
+        csDraft = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice(),
+          types: (window.DEVICE_TYPES || []).slice(), focus: (window.FOCUS_ITEMS || []).slice(), focusQty: (window.FOCUS_QTY || []).slice() };
         const m = window.CHECK_SETTINGS_META;
         openSheet('⚙️ ตั้งค่า Check List', m && m.at ? 'แก้ล่าสุด ' + m.at + (m.by ? ' โดย ' + m.by : '') : 'บันทึกแล้วทุกเครื่องเปลี่ยนตามทันที', '<div id="csBody"></div>');
         csRender();
@@ -3328,8 +3311,10 @@
           return `<div class="cs-sec"><h6>${sec.title}<small>${list.length} รายการ</small></h6><p>${sec.note}</p>
             <div class="cs-chips">${list.map((n, i) => {
               const pc = sec.k === 'sales' && csDraft.pc.indexOf(n) !== -1;
-              return `<span class="cs-chip ${pc ? 'pc' : ''}">${csEsc(n)}
+              const qty = sec.k === 'focus' && csDraft.focusQty.indexOf(n) !== -1;
+              return `<span class="cs-chip ${pc || qty ? 'pc' : ''}">${csEsc(n)}
                 ${sec.k === 'sales' ? `<button type="button" title="PC" onclick="csPc(${i})">${pc ? '⭐' : '☆'}</button>` : ''}
+                ${sec.k === 'focus' ? `<button type="button" title="กรอกจำนวน" onclick="csQty(${i})" style="${qty ? '' : 'opacity:.45'}">🔢</button>` : ''}
                 <button type="button" title="เลื่อนซ้าย" onclick="csMove('${sec.k}',${i},-1)" ${i ? '' : 'disabled style="opacity:.3"'}>‹</button>
                 <button type="button" class="x" title="ลบ" onclick="csDel('${sec.k}',${i})">✕</button></span>`;
             }).join('')}</div>
@@ -3339,7 +3324,8 @@
       function csAdd(k) {
         const el = document.getElementById('csIn_' + k); let v = (el.value || '').replace(/[<>"]/g, '').replace(/\s+/g, ' ').trim();
         if (!v) { el.focus(); return; }
-        if (k === 'brands') v = v.toUpperCase();
+        if (k === 'brands' || k === 'focus') v = v.toUpperCase();
+        if (k === 'focus' && /,/.test(v)) { showToast('ชื่องานโฟกัสห้ามมีเครื่องหมาย ,', 'warn'); return; }
         if (csDraft[k].some(x => x.toUpperCase() === v.toUpperCase())) { showToast('มี "' + v + '" อยู่แล้ว', 'warn'); return; }
         csDraft[k].push(v); csRender();
         const ni = document.getElementById('csIn_' + k); if (ni) ni.focus();
@@ -3348,19 +3334,23 @@
         const n = csDraft[k][i];
         csDraft[k].splice(i, 1);
         if (k === 'sales') csDraft.pc = csDraft.pc.filter(x => x !== n);
+        if (k === 'focus') csDraft.focusQty = csDraft.focusQty.filter(x => x !== n);
         csRender();
       }
       function csMove(k, i, d) { const a = csDraft[k], j = i + d; if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; csRender(); }
+      function csQty(i) { const n = csDraft.focus[i], p = csDraft.focusQty.indexOf(n); if (p === -1) csDraft.focusQty.push(n); else csDraft.focusQty.splice(p, 1); csRender(); }
       function csPc(i) { const n = csDraft.sales[i], p = csDraft.pc.indexOf(n); if (p === -1) csDraft.pc.push(n); else csDraft.pc.splice(p, 1); csRender(); }
       function csReset() {
         if (!confirm('กลับไปใช้รายชื่อเดิมจากไฟล์ staff-names.js?\n(ยังไม่บันทึกจนกว่าจะกด 💾)')) return;
         const f = window.__CS_FILE_DEFAULTS || {};
-        csDraft = { sales: (f.sales || []).slice(), receivers: (f.receivers || []).slice(), pc: (f.pc || []).slice(), brands: (f.brands || []).slice() };
+        csDraft = { sales: (f.sales || []).slice(), receivers: (f.receivers || []).slice(), pc: (f.pc || []).slice(), brands: (f.brands || []).slice(),
+          types: (f.types || []).slice(), focus: (f.focus || []).slice(), focusQty: (f.focusQty || []).slice() };
         csRender();
       }
       function csSave() {
         if (!csDraft.sales.length) { showToast('ต้องมีพนักงานขายอย่างน้อย 1 คน', 'warn'); return; }
         if (!csDraft.brands.length) { showToast('ต้องมีแบรนด์อย่างน้อย 1 แบรนด์', 'warn'); return; }
+        if (!csDraft.focus.length) { showToast('ต้องมีงานโฟกัสอย่างน้อย 1 รายการ', 'warn'); return; }
         const b = document.getElementById('csSaveBtn'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
         google.script.run.withSuccessHandler(res => {
           if (!res || !res.ok) { b.disabled = false; b.textContent = '💾 บันทึก'; showToast((res && res.error) || 'บันทึกไม่สำเร็จ', 'error'); return; }
@@ -3562,7 +3552,15 @@
         openSheet('📌 เป้าวันนี้', (g.label || '') + ' · คิดจากยอดสะสมทั้งร้านถึงวันที่ ' + g.day, h);
       }
       document.addEventListener('DOMContentLoaded', () => setTimeout(loadTodayStrip, 300));
-      setInterval(() => { if (!document.hidden) loadTodayStrip(); }, 180000);
+      // แอปที่ซ่อนอยู่ใน SUPER APP (เปิดแอปอื่นอยู่) ไม่ต้องดึงข้อมูล → เซิร์ฟเวอร์ไม่ต้องทำงานฟรี
+      function appVisible() {
+        if (document.hidden) return false;
+        try { const f = window.frameElement; if (f && (!f.classList.contains('on') || window.parent.document.getElementById('frame-shell').classList.contains('hidden'))) return false; } catch (e) {}
+        return true;
+      }
+      setInterval(() => { if (appVisible()) loadTodayStrip(); }, 180000);
+      // กลับมาเปิดแอปนี้อีกครั้งจากหน้าเมนู → อัปเดตแถบทันที
+      window.addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.type === 'sys1326-show') loadTodayStrip(); });
 
       // =========================================================
       // 🏆 LEADERBOARD — แยกพนักงานร้าน / PC

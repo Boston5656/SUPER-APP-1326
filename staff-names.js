@@ -35,3 +35,11 @@ window.BRANDS = [
   'APPLE', 'SAMSUNG', 'OPPO', 'VIVO / IQOO', 'REALME', 'XIAOMI',
   'INFINIX', 'HONOR', 'ALLDOCUBE', 'TCL', 'ZTE', 'NOTHING'
 ];
+
+// 📦 ประเภทสินค้า (ต่อท้ายชื่อรุ่น) — "SMARTPHONE / iPhone" เป็นค่าตั้งต้นเสมอ ไม่ต้องใส่
+window.DEVICE_TYPES = ['TABLET', 'iPad', 'APPLE WATCH'];
+
+// 🎯 งานโฟกัส (ปุ่มหน้า "บันทึกขาย" และหน้าต่าง "แก้ไขงานโฟกัส")
+window.FOCUS_ITEMS = ['SIM', 'FILM BRIGHT', 'FILM PVL', 'SANDISK', 'ULTRA CARE+', 'SOCIAL CARE', '7CARE+', 'U-FUND', 'U-FUND STUDENT', 'APPLE PENCIL'];
+// 🔢 งานโฟกัสที่ต้องกรอกจำนวน (เช่น SANDISK x2)
+window.FOCUS_QTY = ['SANDISK', 'FILM BRIGHT', 'FILM PVL', 'SOCIAL CARE', 'APPLE PENCIL'];
