@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
-  <script src="gas.js?v=2026.10.04-7"></script>
+  <script src="gas.js?v=2026.10.05-1"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1122,7 +1122,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.10.04-7';
+    const APP_VER = '2026.10.05-1';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -1150,9 +1150,11 @@
       6: "shift.html",
       7: "asm.html",
       8: "https://boston5656.github.io/STOCK-1326/",
-      9: "https://boston5656.github.io/Scanner1326/"
+      9: "https://boston5656.github.io/Scanner1326/",
+      11: "collage.html"
     };
 
+    const EVERYONE_APPS = [11];   // แอปที่ทุกคนเห็น ไม่ต้องแก้ฝั่ง Apps Script (รวมภาพ)
     const APP_DEFS = [
       { id: 1, name: "Dash สาขา", icon: `<svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 15l3-3 4 4 5-5" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
       { id: 2, name: "Dash พนักงาน", icon: `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke="black" stroke-width="2.5" fill="none"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
@@ -1163,7 +1165,8 @@
       { id: 7, name: "ASM Track", icon: `<svg viewBox="0 0 24 24"><path d="M12 2L2 22l10-5 10 5L12 2z" stroke="black" stroke-width="2.5" fill="none" stroke-linejoin="round"/></svg>` },
       { id: 8, name: "Stock GitHub", icon: `<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="black" stroke-width="2.5" fill="none"/><path d="M3.27 6.96L12 12l8.73-5.04M12 22.08V12" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
       { id: 9, name: "Scanner", icon: `<svg viewBox="0 0 24 24"><path d="M3 7V4a1 1 0 011-1h3M17 3h3a1 1 0 011 1v3M21 17v3a1 1 0 01-1 1h-3M7 21H4a1 1 0 01-1-1v-3" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M7 8v8M11 8v8M14 8v8M17 8v8" stroke="black" stroke-width="2.5" stroke-linecap="round"/></svg>` },
-      { id: 10, name: "Ranking", icon: `<svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z" stroke="black" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` }
+      { id: 10, name: "Ranking", icon: `<svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z" stroke="black" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 11, name: "รวมภาพ", icon: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="11" rx="2" stroke="black" stroke-width="2.5" fill="none"/><rect x="13" y="3" width="8" height="6" rx="2" stroke="black" stroke-width="2.5" fill="none"/><rect x="13" y="11" width="8" height="10" rx="2" stroke="black" stroke-width="2.5" fill="none"/><rect x="3" y="16" width="8" height="5" rx="2" stroke="black" stroke-width="2.5" fill="none"/></svg>` }
     ];
 
     let currentUser = null; let pieChart = null; let lastDashboardData = null;
@@ -1453,7 +1456,7 @@
       const grid = document.getElementById('appGrid');
       let html = '', n = 0;
       APP_DEFS.forEach(app => {
-        if (currentUser.apps.includes(app.id)) {
+        if (currentUser.apps.includes(app.id) || EVERYONE_APPS.includes(app.id)) {
           html += `<div class="app-item flex flex-col items-center gap-3" style="animation-delay:${n * 55}ms" data-app="${app.id}">
             <div class="app-icon">${app.icon}</div><b class="app-badge" id="badge-${app.id}"></b>
             <span class="text-[11px] font-bold text-zinc-800 uppercase tracking-widest">${app.name}</span>
@@ -1525,7 +1528,7 @@
       let f = frameCache[id];
       if (!f) {
         f = document.createElement('iframe');
-        f.setAttribute('allow', 'camera; clipboard-write; accelerometer; gyroscope; fullscreen');
+        f.setAttribute('allow', 'camera; clipboard-write; accelerometer; gyroscope; fullscreen; web-share');
         f.title = 'app-' + id;
         const ld = document.getElementById('frame-loading');
         ld.classList.add('on');
