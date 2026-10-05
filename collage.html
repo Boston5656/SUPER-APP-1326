@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#FFD600">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script src="staff-names.js?v=2026.10.05-2"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@600;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
@@ -158,6 +159,49 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 .busy{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(28,28,30,.6);border-radius:26px;z-index:5;color:var(--y);font-weight:700;gap:10px}
 .busy.on{display:flex}
 input[type=file]{display:none}
+
+/* ================= โหมด / แสตมป์ ================= */
+.m-st{display:none}
+body.mode-st .m-st{display:flex}
+body.mode-st .m-col{display:none}
+body.mode-st .rise.m-st{display:block}
+body.mode-st .panel.m-st{display:flex}
+body.mode-st #clearBtn{visibility:hidden}
+.mseg{position:relative;display:flex;gap:2px;padding:4px;border-radius:14px;background:rgba(28,28,30,.08);min-width:0}
+.mglider{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:11px;background:var(--d);box-shadow:0 6px 14px -6px rgba(0,0,0,.5);transition:transform .55s var(--spring-soft),width .55s var(--spring-soft)}
+.mseg button{position:relative;z-index:1;border:0;background:none;border-radius:11px;padding:7px 10px;font-weight:700;font-size:13.5px;color:#48484A;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:color .35s var(--ios-ease)}
+.mseg button.on{color:#fff}
+.mseg button:active{transform:scale(.94)}
+.mseg .cnt{font-size:10.5px;padding:3px 7px}
+.mseg button:not(.on) .cnt{background:rgba(28,28,30,.12);color:var(--d)}
+.st-box{position:relative;display:flex;align-items:center;justify-content:center;min-height:300px;border-radius:16px;overflow:hidden;background:#000}
+#stCv{display:block;max-width:100%;touch-action:manipulation}
+#stVid{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.st-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.st-flash.on{animation:flash .5s ease-out}
+@keyframes flash{0%{opacity:.95}100%{opacity:0}}
+.st-off{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;text-align:center;padding:24px}
+.st-off.on{display:flex}
+.st-off .big{width:70px;height:70px;border-radius:24px;background:var(--y);display:flex;align-items:center;justify-content:center;font-size:32px;animation:pulse 2.2s infinite}
+.st-off small{color:var(--g);font-weight:600}
+.st-ctrl{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:14px}
+.st-ctrl.hide,.st-done:not(.on){display:none}
+.st-shut{width:78px;height:78px;border-radius:50%;border:4px solid #fff;background:transparent;padding:5px;transition:transform .3s var(--spring)}
+.st-shut i{display:block;width:100%;height:100%;border-radius:50%;background:var(--y);box-shadow:0 0 24px rgba(255,214,0,.45);transition:transform .2s}
+.st-shut:active{transform:scale(.88)}.st-shut:active i{transform:scale(.86)}
+.st-side{width:50px;height:50px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:21px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .3s var(--spring)}
+.st-side:active{transform:scale(.86) rotate(-12deg)}
+.st-done{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;animation:riseIn .45s var(--ios-ease)}
+.st-tag{color:var(--y);font-weight:700;font-size:13px}
+.st-loc{display:flex;flex-direction:column;gap:3px;font-size:13px;font-weight:600;line-height:1.45}
+.st-loc b{font-size:15px}.st-loc small{color:var(--g);font-family:'Space Grotesk',monospace;font-size:11.5px}
+.st-loc .err{color:#FF6961}
+.st-in{min-height:0;padding:11px 14px;font-size:14px}
+.presets button.on{background:var(--y);color:var(--d)}
+#barSt .bbtn.add{padding:15px 14px}
+.bar .in.m-st{display:none}
+body.mode-st .bar .in.m-st{display:flex}
+body.mode-st .bar .in.m-col{display:none}
 </style>
 </head>
 <body>
@@ -165,12 +209,16 @@ input[type=file]{display:none}
   <div class="navrow rise">
     <span data-sys-back-slot></span>
     <div class="titlebar">
-      <h1>🧩 รวมภาพ <span class="cnt" id="cnt">0/25</span></h1>
-      <button class="tb-btn" id="clearBtn" type="button">ล้างทั้งหมด</button>
+      <div class="mseg" id="mseg">
+        <i class="mglider" id="mglider"></i>
+        <button type="button" data-m="collage" class="on">🧩 รวมภาพ <span class="cnt" id="cnt">0/25</span></button>
+        <button type="button" data-m="stamp">📷 แสตมป์</button>
+      </div>
+      <button class="tb-btn" id="clearBtn" type="button">ล้าง</button>
     </div>
   </div>
 
-  <div class="rise d1">
+  <div class="rise d1 m-col">
     <div class="stage">
       <div class="canvas-box" id="box">
         <canvas id="cv" width="10" height="10"></canvas>
@@ -185,7 +233,7 @@ input[type=file]{display:none}
     </div>
   </div>
 
-  <div class="panel rise d2">
+  <div class="panel rise d2 m-col">
     <div class="seg" id="seg">
       <div class="glider" id="glider"></div>
       <button type="button" data-p="size" class="on">📐 ขนาด</button>
@@ -226,13 +274,69 @@ input[type=file]{display:none}
       <div class="card"><h3>ข้อความในภาพ</h3><div class="tlist" id="tList"></div></div>
     </div>
   </div>
+
+  <!-- ================= 📷 แสตมป์ ================= -->
+  <div class="rise d1 m-st">
+    <div class="stage st-stage">
+      <div class="st-box" id="stBox">
+        <canvas id="stCv" width="10" height="10"></canvas>
+        <video id="stVid" playsinline muted autoplay></video>
+        <div class="st-flash" id="stFlash"></div>
+        <div class="st-off" id="stOff">
+          <div class="big">📷</div>
+          <b id="stOffT">กำลังเปิดกล้อง…</b>
+          <small id="stOffS">ถ้าเปิดไม่ได้ ใช้ปุ่มกล้องมือถือ/อัลบั้มด้านล่างได้เลย</small>
+          <button class="ibtn y" type="button" id="stRetry" style="margin-top:6px">🔄 ลองเปิดกล้องอีกครั้ง</button>
+        </div>
+      </div>
+      <div class="st-ctrl" id="stCtrl">
+        <button class="st-side" type="button" id="stPickBtn" aria-label="อัลบั้ม">🖼</button>
+        <button class="st-shut" type="button" id="stShut" aria-label="ถ่าย"><i></i></button>
+        <button class="st-side" type="button" id="stFlip" aria-label="สลับกล้อง">🔄</button>
+      </div>
+      <div class="st-done" id="stDone">
+        <button class="ibtn" type="button" id="stAgain">↺ ถ่ายใหม่</button>
+        <span class="st-tag" id="stTag">📸 ถ่ายแล้ว</span>
+      </div>
+      <div class="hint" id="stHint">การ์ดจะแสตมป์เวลา–วันที่–ตำแหน่ง ตอนกดถ่าย</div>
+    </div>
+  </div>
+
+  <div class="panel rise d2 m-st">
+    <div class="card">
+      <h3>📍 ตำแหน่ง <button class="ibtn" type="button" id="stLocBtn" style="padding:6px 10px;font-size:11.5px">🔄 อัปเดต</button></h3>
+      <div class="st-loc" id="stLoc"><span class="spin"></span> กำลังหาตำแหน่ง…</div>
+    </div>
+    <div class="card">
+      <h3>ข้อความบนการ์ด</h3>
+      <input class="tinput st-in" id="stTitle" maxlength="60" placeholder="หัวข้อ เช่น ID1326 BN Future Park Rangsit 2.2">
+      <input class="tinput st-in" id="stNote" maxlength="80" placeholder="หมายเหตุ เช่น เปิดร้าน / ตรวจสต๊อก" style="margin-top:8px">
+      <div class="presets" id="stNotes" style="margin-top:8px"></div>
+      <h3 style="margin-top:12px">ผู้ถ่าย</h3>
+      <div class="presets" id="stStaff"></div>
+    </div>
+    <div class="card">
+      <h3>หน้าตาการ์ด</h3>
+      <div class="chips" id="stStyles"></div>
+      <h3 style="margin-top:12px">ตำแหน่งการ์ด</h3>
+      <div class="chips" id="stPos"></div>
+      <h3 style="margin-top:12px">แสดง</h3>
+      <div class="presets st-tog" id="stToggles"></div>
+    </div>
+  </div>
 </div>
 
-<div class="bar"><div class="in">
+<div class="bar"><div class="in m-st" id="barSt">
+  <button class="bbtn add" type="button" id="stNative"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>กล้อง</button>
+  <button class="bbtn add" type="button" id="stToCol" disabled>➕ รวมภาพ</button>
+  <button class="bbtn dl" type="button" id="stSave" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>บันทึก</button>
+</div><div class="in m-col">
   <button class="bbtn add" type="button" id="addBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M12 8v8M8 12h8"/></svg>รูป</button>
   <button class="bbtn dl" type="button" id="dlBtn" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>ดาวน์โหลดภาพรวม</button>
 </div></div>
 <input type="file" id="file" accept="image/*" multiple>
+<input type="file" id="stFile" accept="image/*">
+<input type="file" id="stCam" accept="image/*" capture="environment">
 
 <div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
@@ -297,6 +401,14 @@ async function loadFile(f) {
   const c = document.createElement('canvas'); c.width = Math.round(iw * k); c.height = Math.round(ih * k);
   const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(src, 0, 0, c.width, c.height);
   if (src.close) src.close(); else if (src.src) URL.revokeObjectURL(src.src);
+  return itemFromCanvas(c);
+}
+function itemFromCanvas(c) {
+  if (Math.max(c.width, c.height) > IMPORT_MAX) {
+    const k = IMPORT_MAX / Math.max(c.width, c.height), d = document.createElement('canvas');
+    d.width = Math.round(c.width * k); d.height = Math.round(c.height * k);
+    const x = d.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(c, 0, 0, d.width, d.height); c = d;
+  }
   const thumb = document.createElement('canvas'), tk = 160 / Math.max(c.width, c.height);
   thumb.width = Math.round(c.width * tk); thumb.height = Math.round(c.height * tk);
   thumb.getContext('2d').drawImage(c, 0, 0, thumb.width, thumb.height);
@@ -708,30 +820,34 @@ async function exportBlob() {
   return await new Promise(ok => c.toBlob(ok, 'image/jpeg', .92));
 }
 let lastURL = null;
+// แผ่นผลลัพธ์: ดูรูป + บันทึก/แชร์/ดาวน์โหลด (ใช้ทั้งรวมภาพและแสตมป์)
+function showResult(blob, name, title, sub, extra) {
+  if (lastURL) URL.revokeObjectURL(lastURL);
+  lastURL = URL.createObjectURL(blob);
+  const file = new File([blob], name, { type: 'image/jpeg' });
+  const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
+  const mb = (blob.size / 1048576).toFixed(1);
+  $('sheet').innerHTML = `<div class="grab"></div><h2>${title}</h2><p>${sub} · ${mb} MB — ไฟล์อยู่ในเครื่องเท่านั้น</p>
+    <img src="${lastURL}" alt="ผลลัพธ์">
+    <p style="margin:10px 0 0;text-align:center">iPhone: กดค้างที่รูป → “บันทึกไปยังรูปภาพ” ก็ได้</p>
+    <div class="acts">
+      ${canShare ? '<button class="bbtn y" type="button" id="shBtn">📤 บันทึก / แชร์</button>' : ''}
+      <a class="bbtn ${canShare ? 'g' : 'y'}" id="aDl" href="${lastURL}" download="${name}" style="text-decoration:none">⬇️ ดาวน์โหลดไฟล์</a>
+      ${extra || ''}
+      <button class="bbtn g" type="button" id="closeOv">ปิด</button>
+    </div>`;
+  $('ov').classList.add('on');
+  if (canShare) $('shBtn').onclick = async () => { try { await navigator.share({ files: [file], title: 'SUPER APP 1326' }); } catch (e) {} };
+  $('closeOv').onclick = closeOv;
+  haptic(18);
+}
+function stampName(prefix, d) { d = d || new Date(); const pad = n => String(n).padStart(2, '0'); return `${prefix}-1326-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.jpg`; }
 $('dlBtn').onclick = async () => {
   const btn = $('dlBtn'), old = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span> กำลังรวมภาพ…';
   try {
     const blob = await exportBlob();
-    const d = new Date(), pad = n => String(n).padStart(2, '0');
-    const name = `รวมภาพ-1326-${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}-${pad(d.getHours())}${pad(d.getMinutes())}.jpg`;
-    if (lastURL) URL.revokeObjectURL(lastURL);
-    lastURL = URL.createObjectURL(blob);
-    const file = new File([blob], name, { type: 'image/jpeg' });
-    const canShare = !!(navigator.canShare && navigator.canShare({ files: [file] }));
-    const mb = (blob.size / 1048576).toFixed(1);
-    $('sheet').innerHTML = `<div class="grab"></div><h2>✨ รวมภาพเสร็จแล้ว</h2><p>${S.imgs.length} รูป · ${S.ratio} · ${mb} MB — ไฟล์อยู่ในเครื่องเท่านั้น</p>
-      <img src="${lastURL}" alt="ภาพรวม">
-      <p style="margin:10px 0 0;text-align:center">iPhone: กดค้างที่รูป → “บันทึกไปยังรูปภาพ” ก็ได้</p>
-      <div class="acts">
-        ${canShare ? '<button class="bbtn y" type="button" id="shBtn">📤 บันทึก / แชร์</button>' : ''}
-        <a class="bbtn ${canShare ? 'g' : 'y'}" id="aDl" href="${lastURL}" download="${name}" style="text-decoration:none">⬇️ ดาวน์โหลดไฟล์</a>
-        <button class="bbtn g" type="button" id="closeOv">ปิด</button>
-      </div>`;
-    $('ov').classList.add('on');
-    if (canShare) $('shBtn').onclick = async () => { try { await navigator.share({ files: [file], title: 'รวมภาพ 1326' }); } catch (e) {} };
-    $('closeOv').onclick = closeOv;
-    haptic(18);
+    showResult(blob, stampName('รวมภาพ'), '✨ รวมภาพเสร็จแล้ว', `${S.imgs.length} รูป · ${S.ratio}`);
   } catch (e) { toast('รวมภาพไม่สำเร็จ ลองลดจำนวนรูปนะ'); }
   btn.disabled = false; btn.innerHTML = old;
 };
@@ -754,14 +870,424 @@ $('resetFitBtn').onclick = () => { S.imgs.forEach(m => { m.zoom = 1; m.ox = 0; m
 $('gap').oninput = e => { S.gap = +e.target.value; $('gapV').textContent = S.gap; relayout(false); };
 $('rad').oninput = e => { S.rad = +e.target.value; $('radV').textContent = S.rad; draw(); };
 // ลากไฟล์มาวาง (คอม)
-['dragover', 'drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev === 'drop') addFiles(e.dataTransfer.files); }));
+['dragover', 'drop'].forEach(ev => document.addEventListener(ev, e => { e.preventDefault(); if (ev === 'drop') { if (document.body.classList.contains('mode-st')) ST.fromFile(e.dataTransfer.files[0]); else addFiles(e.dataTransfer.files); } }));
 // วางรูปจากคลิปบอร์ด (คอม)
-document.addEventListener('paste', e => { const f = Array.from(e.clipboardData && e.clipboardData.files || []); if (f.length) addFiles(f); });
+document.addEventListener('paste', e => { const f = Array.from(e.clipboardData && e.clipboardData.files || []); if (f.length) { if (document.body.classList.contains('mode-st')) ST.fromFile(f[0]); else addFiles(f); } });
 
 let rT; window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => { fit(); moveGlider(); }, 120); });
 renderRatios(); renderLayouts(); renderBgs(); renderTextOpts(); renderThumbs(); renderTList(); updateCount();
 (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => { fit(); moveGlider(); });
 fit(); requestAnimationFrame(moveGlider);
+</script>
+<script>
+'use strict';
+// =========================================================
+// 📷 แสตมป์ — ถ่ายรูป + การ์ด liquid glass (เวลา · วันที่ · ตำแหน่ง)
+//   ทุกอย่างทำในเครื่อง · ส่งแค่พิกัดไปถามชื่อสถานที่ (BigDataCloud / OpenStreetMap)
+// =========================================================
+const ST_CFG = {
+  TITLE: 'ID1326 BN Future Park Rangsit 2.2',         // หัวข้อเริ่มต้นบนการ์ด
+  NOTES: ['เปิดร้าน', 'ปิดร้าน', 'ตรวจสต๊อก', 'จัด Display', 'ส่งงาน ASM', 'รับสินค้า'],
+  MAX_LONG: 3000,                                      // ความละเอียดสูงสุดของรูปที่บันทึก (ด้านยาว)
+  MAP_ZOOM: 17
+};
+const ST_STYLES = [{ k: 'dark', name: 'กระจกเข้ม' }, { k: 'light', name: 'กระจกใส' }, { k: 'yellow', name: 'กระจกเหลือง' }];
+const ST_POS = [{ k: 'bottom', name: 'ล่าง' }, { k: 'top', name: 'บน' }, { k: 'center', name: 'กลาง' }];
+const TH_DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+const TH_MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+const lsGet = (k, d) => { try { const v = localStorage.getItem('st1326_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem('st1326_' + k, JSON.stringify(v)); } catch (e) {} };
+
+const ST = {
+  on: false, stream: null, facing: 'environment', raf: 0,
+  shot: null,          // { src: canvas, time: Date, fromFile: bool }
+  loc: null,           // { lat, lng, acc, place, addr, at }
+  locErr: '', watch: null, geoAt: null, tiles: null, tileKey: '',
+  opt: { style: lsGet('style', 'dark'), pos: lsGet('pos', 'bottom'), map: lsGet('map', true), coord: lsGet('coord', true), staff: lsGet('staff', '') }
+};
+const stCv = $('stCv'), stx = stCv.getContext('2d'), vid = $('stVid');
+
+// ---------- โหมด ----------
+function moveMGlider() { const on = document.querySelector('#mseg button.on'), g = $('mglider'); if (!on) return; g.style.width = on.offsetWidth + 'px'; g.style.transform = 'translateX(' + (on.offsetLeft - 4) + 'px)'; }
+function setMode(m) {
+  document.querySelectorAll('#mseg button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  document.body.classList.toggle('mode-st', m === 'stamp');
+  moveMGlider(); haptic(6);
+  document.querySelectorAll(m === 'stamp' ? '.m-st' : '.m-col').forEach(el => { el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; });
+  if (m === 'stamp') { ST.on = true; stStart(); } else { ST.on = false; stStop(); fit(); moveGlider(); }
+  try { history.replaceState(null, '', location.pathname + location.search.replace(/[?&]mode=\w+/, '') + (m === 'stamp' ? (location.search ? '&' : '?') + 'mode=stamp' : '')); } catch (e) {}
+}
+document.querySelectorAll('#mseg button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+
+// ---------- กล้อง ----------
+async function camOpen() {
+  camClose();
+  $('stOff').classList.add('on'); $('stOffT').textContent = 'กำลังเปิดกล้อง…'; $('stRetry').style.display = 'none';
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { camFail('เบราว์เซอร์นี้เปิดกล้องในแอปไม่ได้'); return; }
+  try {
+    ST.stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: ST.facing }, width: { ideal: 2560 }, height: { ideal: 1920 } } });
+    vid.srcObject = ST.stream; await vid.play().catch(() => {});
+    await new Promise(r => { if (vid.videoWidth) r(); else vid.onloadedmetadata = () => r(); setTimeout(r, 2500); });
+    if (!vid.videoWidth) throw new Error('no video');
+    $('stOff').classList.remove('on');
+    stFit(); loop();
+  } catch (e) {
+    camFail(/NotAllowed|Permission/i.test(e.name || e.message) ? 'ยังไม่ได้อนุญาตให้ใช้กล้อง' : 'เปิดกล้องไม่ได้');
+  }
+}
+function camFail(msg) {
+  $('stOff').classList.add('on'); $('stOffT').textContent = msg; $('stRetry').style.display = '';
+  $('stOffS').textContent = 'กด “กล้อง” ด้านล่างเพื่อถ่ายด้วยแอปกล้องมือถือ หรือ 🖼 เลือกรูปจากอัลบั้ม — การ์ดแสตมป์ได้เหมือนกัน';
+  stFit(); stDraw();
+}
+function camClose() { cancelAnimationFrame(ST.raf); if (ST.stream) { ST.stream.getTracks().forEach(t => t.stop()); ST.stream = null; } vid.srcObject = null; }
+function loop() {
+  cancelAnimationFrame(ST.raf);
+  let last = 0;
+  const f = now => { if (!ST.on || ST.shot) return; if (now - last > 33) { last = now; stDraw(); } ST.raf = requestAnimationFrame(f); };
+  ST.raf = requestAnimationFrame(f);
+}
+function stStart() {
+  geoStart();
+  if (ST.shot) { stFit(); stDraw(); return; }
+  camOpen();
+}
+function stStop() { camClose(); geoStop(); }
+document.addEventListener('visibilitychange', () => { if (!ST.on) return; if (document.hidden) stStop(); else stStart(); });
+
+// ---------- ตำแหน่ง ----------
+function geoStart() {
+  if (ST.watch !== null || !navigator.geolocation) { if (!navigator.geolocation) { ST.locErr = 'เครื่องนี้หาตำแหน่งไม่ได้'; renderLoc(); } return; }
+  renderLoc();
+  ST.watch = navigator.geolocation.watchPosition(p => {
+    const c = p.coords, prev = ST.loc;
+    ST.loc = Object.assign({}, prev || {}, { lat: c.latitude, lng: c.longitude, acc: Math.round(c.accuracy), at: Date.now() });
+    ST.locErr = '';
+    if (!prev || !prev.place || distM(prev, ST.loc) > 80) reverseGeo();
+    loadTiles(); renderLoc(); if (ST.shot) stDraw();
+  }, e => { ST.locErr = e.code === 1 ? 'ยังไม่ได้อนุญาตตำแหน่ง (ตั้งค่า → Safari/Chrome → ตำแหน่ง)' : 'หาตำแหน่งไม่ได้ ลองออกไปที่โล่ง'; renderLoc(); },
+  { enableHighAccuracy: true, maximumAge: 15000, timeout: 20000 });
+}
+function geoStop() { if (ST.watch !== null) { navigator.geolocation.clearWatch(ST.watch); ST.watch = null; } }
+function distM(a, b) { const R = 6371000, r = Math.PI / 180, dLa = (b.lat - a.lat) * r, dLo = (b.lng - a.lng) * r; const x = Math.sin(dLa / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLo / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(x)); }
+let geoBusy = false;
+async function reverseGeo() {
+  if (geoBusy || !ST.loc) return; geoBusy = true;
+  const { lat, lng } = ST.loc;
+  const uniq = a => a.filter((v, i) => v && a.indexOf(v) === i);
+  try {
+    const j = await (await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=th`)).json();
+    const parts = uniq([j.locality, j.city, j.principalSubdivision]);
+    if (!parts.length) throw 0;
+    ST.loc.place = parts[0]; ST.loc.addr = parts.slice(1).join(' · ') || j.countryName || '';
+  } catch (e) {
+    try {
+      const j = await (await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=17&accept-language=th`)).json(), a = j.address || {};
+      const parts = uniq([j.name, a.road, a.suburb || a.quarter || a.neighbourhood, a.city_district || a.town || a.city, a.state]);
+      ST.loc.place = parts[0] || ''; ST.loc.addr = parts.slice(1, 4).join(' · ');
+    } catch (e2) {}
+  }
+  geoBusy = false; renderLoc(); if (ST.shot) stDraw();
+}
+function renderLoc() {
+  const el = $('stLoc'), L = ST.loc;
+  if (ST.locErr && !L) { el.innerHTML = `<span class="err">⚠️ ${ST.locErr}</span><small>การ์ดจะแสดงเวลา–วันที่ แต่ไม่มีตำแหน่ง</small>`; return; }
+  if (!L) { el.innerHTML = '<span><span class="spin"></span> กำลังหาตำแหน่ง…</span>'; return; }
+  el.innerHTML = `<b>${esc(L.place || 'กำลังหาชื่อสถานที่…')}</b>${L.addr ? '<span>' + esc(L.addr) + '</span>' : ''}<small>${L.lat.toFixed(5)}, ${L.lng.toFixed(5)} · ±${L.acc} ม.</small>`;
+}
+function esc(t) { return String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+$('stLocBtn').onclick = () => { geoStop(); if (ST.loc) ST.loc.place = ''; geoStart(); toast('กำลังอัปเดตตำแหน่ง'); };
+
+// แผนที่เล็ก (OpenStreetMap)
+function loadTiles() {
+  if (!ST.opt.map || !ST.loc) return;
+  const z = ST_CFG.MAP_ZOOM, n = 2 ** z, la = ST.loc.lat * Math.PI / 180;
+  const fx = (ST.loc.lng + 180) / 360 * n, fy = (1 - Math.log(Math.tan(la) + 1 / Math.cos(la)) / Math.PI) / 2 * n;
+  const tx = Math.floor(fx), ty = Math.floor(fy), key = z + '/' + tx + '/' + ty;
+  if (ST.tileKey === key) { ST.tiles.fx = fx; ST.tiles.fy = fy; return; }
+  ST.tileKey = key;
+  const T = { fx, fy, z, imgs: [], ok: 0, fail: false };
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+    const im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = () => { T.ok++; if (ST.shot) stDraw(); };
+    im.onerror = () => { T.fail = true; };
+    im.src = `https://tile.openstreetmap.org/${z}/${tx + dx}/${ty + dy}.png`;
+    T.imgs.push({ im, x: tx + dx, y: ty + dy });
+  }
+  ST.tiles = T;
+}
+
+// ---------- วาด ----------
+function thDate(d) { return `วัน${TH_DAYS[d.getDay()]}ที่ ${d.getDate()} ${TH_MONTHS[d.getMonth()]} ${d.getFullYear() + 543}`; }
+const p2 = n => String(n).padStart(2, '0');
+function rrect(c, x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+// ตัดบรรทัดตาม "คำ" ภาษาไทย (Intl.Segmenter) ไม่ให้ขาดกลางคำ
+const TH_SEG = (window.Intl && Intl.Segmenter) ? new Intl.Segmenter('th', { granularity: 'word' }) : null;
+const GR_SEG = (window.Intl && Intl.Segmenter) ? new Intl.Segmenter('th', { granularity: 'grapheme' }) : null;
+function words(t) { return TH_SEG ? Array.from(TH_SEG.segment(t), x => x.segment) : String(t).split(/(\s+)/); }
+function graphemes(t) { return GR_SEG ? Array.from(GR_SEG.segment(t), x => x.segment) : Array.from(t); }
+function wrap(c, text, maxW, maxLines) {
+  const out = []; let line = '', cut = false;
+  const push = () => { out.push(line.trim()); line = ''; };
+  for (const w of words(String(text))) {
+    if (out.length >= maxLines) { cut = true; break; }
+    if (c.measureText(line + w).width <= maxW) { line += w; continue; }
+    if (line.trim()) { push(); if (out.length >= maxLines) { cut = true; break; } }
+    if (c.measureText(w).width <= maxW) { line = w.trimStart(); continue; }
+    for (const g of graphemes(w)) {                        // คำยาวเกินบรรทัด → ตัดทีละตัว (ไม่แยกสระ/วรรณยุกต์)
+      if (c.measureText(line + g).width > maxW && line) { push(); if (out.length >= maxLines) { cut = true; break; } }
+      line += g;
+    }
+    if (cut) break;
+  }
+  if (line.trim() && out.length < maxLines) push(); else if (line.trim()) cut = true;
+  if (cut && out.length) {
+    let l = out[out.length - 1];
+    const gs = graphemes(l); while (gs.length && c.measureText(gs.join('') + '…').width > maxW) gs.pop();
+    out[out.length - 1] = gs.join('') + '…';
+  }
+  return out;
+}
+// การ์ด liquid glass ด้านล่าง/บน/กลาง ของภาพขนาด W×H
+function drawCard(c, src, sx, sy, sw, sh, W, H, time) {
+  const L = ST.loc, o = ST.opt, short = Math.min(W, H);
+  const m = short * .04, cw = H >= W ? W - 2 * m : Math.min(W - 2 * m, Math.max(short * 1.15, W * .55));   // แนวตั้งเต็มกว้าง · แนวนอนครึ่งๆ
+  const u = cw / 1000, pad = 46 * u;
+  const showMap = o.map && L && ST.tiles && ST.tiles.ok >= 4 && !ST.tiles.fail;
+  const ms = showMap ? 300 * u : 0, tx = pad + (showMap ? ms + 40 * u : 0), tw = cw - tx - pad;
+  const title = ($('stTitle').value || '').trim(), note = ($('stNote').value || '').trim();
+  const dark = o.style !== 'light', fg = dark ? '#FFFFFF' : '#111111', sub = dark ? 'rgba(255,255,255,.78)' : 'rgba(0,0,0,.66)';
+  const F = (w, px, fam) => `${w} ${px}px ${fam || '"IBM Plex Sans Thai"'}`;
+  // วัดความสูง
+  c.save(); c.font = F(700, 40 * u);
+  const titleL = title ? wrap(c, title, tw - 28 * u, 2) : [];
+  c.font = F(700, 44 * u);
+  const placeL = L ? wrap(c, '📍 ' + (L.place || 'ไม่ทราบชื่อสถานที่'), tw, 2) : [];
+  c.font = F(500, 32 * u);
+  const addrL = L && L.addr ? wrap(c, L.addr, tw, 1) : [];
+  c.restore();
+  const tags = [note, o.staff ? '👤 ' + o.staff : ''].filter(Boolean);
+  let h = pad + titleL.length * 50 * u + 150 * u + 56 * u;
+  if (L) h += 18 * u + placeL.length * 56 * u + addrL.length * 42 * u + (o.coord ? 40 * u : 0);
+  else h += 18 * u + 48 * u;
+  if (tags.length) h += 64 * u;
+  h += pad;
+  h = Math.max(h, showMap ? ms + 2 * pad : 0);
+  const x = (W - cw) / 2, y = o.pos === 'top' ? m : o.pos === 'center' ? (H - h) / 2 : H - h - m, R = 52 * u;
+  // เงา
+  c.save(); c.shadowColor = 'rgba(0,0,0,.38)'; c.shadowBlur = 70 * u; c.shadowOffsetY = 24 * u; rrect(c, x, y, cw, h, R); c.fillStyle = 'rgba(0,0,0,.2)'; c.fill(); c.restore();
+  // กระจกฝ้า: ย่อพื้นหลังส่วนนั้นลงเล็กๆ แล้วขยายกลับ = เบลอนุ่ม
+  c.save(); rrect(c, x, y, cw, h, R); c.clip();
+  const k1 = 10, a = document.createElement('canvas'), b = document.createElement('canvas');
+  a.width = Math.max(4, Math.round(cw / k1)); a.height = Math.max(4, Math.round(h / k1));
+  b.width = Math.max(2, Math.round(a.width / 3)); b.height = Math.max(2, Math.round(a.height / 3));
+  const ax = a.getContext('2d'), bx = b.getContext('2d');
+  const scx = sw / W, scy = sh / H;
+  ax.drawImage(src, sx + x * scx, sy + y * scy, cw * scx, h * scy, 0, 0, a.width, a.height);
+  bx.drawImage(a, 0, 0, b.width, b.height);
+  ax.clearRect(0, 0, a.width, a.height); ax.imageSmoothingQuality = 'high'; ax.drawImage(b, 0, 0, a.width, a.height);
+  c.imageSmoothingQuality = 'high'; c.drawImage(a, x - 6 * u, y - 6 * u, cw + 12 * u, h + 12 * u);
+  // โทนกระจก
+  const tint = c.createLinearGradient(0, y, 0, y + h);
+  if (o.style === 'light') { tint.addColorStop(0, 'rgba(255,255,255,.62)'); tint.addColorStop(1, 'rgba(255,255,255,.44)'); }
+  else if (o.style === 'yellow') { tint.addColorStop(0, 'rgba(255,214,0,.34)'); tint.addColorStop(1, 'rgba(40,32,0,.48)'); }
+  else { tint.addColorStop(0, 'rgba(30,30,34,.30)'); tint.addColorStop(1, 'rgba(10,10,12,.52)'); }
+  c.fillStyle = tint; c.fillRect(x, y, cw, h);
+  // ประกายแสงด้านบน (specular)
+  const sp = c.createRadialGradient(x + cw * .3, y - h * .35, 0, x + cw * .3, y - h * .35, cw * .75);
+  sp.addColorStop(0, `rgba(255,255,255,${dark ? .22 : .5})`); sp.addColorStop(1, 'rgba(255,255,255,0)');
+  c.fillStyle = sp; c.fillRect(x, y, cw, h);
+  c.restore();
+  // ขอบกระจก
+  c.save(); rrect(c, x + 1.5 * u, y + 1.5 * u, cw - 3 * u, h - 3 * u, R - 1.5 * u);
+  const eg = c.createLinearGradient(x, y, x + cw, y + h);
+  eg.addColorStop(0, 'rgba(255,255,255,.85)'); eg.addColorStop(.35, 'rgba(255,255,255,.12)'); eg.addColorStop(.7, 'rgba(255,255,255,.08)'); eg.addColorStop(1, 'rgba(255,255,255,.5)');
+  c.strokeStyle = eg; c.lineWidth = 3 * u; c.stroke(); c.restore();
+  // แผนที่
+  if (showMap) {
+    const mx = x + pad, my = y + (h - ms) / 2, T = ST.tiles;
+    c.save(); rrect(c, mx, my, ms, ms, 34 * u); c.clip();
+    c.fillStyle = '#ddd'; c.fillRect(mx, my, ms, ms);
+    const ts = ms / 1.6;     // 1 tile = ms/1.6 px
+    T.imgs.forEach(t => { if (t.im.complete && t.im.naturalWidth) c.drawImage(t.im, mx + ms / 2 + (t.x - T.fx) * ts, my + ms / 2 + (t.y - T.fy) * ts, ts, ts); });
+    c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(mx, my, ms, ms);
+    const pc = [mx + ms / 2, my + ms / 2];
+    c.beginPath(); c.arc(pc[0], pc[1], 46 * u, 0, 7); c.fillStyle = 'rgba(255,214,0,.28)'; c.fill();
+    c.beginPath(); c.arc(pc[0], pc[1], 20 * u, 0, 7); c.fillStyle = '#FFD600'; c.fill(); c.lineWidth = 7 * u; c.strokeStyle = '#1C1C1E'; c.stroke();
+    c.font = F(600, 15 * u); c.fillStyle = 'rgba(0,0,0,.6)'; c.textAlign = 'right'; c.fillText('© OpenStreetMap', mx + ms - 12 * u, my + ms - 12 * u);
+    c.restore();
+    c.save(); rrect(c, mx, my, ms, ms, 34 * u); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3 * u; c.stroke(); c.restore();
+  }
+  // ข้อความ
+  c.save(); c.textBaseline = 'alphabetic'; c.textAlign = 'left';
+  c.shadowColor = dark ? 'rgba(0,0,0,.35)' : 'rgba(255,255,255,.4)'; c.shadowBlur = 8 * u;
+  let ty = y + pad;
+  if (titleL.length) {
+    c.font = F(700, 40 * u); c.fillStyle = sub;
+    c.beginPath(); c.arc(x + tx + 9 * u, ty + 26 * u, 9 * u, 0, 7); c.fillStyle = '#FFD600'; c.fill();
+    c.fillStyle = sub; titleL.forEach(l => { c.fillText(l, x + tx + 28 * u, ty + 40 * u); ty += 50 * u; });
+  }
+  const hh = p2(time.getHours()) + ':' + p2(time.getMinutes());
+  c.font = F(700, 150 * u, '"Space Grotesk","IBM Plex Sans Thai"'); c.fillStyle = fg; c.fillText(hh, x + tx - 6 * u, ty + 132 * u);
+  const hw = c.measureText(hh).width;
+  c.font = F(600, 54 * u, '"Space Grotesk","IBM Plex Sans Thai"'); c.fillStyle = o.style === 'light' ? '#B38F00' : '#FFD600';
+  c.fillText(':' + p2(time.getSeconds()), x + tx + hw + 2 * u, ty + 132 * u);
+  ty += 150 * u;
+  c.font = F(600, 40 * u); c.fillStyle = sub; c.fillText(thDate(time), x + tx, ty + 40 * u); ty += 56 * u;
+  // เส้นคั่น
+  c.shadowColor = 'transparent'; c.fillStyle = dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.14)'; c.fillRect(x + tx, ty + 4 * u, tw, 2 * u); ty += 18 * u;
+  c.shadowColor = dark ? 'rgba(0,0,0,.35)' : 'rgba(255,255,255,.4)';
+  if (L) {
+    c.font = F(700, 44 * u); c.fillStyle = fg; placeL.forEach(l => { c.fillText(l, x + tx, ty + 46 * u); ty += 56 * u; });
+    c.font = F(500, 32 * u); c.fillStyle = sub; addrL.forEach(l => { c.fillText(l, x + tx, ty + 34 * u); ty += 42 * u; });
+    if (o.coord) { c.font = F(600, 28 * u, '"Space Grotesk",monospace'); c.fillStyle = sub; c.fillText(`${L.lat.toFixed(5)}, ${L.lng.toFixed(5)}  ±${L.acc}m`, x + tx, ty + 32 * u); ty += 40 * u; }
+  } else { c.font = F(600, 34 * u); c.fillStyle = sub; c.fillText('📍 ไม่มีข้อมูลตำแหน่ง', x + tx, ty + 38 * u); ty += 48 * u; }
+  if (tags.length) {
+    ty += 10 * u; let px = x + tx; c.font = F(700, 30 * u); c.shadowColor = 'transparent';
+    tags.forEach(t => {
+      const w = Math.min(c.measureText(t).width + 40 * u, x + tx + tw - px); if (w < 60 * u) return;
+      rrect(c, px, ty, w, 48 * u, 24 * u); c.fillStyle = o.style === 'light' ? 'rgba(28,28,30,.88)' : 'rgba(255,214,0,.92)'; c.fill();
+      c.fillStyle = o.style === 'light' ? '#FFD600' : '#1C1C1E'; c.save(); c.beginPath(); c.rect(px, ty, w, 48 * u); c.clip(); c.fillText(t, px + 20 * u, ty + 35 * u); c.restore();
+      px += w + 12 * u;
+    });
+  }
+  c.restore();
+}
+function srcInfo() {
+  if (ST.shot) return { el: ST.shot.src, w: ST.shot.src.width, h: ST.shot.src.height };
+  if (vid.videoWidth) return { el: vid, w: vid.videoWidth, h: vid.videoHeight, mirror: ST.facing === 'user' };
+  return null;
+}
+function stFit() {
+  const box = $('stBox'), s = srcInfo();
+  const ar = s ? s.w / s.h : 3 / 4;
+  const two = getComputedStyle(document.querySelector('.wrap')).gridTemplateColumns.split(' ').length > 1;
+  const maxW = box.parentElement.clientWidth - 0, maxH = Math.max(260, two ? window.innerHeight - 220 : window.innerHeight * .58);
+  let w = maxW, h = w / ar; if (h > maxH) { h = maxH; w = h * ar; }
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  stCv.style.width = Math.round(w) + 'px'; stCv.style.height = Math.round(h) + 'px';
+  stCv.width = Math.round(w * dpr); stCv.height = Math.round(h * dpr);
+  box.style.minHeight = Math.round(h) + 'px';
+}
+function stDraw() {
+  const s = srcInfo(), W = stCv.width, H = stCv.height;
+  stx.setTransform(1, 0, 0, 1, 0, 0); stx.fillStyle = '#000'; stx.fillRect(0, 0, W, H);
+  if (!s) return;
+  const k = Math.max(W / s.w, H / s.h), dw = s.w * k, dh = s.h * k;
+  stx.save(); if (s.mirror) { stx.translate(W, 0); stx.scale(-1, 1); }
+  stx.drawImage(s.el, (W - dw) / 2, (H - dh) / 2, dw, dh); stx.restore();
+  // สำหรับการ์ด ใช้พื้นหลังจากแคนวาสพรีวิวเอง (เบลอส่วนนั้น)
+  drawCard(stx, stCv, 0, 0, W, H, W, H, ST.shot ? ST.shot.time : new Date());
+}
+
+// ---------- ถ่าย ----------
+function grabFrame() {
+  const w = vid.videoWidth, h = vid.videoHeight, k = Math.min(1, ST_CFG.MAX_LONG / Math.max(w, h));
+  const c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+  const x = c.getContext('2d'); if (ST.facing === 'user') { x.translate(c.width, 0); x.scale(-1, 1); }
+  x.drawImage(vid, 0, 0, c.width, c.height); return c;
+}
+function setShot(src, time, fromFile) {
+  ST.shot = { src, time, fromFile };
+  camClose();
+  $('stOff').classList.remove('on');
+  $('stCtrl').classList.add('hide'); $('stDone').classList.add('on');
+  $('stTag').textContent = fromFile ? '🖼 เวลาจากไฟล์รูป ' + p2(time.getHours()) + ':' + p2(time.getMinutes()) : '📸 ถ่ายเมื่อ ' + p2(time.getHours()) + ':' + p2(time.getMinutes()) + ':' + p2(time.getSeconds());
+  $('stSave').disabled = false; $('stToCol').disabled = false;
+  $('stHint').textContent = 'แก้หมายเหตุ / ผู้ถ่าย / หน้าตาการ์ด ได้ก่อนกดบันทึก';
+  stFit(); stDraw();
+}
+$('stShut').onclick = () => {
+  if (!vid.videoWidth) { $('stCam').click(); return; }
+  const f = $('stFlash'); f.classList.remove('on'); void f.offsetWidth; f.classList.add('on');
+  haptic(20); setShot(grabFrame(), new Date(), false);
+};
+$('stAgain').onclick = () => {
+  ST.shot = null; $('stCtrl').classList.remove('hide'); $('stDone').classList.remove('on');
+  $('stSave').disabled = true; $('stToCol').disabled = true;
+  $('stHint').textContent = 'การ์ดจะแสตมป์เวลา–วันที่–ตำแหน่ง ตอนกดถ่าย';
+  camOpen();
+};
+$('stFlip').onclick = () => { ST.facing = ST.facing === 'environment' ? 'user' : 'environment'; camOpen(); };
+$('stRetry').onclick = camOpen;
+$('stPickBtn').onclick = () => $('stFile').click();
+$('stNative').onclick = () => $('stCam').click();
+ST.fromFile = async function (f) {
+  if (!f) return;
+  try {
+    let src; try { src = await createImageBitmap(f, { imageOrientation: 'from-image' }); } catch (e) { src = await new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = URL.createObjectURL(f); }); }
+    const w = src.width || src.naturalWidth, h = src.height || src.naturalHeight, k = Math.min(1, ST_CFG.MAX_LONG / Math.max(w, h));
+    const c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+    const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(src, 0, 0, c.width, c.height);
+    if (src.close) src.close();
+    // ถ่ายจากแอปกล้องตอนนี้ = เวลาปัจจุบัน · เลือกจากอัลบั้ม = เวลาของไฟล์
+    const fresh = Date.now() - (f.lastModified || 0) < 120000;
+    setShot(c, fresh ? new Date() : new Date(f.lastModified || Date.now()), !fresh);
+  } catch (e) { toast('เปิดรูปนี้ไม่ได้'); }
+};
+$('stFile').onchange = e => { ST.fromFile(e.target.files[0]); e.target.value = ''; };
+$('stCam').onchange = e => { ST.fromFile(e.target.files[0]); e.target.value = ''; };
+
+async function stRender() {
+  if (document.fonts && document.fonts.ready) await document.fonts.ready;
+  const s = ST.shot.src, c = document.createElement('canvas'); c.width = s.width; c.height = s.height;
+  const x = c.getContext('2d'); x.drawImage(s, 0, 0);
+  drawCard(x, s, 0, 0, s.width, s.height, s.width, s.height, ST.shot.time);
+  return c;
+}
+async function stBlob() {
+  let c = await stRender();
+  try { return { c, blob: await new Promise((ok, no) => { try { c.toBlob(b => b ? ok(b) : no(), 'image/jpeg', .92); } catch (e) { no(e); } }) }; }
+  catch (e) { // แผนที่โหลดแบบห้ามบันทึก → ตัดแผนที่ออกแล้วลองใหม่
+    ST.tiles && (ST.tiles.fail = true); c = await stRender();
+    toast('บันทึกโดยไม่มีแผนที่เล็ก');
+    return { c, blob: await new Promise(ok => c.toBlob(ok, 'image/jpeg', .92)) };
+  }
+}
+$('stSave').onclick = async () => {
+  if (!ST.shot) return;
+  const b = $('stSave'), old = b.innerHTML; b.disabled = true; b.innerHTML = '<span class="spin"></span>';
+  try {
+    const { c, blob } = await stBlob();
+    showResult(blob, stampName('แสตมป์', ST.shot.time), '📸 แสตมป์เสร็จแล้ว', thDate(ST.shot.time) + ' ' + p2(ST.shot.time.getHours()) + ':' + p2(ST.shot.time.getMinutes()),
+      '<button class="bbtn g" type="button" id="ovToCol">➕ ใส่ในรวมภาพ</button>');
+    $('ovToCol').onclick = () => { closeOv(); toCollage(c); };
+  } catch (e) { toast('บันทึกไม่สำเร็จ'); }
+  b.disabled = false; b.innerHTML = old;
+};
+function toCollage(c) {
+  if (S.imgs.length >= MAX) { toast('รวมภาพครบ 25 รูปแล้ว'); return; }
+  S.imgs.push(itemFromCanvas(c)); relayout(false); renderThumbs(); updateCount();
+  toast('➕ ใส่ในรวมภาพแล้ว (' + S.imgs.length + '/' + MAX + ')'); haptic(14);
+  const cnt = $('cnt'); cnt.classList.remove('bump'); void cnt.offsetWidth; cnt.classList.add('bump');
+}
+$('stToCol').onclick = async () => { if (!ST.shot) return; const { c } = await stBlob(); toCollage(c); $('stAgain').click(); };
+
+// ---------- ตัวเลือก ----------
+function chipRow(el, list, cur, onPick) {
+  el.innerHTML = list.map(o => `<button class="chip ${cur === o.k ? 'on' : ''}" type="button" data-k="${o.k}">${o.name}</button>`).join('');
+  el.querySelectorAll('.chip').forEach(b => b.onclick = () => { onPick(b.dataset.k); haptic(5); });
+}
+function renderStOpts() {
+  chipRow($('stStyles'), ST_STYLES, ST.opt.style, k => { ST.opt.style = k; lsSet('style', k); renderStOpts(); redraw(); });
+  chipRow($('stPos'), ST_POS, ST.opt.pos, k => { ST.opt.pos = k; lsSet('pos', k); renderStOpts(); redraw(); });
+  $('stToggles').innerHTML = [['map', '🗺 แผนที่เล็ก'], ['coord', '🧭 พิกัด GPS']].map(([k, n]) => `<button type="button" class="${ST.opt[k] ? 'on' : ''}" data-k="${k}">${n}</button>`).join('');
+  $('stToggles').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.k; ST.opt[k] = !ST.opt[k]; lsSet(k, ST.opt[k]); if (k === 'map') { ST.tileKey = ''; loadTiles(); } renderStOpts(); redraw(); });
+  const staff = (window.SALES_STAFF || []).concat((window.PC_STAFF || []).filter(n => (window.SALES_STAFF || []).indexOf(n) === -1));
+  $('stStaff').innerHTML = staff.map(n => `<button type="button" class="${ST.opt.staff === n ? 'on' : ''}">${esc(n)}</button>`).join('') || '<small style="color:var(--g)">-</small>';
+  $('stStaff').querySelectorAll('button').forEach(b => b.onclick = () => { ST.opt.staff = ST.opt.staff === b.textContent ? '' : b.textContent; lsSet('staff', ST.opt.staff); renderStOpts(); redraw(); });
+  $('stNotes').innerHTML = ST_CFG.NOTES.map(n => `<button type="button" class="${$('stNote').value === n ? 'on' : ''}">${n}</button>`).join('');
+  $('stNotes').querySelectorAll('button').forEach(b => b.onclick = () => { $('stNote').value = $('stNote').value === b.textContent ? '' : b.textContent; lsSet('note', $('stNote').value); renderStOpts(); redraw(); });
+}
+function redraw() { if (ST.on && (ST.shot || !vid.videoWidth)) stDraw(); }
+$('stTitle').value = lsGet('title', ST_CFG.TITLE); $('stNote').value = lsGet('note', '');
+$('stTitle').oninput = () => { lsSet('title', $('stTitle').value); redraw(); };
+$('stNote').oninput = () => { lsSet('note', $('stNote').value); renderStOpts(); redraw(); };
+renderStOpts(); renderLoc();
+window.addEventListener('resize', () => { moveMGlider(); if (ST.on) { stFit(); stDraw(); } });
+(document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(moveMGlider);
+requestAnimationFrame(moveMGlider);
+if (/[?&]mode=stamp/.test(location.search)) setMode('stamp');
 </script>
 </body>
 </html>

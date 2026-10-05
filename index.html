@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
-  <script src="gas.js?v=2026.10.05-1"></script>
+  <script src="gas.js?v=2026.10.05-2"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1122,7 +1122,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.10.05-1';
+    const APP_VER = '2026.10.05-2';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -1154,7 +1154,7 @@
       11: "collage.html"
     };
 
-    const EVERYONE_APPS = [11];   // แอปที่ทุกคนเห็น ไม่ต้องแก้ฝั่ง Apps Script (รวมภาพ)
+    const EVERYONE_APPS = [10, 11];   // แอปที่ทุกคนเห็น: Ranking, รวมภาพ
     const APP_DEFS = [
       { id: 1, name: "Dash สาขา", icon: `<svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 15l3-3 4 4 5-5" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
       { id: 2, name: "Dash พนักงาน", icon: `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke="black" stroke-width="2.5" fill="none"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
@@ -1528,7 +1528,7 @@
       let f = frameCache[id];
       if (!f) {
         f = document.createElement('iframe');
-        f.setAttribute('allow', 'camera; clipboard-write; accelerometer; gyroscope; fullscreen; web-share');
+        f.setAttribute('allow', 'camera; clipboard-write; accelerometer; gyroscope; fullscreen; web-share; geolocation');
         f.title = 'app-' + id;
         const ld = document.getElementById('frame-loading');
         ld.classList.add('on');
@@ -1600,7 +1600,7 @@
     function dropFrames() { Object.keys(frameCache).forEach(k => { frameCache[k].remove(); delete frameCache[k]; }); }
 
     function openApp(id) {
-      if (id === 10) { if (String(currentUser && currentUser.empId) !== '15628') return; openRanking(); return; }
+      if (id === 10) { openRanking(); return; }   // ทุกคนเปิดได้ · PC เห็นยอดแบบปิดหลักท้าย (XXX) เหมือน Dash PC
       if ([1, 2, 3].includes(id)) openDashboard();
       else if (APP_URLS[id]) openFrameApp(id);
       else alert("ยังไม่ได้ใส่ลิงก์สำหรับแอปนี้ครับ");
