@@ -7,7 +7,8 @@
 <meta name="theme-color" content="#FFD600">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script src="staff-names.js?v=2026.10.05-2"></script>
+<script src="staff-names.js?v=2026.10.05-4"></script>
+<script>try { const st = JSON.parse(localStorage.getItem('chk1326_settings') || 'null'); if (st && st.sales) { window.SALES_STAFF = st.sales; window.PC_STAFF = st.pc || []; } } catch (e) {}</script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@600;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
@@ -318,6 +319,9 @@ body.mode-st .bar .in.m-col{display:none}
     <div class="card">
       <h3>หน้าตาการ์ด</h3>
       <div class="chips" id="stStyles"></div>
+      <h3 style="margin-top:12px">ขนาดการ์ด <span class="num" id="stSizeV">62%</span></h3>
+      <div class="chips" id="stSizes"></div>
+      <div class="rng" style="margin-top:10px"><input type="range" id="stSize" min="35" max="100" value="62"></div>
       <h3 style="margin-top:12px">ตำแหน่งการ์ด</h3>
       <div class="chips" id="stPos"></div>
       <h3 style="margin-top:12px">แสดง</h3>
@@ -892,7 +896,8 @@ const ST_CFG = {
   MAP_ZOOM: 17
 };
 const ST_STYLES = [{ k: 'dark', name: 'กระจกเข้ม' }, { k: 'light', name: 'กระจกใส' }, { k: 'yellow', name: 'กระจกเหลือง' }];
-const ST_POS = [{ k: 'bottom', name: 'ล่าง' }, { k: 'top', name: 'บน' }, { k: 'center', name: 'กลาง' }];
+const ST_POS = [{ k: 'tl', name: '↖ บนซ้าย' }, { k: 'top', name: '⬆ บนกลาง' }, { k: 'tr', name: '↗ บนขวา' }, { k: 'bl', name: '↙ ล่างซ้าย' }, { k: 'bottom', name: '⬇ ล่างกลาง' }, { k: 'br', name: '↘ ล่างขวา' }];
+const ST_SIZES = [{ k: 45, name: 'เล็ก' }, { k: 62, name: 'กลาง' }, { k: 80, name: 'ใหญ่' }, { k: 100, name: 'เต็ม' }];
 const TH_DAYS = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
 const TH_MONTHS = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 const lsGet = (k, d) => { try { const v = localStorage.getItem('st1326_' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
@@ -903,7 +908,7 @@ const ST = {
   shot: null,          // { src: canvas, time: Date, fromFile: bool }
   loc: null,           // { lat, lng, acc, place, addr, at }
   locErr: '', watch: null, geoAt: null, tiles: null, tileKey: '',
-  opt: { style: lsGet('style', 'dark'), pos: lsGet('pos', 'bottom'), map: lsGet('map', true), coord: lsGet('coord', true), staff: lsGet('staff', '') }
+  opt: { style: lsGet('style', 'dark'), pos: lsGet('pos', 'bl'), size: lsGet('size', 62), map: lsGet('map', true), coord: lsGet('coord', true), staff: lsGet('staff', '') }
 };
 const stCv = $('stCv'), stx = stCv.getContext('2d'), vid = $('stVid');
 
@@ -1051,7 +1056,9 @@ function wrap(c, text, maxW, maxLines) {
 // การ์ด liquid glass ด้านล่าง/บน/กลาง ของภาพขนาด W×H
 function drawCard(c, src, sx, sy, sw, sh, W, H, time) {
   const L = ST.loc, o = ST.opt, short = Math.min(W, H);
-  const m = short * .04, cw = H >= W ? W - 2 * m : Math.min(W - 2 * m, Math.max(short * 1.15, W * .55));   // แนวตั้งเต็มกว้าง · แนวนอนครึ่งๆ
+  // ขนาดการ์ด = % ของความกว้างภาพ (แนวนอนคิดจากด้านสั้น ไม่ให้การ์ดยาวเกิน)
+  const m = short * .035, full = W - 2 * m, base = H >= W ? full : Math.min(full, short * 1.35);
+  const cw = Math.max(short * .38, Math.min(full, base * (o.size || 62) / 100));
   const u = cw / 1000, pad = 46 * u;
   const showMap = o.map && L && ST.tiles && ST.tiles.ok >= 4 && !ST.tiles.fail;
   const ms = showMap ? 300 * u : 0, tx = pad + (showMap ? ms + 40 * u : 0), tw = cw - tx - pad;
@@ -1073,7 +1080,8 @@ function drawCard(c, src, sx, sy, sw, sh, W, H, time) {
   if (tags.length) h += 64 * u;
   h += pad;
   h = Math.max(h, showMap ? ms + 2 * pad : 0);
-  const x = (W - cw) / 2, y = o.pos === 'top' ? m : o.pos === 'center' ? (H - h) / 2 : H - h - m, R = 52 * u;
+  const P = o.pos === 'center' ? 'bottom' : o.pos, top = /^(t|top)/.test(P), hz = /l$/.test(P) ? 'l' : /r$/.test(P) ? 'r' : 'c';
+  const x = hz === 'l' ? m : hz === 'r' ? W - cw - m : (W - cw) / 2, y = top ? m : H - h - m, R = 52 * u;
   // เงา
   c.save(); c.shadowColor = 'rgba(0,0,0,.38)'; c.shadowBlur = 70 * u; c.shadowOffsetY = 24 * u; rrect(c, x, y, cw, h, R); c.fillStyle = 'rgba(0,0,0,.2)'; c.fill(); c.restore();
   // กระจกฝ้า: ย่อพื้นหลังส่วนนั้นลงเล็กๆ แล้วขยายกลับ = เบลอนุ่ม
@@ -1271,6 +1279,8 @@ function chipRow(el, list, cur, onPick) {
 function renderStOpts() {
   chipRow($('stStyles'), ST_STYLES, ST.opt.style, k => { ST.opt.style = k; lsSet('style', k); renderStOpts(); redraw(); });
   chipRow($('stPos'), ST_POS, ST.opt.pos, k => { ST.opt.pos = k; lsSet('pos', k); renderStOpts(); redraw(); });
+  chipRow($('stSizes'), ST_SIZES, +ST.opt.size, k => setSize(+k));
+  $('stSize').value = ST.opt.size; $('stSizeV').textContent = ST.opt.size + '%';
   $('stToggles').innerHTML = [['map', '🗺 แผนที่เล็ก'], ['coord', '🧭 พิกัด GPS']].map(([k, n]) => `<button type="button" class="${ST.opt[k] ? 'on' : ''}" data-k="${k}">${n}</button>`).join('');
   $('stToggles').querySelectorAll('button').forEach(b => b.onclick = () => { const k = b.dataset.k; ST.opt[k] = !ST.opt[k]; lsSet(k, ST.opt[k]); if (k === 'map') { ST.tileKey = ''; loadTiles(); } renderStOpts(); redraw(); });
   const staff = (window.SALES_STAFF || []).concat((window.PC_STAFF || []).filter(n => (window.SALES_STAFF || []).indexOf(n) === -1));
@@ -1279,6 +1289,9 @@ function renderStOpts() {
   $('stNotes').innerHTML = ST_CFG.NOTES.map(n => `<button type="button" class="${$('stNote').value === n ? 'on' : ''}">${n}</button>`).join('');
   $('stNotes').querySelectorAll('button').forEach(b => b.onclick = () => { $('stNote').value = $('stNote').value === b.textContent ? '' : b.textContent; lsSet('note', $('stNote').value); renderStOpts(); redraw(); });
 }
+function setSize(v) { ST.opt.size = Math.max(35, Math.min(100, Math.round(v))); lsSet('size', ST.opt.size); renderStOpts(); redraw(); }
+$('stSize').oninput = e => { ST.opt.size = +e.target.value; $('stSizeV').textContent = ST.opt.size + '%'; lsSet('size', ST.opt.size); document.querySelectorAll('#stSizes .chip').forEach(b => b.classList.toggle('on', +b.dataset.k === ST.opt.size)); redraw(); };
+$('stSize').onchange = () => renderStOpts();
 function redraw() { if (ST.on && (ST.shot || !vid.videoWidth)) stDraw(); }
 $('stTitle').value = lsGet('title', ST_CFG.TITLE); $('stNote').value = lsGet('note', '');
 $('stTitle').oninput = () => { lsSet('title', $('stTitle').value); redraw(); };

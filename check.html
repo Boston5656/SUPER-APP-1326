@@ -5,20 +5,34 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script src="staff-names.js?v=2026.10.05-2"></script>
+        <script src="staff-names.js?v=2026.10.05-4"></script>
     <script>
       // ปุ่มชื่อพนักงาน — รายชื่ออยู่ในไฟล์ staff-names.js
       function pickedName(radioName) {
         var el = document.querySelector('input[name="' + radioName + '"]:checked');
         return el ? el.value : '';
       }
+      // ⚙️ รายชื่อจากหน้า "ตั้งค่า" (เก็บในระบบ) ทับค่าในไฟล์ staff-names.js
+      function applyCheckSettings(st) {
+        if (!st || !st.sales) return false;
+        window.SALES_STAFF = st.sales.slice();
+        window.CASE_RECEIVERS = (st.receivers || []).slice();
+        window.PC_STAFF = (st.pc || []).slice();
+        if (st.brands && st.brands.length) window.BRANDS = st.brands.slice();
+        window.CHECK_SETTINGS_META = { by: st.updatedBy || '', at: st.updatedAt || '' };
+        return true;
+      }
+      window.__CS_FILE_DEFAULTS = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice() };
+      try { applyCheckSettings(JSON.parse(localStorage.getItem('chk1326_settings') || 'null')); } catch (e) {}
       function renderNameButtons() {
         document.querySelectorAll('[data-names]').forEach(function (box) {
           var list = window[box.dataset.names] || [];
           var rn = box.dataset.radio, cls = box.dataset.style;
+          var keep = document.querySelector('input[name="' + rn + '"]:checked');
+          keep = keep ? keep.value : '';
           box.innerHTML = list.map(function (n, i) {
             var id = rn + '_' + i;
-            return '<input type="radio" class="btn-check" name="' + rn + '" id="' + id + '" value="' + String(n).replace(/"/g, '&quot;') + '"' + (i === 0 ? ' required' : '') + '>' +
+            return '<input type="radio" class="btn-check" name="' + rn + '" id="' + id + '" value="' + String(n).replace(/"/g, '&quot;') + '"' + (i === 0 ? ' required' : '') + (n === keep ? ' checked' : '') + '>' +
                    '<label class="btn-grid-custom ' + cls + '" for="' + id + '">' + n + '</label>';
           }).join('');
         });
@@ -26,7 +40,7 @@
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderNameButtons); else renderNameButtons();
     </script>
     <script>window.GAS_APP = 'check';</script>
-    <script src="gas.js?v=2026.10.05-2"></script>
+    <script src="gas.js?v=2026.10.05-4"></script>
     <title>Check List 1326</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFD600">
@@ -200,6 +214,32 @@
          📰 PAGE HEADER
       ========================================================= */
       .page-head { text-align: center; margin: 6px 0 20px; }
+      /* ⚙️ ตั้งค่า */
+      .st-gear { margin-top: 10px; border: 0; border-radius: 100px; padding: 8px 16px; background: rgba(28,28,30,.9); color: #FFD600; font-weight: 700; font-size: .82rem; box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+      .st-gear:active { transform: scale(.92); }
+      .cs-sec { background: #2C2C2E; border-radius: 18px; padding: 12px; margin-bottom: 12px; }
+      .cs-sec h6 { color: #fff; font-weight: 700; font-size: .9rem; margin: 0 0 2px; display: flex; justify-content: space-between; align-items: center; }
+      .cs-sec h6 small { color: #8E8E93; font-weight: 600; font-size: .72rem; }
+      .cs-sec p { color: #8E8E93; font-size: .74rem; margin: 0 0 10px; }
+      .cs-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 10px; }
+      .cs-chip { display: inline-flex; align-items: center; gap: 2px; border-radius: 100px; background: #3A3A3C; color: #fff; font-weight: 700; font-size: .82rem; padding: 3px 3px 3px 12px; animation: csIn .35s cubic-bezier(.34,1.56,.64,1) both; }
+      .cs-chip.pc { background: rgba(255,214,0,.16); color: #FFD600; }
+      .cs-chip button { border: 0; background: rgba(255,255,255,.08); color: #fff; width: 26px; height: 26px; border-radius: 50%; font-size: .78rem; line-height: 1; padding: 0; }
+      .cs-chip button:active { transform: scale(.85); }
+      .cs-chip button.x { background: rgba(255,69,58,.22); color: #FF6961; }
+      @keyframes csIn { from { opacity: 0; transform: scale(.8); } }
+      .cs-add { display: flex; gap: 6px; margin-top: 10px; }
+      .cs-add input { flex: 1; min-width: 0; border: 0; border-radius: 12px; padding: 9px 12px; background: #1C1C1E; color: #fff; font-weight: 600; font-size: .88rem; }
+      .cs-add input:focus { outline: 2px solid #FFD600; }
+      .cs-add button { border: 0; border-radius: 12px; padding: 0 14px; background: #FFD600; color: #1C1C1E; font-weight: 800; }
+      .cs-pick { display: flex; flex-wrap: wrap; gap: 6px; }
+      .cs-pick button { border: 0; border-radius: 100px; padding: 6px 12px; background: #3A3A3C; color: #fff; font-weight: 700; font-size: .8rem; transition: all .25s; }
+      .cs-pick button.on { background: #FFD600; color: #1C1C1E; }
+      .cs-save { position: sticky; bottom: 0; display: flex; gap: 8px; padding-top: 8px; background: linear-gradient(to top, #1C1C1E 70%, rgba(28,28,30,0)); }
+      .cs-save button { flex: 1; border: 0; border-radius: 16px; padding: 13px; font-weight: 800; }
+      .cs-save .ok { background: #FFD600; color: #1C1C1E; }
+      .cs-save .no { flex: 0 0 auto; background: #3A3A3C; color: #fff; padding: 13px 16px; }
+
       .eyebrow {
         display: inline-flex;
         align-items: center;
@@ -1527,6 +1567,7 @@
           <div class="page-head">
             <span class="eyebrow">STORE OPERATIONS · CHECKLIST</span>
             <h1 class="page-title">บันทึกการขายประจำวัน</h1>
+            <button type="button" class="st-gear" id="stGear" onclick="openCheckSettings()" style="display:none">⚙️ ตั้งค่ารายชื่อ / แบรนด์</button>
           </div>
 
           <!-- 📌 สรุปวันนี้ (แตะ = ดูรายละเอียด) -->
@@ -1579,43 +1620,7 @@
 
               <div class="field">
                 <label class="form-label-custom">🏷️ แบรนด์</label>
-                <div class="grid-3-col">
-                  <input type="radio" class="btn-check" name="brand" id="b_apple" value="APPLE" required>
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_apple">APPLE</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_samsung" value="SAMSUNG">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_samsung">SAMSUNG</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_oppo" value="OPPO">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_oppo">OPPO</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_vivo" value="VIVO / IQOO">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_vivo">VIVO / IQOO</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_realme" value="REALME">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_realme">REALME</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_xiaomi" value="XIAOMI">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_xiaomi">XIAOMI</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_infinix" value="INFINIX">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_infinix">INFINIX</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_honor" value="HONOR">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_honor">HONOR</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_alldocube" value="ALLDOCUBE">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_alldocube">ALLDOCUBE</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_tcl" value="TCL">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_tcl">TCL</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_zte" value="ZTE">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_zte">ZTE</label>
-
-                  <input type="radio" class="btn-check" name="brand" id="b_nothing" value="NOTHING">
-                  <label class="btn-grid-custom btn-brand-yellow" for="b_nothing">NOTHING</label>
-                </div>
+                <div class="grid-3-col" data-names="BRANDS" data-radio="brand" data-style="btn-brand-yellow"></div>
               </div>
 
               <div class="field">
@@ -1822,43 +1827,7 @@
 
               <div class="field">
                 <label class="form-label-custom">🏷️ แบรนด์</label>
-                <div class="grid-3-col">
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_apple" value="APPLE" required>
-                  <label class="btn-grid-custom btn-brand-red" for="fb_apple">APPLE</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_samsung" value="SAMSUNG">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_samsung">SAMSUNG</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_oppo" value="OPPO">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_oppo">OPPO</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_vivo" value="VIVO / IQOO">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_vivo">VIVO / IQOO</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_realme" value="REALME">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_realme">REALME</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_xiaomi" value="XIAOMI">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_xiaomi">XIAOMI</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_infinix" value="INFINIX">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_infinix">INFINIX</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_honor" value="HONOR">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_honor">HONOR</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_alldocube" value="ALLDOCUBE">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_alldocube">ALLDOCUBE</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_tcl" value="TCL">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_tcl">TCL</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_zte" value="ZTE">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_zte">ZTE</label>
-
-                  <input type="radio" class="btn-check" name="brandFailed" id="fb_nothing" value="NOTHING">
-                  <label class="btn-grid-custom btn-brand-red" for="fb_nothing">NOTHING</label>
-                </div>
+                <div class="grid-3-col" data-names="BRANDS" data-radio="brandFailed" data-style="btn-brand-red"></div>
               </div>
 
               <div class="field">
@@ -3325,6 +3294,84 @@
       }
 
       // ---------- Sheet รายละเอียด ----------
+      // =========================================================
+      // ⚙️ ตั้งค่ารายชื่อ / แบรนด์ (ผู้จัดการ) — บันทึกในระบบ ทุกเครื่องเปลี่ยนตาม
+      // =========================================================
+      const CS_IS_MGR = (() => { try { const ss = JSON.parse(localStorage.getItem('system1326_session') || '{}'); return !!(ss.user && ss.user.role === 'MANAGER'); } catch (e) { return false; } })();
+      let csDraft = null;
+      function csEsc(t) { return String(t).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
+      function loadCheckSettings() {
+        if (CS_IS_MGR) document.getElementById('stGear').style.display = '';
+        google.script.run.withSuccessHandler(st => {
+          if (!st || !st.sales) return;
+          const now = JSON.stringify(st), old = localStorage.getItem('chk1326_settings');
+          try { localStorage.setItem('chk1326_settings', now); } catch (e) {}
+          if (now !== old) { applyCheckSettings(st); renderNameButtons(); }
+        }).withFailureHandler(() => {}).getCheckSettings();
+      }
+      document.addEventListener('DOMContentLoaded', () => setTimeout(loadCheckSettings, 200));
+      const CS_SECS = [
+        { k: 'sales', title: '👤 พนักงานขาย', note: 'ปุ่มชื่อในหน้า บันทึกขาย และ งานไม่ผ่าน · แตะ ⭐ = เป็น PC แบรนด์ (แยกตาราง Leaderboard)', ph: 'ชื่อพนักงานใหม่' },
+        { k: 'receivers', title: '🙋 ผู้รับเคส', note: 'ปุ่มผู้รับเคสในหน้า บันทึกขาย', ph: 'ชื่อผู้รับเคส' },
+        { k: 'brands', title: '🏷️ แบรนด์', note: 'ปุ่มแบรนด์ในหน้า บันทึกขาย และ งานไม่ผ่าน (ตัวพิมพ์ใหญ่อัตโนมัติ)', ph: 'เช่น HUAWEI' }
+      ];
+      function openCheckSettings() {
+        csDraft = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice() };
+        const m = window.CHECK_SETTINGS_META;
+        openSheet('⚙️ ตั้งค่า Check List', m && m.at ? 'แก้ล่าสุด ' + m.at + (m.by ? ' โดย ' + m.by : '') : 'บันทึกแล้วทุกเครื่องเปลี่ยนตามทันที', '<div id="csBody"></div>');
+        csRender();
+      }
+      function csRender() {
+        const body = document.getElementById('csBody'); if (!body) return;
+        body.innerHTML = CS_SECS.map(sec => {
+          const list = csDraft[sec.k];
+          return `<div class="cs-sec"><h6>${sec.title}<small>${list.length} รายการ</small></h6><p>${sec.note}</p>
+            <div class="cs-chips">${list.map((n, i) => {
+              const pc = sec.k === 'sales' && csDraft.pc.indexOf(n) !== -1;
+              return `<span class="cs-chip ${pc ? 'pc' : ''}">${csEsc(n)}
+                ${sec.k === 'sales' ? `<button type="button" title="PC" onclick="csPc(${i})">${pc ? '⭐' : '☆'}</button>` : ''}
+                <button type="button" title="เลื่อนซ้าย" onclick="csMove('${sec.k}',${i},-1)" ${i ? '' : 'disabled style="opacity:.3"'}>‹</button>
+                <button type="button" class="x" title="ลบ" onclick="csDel('${sec.k}',${i})">✕</button></span>`;
+            }).join('')}</div>
+            <div class="cs-add"><input id="csIn_${sec.k}" maxlength="30" placeholder="${sec.ph}" onkeydown="if(event.key==='Enter'){event.preventDefault();csAdd('${sec.k}')}"><button type="button" onclick="csAdd('${sec.k}')">＋ เพิ่ม</button></div></div>`;
+        }).join('') + `<div class="cs-save"><button type="button" class="no" onclick="csReset()">↺ ค่าเดิม</button><button type="button" class="ok" id="csSaveBtn" onclick="csSave()">💾 บันทึก</button></div>`;
+      }
+      function csAdd(k) {
+        const el = document.getElementById('csIn_' + k); let v = (el.value || '').replace(/[<>"]/g, '').replace(/\s+/g, ' ').trim();
+        if (!v) { el.focus(); return; }
+        if (k === 'brands') v = v.toUpperCase();
+        if (csDraft[k].some(x => x.toUpperCase() === v.toUpperCase())) { showToast('มี "' + v + '" อยู่แล้ว', 'warn'); return; }
+        csDraft[k].push(v); csRender();
+        const ni = document.getElementById('csIn_' + k); if (ni) ni.focus();
+      }
+      function csDel(k, i) {
+        const n = csDraft[k][i];
+        csDraft[k].splice(i, 1);
+        if (k === 'sales') csDraft.pc = csDraft.pc.filter(x => x !== n);
+        csRender();
+      }
+      function csMove(k, i, d) { const a = csDraft[k], j = i + d; if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; csRender(); }
+      function csPc(i) { const n = csDraft.sales[i], p = csDraft.pc.indexOf(n); if (p === -1) csDraft.pc.push(n); else csDraft.pc.splice(p, 1); csRender(); }
+      function csReset() {
+        if (!confirm('กลับไปใช้รายชื่อเดิมจากไฟล์ staff-names.js?\n(ยังไม่บันทึกจนกว่าจะกด 💾)')) return;
+        const f = window.__CS_FILE_DEFAULTS || {};
+        csDraft = { sales: (f.sales || []).slice(), receivers: (f.receivers || []).slice(), pc: (f.pc || []).slice(), brands: (f.brands || []).slice() };
+        csRender();
+      }
+      function csSave() {
+        if (!csDraft.sales.length) { showToast('ต้องมีพนักงานขายอย่างน้อย 1 คน', 'warn'); return; }
+        if (!csDraft.brands.length) { showToast('ต้องมีแบรนด์อย่างน้อย 1 แบรนด์', 'warn'); return; }
+        const b = document.getElementById('csSaveBtn'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+        google.script.run.withSuccessHandler(res => {
+          if (!res || !res.ok) { b.disabled = false; b.textContent = '💾 บันทึก'; showToast((res && res.error) || 'บันทึกไม่สำเร็จ', 'error'); return; }
+          try { localStorage.setItem('chk1326_settings', JSON.stringify(res.settings)); } catch (e) {}
+          applyCheckSettings(res.settings); renderNameButtons();
+          bootstrap.Modal.getOrCreateInstance(document.getElementById('dashSheet')).hide();
+          showToast('บันทึกรายชื่อแล้ว — ทุกเครื่องจะเห็นเมื่อเปิดแอปครั้งถัดไป');
+        }).withFailureHandler(err => { b.disabled = false; b.textContent = '💾 บันทึก'; showToast('บันทึกไม่สำเร็จ: ' + err.message, 'error'); })
+          .saveCheckSettings(csDraft);
+      }
+
       function openSheet(title, sub, html) {
         document.getElementById('dashSheetTitle').textContent = title;
         document.getElementById('dashSheetSub').textContent = sub || '';
