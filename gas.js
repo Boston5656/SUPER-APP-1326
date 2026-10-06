@@ -14,8 +14,9 @@
   function setToken(t) { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
 
   // หมดอายุ/ยังไม่ล็อกอิน → บอกหน้าเมนูหลัก (ถ้าเปิดอยู่ในกรอบ) หรือพากลับไปหน้าล็อกอิน
+  function swrClear() { try { Object.keys(localStorage).forEach(function (x) { if (x.indexOf('swr1:') === 0) localStorage.removeItem(x); }); } catch (e) {} }
   function needLogin() {
-    setToken('');
+    setToken(''); swrClear();
     if (window.parent && window.parent !== window) {
       try { window.parent.postMessage({ type: 'sys1326-auth' }, location.origin); return; } catch (e) {}
     }
@@ -102,7 +103,70 @@
   window.addEventListener('load', function () { badge(); setTimeout(flush, 1500); });
   setInterval(function () { qAll(function (it) { if (it.length) flush(); }); }, 30000);
 
+  // ===== ⚡ โชว์ข้อมูลล่าสุดในเครื่องทันที แล้วค่อยอัปเดตตามหลัง =====
+  // เฉพาะคำสั่ง "อ่าน" เท่านั้น (ไม่มีคำสั่งบันทึก/แก้/ลบในนี้)
+  var SWR_FNS = {
+    dash:  ['getDashboardData', 'getRankingData', 'getHubBadges'],
+    check: ['getDashboardData', 'getStoreGoal', 'getLeaderboard', 'getCheckSettings', 'getTodaySales'],
+    shift: ['getMonthData', 'getReportSummary'],
+    stock: ['getBrandList', 'getPromotions']
+  };
+  var SWR_MAX_AGE = 12 * 3600 * 1000;
+  function who() {
+    try {
+      var b = getToken().split('.')[0].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, ''); while (b.length % 4) b += '=';
+      var j = JSON.parse(decodeURIComponent(escape(atob(b))));
+      return (j.role || '') + ':' + (j.id || '');
+    } catch (e) { return ''; }
+  }
+  function swrKey(fn, args) { var w = who(); return w ? 'swr1:' + APP + ':' + fn + ':' + w + ':' + JSON.stringify(args) : ''; }
+  function swrGet(k) {
+    try { var o = JSON.parse(localStorage.getItem(k) || 'null'); if (o && Date.now() - o.t < SWR_MAX_AGE) return o; } catch (e) {}
+    return null;
+  }
+  function swrPut(k, txt) {
+    try { localStorage.setItem(k, JSON.stringify({ t: Date.now(), d: txt })); }
+    catch (e) {   // เครื่องเต็ม → ล้างของเก่าทิ้งแล้วลองใหม่
+      try { Object.keys(localStorage).forEach(function (x) { if (x.indexOf('swr1:') === 0) localStorage.removeItem(x); }); localStorage.setItem(k, JSON.stringify({ t: Date.now(), d: txt })); } catch (e2) {}
+    }
+  }
+  // ป้ายเล็กมุมล่าง "กำลังอัปเดต…" ระหว่างโชว์ข้อมูลเก่า
+  var swrBusy = 0;
+  function swrPill(delta, t) {
+    swrBusy = Math.max(0, swrBusy + delta);
+    var el = document.getElementById('sys-swr');
+    if (!swrBusy) { if (el) el.remove(); return; }
+    if (!el) {
+      el = document.createElement('div'); el.id = 'sys-swr';
+      el.style.cssText = 'position:fixed;z-index:2147483000;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));padding:7px 12px;border-radius:100px;background:rgba(28,28,30,.86);color:#FFD600;font:600 11px "IBM Plex Sans Thai",sans-serif;box-shadow:0 8px 20px -10px rgba(0,0,0,.6);pointer-events:none';
+      (document.body || document.documentElement).appendChild(el);
+    }
+    if (t) {
+      var m = Math.max(0, Math.round((Date.now() - t) / 60000));
+      el.textContent = '⏳ กำลังอัปเดต · ข้อมูลเมื่อ ' + (m < 1 ? 'เมื่อกี้' : m < 60 ? m + ' นาทีก่อน' : Math.floor(m / 60) + ' ชม.ก่อน');
+    }
+  }
+
   function call(fn, args, ok, fail) {
+    var swrK = (SWR_FNS[APP] || []).indexOf(fn) !== -1 ? swrKey(fn, args) : '';
+    var cached = swrK ? swrGet(swrK) : null;
+    if (cached) {
+      var shown = false;
+      try { var cd = JSON.parse(cached.d), okFirst = ok; setTimeout(function () { okFirst && okFirst(cd); }, 0); shown = true; } catch (e) { cached = null; }
+      if (shown) {
+        swrPill(1, cached.t);
+        var ok0 = ok, fail0 = fail, fin = false;
+        var end = function () { if (!fin) { fin = true; swrPill(-1); } };
+        ok = function (d) {
+          end();
+          var txt = ''; try { txt = JSON.stringify(d); } catch (e) {}
+          if (txt && txt === cached.d) return;   // ไม่มีอะไรเปลี่ยน → ไม่ต้องวาดใหม่
+          ok0 && ok0(d);
+        };
+        fail = function (e) { end(); console.warn('อัปเดตไม่สำเร็จ ใช้ข้อมูลในเครื่องไปก่อน', e); };
+        setTimeout(end, 90000);
+      }
+    }
     var queueable = (QUEUE_FNS[APP] || []).indexOf(fn) !== -1;
     if (queueable && args[0] && typeof args[0] === 'object') {
       // เวลาที่กดบันทึกจริง + รหัสกันบันทึกซ้ำ
@@ -130,6 +194,7 @@
           }
           if (res.ok) {
             if (fn === 'authenticateUser' && res.data && res.data.token) setToken(res.data.token);
+            if (swrK && res.data && !res.data.error && res.data.status !== 'error') { try { swrPut(swrK, JSON.stringify(res.data)); } catch (e) {} }
             ok && ok(res.data);
           } else {
             if (res.auth) needLogin();
@@ -182,7 +247,7 @@
   window.google.script = window.google.script || {};
   Object.defineProperty(window.google.script, 'run', { get: function () { return runner(null, null); }, configurable: true });
 
-  window.SYS1326 = { getToken: getToken, setToken: setToken, needLogin: needLogin, API_URL: API_URL, flush: flush, pending: qAll };
+  window.SYS1326 = { clearCache: swrClear, getToken: getToken, setToken: setToken, needLogin: needLogin, API_URL: API_URL, flush: flush, pending: qAll };
 
   // แอปที่เปิดอยู่ในกรอบ: ส่งสัญญาณ "ยังใช้งานอยู่" ให้หน้าเมนูหลัก (กันเด้งออกเพราะไม่ได้แตะหน้าเมนู 15 นาที)
   if (window.parent && window.parent !== window) {
