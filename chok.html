@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>น้องโชค 1326</title>
+<meta name="theme-color" content="#FFD600">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script>window.GAS_APP = 'chok';</script>
+<script src="gas.js?v=2026.10.06-6"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   🍀 น้องโชค — ผู้ช่วย AI ที่เรียนรู้จากพี่ๆ ในร้าน
+   ========================================================= */
+:root{
+  --y:#FFD600; --d:#1C1C1E; --d2:#2C2C2E; --g:#8E8E93; --ok:#34C759; --bad:#FF453A;
+  --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),radial-gradient(90% 60% at 110% 110%,#FFC400 0%,rgba(255,196,0,0) 60%),var(--y);
+  background-attachment:fixed;display:flex;flex-direction:column;
+}
+button,input,textarea{font-family:inherit}
+button{cursor:pointer}
+@keyframes riseIn{0%{opacity:0;transform:translateY(12px) scale(.985)}100%{opacity:1;transform:none}}
+@keyframes dot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+
+.top{position:sticky;top:0;z-index:20;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;display:flex;gap:8px;align-items:stretch}
+[data-sys-back-slot]{display:flex}[data-sys-back-slot]:empty{display:none}
+.titlebar{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 6px 6px 14px;border-radius:18px;
+  background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);
+  border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35)}
+.titlebar h1{margin:0;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tabs{display:flex;gap:4px;background:rgba(28,28,30,.08);padding:3px;border-radius:13px;flex-shrink:0}
+.tabs button{border:0;background:transparent;border-radius:10px;padding:7px 11px;font-size:12.5px;font-weight:700;color:var(--d)}
+.tabs button.on{background:var(--d);color:var(--y)}
+
+main{flex:1;width:100%;max-width:760px;margin:0 auto;padding:0 12px;display:flex;flex-direction:column;min-height:0}
+.view{display:none;flex:1;flex-direction:column;min-height:0}
+.view.on{display:flex}
+
+/* ---------- แชท ---------- */
+#log{flex:1;overflow-y:auto;padding:6px 0 12px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:86%;padding:10px 14px;border-radius:20px;font-size:14.5px;line-height:1.6;word-wrap:break-word;white-space:pre-wrap;animation:riseIn .35s var(--ios-ease) both}
+.msg.me{align-self:flex-end;background:var(--d);color:#fff;border-bottom-right-radius:6px}
+.msg.bot{align-self:flex-start;background:#fff;border-bottom-left-radius:6px;box-shadow:0 6px 18px -10px rgba(60,48,0,.4)}
+.msg.err{background:#FFE5E3;color:#8A1C14}
+.who{font-size:11px;font-weight:700;color:var(--g);margin:0 0 2px}
+.learned{margin-top:8px;padding:8px 10px;border-radius:12px;background:#FFF7C2;font-size:12.5px;white-space:normal}
+.acts{display:flex;gap:6px;margin-top:8px}
+.acts button{border:0;border-radius:100px;padding:5px 10px;font-size:12px;font-weight:600;background:rgba(28,28,30,.07);color:var(--d)}
+.acts button:active{transform:scale(.92)}
+.acts button.done{background:var(--ok);color:#fff}
+.typing span{display:inline-block;width:7px;height:7px;margin:0 2px;border-radius:50%;background:var(--g);animation:dot 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+.hello{margin:auto 0;text-align:center;padding:24px 8px;color:rgba(28,28,30,.75)}
+.hello .face{font-size:54px;line-height:1}
+.hello h2{margin:8px 0 4px;font-size:20px}
+.hello p{margin:0 0 14px;font-size:13.5px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips button{border:0;border-radius:100px;padding:8px 13px;font-size:13px;font-weight:600;background:rgba(255,255,255,.8);color:var(--d);box-shadow:0 4px 12px -8px rgba(60,48,0,.5)}
+
+.composer{position:sticky;bottom:0;display:flex;gap:8px;align-items:flex-end;padding:8px 0 calc(10px + env(safe-area-inset-bottom))}
+.composer textarea{flex:1;min-width:0;resize:none;border:0;border-radius:22px;padding:11px 16px;font-size:15px;line-height:1.45;max-height:140px;
+  background:rgba(255,255,255,.92);box-shadow:0 8px 24px -12px rgba(60,48,0,.5);outline:none}
+.send{flex-shrink:0;width:46px;height:46px;border:0;border-radius:50%;background:var(--d);color:var(--y);display:flex;align-items:center;justify-content:center;transition:transform .3s var(--spring)}
+.send:active{transform:scale(.86)}
+.send:disabled{opacity:.4}
+.clear{flex-shrink:0;height:46px;border:0;border-radius:23px;padding:0 12px;background:rgba(28,28,30,.08);font-size:12px;font-weight:700;color:var(--d)}
+
+/* ---------- สอน ---------- */
+#v-teach{overflow-y:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+.card{background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 28px -14px rgba(60,48,0,.45);margin-bottom:12px}
+.card h3{margin:0 0 4px;font-size:15px}
+.card p.sub{margin:0 0 12px;font-size:12.5px;color:var(--g)}
+.field{display:block;width:100%;border:1.5px solid #E5E5EA;border-radius:14px;padding:10px 12px;font-size:14.5px;margin-bottom:10px;outline:none;background:#FAFAFA}
+.field:focus{border-color:var(--d);background:#fff}
+textarea.field{min-height:96px;resize:vertical;line-height:1.5}
+.btn{border:0;border-radius:14px;padding:11px 16px;font-size:14px;font-weight:700;background:var(--d);color:var(--y);width:100%}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5}
+.search{margin-bottom:10px}
+.k{padding:12px 0;border-top:1px solid #F0F0F2;display:flex;gap:10px;align-items:flex-start}
+.k:first-child{border-top:0}
+.k .b{flex:1;min-width:0}
+.k .t{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;background:var(--d);color:var(--y);margin-bottom:4px}
+.k .c{font-size:14px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.k .m{font-size:11px;color:var(--g);margin-top:3px}
+.k .del{border:0;background:transparent;color:var(--bad);font-size:12px;font-weight:700;padding:4px}
+.empty{text-align:center;color:var(--g);font-size:13px;padding:14px 0}
+.count{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;padding:3px 9px;border-radius:100px;background:var(--d);color:var(--y);margin-left:6px}
+
+/* ---------- หน้าต่างแก้คำตอบ ---------- */
+.sheet-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.35);display:none;align-items:flex-end;justify-content:center}
+.sheet-bg.on{display:flex}
+.sheet{width:100%;max-width:560px;background:#fff;border-radius:24px 24px 0 0;padding:18px 16px calc(16px + env(safe-area-inset-bottom));animation:riseIn .3s var(--ios-ease)}
+.sheet h3{margin:0 0 4px;font-size:16px}
+.sheet .q{font-size:12.5px;color:var(--g);margin:0 0 12px;white-space:pre-wrap}
+.row2{display:flex;gap:8px}
+.row2 .btn.ghost{background:rgba(28,28,30,.08);color:var(--d)}
+.toast{position:fixed;z-index:60;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translateX(-50%);padding:10px 16px;border-radius:16px;background:rgba(28,28,30,.92);color:#fff;font-size:13px;font-weight:600;max-width:92vw;white-space:nowrap}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div data-sys-back-slot></div>
+  <div class="titlebar">
+    <h1>🍀 น้องโชค</h1>
+    <div class="tabs" role="tablist">
+      <button type="button" class="on" data-tab="chat">💬 คุย</button>
+      <button type="button" data-tab="teach">📚 สอน</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <!-- แชท -->
+  <section class="view on" id="v-chat">
+    <div id="log"></div>
+    <div class="composer">
+      <button type="button" class="clear" id="clear" title="เริ่มคุยใหม่">ล้าง</button>
+      <textarea id="input" rows="1" placeholder="ถามน้องโชค หรือสอนเรื่องใหม่…"></textarea>
+      <button type="button" class="send" id="send" aria-label="ส่ง">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- สอน -->
+  <section class="view" id="v-teach">
+    <div class="card">
+      <h3>📚 สอนน้องโชค</h3>
+      <p class="sub">ใส่ข้อมูลที่อยากให้น้องโชคจำไว้ตอบพี่ๆ คนอื่น เช่น โปรโมชั่น ขั้นตอนงาน กฎร้าน ข้อมูลสินค้า</p>
+      <input class="field" id="t-topic" maxlength="80" placeholder="หัวข้อ เช่น โปรโมชั่น, ขั้นตอนเคลม, SAMSUNG">
+      <textarea class="field" id="t-content" maxlength="2000" placeholder="ความรู้ เช่น โปร SAMSUNG S26 ลด 3,000 บาท ถึง 31 ต.ค. เฉพาะผ่อน 0%"></textarea>
+      <button type="button" class="btn" id="t-save">บันทึกให้น้องโชคจำ</button>
+    </div>
+    <div class="card">
+      <h3>🧠 สิ่งที่น้องโชครู้<span class="count" id="k-count">0</span></h3>
+      <p class="sub" id="k-sub">ความรู้ทั้งหมดที่พี่ๆ สอน ใหม่สุดอยู่บน</p>
+      <input class="field search" id="k-search" placeholder="🔎 ค้นหา…">
+      <div id="k-list"><div class="empty">กำลังโหลด…</div></div>
+    </div>
+  </section>
+</main>
+
+<div class="sheet-bg" id="fix-bg">
+  <div class="sheet">
+    <h3>✏️ สอนคำตอบที่ถูก</h3>
+    <p class="q" id="fix-q"></p>
+    <textarea class="field" id="fix-text" maxlength="2000" placeholder="คำตอบที่ถูกต้องคือ…"></textarea>
+    <div class="row2">
+      <button type="button" class="btn ghost" id="fix-cancel">ยกเลิก</button>
+      <button type="button" class="btn" id="fix-save">บันทึก</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const ADMIN_ID = '15628';
+  const HIST_KEY = 'chok1326_chat';
+  const $ = id => document.getElementById(id);
+
+  // ผู้ใช้ที่ล็อกอินอยู่ (ใช้ร่วมกับหน้าเมนูหลัก)
+  let me = { id: '', name: '' };
+  try {
+    const s = JSON.parse(localStorage.getItem('system1326_session') || 'null');
+    if (s && s.user) me = { id: String(s.user.empId || ''), name: String(s.user.name || s.user.brand || '') };
+  } catch (e) {}
+  const isAdmin = me.id === ADMIN_ID;
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+  function fmt(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+  function haptic(ms) { try { navigator.vibrate && navigator.vibrate(ms || 10); } catch (e) {} }
+  function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2400); }
+  function call(fn, arg) {
+    return new Promise((ok, fail) => {
+      google.script.run.withSuccessHandler(r => (r && r.status === 'error') ? fail(new Error(r.message || 'เกิดข้อผิดพลาด')) : ok(r))
+        .withFailureHandler(fail)[fn](arg);
+    });
+  }
+
+  /* ---------- แท็บ ---------- */
+  document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x === b));
+    $('v-chat').classList.toggle('on', b.dataset.tab === 'chat');
+    $('v-teach').classList.toggle('on', b.dataset.tab === 'teach');
+    if (b.dataset.tab === 'teach') loadKnowledge();
+    haptic(6);
+  }));
+
+  /* ---------- แชท ---------- */
+  let history = [];   // [{role, text, learned?}]
+  try { history = JSON.parse(localStorage.getItem(HIST_KEY) || '[]') || []; } catch (e) { history = []; }
+  function saveHist() { try { localStorage.setItem(HIST_KEY, JSON.stringify(history.slice(-40))); } catch (e) {} }
+
+  const log = $('log'), input = $('input'), send = $('send');
+  const SUGGEST = ['น้องโชครู้อะไรบ้าง?', 'จำไว้นะว่า…', 'โปรโมชั่นเดือนนี้มีอะไร?', 'ขั้นตอนรับเครื่องเคลมทำยังไง?'];
+
+  function hello() {
+    log.innerHTML = `<div class="hello"><div class="face">🍀</div><h2>สวัสดีครับ${me.name ? ' พี่' + esc(me.name) : ''}</h2>
+      <p>น้องโชคเรียนรู้จากพี่ๆ ในร้านครับ ถามได้ทุกเรื่อง<br>อยากให้จำอะไร พิมพ์ว่า <b>"จำไว้นะว่า…"</b> ได้เลย</p>
+      <div class="chips">${SUGGEST.map(s => `<button type="button">${esc(s)}</button>`).join('')}</div></div>`;
+    log.querySelectorAll('.chips button').forEach(b => b.onclick = () => {
+      const t = b.textContent;
+      if (t.endsWith('…')) { input.value = t.replace('…', ' '); input.focus(); grow(); }
+      else ask(t);
+    });
+  }
+
+  function bubble(h, idx) {
+    const el = document.createElement('div');
+    el.className = 'msg ' + (h.role === 'user' ? 'me' : 'bot') + (h.err ? ' err' : '');
+    let html = (h.role === 'assistant' ? '<div class="who">🍀 น้องโชค</div>' : '') + fmt(h.text);
+    if (h.learned && h.learned.length) {
+      html += '<div class="learned">🧠 <b>จำไว้แล้ว:</b> ' + h.learned.map(l => `[${esc(l.topic)}] ${esc(l.content)}`).join('<br>') + '</div>';
+    }
+    if (h.role === 'assistant' && !h.err) {
+      html += `<div class="acts"><button type="button" data-a="good" class="${h.fb === 'good' ? 'done' : ''}">👍 ถูก</button>
+        <button type="button" data-a="fix" class="${h.fb === 'fix' ? 'done' : ''}">✏️ ${h.fb === 'fix' ? 'สอนแล้ว' : 'ไม่ถูก สอนใหม่'}</button></div>`;
+    }
+    el.innerHTML = html;
+    el.querySelectorAll('.acts button').forEach(b => b.onclick = () => {
+      haptic(8);
+      if (b.dataset.a === 'good') { h.fb = 'good'; saveHist(); b.classList.add('done'); toast('ขอบคุณครับ 🙏'); }
+      else openFix(idx);
+    });
+    return el;
+  }
+
+  function render() {
+    if (!history.length) { hello(); return; }
+    log.innerHTML = '';
+    history.forEach((h, i) => log.appendChild(bubble(h, i)));
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function grow() { input.style.height = 'auto'; input.style.height = Math.min(140, input.scrollHeight) + 'px'; }
+  input.addEventListener('input', grow);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && window.matchMedia('(pointer:fine)').matches) { e.preventDefault(); ask(); } });
+  send.onclick = () => ask();
+  $('clear').onclick = () => { if (!history.length || confirm('ล้างแชทนี้? (สิ่งที่น้องโชคจำไว้ยังอยู่ครบ)')) { history = []; saveHist(); render(); } };
+
+  let busy = false;
+  function ask(text) {
+    text = String(text != null ? text : input.value).trim();
+    if (!text || busy) return;
+    busy = true; send.disabled = true; haptic(8);
+    const past = history.filter(h => !h.err).map(h => ({ role: h.role, text: h.text }));
+    history.push({ role: 'user', text });
+    input.value = ''; grow(); render();
+    const typing = document.createElement('div');
+    typing.className = 'msg bot typing'; typing.innerHTML = '<span></span><span></span><span></span>';
+    log.appendChild(typing); log.scrollTop = log.scrollHeight;
+    call('chokChat', { message: text, history: past, who: me })
+      .then(r => {
+        history.push({ role: 'assistant', text: r.reply || '…', learned: r.learned || [] });
+        if (r.learned && r.learned.length) { haptic([10, 40, 10]); knowledgeLoaded = false; }
+      })
+      .catch(e => history.push({ role: 'assistant', text: '⚠️ ' + (e.message || e), err: true }))
+      .finally(() => { busy = false; send.disabled = false; saveHist(); render(); });
+  }
+
+  /* ---------- แก้คำตอบ ---------- */
+  let fixIdx = -1;
+  function openFix(idx) {
+    fixIdx = idx;
+    let q = ''; for (let i = idx - 1; i >= 0; i--) if (history[i].role === 'user') { q = history[i].text; break; }
+    $('fix-q').textContent = q ? 'คำถาม: ' + q : '';
+    $('fix-text').value = '';
+    $('fix-bg').classList.add('on');
+    setTimeout(() => $('fix-text').focus(), 50);
+  }
+  function closeFix() { $('fix-bg').classList.remove('on'); }
+  $('fix-cancel').onclick = closeFix;
+  $('fix-bg').addEventListener('click', e => { if (e.target === $('fix-bg')) closeFix(); });
+  $('fix-save').onclick = () => {
+    const correction = $('fix-text').value.trim();
+    if (!correction) return $('fix-text').focus();
+    const h = history[fixIdx]; if (!h) return closeFix();
+    let q = ''; for (let i = fixIdx - 1; i >= 0; i--) if (history[i].role === 'user') { q = history[i].text; break; }
+    const btn = $('fix-save'); btn.disabled = true; btn.textContent = 'กำลังบันทึก…';
+    call('chokFeedback', { question: q, answer: h.text, correction, who: me })
+      .then(() => { h.fb = 'fix'; saveHist(); render(); closeFix(); knowledgeLoaded = false; haptic([10, 40, 10]); toast('🧠 น้องโชคจำคำตอบใหม่แล้ว'); })
+      .catch(e => alert('บันทึกไม่สำเร็จ: ' + e.message))
+      .finally(() => { btn.disabled = false; btn.textContent = 'บันทึก'; });
+  };
+
+  /* ---------- สอน + คลังความรู้ ---------- */
+  let knowledge = [], knowledgeLoaded = false;
+  function loadKnowledge(force) {
+    if (knowledgeLoaded && !force) return drawKnowledge();
+    call('chokListKnowledge').then(r => { knowledge = r.items || []; knowledgeLoaded = true; drawKnowledge(); })
+      .catch(e => { $('k-list').innerHTML = `<div class="empty">⚠️ ${esc(e.message)}</div>`; });
+  }
+  function drawKnowledge() {
+    const q = $('k-search').value.trim().toLowerCase();
+    const list = q ? knowledge.filter(k => (k.topic + ' ' + k.content + ' ' + k.by).toLowerCase().includes(q)) : knowledge;
+    $('k-count').textContent = knowledge.length;
+    $('k-sub').textContent = isAdmin ? 'ใหม่สุดอยู่บน · ผู้จัดการลบรายการที่ผิดหรือหมดอายุได้' : 'ความรู้ทั้งหมดที่พี่ๆ สอน ใหม่สุดอยู่บน';
+    if (!list.length) { $('k-list').innerHTML = `<div class="empty">${q ? 'ไม่พบ' : 'ยังไม่มีความรู้ — สอนน้องโชคเรื่องแรกได้เลย'}</div>`; return; }
+    $('k-list').innerHTML = list.map(k => `<div class="k"><div class="b"><span class="t">${esc(k.topic)}</span>
+        <div class="c">${esc(k.content)}</div><div class="m">${esc(k.source)}${k.by ? ' · ' + esc(k.by) : ''} · ${esc(k.time)}</div></div>
+        ${isAdmin ? `<button type="button" class="del" data-id="${esc(k.id)}">ลบ</button>` : ''}</div>`).join('');
+    $('k-list').querySelectorAll('.del').forEach(b => b.onclick = () => {
+      if (!confirm('ลบความรู้นี้? น้องโชคจะลืมเรื่องนี้')) return;
+      b.disabled = true;
+      call('chokDeleteKnowledge', { id: b.dataset.id, who: me })
+        .then(() => { knowledge = knowledge.filter(k => k.id !== b.dataset.id); drawKnowledge(); toast('ลบแล้ว'); })
+        .catch(e => { b.disabled = false; alert('ลบไม่สำเร็จ: ' + e.message); });
+    });
+  }
+  $('k-search').addEventListener('input', drawKnowledge);
+  $('t-save').onclick = () => {
+    const topic = $('t-topic').value.trim(), content = $('t-content').value.trim();
+    if (!content) return $('t-content').focus();
+    const btn = $('t-save'); btn.disabled = true; btn.textContent = 'กำลังบันทึก…';
+    call('chokTeach', { topic, content, who: me })
+      .then(r => {
+        $('t-topic').value = ''; $('t-content').value = '';
+        loadKnowledge(true); haptic([10, 40, 10]); toast('🧠 น้องโชคจำแล้วครับ');
+      })
+      .catch(e => alert('บันทึกไม่สำเร็จ: ' + e.message))
+      .finally(() => { btn.disabled = false; btn.textContent = 'บันทึกให้น้องโชคจำ'; });
+  };
+
+  render();
+})();
+</script>
+</body>
+</html>
