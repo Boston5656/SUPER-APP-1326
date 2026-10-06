@@ -147,6 +147,20 @@
     }
   }
 
+  // อัปเดตไม่สำเร็จ → บอกให้ชัดว่ากำลังดูข้อมูลเก่า (แตะเพื่อลองใหม่)
+  function swrWarn(t) {
+    var el = document.getElementById('sys-swr-warn');
+    if (!el) {
+      el = document.createElement('button'); el.id = 'sys-swr-warn'; el.type = 'button';
+      el.style.cssText = 'position:fixed;z-index:2147483001;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));border:0;border-radius:100px;padding:9px 16px;background:#FF453A;color:#fff;font:700 12px "IBM Plex Sans Thai",sans-serif;box-shadow:0 10px 24px -10px rgba(0,0,0,.6);cursor:pointer;max-width:92vw';
+      el.onclick = function () { location.reload(); };
+      (document.body || document.documentElement).appendChild(el);
+    }
+    var m = Math.max(0, Math.round((Date.now() - t) / 60000));
+    el.textContent = '⚠️ ต่อหลังบ้านไม่ได้ · กำลังดูข้อมูลเมื่อ ' + (m < 1 ? 'เมื่อกี้' : m < 60 ? m + ' นาทีก่อน' : Math.floor(m / 60) + ' ชม.ก่อน') + ' · แตะลองใหม่';
+  }
+  function swrOkClear() { var el = document.getElementById('sys-swr-warn'); if (el) el.remove(); }
+
   function call(fn, args, ok, fail) {
     var swrK = (SWR_FNS[APP] || []).indexOf(fn) !== -1 ? swrKey(fn, args) : '';
     var cached = swrK ? swrGet(swrK) : null;
@@ -163,7 +177,7 @@
           if (txt && txt === cached.d) return;   // ไม่มีอะไรเปลี่ยน → ไม่ต้องวาดใหม่
           ok0 && ok0(d);
         };
-        fail = function (e) { end(); console.warn('อัปเดตไม่สำเร็จ ใช้ข้อมูลในเครื่องไปก่อน', e); };
+        fail = function (e) { end(); console.warn('อัปเดตไม่สำเร็จ ใช้ข้อมูลในเครื่องไปก่อน', e); swrWarn(cached.t); };
         setTimeout(end, 90000);
       }
     }
@@ -194,7 +208,7 @@
           }
           if (res.ok) {
             if (fn === 'authenticateUser' && res.data && res.data.token) setToken(res.data.token);
-            if (swrK && res.data && !res.data.error && res.data.status !== 'error') { try { swrPut(swrK, JSON.stringify(res.data)); } catch (e) {} }
+            if (swrK && res.data && !res.data.error && res.data.status !== 'error') { try { swrPut(swrK, JSON.stringify(res.data)); } catch (e) {} swrOkClear(); }
             ok && ok(res.data);
           } else {
             if (res.auth) needLogin();
@@ -203,12 +217,14 @@
           }
         })
         .catch(function (e) {
-          // ลองใหม่แค่ 1 ครั้ง (เว้น 3–5 วิ) — ส่งซ้ำรัวๆ จะยิ่งเพิ่มคิวให้ Google ตอนที่มันช้าอยู่แล้ว
-          if (e && e.gBusy && retryable && tries < 2) { setTimeout(go, 3000 + Math.random() * 2000); return; }
-          if (retryable && tries < 2 && isNetErr(e)) { setTimeout(go, 2500 + Math.random() * 1500); return; }   // เน็ตสะดุด / Google ไม่ว่าง → ลองใหม่เอง
-          if (queueable && isNetErr(e)) {
+          // คำสั่งอ่าน: ลองใหม่แค่ 1 ครั้ง — ส่งซ้ำรัวๆ จะยิ่งเพิ่มคิวให้ Google
+          // บันทึกขาย/งานไม่ผ่าน: มีรหัสกันซ้ำที่หลังบ้าน → ลองได้ 4 ครั้ง (3, 7, 12 วิ) ไม่เข้าชีตซ้ำ
+          var transient = (e && e.gBusy) || isNetErr(e);
+          var maxTries = queueable ? 4 : 2;
+          if (transient && retryable && tries < maxTries) { setTimeout(go, (queueable ? [0, 3000, 7000, 12000][tries] : 3000) + Math.random() * 1500); return; }
+          if (queueable && transient) {
             qAdd({ id: args[0].clientId || uid(), app: APP, fn: fn, args: args, t: Date.now() }, function (saved) {
-              if (saved) { badge(); ok && ok({ status: 'success', queued: true, message: '📴 เน็ตหลุด — เก็บไว้ในเครื่องแล้ว จะส่งให้เองเมื่อเน็ตกลับมา' }); }
+              if (saved) { badge(); ok && ok({ status: 'success', queued: true, message: '📴 ส่งไม่ออกตอนนี้ (เน็ตหรือ Google ไม่ว่าง) — เก็บไว้ในเครื่องแล้ว ระบบจะส่งให้เอง ห้ามกดบันทึกซ้ำ' }); }
               else { var er = new Error('ไม่มีเน็ต และเก็บข้อมูลไว้ในเครื่องไม่ได้'); fail ? fail(er) : console.error(er); }
             });
             return;
