@@ -3,7 +3,8 @@
 
    วิธีติดตั้ง (ทำครั้งเดียว) — ดูรายละเอียดใน apps-script/README-NongChok.md
      1) โปรเจกต์ Apps Script ของ SUPER APP → เพิ่มไฟล์ใหม่ชื่อ NongChok.gs → วางโค้ดนี้ทั้งหมด
-     2) Project Settings → Script Properties → เพิ่ม ANTHROPIC_API_KEY = (คีย์จาก console.anthropic.com)
+     2) ใช้ Gemini (ฟรี) — คีย์ Gemini เดิมใน Script Properties ใช้ต่อได้เลย
+        (ชื่อ GEMINI_API_KEY หรือชื่ออื่นที่มีคำว่า GEMINI · ถ้ายังไม่มี สร้างฟรีที่ aistudio.google.com)
      3) ใน API.gs ให้แอป 'chok' เรียกฟังก์ชันเหล่านี้ได้:
           chokChat, chokTeach, chokFeedback, chokListKnowledge, chokDeleteKnowledge
      4) Deploy → Manage deployments → แก้ไข → Version: New version → Deploy
@@ -14,8 +15,8 @@
      • แก้คำตอบ   — กด ✏️ ใต้คำตอบที่ผิด แล้วพิมพ์คำตอบที่ถูก
    ===================================================================== */
 
-var CHOK_MODEL = 'claude-opus-5-5';
-var CHOK_API_URL = 'https://api.anthropic.com/v1/messages';
+var CHOK_MODEL = 'gemini-2.5-flash';   // รุ่นฟรี · เปลี่ยนได้ด้วย Script Property GEMINI_MODEL
+var CHOK_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/';
 var CHOK_ADMIN_ID = '15628';
 var CHOK_MAX_KNOWLEDGE_CHARS = 60000;   // ความรู้เกินนี้ → เลือกเฉพาะเรื่องที่เกี่ยวกับคำถาม
 var CHOK_HEADERS = ['ID', 'เวลา', 'หัวข้อ', 'ความรู้', 'ที่มา', 'ผู้สอน'];
@@ -36,20 +37,18 @@ var CHOK_SYSTEM = [
   '- หลังบันทึก ให้บอกสั้นๆ ว่าจำอะไรไว้'
 ].join('\n');
 
-var CHOK_TOOLS = [{
+var CHOK_TOOLS = [{ functionDeclarations: [{
   name: 'remember',
   description: 'บันทึกความรู้ใหม่ลงคลังความรู้ถาวรของน้องโชค เพื่อใช้ตอบคำถามในอนาคต ใช้เมื่อพนักงานสอนหรือให้ข้อมูลร้านที่มีประโยชน์ระยะยาว',
-  strict: true,
-  input_schema: {
-    type: 'object',
+  parameters: {
+    type: 'OBJECT',
     properties: {
-      topic: { type: 'string', description: 'หัวข้อสั้นๆ เช่น "โปรโมชั่น", "ขั้นตอนเคลม", "SAMSUNG"' },
-      content: { type: 'string', description: 'ความรู้ที่ต้องจำ เขียนเป็นประโยคสมบูรณ์ อ่านเข้าใจได้เอง' }
+      topic: { type: 'STRING', description: 'หัวข้อสั้นๆ เช่น "โปรโมชั่น", "ขั้นตอนเคลม", "SAMSUNG"' },
+      content: { type: 'STRING', description: 'ความรู้ที่ต้องจำ เขียนเป็นประโยคสมบูรณ์ อ่านเข้าใจได้เอง' }
     },
-    required: ['topic', 'content'],
-    additionalProperties: false
+    required: ['topic', 'content']
   }
-}];
+}] }];
 
 /* ===================== ฟังก์ชันที่หน้าเว็บเรียก (app: 'chok') ===================== */
 
@@ -62,45 +61,42 @@ function chokChat(req) {
   var who = chokWho_(req.who);
 
   var knowledge = chokReadKnowledge_();
-  var messages = chokHistory_(req.history);
-  var lastMsg = messages[messages.length - 1];
-  if (lastMsg && lastMsg.role === 'user') lastMsg.content += '\n' + message;   // ข้อความก่อนหน้าที่ส่งไม่สำเร็จ
-  else messages.push({ role: 'user', content: message });
+  var contents = chokHistory_(req.history);
+  var lastMsg = contents[contents.length - 1];
+  if (lastMsg && lastMsg.role === 'user') lastMsg.parts[0].text += '\n' + message;   // ข้อความก่อนหน้าที่ส่งไม่สำเร็จ
+  else contents.push({ role: 'user', parts: [{ text: message }] });
 
-  var system = [
-    { type: 'text', text: CHOK_SYSTEM, cache_control: { type: 'ephemeral' } },
-    { type: 'text', text: chokKnowledgeText_(knowledge, message) +
-      '\n\nวันนี้: ' + Utilities.formatDate(new Date(), 'Asia/Bangkok', 'yyyy-MM-dd') + ' · คนที่คุยด้วย: ' + (who.name || 'พนักงาน') }
-  ];
+  var system = CHOK_SYSTEM + '\n\n' + chokKnowledgeText_(knowledge, message) +
+    '\n\nวันนี้: ' + Utilities.formatDate(new Date(), 'Asia/Bangkok', 'yyyy-MM-dd') + ' · คนที่คุยด้วย: ' + (who.name || 'พนักงาน');
 
   var learned = [];
   for (var turn = 0; turn < 4; turn++) {
-    var res = chokCallClaude_({ system: system, messages: messages, tools: CHOK_TOOLS });
-    if (res.stop_reason === 'refusal') {
+    var res = chokCallGemini_({ system: system, contents: contents });
+    var cand = (res.candidates || [])[0];
+    if (!cand || !cand.content || !cand.content.parts) {
+      var why = cand && cand.finishReason;
+      if (why === 'MAX_TOKENS') return { status: 'success', reply: 'คำตอบยาวเกินไปครับ ลองถามให้แคบลงหน่อยนะครับ', learned: learned };
       return { status: 'success', reply: 'ขอโทษครับ เรื่องนี้น้องโชคตอบให้ไม่ได้ ลองถามแบบอื่นนะครับ 🙏', learned: learned };
     }
-    if (res.stop_reason !== 'tool_use') {
-      var reply = chokText_(res.content);
-      if (!reply && res.stop_reason === 'max_tokens') reply = 'คำตอบยาวเกินไปครับ ลองถามให้แคบลงหน่อยนะครับ';
-      return { status: 'success', reply: reply || '…', learned: learned };
+    var calls = cand.content.parts.filter(function (p) { return p.functionCall; });
+    if (!calls.length) {
+      return { status: 'success', reply: chokText_(cand.content.parts) || '…', learned: learned };
     }
     // น้องโชคขอบันทึกความรู้ → บันทึกลงชีต แล้วส่งผลกลับ
-    messages.push({ role: 'assistant', content: res.content });
-    var results = [];
-    res.content.forEach(function (b) {
-      if (b.type !== 'tool_use') return;
-      var out;
+    contents.push(cand.content);
+    var results = calls.map(function (p) {
+      var fc = p.functionCall, args = fc.args || {}, out;
       try {
-        if (b.name !== 'remember') throw new Error('ไม่รู้จักเครื่องมือ ' + b.name);
-        var item = chokSave_(b.input && b.input.topic, b.input && b.input.content, 'คุย', who.name);
+        if (fc.name !== 'remember') throw new Error('ไม่รู้จักเครื่องมือ ' + fc.name);
+        var item = chokSave_(args.topic, args.content, 'คุย', who.name);
         learned.push({ topic: item.topic, content: item.content });
-        out = { type: 'tool_result', tool_use_id: b.id, content: 'บันทึกแล้ว (#' + item.id + ')' };
+        out = { result: 'บันทึกแล้ว (#' + item.id + ')' };
       } catch (e) {
-        out = { type: 'tool_result', tool_use_id: b.id, content: 'บันทึกไม่สำเร็จ: ' + e.message, is_error: true };
+        out = { error: 'บันทึกไม่สำเร็จ: ' + e.message };
       }
-      results.push(out);
+      return { functionResponse: { name: fc.name, response: out } };
     });
-    messages.push({ role: 'user', content: results });
+    contents.push({ role: 'user', parts: results });
   }
   return { status: 'success', reply: 'บันทึกไว้แล้วครับ ✅', learned: learned };
 }
@@ -219,52 +215,59 @@ function chokBigrams_(s) {
   return out;
 }
 
-/* ===================== เรียก Claude API ===================== */
+/* ===================== เรียก Gemini API (ฟรี) ===================== */
 
-function chokCallClaude_(body) {
-  var key = PropertiesService.getScriptProperties().getProperty('ANTHROPIC_API_KEY');
-  if (!key) throw new Error('ยังไม่ได้ตั้ง ANTHROPIC_API_KEY ใน Script Properties');
+// ใช้คีย์ Gemini ที่มีอยู่แล้วใน Script Properties (GEMINI_API_KEY หรือชื่ออื่นที่มีคำว่า GEMINI)
+function chokGeminiKey_() {
+  var all = PropertiesService.getScriptProperties().getProperties();
+  if (all.GEMINI_API_KEY) return all.GEMINI_API_KEY;
+  var name = Object.keys(all).filter(function (k) { return /GEMINI/i.test(k) && !/MODEL/i.test(k) && all[k]; })[0];
+  if (name) return all[name];
+  throw new Error('ไม่พบคีย์ Gemini ใน Script Properties (ตั้งชื่อ GEMINI_API_KEY)');
+}
+
+function chokCallGemini_(body) {
+  var model = PropertiesService.getScriptProperties().getProperty('GEMINI_MODEL') || CHOK_MODEL;
   var payload = {
-    model: CHOK_MODEL,
-    max_tokens: 4096,
-    output_config: { effort: 'low' },   // แชทสั้นๆ → เร็วและประหยัด
-    fallbacks: 'default',               // ถ้าโมเดลหลักปฏิเสธ ให้โมเดลสำรองตอบแทน
-    system: body.system,
-    messages: body.messages,
-    tools: body.tools
+    systemInstruction: { parts: [{ text: body.system }] },
+    contents: body.contents,
+    tools: CHOK_TOOLS,
+    generationConfig: { temperature: 0.4, maxOutputTokens: 2048 }
   };
   var opts = {
     method: 'post', contentType: 'application/json', muteHttpExceptions: true,
-    headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-beta': 'server-side-fallback-2026-07-01' },
+    headers: { 'x-goog-api-key': chokGeminiKey_() },
     payload: JSON.stringify(payload)
   };
+  var url = CHOK_API_BASE + encodeURIComponent(model) + ':generateContent';
   for (var attempt = 0; ; attempt++) {
-    var r = UrlFetchApp.fetch(CHOK_API_URL, opts), code = r.getResponseCode();
+    var r = UrlFetchApp.fetch(url, opts), code = r.getResponseCode();
     if (code === 200) return JSON.parse(r.getContentText());
     var retryable = code === 429 || code >= 500;
-    if (retryable && attempt < 2) { Utilities.sleep(1500 * (attempt + 1)); continue; }
+    if (retryable && attempt < 2) { Utilities.sleep(2000 * (attempt + 1)); continue; }
     var msg = '';
     try { msg = JSON.parse(r.getContentText()).error.message; } catch (e) { msg = r.getContentText().slice(0, 200); }
-    if (code === 429 || code === 529) throw new Error('น้องโชคมีคนคุยเยอะ ลองใหม่อีกครั้งนะครับ');
+    if (code === 429) throw new Error('ใช้น้องโชคเกินโควตาฟรีชั่วคราว รอสักครู่แล้วลองใหม่นะครับ');
+    if (code === 503) throw new Error('Gemini ไม่ว่างชั่วคราว ลองใหม่อีกครั้งนะครับ');
     throw new Error('น้องโชคตอบไม่ได้ (' + code + '): ' + msg);
   }
 }
 
-function chokText_(content) {
-  return (content || []).filter(function (b) { return b.type === 'text'; })
-    .map(function (b) { return b.text; }).join('\n').trim();
+function chokText_(parts) {
+  return (parts || []).filter(function (p) { return p.text && !p.thought; })
+    .map(function (p) { return p.text; }).join('').trim();
 }
 
-// ประวัติแชทจากหน้าเว็บ (ข้อความล้วน) → ต้องเริ่มด้วย user และสลับ user/assistant
+// ประวัติแชทจากหน้าเว็บ (ข้อความล้วน) → รูปแบบ Gemini ต้องเริ่มด้วย user และสลับ user/model
 function chokHistory_(history) {
   var out = [];
   (Array.isArray(history) ? history : []).slice(-12).forEach(function (h) {
-    var role = h && h.role === 'assistant' ? 'assistant' : 'user';
+    var role = h && h.role === 'assistant' ? 'model' : 'user';
     var text = String((h && h.text) || '').trim().slice(0, 4000);
     if (!text) return;
     if (!out.length && role !== 'user') return;
-    if (out.length && out[out.length - 1].role === role) out[out.length - 1].content += '\n' + text;
-    else out.push({ role: role, content: text });
+    if (out.length && out[out.length - 1].role === role) out[out.length - 1].parts[0].text += '\n' + text;
+    else out.push({ role: role, parts: [{ text: text }] });
   });
   return out;
 }

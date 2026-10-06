@@ -21,26 +21,27 @@
 
 ## ติดตั้ง (ทำครั้งเดียว)
 
-1. **รับ API key** ที่ https://console.anthropic.com → API Keys → Create Key
-2. เปิดโปรเจกต์ Apps Script ของ SUPER APP (ตัวเดียวกับลิงก์ใน `gas.js`)
-3. **เพิ่มไฟล์** ➕ → Script → ตั้งชื่อ `NongChok` → วางโค้ดทั้งหมดจาก `apps-script/NongChok.gs`
-4. **ตั้งคีย์**: ⚙️ Project Settings → Script Properties → Add script property
-   - Property: `ANTHROPIC_API_KEY`
-   - Value: คีย์จากข้อ 1 (ห้ามใส่คีย์ไว้ในโค้ดหรือใน GitHub)
-5. **เปิดทางให้แอป `chok`** ใน `API.gs`: ตัวรับคำสั่งจะได้ข้อมูล `{ app: 'chok', fn: 'ชื่อฟังก์ชัน', args: [...] }`
+1. เปิดโปรเจกต์ Apps Script ของ SUPER APP (ตัวเดียวกับลิงก์ใน `gas.js`)
+2. **เพิ่มไฟล์** ➕ → Script → ตั้งชื่อ `NongChok` → วางโค้ดทั้งหมดจาก `apps-script/NongChok.gs`
+3. **คีย์ Gemini (ฟรี)**: ใช้คีย์ Gemini เดิมที่อยู่ใน ⚙️ Project Settings → Script Properties ได้เลย ไม่ต้องแก้อะไร
+   (น้องโชคหาคีย์ชื่อ `GEMINI_API_KEY` ก่อน ถ้าไม่มีจะใช้ชื่ออื่นที่มีคำว่า `GEMINI`)
+   ถ้ายังไม่มีคีย์ สร้างฟรีที่ https://aistudio.google.com → Get API key แล้วเพิ่มเป็น `GEMINI_API_KEY`
+4. **เปิดทางให้แอป `chok`** ใน `API.gs`: ตัวรับคำสั่งจะได้ข้อมูล `{ app: 'chok', fn: 'ชื่อฟังก์ชัน', args: [...] }`
    ถ้า `API.gs` มีรายชื่อฟังก์ชันที่อนุญาตแยกตามแอป ให้เพิ่มแอป `chok` เข้าไปแบบนี้:
    ```js
    chok: ['chokChat', 'chokTeach', 'chokFeedback', 'chokListKnowledge', 'chokDeleteKnowledge'],
    ```
    ทุกคนที่ล็อกอินแล้วควรเรียกได้ (เหมือนแอป Ranking / รวมภาพ)
-6. **Deploy ใหม่**: Deploy → Manage deployments → ✏️ → Version: **New version** → Deploy
+5. **Deploy ใหม่**: Deploy → Manage deployments → ✏️ → Version: **New version** → Deploy
    (ลิงก์ `/exec` เท่าเดิม ไม่ต้องแก้ `gas.js`)
-7. ครั้งแรกที่รัน Google จะขอสิทธิ์ **เชื่อมต่อบริการภายนอก** (เรียก API) และ **สร้างชีต** ให้กด Allow
+6. ครั้งแรกที่รัน Google จะขอสิทธิ์ **เชื่อมต่อบริการภายนอก** (เรียก API) และ **สร้างชีต** ให้กด Allow
 
-## ค่าใช้จ่าย
+## ค่าใช้จ่าย — ฟรี
 
-น้องโชคใช้โมเดล `claude-opus-5-5` ที่ระดับ effort `low` (ตอบเร็ว ประหยัด) และคิดเงินตามการใช้งานจริงในบัญชี Anthropic
-ตั้งวงเงินสูงสุดต่อเดือนได้ที่ console.anthropic.com → Settings → Limits
+น้องโชคใช้ Gemini รุ่น `gemini-2.5-flash` บนโควตาฟรีของ Google AI Studio (ไม่ต้องผูกบัตร)
+- ถ้าใช้เกินโควตาฟรีต่อนาที/ต่อวัน น้องโชคจะบอกให้รอสักครู่แล้วลองใหม่ ไม่มีค่าใช้จ่ายเพิ่ม
+- อยากเปลี่ยนรุ่น: เพิ่ม Script Property `GEMINI_MODEL` เช่น `gemini-2.5-flash-lite` (ไม่ต้องแก้โค้ด)
+- หมายเหตุ: ข้อมูลที่ส่งผ่านโควตาฟรี Google อาจนำไปใช้ปรับปรุงบริการได้ จึงไม่ควรพิมพ์ข้อมูลส่วนตัวลูกค้า
 
 ## หมายเหตุ
 
