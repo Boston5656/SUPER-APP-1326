@@ -107,7 +107,7 @@
   // เฉพาะคำสั่ง "อ่าน" เท่านั้น (ไม่มีคำสั่งบันทึก/แก้/ลบในนี้)
   var SWR_FNS = {
     dash:  ['getDashboardData', 'getRankingData', 'getHubBadges'],
-    check: ['getDashboardData', 'getStoreGoal', 'getLeaderboard', 'getCheckSettings', 'getTodaySales'],
+    check: ['getDashboardData', 'getStoreGoal', 'getLeaderboard', 'getCheckSettings', 'getTodaySales', 'getSerialIndex'],
     shift: ['getMonthData', 'getReportSummary'],
     stock: ['getBrandList', 'getPromotions']
   };

@@ -5,7 +5,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <script src="staff-names.js?v=2026.10.06-2"></script>
+        <script src="staff-names.js?v=2026.10.06-3"></script>
     <script>
       // ปุ่มชื่อพนักงาน — รายชื่ออยู่ในไฟล์ staff-names.js
       function pickedName(radioName) {
@@ -71,7 +71,7 @@
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderNameButtons); else renderNameButtons();
     </script>
     <script>window.GAS_APP = 'check';</script>
-    <script src="gas.js?v=2026.10.06-2"></script>
+    <script src="gas.js?v=2026.10.06-3"></script>
     <title>Check List 1326</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#FFD600">
@@ -1619,6 +1619,11 @@
                 <div class="name-grid nm-recv" data-names="CASE_RECEIVERS" data-radio="caseReceiver" data-style="btn-receiver"></div>
               </div>
 
+              <div class="field">
+                <button type="button" class="imei-btn" onclick="openImeiScan()"><span class="ic">📷</span><span>สแกน IMEI จากกล่อง<small>เติมรุ่น แบรนด์ ราคาให้เอง + ตัดออกจากสต๊อก</small></span><span class="go">›</span></button>
+                <div class="imei-chip" id="imeiChip"></div>
+              </div>
+
               <div class="row g-3 field">
                 <div class="col-md-7">
                   <label class="form-label-custom">📱 รุ่นที่ขาย</label>
@@ -2534,11 +2539,15 @@
             paperBase64: paperBase64,
             caseReceiver: caseReceiver
           };
+          // 📦 เครื่องที่สแกนมา (ใช้ตัดสต๊อก) — ถ้าแก้ชื่อรุ่นเองหลังสแกน ก็ยังผูกกับ IMEI เดิม
+          var imeiIt = window.imeiPicked ? window.imeiPicked() : null;
+          if (imeiIt) { payload.serial = imeiIt.serial; payload.stockCode = imeiIt.code; }
 
           google.script.run
             .withSuccessHandler(function(res) {
               if (res.status === 'success') {
                 document.getElementById('salesForm').reset();
+                if (window.imeiAfterSave) imeiAfterSave(empName);
                 resetQtyChecks('input[name="focusCheck"]');
                 clearPickedPhoto('paper', 'paperPicked');
                 showToast(res.queued ? res.message : 'บันทึกข้อมูลการขายเรียบร้อย'); setTimeout(loadTodayStrip, 800);
@@ -4057,5 +4066,279 @@
         }
       }
     </script>
+  <!-- ================================================================
+       📷 สแกน IMEI → เติมรุ่น/แบรนด์/ราคาจาก STOCK + ตัดสต๊อกตอนบันทึก
+       ================================================================ -->
+  <style>
+    .imei-btn { width: 100%; display: flex; align-items: center; gap: 12px; border: 0; background: var(--ink, #1C1C1E); color: #fff; text-align: left;
+      border-radius: 18px; padding: 13px 16px; font-weight: 800; font-size: 15px; box-shadow: 0 10px 22px -14px rgba(0,0,0,.6); transition: transform .15s; }
+    .imei-btn:active { transform: scale(.98); }
+    .imei-btn .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--yellow, #FFD600); display: grid; place-items: center; font-size: 20px; flex: none; }
+    .imei-btn small { display: block; font-weight: 600; font-size: 11.5px; color: #AEAEB2; margin-top: 1px; }
+    .imei-btn .go { margin-left: auto; color: var(--yellow, #FFD600); font-size: 20px; }
+    .imei-chip { display: none; margin-top: 10px; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 16px; background: #E9F9EE; border: 1px solid rgba(52,199,89,.45); color: #1C1C1E; }
+    .imei-chip.on { display: flex; animation: imeiPop .45s cubic-bezier(.2,1.4,.4,1); }
+    .imei-chip b { font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: #1C1C1E; }
+    .imei-chip span { flex: 1; min-width: 0; font-size: 12px; line-height: 1.4; color: #3A3A3C; word-break: break-all; }
+    .imei-chip button { border: 0; background: rgba(0,0,0,.08); color: #1C1C1E; width: 30px; height: 30px; border-radius: 50%; font-weight: 800; flex: none; }
+    @keyframes imeiPop { from { transform: scale(.9); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    #imeiScan { position: fixed; inset: 0; z-index: 2000; background: #000; display: none; flex-direction: column; color: #fff; font-family: inherit; }
+    #imeiScan.on { display: flex; }
+    #imeiScan .sc-top { position: absolute; z-index: 3; left: 0; right: 0; top: 0; padding: calc(12px + env(safe-area-inset-top)) 14px 10px; display: flex; align-items: center; gap: 10px;
+      background: linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,0)); }
+    #imeiScan .sc-top h6 { margin: 0; flex: 1; font-weight: 800; font-size: 16px; }
+    #imeiScan .sc-top h6 small { display: block; font-weight: 600; font-size: 11px; opacity: .7; }
+    #imeiScan .sc-ic { border: 0; width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 18px; font-weight: 800; flex: none; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+    #imeiScan .sc-ic.on { background: #FFD600; color: #1C1C1E; }
+    #imeiScan .sc-ic[hidden] { display: none; }
+    #scView { position: absolute; inset: 0; }
+    #scView video { width: 100% !important; height: 100% !important; object-fit: cover; }
+    #scView #qr-shaded-region { border-color: rgba(0,0,0,.45) !important; }
+    #imeiScan .sc-bot { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; padding: 14px 14px calc(16px + env(safe-area-inset-bottom));
+      background: linear-gradient(0deg, rgba(0,0,0,.85) 55%, rgba(0,0,0,0)); }
+    #scMsg { text-align: center; font-size: 13px; font-weight: 700; min-height: 38px; margin-bottom: 10px; line-height: 1.4; }
+    #scMsg.warn { color: #FFD60A; } #scMsg.bad { color: #FF6961; } #scMsg.ok { color: #30D158; }
+    #imeiScan .sc-zoom { display: flex; justify-content: center; gap: 8px; margin-bottom: 10px; }
+    #imeiScan .sc-zoom button { border: 0; border-radius: 100px; padding: 6px 13px; font-weight: 800; font-size: 12px; background: rgba(255,255,255,.16); color: #fff; }
+    #imeiScan .sc-zoom button.on { background: #FFD600; color: #1C1C1E; }
+    #imeiScan .sc-man { display: flex; gap: 8px; }
+    #imeiScan .sc-man input { flex: 1; min-width: 0; border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.1); color: #fff; border-radius: 14px; padding: 11px 12px; font: 600 14px ui-monospace, Menlo, monospace; }
+    #imeiScan .sc-man button { border: 0; border-radius: 14px; padding: 0 16px; background: #FFD600; color: #1C1C1E; font-weight: 800; }
+    #imeiScan .sc-dup { position: absolute; z-index: 5; inset: 0; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.72); }
+    #imeiScan .sc-dup.on { display: flex; }
+    #imeiScan .sc-dup > div { width: 100%; max-width: 360px; background: #1C1C1E; border-radius: 24px; padding: 20px; text-align: center; animation: imeiPop .4s cubic-bezier(.2,1.4,.4,1); }
+    #imeiScan .sc-dup h5 { font-weight: 800; color: #FFD60A; margin-bottom: 8px; }
+    #imeiScan .sc-dup p { font-size: 13px; opacity: .85; margin-bottom: 16px; white-space: pre-line; }
+    #imeiScan .sc-dup .row2 { display: flex; gap: 8px; }
+    #imeiScan .sc-dup .row2 button { flex: 1; border: 0; border-radius: 14px; padding: 12px; font-weight: 800; }
+    #imeiScan .sc-line { position: absolute; z-index: 2; left: 7%; right: 7%; top: 50%; height: 2px; background: #FFD600; box-shadow: 0 0 14px #FFD600; animation: scLine 1.8s ease-in-out infinite alternate; pointer-events: none; }
+    @keyframes scLine { from { transform: translateY(-46px); opacity: .5; } to { transform: translateY(46px); opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { #imeiScan .sc-line { animation: none; } }
+  </style>
+
+  <div id="imeiScan" aria-modal="true" role="dialog">
+    <div id="scView"></div>
+    <div class="sc-line"></div>
+    <div class="sc-top">
+      <button type="button" class="sc-ic" onclick="closeImeiScan()" aria-label="ปิด">✕</button>
+      <h6>สแกน IMEI / Serial<small id="scIdx">กำลังโหลดรายการสต๊อก…</small></h6>
+      <button type="button" class="sc-ic" id="scTorch" onclick="imeiTorch()" hidden aria-label="ไฟฉาย">🔦</button>
+    </div>
+    <div class="sc-bot">
+      <div id="scMsg">เล็งบาร์โค้ด IMEI หรือ S/N บนกล่องให้อยู่ตรงเส้นเหลือง</div>
+      <div class="sc-zoom" id="scZoom" hidden></div>
+      <form class="sc-man" onsubmit="event.preventDefault(); imeiTry(document.getElementById('scManual').value, true)">
+        <input id="scManual" placeholder="หรือพิมพ์ IMEI / Serial (8 ตัวท้ายก็ได้)" autocomplete="off" autocapitalize="characters" inputmode="text">
+        <button type="submit">ค้นหา</button>
+      </form>
+    </div>
+    <div class="sc-dup" id="scDup"><div>
+      <h5>⚠️ เครื่องนี้บันทึกขายแล้ว</h5>
+      <p id="scDupTxt"></p>
+      <div class="row2">
+        <button type="button" style="background:#3A3A3C;color:#fff" onclick="imeiDupNo()">สแกนเครื่องอื่น</button>
+        <button type="button" style="background:#FFD600;color:#1C1C1E" onclick="imeiDupYes()">ใช้เครื่องนี้</button>
+      </div>
+    </div></div>
+  </div>
+
+  <script>
+    (function () {
+      var IMEI = { idx: null, map: null, products: {}, sold: {}, at: '', loading: false, scanner: null, track: null, busy: false, lastBad: '', pend: null, picked: null };
+      window.IMEI_STATE = IMEI;
+
+      function libReady(cb) {
+        if (window.Html5Qrcode) return cb();
+        var s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js';
+        s.onload = cb; s.onerror = function () { setMsg('โหลดตัวสแกนไม่สำเร็จ — เช็กเน็ตแล้วลองใหม่ หรือพิมพ์ IMEI ด้านล่าง', 'bad'); };
+        document.head.appendChild(s);
+      }
+      function setMsg(t, cls) { var m = document.getElementById('scMsg'); if (m) { m.textContent = t; m.className = cls || ''; } }
+      function norm(t) { return String(t || '').toUpperCase().replace(/\s+/g, '').replace(/[^0-9A-Z\-\/]/g, ''); }
+
+      function loadIndex() {
+        if (IMEI.loading) return; IMEI.loading = true;
+        google.script.run.withSuccessHandler(function (d) {
+          IMEI.loading = false;
+          if (!d || !d.serials) return;
+          var m = new Map();
+          d.serials.forEach(function (r) { m.set(r[0], r[1]); });
+          IMEI.map = m; IMEI.products = d.products || {}; IMEI.at = d.at || '';
+          IMEI.sold = Object.assign({}, d.sold || {}, IMEI.localSold || {});
+          var el = document.getElementById('scIdx'); if (el) el.textContent = 'สต๊อก ' + m.size.toLocaleString() + ' เครื่อง · อัปเดต ' + IMEI.at;
+          if (IMEI.pend) { var p = IMEI.pend; IMEI.pend = null; imeiTry(p, true); }
+        }).withFailureHandler(function (e) {
+          IMEI.loading = false;
+          var el = document.getElementById('scIdx'); if (el) el.textContent = '⚠️ โหลดรายการสต๊อกไม่สำเร็จ — ลองปิดแล้วเปิดใหม่';
+        }).getSerialIndex();
+      }
+
+      // หา Serial ในสต๊อก: ตรงตัว → ตัด IMEI 15 หลักออกมา → ท้ายตรงกัน
+      function findSerial(raw) {
+        var t = norm(raw); if (!t || !IMEI.map) return null;
+        if (IMEI.map.has(t)) return t;
+        var im = t.match(/\d{15}/); if (im && IMEI.map.has(im[0])) return im[0];
+        var t2 = t.replace(/^(IMEI|SN|S\/N|SERIAL)[:\-]?/, ''); if (IMEI.map.has(t2)) return t2;
+        if (t.length >= 8) {
+          var hits = [];
+          IMEI.map.forEach(function (_, k) { if (k.length >= 8 && (k.endsWith(t) || t.endsWith(k))) hits.push(k); });
+          if (hits.length === 1) return hits[0];
+          if (hits.length > 1) return { many: hits.length };
+        }
+        return null;
+      }
+
+      window.imeiTry = function (raw, manual) {
+        if (IMEI.busy) return;
+        var t = norm(raw); if (!t) return;
+        if (!IMEI.map) { IMEI.pend = t; setMsg('รอโหลดรายการสต๊อกแป๊บนึง…', 'warn'); return; }
+        var sn = findSerial(t);
+        if (sn && sn.many) { setMsg('เจอ ' + sn.many + ' เครื่องที่ลงท้ายแบบนี้ — พิมพ์เพิ่มอีกหน่อย', 'warn'); return; }
+        if (!sn) {
+          if (manual || t !== IMEI.lastBad) {
+            IMEI.lastBad = t;
+            setMsg('ไม่พบ "' + t.slice(-12) + '" ในสต๊อก — ' + (manual && t.length < 8 ? 'พิมพ์อย่างน้อย 8 ตัว' : 'ลองบาร์โค้ดอื่นบนกล่อง (IMEI / S/N)'), 'bad');
+            if (navigator.vibrate) try { navigator.vibrate(40); } catch (e) {}
+          }
+          return;
+        }
+        var sold = IMEI.sold[sn];
+        if (sold) {
+          IMEI.busy = true; IMEI.dupSn = sn;
+          document.getElementById('scDupTxt').textContent = 'IMEI …' + sn.slice(-6) + ' บันทึกขายเมื่อ ' + sold.at + (sold.emp ? ' โดย ' + sold.emp : '') + '\nถ้าเป็นเครื่องเดียวกันจะนับซ้ำนะครับ';
+          document.getElementById('scDup').classList.add('on');
+          return;
+        }
+        pick(sn);
+      };
+      window.imeiDupNo = function () { document.getElementById('scDup').classList.remove('on'); IMEI.busy = false; IMEI.lastBad = ''; setMsg('สแกนเครื่องถัดไปได้เลย'); };
+      window.imeiDupYes = function () { document.getElementById('scDup').classList.remove('on'); IMEI.busy = false; pick(IMEI.dupSn); };
+
+      function pick(sn) {
+        IMEI.busy = true;
+        if (navigator.vibrate) try { navigator.vibrate([30, 40, 30]); } catch (e) {}
+        var code = IMEI.map.get(sn), p = IMEI.products[code] || ['', '', ''];
+        IMEI.picked = { serial: sn, code: code, name: p[0], brand: p[1], price: p[2] };
+        setMsg('✓ ' + p[0], 'ok');
+        setTimeout(function () { closeImeiScan(); fillForm(); }, 350);
+      }
+
+      function fillForm() {
+        var it = IMEI.picked; if (!it) return;
+        var mn = document.getElementById('modelName'); if (mn) mn.value = it.name;
+        var pr = document.getElementById('price'), n = Number(String(it.price).replace(/[^\d.]/g, ''));
+        if (pr && n > 0 && (!pr.value || pr.value === IMEI.autoPrice)) { pr.value = Math.round(n); IMEI.autoPrice = pr.value; }
+        // แบรนด์: เทียบคำในปุ่มแบรนด์กับแบรนด์ในสต๊อก / ชื่อรุ่น
+        var up = (it.brand + ' ' + it.name).toUpperCase();
+        if (/\bIPHONE|\bIPAD|APPLE WATCH|\bAIRPODS|\bMACBOOK/.test(up)) up = 'APPLE ' + up;
+        var best = null;
+        document.querySelectorAll('input[name="brand"]').forEach(function (r) {
+          if (best) return;
+          var words = r.value.toUpperCase().split(/[\s\/]+/).filter(function (w) { return w.length >= 2; });
+          var b = (it.brand || '').toUpperCase();
+          if ((b && words.indexOf(b) !== -1) || words.some(function (w) { return new RegExp('(^|\\W)' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\W|$)').test(up); })) best = r;
+        });
+        if (best) best.checked = true;
+        // ประเภท: iPad / Tablet / Watch
+        var u2 = it.name.toUpperCase(), want = /\bIPAD/.test(u2) ? 'IPAD' : /WATCH/.test(u2) ? 'WATCH' : /\bTAB\b|TABLET|\bPAD\b/.test(u2) ? 'TAB' : '';
+        var types = document.querySelectorAll('input[name="deviceType"]'), hitT = null;
+        if (want) types.forEach(function (r) { if (!hitT && r.value && r.value.toUpperCase().indexOf(want) !== -1) hitT = r; });
+        (hitT || document.querySelector('input[name="deviceType"][data-default]') || {}).checked = true;
+        renderChip();
+        if (typeof showToast === 'function') showToast('เติมรุ่นจากสต๊อกแล้ว — เช็กราคาขายอีกที');
+      }
+
+      function renderChip() {
+        var c = document.getElementById('imeiChip'); if (!c) return;
+        var it = IMEI.picked;
+        if (!it) { c.classList.remove('on'); c.innerHTML = ''; return; }
+        c.innerHTML = '<div style="font-size:20px">📦</div><span>IMEI <b>' + it.serial.replace(/</g, '') + '</b><br>บันทึกแล้วจะตัดออกจากสต๊อกในแอป STOCK</span><button type="button" onclick="imeiClear()" aria-label="ยกเลิก">✕</button>';
+        c.classList.add('on');
+      }
+      window.imeiClear = function () { IMEI.picked = null; renderChip(); };
+      window.imeiPicked = function () { return IMEI.picked; };
+      // เรียกหลังบันทึกสำเร็จ: จำว่าขายแล้ว (กันสแกนซ้ำ) แล้วล้างช่อง
+      window.imeiAfterSave = function (emp) {
+        var it = IMEI.picked; if (!it) return;
+        var now = new Date(), at = ('0' + now.getDate()).slice(-2) + '/' + ('0' + (now.getMonth() + 1)).slice(-2) + ' ' + ('0' + now.getHours()).slice(-2) + ':' + ('0' + now.getMinutes()).slice(-2);
+        IMEI.localSold = IMEI.localSold || {}; IMEI.localSold[it.serial] = { at: at, emp: emp || '' };
+        IMEI.sold[it.serial] = IMEI.localSold[it.serial];
+        IMEI.picked = null; renderChip();
+      };
+
+      window.openImeiScan = function () {
+        IMEI.busy = false; IMEI.lastBad = '';
+        document.getElementById('scManual').value = '';
+        document.getElementById('scDup').classList.remove('on');
+        setMsg('เล็งบาร์โค้ด IMEI หรือ S/N บนกล่องให้อยู่ตรงเส้นเหลือง');
+        document.getElementById('imeiScan').classList.add('on');
+        document.body.style.overflow = 'hidden';
+        try { history.pushState({ imeiScan: 1 }, ''); } catch (e) {}
+        loadIndex();
+        libReady(startCam);
+      };
+      window.closeImeiScan = function (fromPop) {
+        var ov = document.getElementById('imeiScan'); if (!ov.classList.contains('on')) return;
+        ov.classList.remove('on'); document.body.style.overflow = '';
+        stopCam();
+        if (!fromPop && history.state && history.state.imeiScan) try { history.back(); } catch (e) {}
+      };
+      window.addEventListener('popstate', function () { closeImeiScan(true); });
+
+      function startCam() {
+        if (!document.getElementById('imeiScan').classList.contains('on')) return;
+        var F = window.Html5QrcodeSupportedFormats || {};
+        var formats = ['CODE_128', 'CODE_39', 'CODE_93', 'EAN_13', 'ITF', 'QR_CODE', 'DATA_MATRIX'].map(function (k) { return F[k]; }).filter(function (v) { return v !== undefined; });
+        try {
+          IMEI.scanner = IMEI.scanner || new Html5Qrcode('scView', { verbose: false, formatsToSupport: formats, experimentalFeatures: { useBarCodeDetectorIfSupported: true } });
+        } catch (e) { setMsg('เปิดตัวสแกนไม่ได้: ' + e.message, 'bad'); return; }
+        var W = window.innerWidth, H = window.innerHeight;
+        IMEI.scanner.start(
+          { facingMode: 'environment' },
+          { fps: 15, disableFlip: true,
+            qrbox: function (vw, vh) { return { width: Math.floor(vw * 0.86), height: Math.max(90, Math.floor(vh * 0.26)) }; },
+            videoConstraints: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 }, advanced: [{ focusMode: 'continuous' }] } },
+          function (text) { imeiTry(text, false); },
+          function () {}
+        ).then(setupCaps).catch(function (err) {
+          setMsg('เปิดกล้องไม่ได้: ' + (err && err.message ? err.message : err) + ' — อนุญาตกล้องในเบราว์เซอร์ หรือพิมพ์ IMEI ด้านล่าง', 'bad');
+        });
+      }
+      function setupCaps() {
+        var tb = document.getElementById('scTorch'), zb = document.getElementById('scZoom');
+        tb.hidden = true; tb.classList.remove('on'); zb.hidden = true; zb.innerHTML = '';
+        var caps = null;
+        try { caps = IMEI.scanner.getRunningTrackCameraCapabilities(); } catch (e) {}
+        if (!caps) return;
+        try { if (caps.torchFeature().isSupported()) { tb.hidden = false; IMEI.torch = caps.torchFeature(); } } catch (e) {}
+        try {
+          var z = caps.zoomFeature();
+          if (z.isSupported()) {
+            var mx = z.max(), mn = z.min(), opts = [1, 1.5, 2, 3].filter(function (v) { return v >= mn && v <= mx; });
+            if (opts.length > 1) {
+              zb.hidden = false;
+              zb.innerHTML = opts.map(function (v) { return '<button type="button" data-z="' + v + '">' + v + '×</button>'; }).join('');
+              zb.querySelectorAll('button').forEach(function (b) {
+                b.onclick = function () { z.apply(Number(b.dataset.z)).catch(function () {}); zb.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); }); };
+              });
+              var start = opts.indexOf(1.5) !== -1 ? 1.5 : opts[0];
+              zb.querySelector('[data-z="' + start + '"]').click();
+            }
+          }
+        } catch (e) {}
+      }
+      window.imeiTorch = function () {
+        var tb = document.getElementById('scTorch'), on = !tb.classList.contains('on');
+        if (IMEI.torch) IMEI.torch.apply(on).then(function () { tb.classList.toggle('on', on); }).catch(function () { setMsg('เครื่องนี้เปิดไฟฉายจากเบราว์เซอร์ไม่ได้', 'warn'); });
+      };
+      function stopCam() {
+        var tb = document.getElementById('scTorch'); if (tb) tb.classList.remove('on');
+        if (IMEI.scanner) { try { IMEI.scanner.stop().catch(function () {}); } catch (e) {} }
+      }
+      document.addEventListener('visibilitychange', function () { if (document.hidden) closeImeiScan(); });
+    })();
+  </script>
   </body>
 </html>
