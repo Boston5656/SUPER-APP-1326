@@ -203,8 +203,9 @@
           }
         })
         .catch(function (e) {
-          if (e && e.gBusy && retryable && tries < 4) { setTimeout(go, [0, 1200, 2600, 5000][tries] + Math.random() * 800); return; }
-          if (retryable && tries < 4 && isNetErr(e)) { setTimeout(go, [0, 1000, 2500, 5000][tries] + Math.random() * 600); return; }   // เน็ตสะดุด / Google ไม่ว่าง → ลองใหม่เอง
+          // ลองใหม่แค่ 1 ครั้ง (เว้น 3–5 วิ) — ส่งซ้ำรัวๆ จะยิ่งเพิ่มคิวให้ Google ตอนที่มันช้าอยู่แล้ว
+          if (e && e.gBusy && retryable && tries < 2) { setTimeout(go, 3000 + Math.random() * 2000); return; }
+          if (retryable && tries < 2 && isNetErr(e)) { setTimeout(go, 2500 + Math.random() * 1500); return; }   // เน็ตสะดุด / Google ไม่ว่าง → ลองใหม่เอง
           if (queueable && isNetErr(e)) {
             qAdd({ id: args[0].clientId || uid(), app: APP, fn: fn, args: args, t: Date.now() }, function (saved) {
               if (saved) { badge(); ok && ok({ status: 'success', queued: true, message: '📴 เน็ตหลุด — เก็บไว้ในเครื่องแล้ว จะส่งให้เองเมื่อเน็ตกลับมา' }); }

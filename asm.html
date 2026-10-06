@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
   <title>ASM Track</title>
   <script>window.GAS_APP = 'asm';</script>
-  <script src="gas.js?v=2026.10.06-3"></script>
+  <script src="gas.js?v=2026.10.06-4"></script>
     <style>
     :root {
       --bg-dark: #090a0f; 
@@ -611,7 +611,7 @@
       try { var f = window.frameElement; if (f && (!f.classList.contains('on') || window.parent.document.getElementById('frame-shell').classList.contains('hidden'))) return false; } catch (e) {}
       return document.getElementById('view-task').style.display !== 'none';
     }
-    setInterval(function () { if (appVisible() && Date.now() - LAST_EDIT > 8000) fetchData(false); }, 60000);
+    setInterval(function () { if (appVisible() && Date.now() - LAST_EDIT > 8000) fetchData(false); }, 180000);
     window.addEventListener('message', function (e) { if (e.origin === location.origin && e.data && e.data.type === 'sys1326-show' && Date.now() - LAST_EDIT > 8000) fetchData(false); });
     window.addEventListener('resize', function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); fitTitle(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); });
