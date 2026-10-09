@@ -14,9 +14,8 @@
   function setToken(t) { try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} }
 
   // หมดอายุ/ยังไม่ล็อกอิน → บอกหน้าเมนูหลัก (ถ้าเปิดอยู่ในกรอบ) หรือพากลับไปหน้าล็อกอิน
-  function swrClear() { try { Object.keys(localStorage).forEach(function (x) { if (x.indexOf('swr1:') === 0) localStorage.removeItem(x); }); } catch (e) {} }
   function needLogin() {
-    setToken(''); swrClear();
+    setToken('');
     if (window.parent && window.parent !== window) {
       try { window.parent.postMessage({ type: 'sys1326-auth' }, location.origin); return; } catch (e) {}
     }
@@ -103,84 +102,7 @@
   window.addEventListener('load', function () { badge(); setTimeout(flush, 1500); });
   setInterval(function () { qAll(function (it) { if (it.length) flush(); }); }, 30000);
 
-  // ===== ⚡ โชว์ข้อมูลล่าสุดในเครื่องทันที แล้วค่อยอัปเดตตามหลัง =====
-  // เฉพาะคำสั่ง "อ่าน" เท่านั้น (ไม่มีคำสั่งบันทึก/แก้/ลบในนี้)
-  var SWR_FNS = {
-    dash:  ['getDashboardData', 'getRankingData', 'getHubBadges'],
-    check: ['getDashboardData', 'getStoreGoal', 'getLeaderboard', 'getCheckSettings', 'getTodaySales', 'getSerialIndex'],
-    shift: ['getMonthData', 'getReportSummary'],
-    stock: ['getBrandList', 'getPromotions']
-  };
-  var SWR_MAX_AGE = 12 * 3600 * 1000;
-  function who() {
-    try {
-      var b = getToken().split('.')[0].replace(/-/g, '+').replace(/_/g, '/').replace(/=+$/, ''); while (b.length % 4) b += '=';
-      var j = JSON.parse(decodeURIComponent(escape(atob(b))));
-      return (j.role || '') + ':' + (j.id || '');
-    } catch (e) { return ''; }
-  }
-  function swrKey(fn, args) { var w = who(); return w ? 'swr1:' + APP + ':' + fn + ':' + w + ':' + JSON.stringify(args) : ''; }
-  function swrGet(k) {
-    try { var o = JSON.parse(localStorage.getItem(k) || 'null'); if (o && Date.now() - o.t < SWR_MAX_AGE) return o; } catch (e) {}
-    return null;
-  }
-  function swrPut(k, txt) {
-    try { localStorage.setItem(k, JSON.stringify({ t: Date.now(), d: txt })); }
-    catch (e) {   // เครื่องเต็ม → ล้างของเก่าทิ้งแล้วลองใหม่
-      try { Object.keys(localStorage).forEach(function (x) { if (x.indexOf('swr1:') === 0) localStorage.removeItem(x); }); localStorage.setItem(k, JSON.stringify({ t: Date.now(), d: txt })); } catch (e2) {}
-    }
-  }
-  // ป้ายเล็กมุมล่าง "กำลังอัปเดต…" ระหว่างโชว์ข้อมูลเก่า
-  var swrBusy = 0;
-  function swrPill(delta, t) {
-    swrBusy = Math.max(0, swrBusy + delta);
-    var el = document.getElementById('sys-swr');
-    if (!swrBusy) { if (el) el.remove(); return; }
-    if (!el) {
-      el = document.createElement('div'); el.id = 'sys-swr';
-      el.style.cssText = 'position:fixed;z-index:2147483000;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));padding:7px 12px;border-radius:100px;background:rgba(28,28,30,.86);color:#FFD600;font:600 11px "IBM Plex Sans Thai",sans-serif;box-shadow:0 8px 20px -10px rgba(0,0,0,.6);pointer-events:none';
-      (document.body || document.documentElement).appendChild(el);
-    }
-    if (t) {
-      var m = Math.max(0, Math.round((Date.now() - t) / 60000));
-      el.textContent = '⏳ กำลังอัปเดต · ข้อมูลเมื่อ ' + (m < 1 ? 'เมื่อกี้' : m < 60 ? m + ' นาทีก่อน' : Math.floor(m / 60) + ' ชม.ก่อน');
-    }
-  }
-
-  // อัปเดตไม่สำเร็จ → บอกให้ชัดว่ากำลังดูข้อมูลเก่า (แตะเพื่อลองใหม่)
-  function swrWarn(t) {
-    var el = document.getElementById('sys-swr-warn');
-    if (!el) {
-      el = document.createElement('button'); el.id = 'sys-swr-warn'; el.type = 'button';
-      el.style.cssText = 'position:fixed;z-index:2147483001;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom));border:0;border-radius:100px;padding:9px 16px;background:#FF453A;color:#fff;font:700 12px "IBM Plex Sans Thai",sans-serif;box-shadow:0 10px 24px -10px rgba(0,0,0,.6);cursor:pointer;max-width:92vw';
-      el.onclick = function () { location.reload(); };
-      (document.body || document.documentElement).appendChild(el);
-    }
-    var m = Math.max(0, Math.round((Date.now() - t) / 60000));
-    el.textContent = '⚠️ ต่อหลังบ้านไม่ได้ · กำลังดูข้อมูลเมื่อ ' + (m < 1 ? 'เมื่อกี้' : m < 60 ? m + ' นาทีก่อน' : Math.floor(m / 60) + ' ชม.ก่อน') + ' · แตะลองใหม่';
-  }
-  function swrOkClear() { var el = document.getElementById('sys-swr-warn'); if (el) el.remove(); }
-
   function call(fn, args, ok, fail) {
-    var swrK = (SWR_FNS[APP] || []).indexOf(fn) !== -1 ? swrKey(fn, args) : '';
-    var cached = swrK ? swrGet(swrK) : null;
-    if (cached) {
-      var shown = false;
-      try { var cd = JSON.parse(cached.d), okFirst = ok; setTimeout(function () { okFirst && okFirst(cd); }, 0); shown = true; } catch (e) { cached = null; }
-      if (shown) {
-        swrPill(1, cached.t);
-        var ok0 = ok, fail0 = fail, fin = false;
-        var end = function () { if (!fin) { fin = true; swrPill(-1); } };
-        ok = function (d) {
-          end();
-          var txt = ''; try { txt = JSON.stringify(d); } catch (e) {}
-          if (txt && txt === cached.d) return;   // ไม่มีอะไรเปลี่ยน → ไม่ต้องวาดใหม่
-          ok0 && ok0(d);
-        };
-        fail = function (e) { end(); console.warn('อัปเดตไม่สำเร็จ ใช้ข้อมูลในเครื่องไปก่อน', e); swrWarn(cached.t); };
-        setTimeout(end, 90000);
-      }
-    }
     var queueable = (QUEUE_FNS[APP] || []).indexOf(fn) !== -1;
     if (queueable && args[0] && typeof args[0] === 'object') {
       // เวลาที่กดบันทึกจริง + รหัสกันบันทึกซ้ำ
@@ -189,26 +111,21 @@
     }
     var body = JSON.stringify({ app: APP, fn: fn, args: args, token: getToken() });
     var tries = 0;
-    // คำสั่งลบ/แก้ตามแถว ห้ามส่งซ้ำอัตโนมัติ (กันลบ/แก้ผิดแถว)
-    var retryable = !/^(delete|update)[A-Z]|Record$/.test(fn);
     function go() {
       tries++;
-      slot(function (done) {
       // text/plain = ไม่ให้เบราว์เซอร์บล็อกการส่งข้ามเว็บ (ไม่มี preflight)
       fetch(API_URL, { method: 'POST', body: body, headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow' })
-        .then(function (r) { done(); return r.text(); }, function (e) { done(); throw e; })
+        .then(function (r) { return r.text(); })
         .then(function (txt) {
           var res;
           try { res = JSON.parse(txt); } catch (e) {
-            if (/doPost/i.test(txt)) throw new Error('หลังบ้านยังไม่มี API.gs หรือยังไม่ได้ Deploy เป็น New version');
-            if (/accounts\.google|signin|ServiceLogin/i.test(txt)) throw new Error('Deploy ยังตั้งสิทธิ์ไม่ใช่ "Anyone" (ทุกคน)');
-            // หน้า error ของ Google (คนใช้พร้อมกันเยอะ / Google ไม่ว่าง) → รอแป๊บแล้วลองใหม่เอง
-            var busy = new Error('Google ไม่ว่างชั่วคราว (ใช้งานพร้อมกันเยอะ) — กด ↻ ลองใหม่อีกครั้งนะครับ');
-            busy.gBusy = true; throw busy;
+            var hint = /doPost/i.test(txt) ? 'หลังบ้านยังไม่มี API.gs หรือยังไม่ได้ Deploy เป็น New version'
+              : /accounts\.google|signin|ServiceLogin/i.test(txt) ? 'Deploy ยังตั้งสิทธิ์ไม่ใช่ "Anyone" (ทุกคน)'
+              : 'Google ตอบกลับไม่ใช่ข้อมูล (ไม่ว่างชั่วคราว) — กด ↻ ลองใหม่';
+            var ge = new Error(hint); ge.gBusy = !/doPost|Deploy/.test(hint); throw ge;
           }
           if (res.ok) {
             if (fn === 'authenticateUser' && res.data && res.data.token) setToken(res.data.token);
-            if (swrK && res.data && !res.data.error && res.data.status !== 'error') { try { swrPut(swrK, JSON.stringify(res.data)); } catch (e) {} swrOkClear(); }
             ok && ok(res.data);
           } else {
             if (res.auth) needLogin();
@@ -217,36 +134,21 @@
           }
         })
         .catch(function (e) {
-          // คำสั่งอ่าน: ลองใหม่แค่ 1 ครั้ง — ส่งซ้ำรัวๆ จะยิ่งเพิ่มคิวให้ Google
-          // บันทึกขาย/งานไม่ผ่าน: มีรหัสกันซ้ำที่หลังบ้าน → ลองได้ 4 ครั้ง (3, 7, 12 วิ) ไม่เข้าชีตซ้ำ
-          var transient = (e && e.gBusy) || isNetErr(e);
-          var maxTries = queueable ? 4 : 2;
-          if (transient && retryable && tries < maxTries) { setTimeout(go, (queueable ? [0, 3000, 7000, 12000][tries] : 3000) + Math.random() * 1500); return; }
-          if (queueable && transient) {
+          if (tries < 2 && /Failed to fetch|NetworkError|Load failed/i.test(String(e && e.message))) { setTimeout(go, 800); return; }
+          // บันทึกขาย/งานไม่ผ่าน ส่งไม่ออก (เน็ตหลุด หรือ Google ตอบผิดปกติ) → เก็บไว้ในเครื่อง ส่งเองทีหลัง (หลังบ้านมีรหัสกันซ้ำ)
+          if (queueable && (isNetErr(e) || (e && e.gBusy))) {
             qAdd({ id: args[0].clientId || uid(), app: APP, fn: fn, args: args, t: Date.now() }, function (saved) {
-              if (saved) { badge(); ok && ok({ status: 'success', queued: true, message: '📴 ส่งไม่ออกตอนนี้ (เน็ตหรือ Google ไม่ว่าง) — เก็บไว้ในเครื่องแล้ว ระบบจะส่งให้เอง ห้ามกดบันทึกซ้ำ' }); }
+              if (saved) { badge(); ok && ok({ status: 'success', queued: true, message: '📴 ส่งไม่ออกตอนนี้ — เก็บไว้ในเครื่องแล้ว ระบบจะส่งให้เอง ห้ามกดบันทึกซ้ำ' }); }
               else { var er = new Error('ไม่มีเน็ต และเก็บข้อมูลไว้ในเครื่องไม่ได้'); fail ? fail(er) : console.error(er); }
             });
             return;
           }
           var err = new Error(/Failed to fetch|NetworkError|Load failed/i.test(String(e && e.message))
-            ? 'เชื่อมต่อหลังบ้านไม่ได้ชั่วคราว (เน็ตสะดุด หรือ Google ไม่ว่าง) — กด ↻ ลองใหม่อีกครั้งนะครับ' : (e && e.message) || String(e));
+            ? 'ติดต่อหลังบ้านไม่ได้ (มักเกิดจาก Deploy ยังไม่ใช่ "Anyone" หรือยังไม่ได้กด New version) — ' + (e && e.message) : (e && e.message) || String(e));
           if (fail) fail(err); else console.error(err);
         });
-      });
     }
     go();
-  }
-
-  // ส่งพร้อมกันได้ไม่เกิน 3 คำขอต่อหน้า ที่เหลือต่อคิว (Google จำกัดจำนวนที่รันพร้อมกัน)
-  var MAX_INFLIGHT = 3, inflight = 0, waiting = [];
-  function slot(run) {
-    var start = function () {
-      inflight++;
-      var released = false;
-      run(function () { if (released) return; released = true; inflight--; if (waiting.length) waiting.shift()(); });
-    };
-    if (inflight < MAX_INFLIGHT) start(); else waiting.push(start);
   }
 
   function runner(ok, fail) {
@@ -264,7 +166,9 @@
   window.google.script = window.google.script || {};
   Object.defineProperty(window.google.script, 'run', { get: function () { return runner(null, null); }, configurable: true });
 
-  window.SYS1326 = { clearCache: swrClear, getToken: getToken, setToken: setToken, needLogin: needLogin, API_URL: API_URL, flush: flush, pending: qAll };
+  // ล้างข้อมูลที่เวอร์ชันก่อนเคยจำไว้ในเครื่อง (เวอร์ชันนี้ดึงสดทุกครั้ง)
+  try { Object.keys(localStorage).forEach(function (x) { if (x.indexOf('swr1:') === 0) localStorage.removeItem(x); }); } catch (e) {}
+  window.SYS1326 = { clearCache: function () {}, getToken: getToken, setToken: setToken, needLogin: needLogin, API_URL: API_URL, flush: flush, pending: qAll };
 
   // แอปที่เปิดอยู่ในกรอบ: ส่งสัญญาณ "ยังใช้งานอยู่" ให้หน้าเมนูหลัก (กันเด้งออกเพราะไม่ได้แตะหน้าเมนู 15 นาที)
   if (window.parent && window.parent !== window) {
