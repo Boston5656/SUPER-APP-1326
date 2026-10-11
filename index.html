@@ -342,6 +342,24 @@
       margin-top: 0 !important; padding: 8px 14px 6px !important;
       display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); column-gap: 18px; align-content: start;
     }
+    /* การ์ดแบรนด์ = หน้าตาเดียวกับการ์ดพนักงาน (KPI 4 ช่อง ฿ | Unit + Att Rate) */
+    .bk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 3px; }
+    .bk-pair > div { min-width: 0; padding: 0 2px; white-space: nowrap; }
+    .bk-pair > div + div { border-left: 1px solid rgba(255,255,255,0.10); }
+    .bk-tag { display: block; font-size: 8px; font-weight: 800; color: #8E8E93; letter-spacing: .04em; }
+    .bk-sm { font-size: 11px !important; }
+    .brand-card .att-tile.sp3 { grid-column: span 3; }
+    .brand-card .att-tile.sp2 { grid-column: span 2; }
+    #page-dashboard.hmode .brand-card {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+      grid-template-areas: "head att" "kpi att";
+      grid-template-rows: auto 1fr;
+    }
+    #page-dashboard.hmode .brand-card .sc-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @container (min-width: 640px) {
+      #page-dashboard.hmode .brand-card .sc-att .grid-att { grid-template-columns: repeat(var(--n, 9), minmax(0, 1fr)); }
+      #page-dashboard.hmode .brand-card .sc-att .att-tile.sp3, #page-dashboard.hmode .brand-card .sc-att .att-tile.sp2 { grid-column: auto; }
+    }
     #page-dashboard.hmode .sc-cat .cm-sum {
       grid-column: auto; flex-direction: column; justify-content: center; gap: 4px;
       background: #F2F2F7; border: 0; border-radius: 12px; padding: 8px 12px; margin: 7px 0;
@@ -993,11 +1011,11 @@
         <section class="box-white dash-sec dash-col hpanel" id="col-brand">
           <h3 class="text-sm font-bold mb-4">📱 ยอดขายรายแบรนด์</h3>
           <p class="hsrc-label text-xs font-bold text-zinc-500 uppercase mb-2">APPLE</p>
-          <div class="hsrc card-grid grid gap-4 sm:grid-cols-2" id="db-brand-apple"></div>
+          <div class="hsrc card-grid grid gap-4 items-start sm:grid-cols-2" id="db-brand-apple"></div>
           <p class="hsrc-label text-xs font-bold text-zinc-500 uppercase mt-6 mb-2">SMARTPHONE</p>
-          <div class="hsrc card-grid grid gap-4 sm:grid-cols-2" id="db-brand-phone"></div>
+          <div class="hsrc card-grid grid gap-4 items-start sm:grid-cols-2" id="db-brand-phone"></div>
           <p class="hsrc-label text-xs font-bold text-zinc-500 uppercase mt-6 mb-2">TABLET</p>
-          <div class="hsrc card-grid grid gap-4 sm:grid-cols-2" id="db-brand-tablet"></div>
+          <div class="hsrc card-grid grid gap-4 items-start sm:grid-cols-2" id="db-brand-tablet"></div>
           <div class="hbody"></div>
         </section>
       </main>
@@ -1992,7 +2010,7 @@
       { id: 'col-focus', minw: 230, maxCols: 5, stretch: true, srcs: [{ id: 'db-focus' }] },
       { id: 'col-category', minw: 290, maxCols: 5, stretch: true, srcs: [{ id: 'db-category' }] },
       { id: 'staff-section', minw: 860, maxCols: 3, minCols: 1, srcs: [{ id: 'db-staff' }] },
-      { id: 'col-brand', minw: 290, maxCols: 5, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
+      { id: 'col-brand', minw: 860, maxCols: 3, minCols: 1, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
     ];
     const NAV_ITEMS = [
       { id: 'dash-top', t: 'สรุป' }, { id: 'col-focus', t: 'งานโฟกัส' }, { id: 'col-category', t: 'Category' },
@@ -2682,6 +2700,121 @@
       clearTimeout(rkResizeT); rkResizeT = setTimeout(rkRender, 200);
     });
 
+    // ===== 🎯 เป้ารายแบรนด์ = ค่าเฉลี่ยต่อเดือน (บาท + Unit) จากข้อมูลในหน้า Ranking =====
+    // ใช้เดือนที่ "จบแล้ว" ของปีนี้ (ไม่รวมเดือนปัจจุบันที่ยังขายไม่ครบ) · ถ้าปีนี้ยังไม่มีเดือนที่จบ ใช้เฉลี่ยทั้งปีก่อน
+    let brandRankData = null, brandRankState = 'loading';
+    const TH_MON = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    function brandRankCat(deviceType, bName) {
+      if (deviceType === 'phone') return bName === 'APPLE' ? 'IPHONE' : 'SMARTPHONE';
+      if (deviceType === 'tablet') return bName === 'APPLE' ? 'IPAD' : 'TABLET';
+      return null;   // Apple Watch ไม่มีใน Ranking
+    }
+    function brandTarget(deviceType, bName) {
+      const rd = brandRankData, cat = brandRankCat(deviceType, bName);
+      if (!rd || !cat) return null;
+      const num = v => Number(v) || 0;
+      const collect = (src, lastMonth, year) => {
+        const brands = (src && src[cat]) || {};
+        const mine = brands[bName];
+        if (!mine) return null;
+        const months = [];
+        for (let m = 0; m < lastMonth; m++) {
+          let tot = 0;
+          Object.keys(brands).forEach(k => { tot += num((brands[k].rev || [])[m]); });
+          if (tot > 0) months.push({ m, year, rev: num((mine.rev || [])[m]), unit: num((mine.unit || [])[m]) });   // เดือนที่มีข้อมูลทั้งหมวด
+        }
+        return months.length ? months : null;
+      };
+      let months = collect(rd.cats, Number(rd.curMonth) || 0, rd.year), src = 'cur';
+      if (!months) { months = collect(rd.prev, 12, rd.year - 1); src = 'prev'; }
+      if (!months) return null;
+      const n = months.length;
+      return { rev: months.reduce((a, x) => a + x.rev, 0) / n, unit: months.reduce((a, x) => a + x.unit, 0) / n, n, months, src };
+    }
+    function brandTargetNote(T) {
+      if (T) return T.src === 'cur' ? `เฉลี่ย ${T.n} เดือนจาก Ranking` : `เฉลี่ยปีก่อน ${T.n} เดือน`;
+      return brandRankState === 'loading' ? 'กำลังคำนวณเป้า…' : (brandRankState === 'err' ? 'ยังไม่มีข้อมูล Ranking' : '');
+    }
+    function showBrandTarget(deviceType, bName, displayName) {
+      const T = brandTarget(deviceType, bName);
+      const title = `${displayName} · ที่มาของเป้า`;
+      if (!T) {
+        const why = !brandRankCat(deviceType, bName) ? 'หมวดนี้ไม่มีใน Ranking จึงยังไม่มีเป้า'
+                  : (brandRankState === 'err' ? 'ยังไม่มีข้อมูล Ranking — กด 🔄 อัปเดตข้อมูลบน Google Sheets ก่อน' : 'ยังไม่มีประวัติยอดขายของแบรนด์นี้ใน Ranking');
+        openModal(title, `<p class="text-xs text-zinc-400 text-center py-6">${why}</p>`);
+        return;
+      }
+      const row = (a, b, c, bold) => `<div class="flex justify-between items-center py-2.5 border-b border-zinc-100 last:border-0">
+          <span class="text-xs ${bold ? 'font-black text-zinc-900' : 'font-bold text-zinc-800'}">${a}</span>
+          <span class="text-right"><span class="block text-xs font-black ${bold ? 'text-zinc-900' : 'text-green-600'}">${b}</span><span class="block text-[10px] text-zinc-400">${c}</span></span></div>`;
+      const html = `<p class="text-[11px] text-zinc-500 mb-2">${T.src === 'cur' ? 'เฉลี่ยจากเดือนที่จบแล้วของปีนี้ใน Ranking' : 'ปีนี้ยังไม่มีเดือนที่จบ — ใช้เฉลี่ยจากปีก่อน'}</p>`
+        + T.months.map(x => row(`${TH_MON[x.m]} ${x.year + 543 - 2500}`, '฿' + formatBaht(Math.round(x.rev)), fmtUnit(x.unit) + ' เครื่อง')).join('')
+        + row('เฉลี่ย = เป้าต่อเดือน', '฿' + formatBaht(Math.round(T.rev)), fmtUnit(T.unit) + ' เครื่อง', true);
+      openModal(title, html);
+    }
+
+    // การ์ดแบรนด์ — รูปแบบเดียวกับการ์ดรายพนักงาน
+    function brandCardHTML(b, bName, displayName, deviceType, dt) {
+      const T = brandTarget(deviceType, bName);
+      const day = Number(dt.day) || 1, days = Number(dt.daysInMonth) || 30;
+      const fcR = b.b / day * days, fcU = b.u / day * days;
+      const tR = T && T.rev > 0 ? T.rev : 0, tU = T && T.unit > 0 ? T.unit : 0;
+      const pc = (v, t) => t > 0 ? v / t * 100 : null;
+      const P = v => v == null ? '–' : pctTxt(v) + '%';
+      const fcCls = v => v == null ? 'text-zinc-500' : getFcColor(v);
+      const diff = (v, t, isBaht) => {
+        if (!(t > 0)) return { txt: '–', cls: 'text-zinc-500' };
+        const d = v - t;
+        const txt = (d > 0 ? '+' : '') + (isBaht ? formatBaht(Math.round(d)) : fmtUnit(d));
+        return { txt, cls: d < 0 ? 'fc-red' : 'fc-green' };
+      };
+      const dR = diff(b.b, tR, true), dU = diff(b.u, tU, false);
+      const half = (tag, main, cls, sub) => `<div><span class="bk-tag">${tag}</span><span class="block text-sm font-black ${cls || ''}">${main}</span><span class="block text-[9px] mt-1">${sub}</span></div>`;
+      const box = (label, l, r) => `<div><span class="block text-[10px] text-zinc-400">${label}</span><div class="bk-pair">${l}${r}</div></div>`;
+      const g = (lbl, v) => `<span class="block text-[10px]"><span class="text-zinc-500">${lbl}</span> <b class="${gClass(v)}">${v}</b></span>`;
+
+      const kpi = `<div class="grid-detail sc-kpi">
+          ${box('Achieve%', half('฿', P(pc(b.b, tR)), '', formatBaht(b.b)), half('UNIT', P(pc(b.u, tU)), '', fmtUnit(b.u)))}
+          ${box('Forecast%', half('฿', P(pc(fcR, tR)), fcCls(pc(fcR, tR)), formatBaht(Math.round(fcR))), half('UNIT', P(pc(fcU, tU)), fcCls(pc(fcU, tU)), fmtUnit(fcU)))}
+          ${box('Diff Target', half('฿', dR.txt, dR.cls + ' bk-sm', '&nbsp;'), half('UNIT', dU.txt, dU.cls + ' bk-sm', '&nbsp;'))}
+          ${box('MOM / YOY', `<div><span class="bk-tag">฿</span>${g('M', b.momRev)}${g('Y', b.yoyRev)}</div>`, `<div><span class="bk-tag">UNIT</span>${g('M', b.momUnit)}${g('Y', b.yoyUnit)}</div>`)}
+        </div>`;
+
+      // ----- Att Rate (ฐาน = จำนวนเครื่องของแบรนด์นั้น) -----
+      const bUnit = b.base > 0 ? b.base : 1;
+      const p = v => ((v / bUnit) * 100).toFixed(1);
+      const tiles = [];
+      const tile = (bucket, label, val, cls) => tiles.push({ bucket, label, val, cls });
+      if (deviceType === 'watch') {
+        tile('SIM', 'SIM', p(b.sim)); tile('CARE', '7CARE', p(b.care), 'care'); tile('SOCIAL', 'SOCIAL', p(b.social));
+      } else {
+        tile('SIM', 'SIM', p(b.sim)); tile('BRIGHT', 'BRIGHT', p(b.bright)); tile('PVL', 'PVL', p(b.pvl));
+        tile('SANDISK', 'SANDISK', p(b.sandisk)); tile('CARE', bName === 'APPLE' ? '7CARE' : 'CARE', p(b.care), 'care'); tile('SOCIAL', 'SOCIAL', p(b.social));
+        if (bName === 'SAMSUNG') tile('SF', 'SF+', p(b.sf), 'fin');
+        else { tile('UFUND_P', 'UFUND P', p(b.ufundP), 'fin'); if (bName === 'APPLE') tile('UFUND_S', 'UFUND S', p(b.ufundS), 'fin'); }
+      }
+      const rest = tiles.length % 3;   // แถวสุดท้ายไม่เต็ม → ขยายช่องสุดท้ายให้เต็มแถว
+      const tilesHtml = tiles.map((t, i) => {
+        const sp = (i === tiles.length - 1 && rest === 1) ? ' sp3' : ((i === tiles.length - 1 && rest === 2) ? ' sp2' : '');
+        return `<div class="att-tile${sp}" onclick="showTop5('${displayName} · ${t.label} — Top 5', getTop5('brandFocusTopProducts','${bName}','${deviceType}','${t.bucket}'))"><span class="lbl">${t.label}</span><span class="val ${t.cls || ''}">${t.val}%</span></div>`;
+      }).join('');
+      const att = `<div class="att-box sc-att">
+          <div class="flex justify-between items-center mb-2 px-1">
+            <span class="font-extrabold text-xs">📶 Att Rate</span>
+            <span class="text-[10px] font-bold text-zinc-400">ฐานเครื่อง ${fmtUnit(b.base || 0)} เครื่อง</span>
+          </div>
+          <div class="grid-att" style="--n:${tiles.length}">${tilesHtml}</div>
+        </div>`;
+
+      const note = brandTargetNote(T);
+      const tgtTxt = T ? `Target: ฿${formatBaht(Math.round(T.rev))} | ${fmtUnit(T.unit)} เครื่อง` : (brandRankCat(deviceType, bName) ? 'ยังไม่มีเป้า' : 'ไม่มีเป้า');
+      const head = `<div class="sc-head flex justify-between border-b border-zinc-600 pb-2 mb-3">
+          <span class="font-bold text-sm text-[var(--bg-yellow)] cursor-pointer" onclick="showTop5('${displayName} — Top 5 รุ่นขายดี', getTop5('brandTopProducts','${bName}','${deviceType}'))">${displayName}</span>
+          <span class="text-[10px] text-zinc-400 pt-1 text-right cursor-pointer" onclick="showBrandTarget('${deviceType}','${bName}','${displayName}')">${tgtTxt}${note ? `<span class="block text-[9px] text-zinc-500">${note} ›</span>` : ''}</span>
+        </div>`;
+      return `<div class="box-dark staff-card brand-card text-xs relative">${head}${kpi}${att}</div>`;
+    }
+
     function openDashboard() {
       document.getElementById('page-hub').classList.add('hidden');
       const dash = document.getElementById('page-dashboard');
@@ -2804,57 +2937,41 @@
 
         function renderBrandBoxes(mapObj, isWatch, deviceType, options) {
           options = options || {};
-          let excludeKeys = options.exclude || [];
-          let titleMap = options.titleMap || {};
+          const excludeKeys = options.exclude || [], titleMap = options.titleMap || {}, dt = data.header.date || {};
           let html = '';
           Object.keys(mapObj).forEach(bName => {
             if (excludeKeys.indexOf(bName) !== -1) return;
-            let b = mapObj[bName];
-            if(b.b > 0) {
-              let displayName = titleMap[bName] || bName;
-              let bUnit = b.base > 0 ? b.base : 1;
-              let calcP = (val) => ((val/bUnit)*100).toFixed(1);
-              let brandTitleClick = `showTop5('${displayName} — Top 5 รุ่นขายดี', getTop5('brandTopProducts','${bName}','${deviceType}'))`;
-              let growthHtml = `<div class="mt-3 pt-2 border-t border-zinc-700 text-[10px] grid grid-cols-2 gap-y-1">
-                <span class="text-zinc-400">MOM ฿ <b class="${gClass(b.momRev)}">${b.momRev}</b></span><span class="text-zinc-400 text-right">MOM Unit <b class="${gClass(b.momUnit)}">${b.momUnit}</b></span>
-                <span class="text-zinc-400">YOY ฿ <b class="${gClass(b.yoyRev)}">${b.yoyRev}</b></span><span class="text-zinc-400 text-right">YOY Unit <b class="${gClass(b.yoyUnit)}">${b.yoyUnit}</b></span>
-              </div>`;
-              let metricClick = (bucket, label) => `showTop5('${displayName} · ${label} — Top 5', getTop5('brandFocusTopProducts','${bName}','${deviceType}','${bucket}'))`;
-
-              if(isWatch) {
-                 html += `<div class="box-dark mb-4"><div class="flex justify-between border-b border-zinc-600 pb-2 mb-3"><span class="font-bold text-sm text-[var(--bg-yellow)] cursor-pointer" onclick="${brandTitleClick}">${displayName}</span><span class="text-xs font-bold">Unit: ${b.u} | <span class="text-green-400">${formatBaht(b.b)}</span></span></div><div class="grid-brand text-[9px]"><div class="cursor-pointer" onclick="${metricClick('SIM','SIM')}"><span class="block text-zinc-400">SIM</span><span class="block font-bold mt-1 text-sm">${calcP(b.sim)}%</span></div><div class="cursor-pointer" onclick="${metricClick('CARE','7CARE')}"><span class="block text-zinc-400">7CARE</span><span class="block font-bold mt-1 text-sm text-yellow-400">${calcP(b.care)}%</span></div><div class="cursor-pointer" onclick="${metricClick('SOCIAL','SOCIAL')}"><span class="block text-zinc-400">SOCIAL</span><span class="block font-bold mt-1 text-sm">${calcP(b.social)}%</span></div></div>${growthHtml}</div>`;
-              } else {
-                 html += `
-                <div class="box-dark mb-4">
-                  <div class="flex justify-between border-b border-zinc-600 pb-2 mb-3"><span class="font-bold text-sm text-[var(--bg-yellow)] cursor-pointer" onclick="${brandTitleClick}">${displayName}</span><span class="text-xs font-bold">Unit: ${b.u} | <span class="text-green-400">${formatBaht(b.b)}</span></span></div>
-                  <div class="grid-brand text-[9px]">
-                    <div class="cursor-pointer" onclick="${metricClick('SIM','SIM')}"><span class="block text-zinc-400">SIM</span><span class="block font-bold mt-1 text-sm">${calcP(b.sim)}%</span></div>
-                    <div class="cursor-pointer" onclick="${metricClick('BRIGHT','BRIGHT')}"><span class="block text-zinc-400">BRIGHT</span><span class="block font-bold mt-1 text-sm">${calcP(b.bright)}%</span></div>
-                    <div class="cursor-pointer" onclick="${metricClick('PVL','PVL')}"><span class="block text-zinc-400">PVL</span><span class="block font-bold mt-1 text-sm">${calcP(b.pvl)}%</span></div>
-                    <div class="cursor-pointer" onclick="${metricClick('SANDISK','SANDISK')}"><span class="block text-zinc-400">SANDISK</span><span class="block font-bold mt-1 text-sm">${calcP(b.sandisk)}%</span></div>
-                    <div class="cursor-pointer" onclick="${metricClick('CARE', bName === 'APPLE' ? '7CARE' : 'CARE')}"><span class="block text-zinc-400">${bName === 'APPLE' ? '7CARE' : 'CARE'}</span><span class="block font-bold mt-1 text-sm text-yellow-400">${calcP(b.care)}%</span></div>
-                    <div class="cursor-pointer" onclick="${metricClick('SOCIAL','SOCIAL')}"><span class="block text-zinc-400">SOCIAL</span><span class="block font-bold mt-1 text-sm">${calcP(b.social)}%</span></div>
-                    <div class="cursor-pointer" onclick="${bName === 'SAMSUNG' ? metricClick('SF','SF+') : metricClick('UFUND_P','UFUND P')}"><span class="block text-zinc-400">${bName === 'SAMSUNG' ? 'SF+' : 'UFUND P'}</span><span class="block font-bold mt-1 text-sm text-blue-400">${bName === 'SAMSUNG' ? calcP(b.sf) : calcP(b.ufundP)}%</span></div>
-                    ${bName === 'APPLE' ? `<div class="cursor-pointer" onclick="${metricClick('UFUND_S','UFUND S')}"><span class="block text-zinc-400">UFUND S</span><span class="block font-bold mt-1 text-sm text-blue-400">${calcP(b.ufundS)}%</span></div>` : ''}
-                  </div>
-                  ${growthHtml}
-                </div>`;
-              }
-            }
+            const b = mapObj[bName];
+            if (b.b > 0) html += brandCardHTML(b, bName, titleMap[bName] || bName, deviceType, dt);
           });
           if (options.noFallback) return html;
           return html || '<div class="text-xs text-zinc-500">ไม่มียอดขายหมวดนี้</div>';
         }
 
         function pickApple(mapObj) { return mapObj['APPLE'] ? { APPLE: mapObj['APPLE'] } : {}; }
-        let appleZoneHtml =
-          renderBrandBoxes(pickApple(data.brandPhone), false, 'phone', { titleMap: { APPLE: 'iPhone' }, noFallback: true }) +
-          renderBrandBoxes(pickApple(data.brandTablet), false, 'tablet', { titleMap: { APPLE: 'iPad' }, noFallback: true }) +
-          renderBrandBoxes(pickApple(data.brandWatch), true, 'watch', { titleMap: { APPLE: 'Apple Watch' }, noFallback: true });
-        document.getElementById('db-brand-apple').innerHTML = appleZoneHtml || '<div class="text-xs text-zinc-500">ไม่มียอดขาย Apple</div>';
+        function renderBrandZones() {
+          const appleZoneHtml =
+            renderBrandBoxes(pickApple(data.brandPhone), false, 'phone', { titleMap: { APPLE: 'iPhone' }, noFallback: true }) +
+            renderBrandBoxes(pickApple(data.brandTablet), false, 'tablet', { titleMap: { APPLE: 'iPad' }, noFallback: true }) +
+            renderBrandBoxes(pickApple(data.brandWatch), true, 'watch', { titleMap: { APPLE: 'Apple Watch' }, noFallback: true });
+          document.getElementById('db-brand-apple').innerHTML = appleZoneHtml || '<div class="text-xs text-zinc-500">ไม่มียอดขาย Apple</div>';
+          document.getElementById('db-brand-phone').innerHTML = renderBrandBoxes(data.brandPhone, false, 'phone', { exclude: ['APPLE'] });
+          document.getElementById('db-brand-tablet').innerHTML = renderBrandBoxes(data.brandTablet, false, 'tablet', { exclude: ['APPLE'] });
+        }
+        renderBrandZones();
 
-        document.getElementById('db-brand-phone').innerHTML = renderBrandBoxes(data.brandPhone, false, 'phone', { exclude: ['APPLE'] });
-        document.getElementById('db-brand-tablet').innerHTML = renderBrandBoxes(data.brandTablet, false, 'tablet', { exclude: ['APPLE'] });
+        const brandRelayout = () => { if (!dashPage().classList.contains('hidden')) hAfterRender(); };
+        // เป้าแบรนด์มาจาก Ranking — ดึงข้อมูลมาแล้ววาดการ์ดแบรนด์ใหม่ (ไม่ต้องรอ ไม่บล็อกหน้าอื่น)
+        brandRankState = brandRankData ? 'ok' : 'loading';
+        google.script.run
+          .withSuccessHandler(d => {
+            if (!d || d.error) { if (!brandRankData) { brandRankState = 'err'; renderBrandZones(); brandRelayout(); } return; }
+            const same = brandRankData && brandRankData.updated === d.updated && brandRankData.curMonth === d.curMonth && brandRankData.year === d.year;
+            brandRankData = d; brandRankState = 'ok';
+            if (!same) { renderBrandZones(); brandRelayout(); }
+          })
+          .withFailureHandler(() => { if (!brandRankData) { brandRankState = 'err'; renderBrandZones(); brandRelayout(); } })
+          .getRankingData(currentUser && currentUser.empId);
 
         // Market Share เป็น Unit (iPhone + Smartphone) — ถ้า DB_CACHE ยังเป็นรุ่นเก่า ใช้กราฟเดิมไปก่อน
         let pieLabels = data.charts.pieLabels, pieData = data.charts.pieData, pieColors = CHART_COLORS;
