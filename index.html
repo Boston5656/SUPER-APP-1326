@@ -714,6 +714,30 @@
     .rk-t td.dd small { display: block; font-size: 9px; color: #8E8E93; font-weight: 600; }
     .rk-t td.dy.zero { color: rgba(255,255,255,.22); }
     .rk-t tr.sum td.dy b, .rk-t tr.sum td.dy i { color: var(--yellow); }
+    /* 📅 รายวัน (แนวนอน: แบรนด์ = แถว · วัน = คอลัมน์ ซ้าย→ขวา) */
+    .rk-lab { font-size: 10px; font-weight: 800; color: #8E8E93; letter-spacing: .06em; align-self: center; margin-right: 2px; }
+    .rk-t.dayh { border-spacing: 0 4px; }
+    .rk-t.dayh th { text-align: center; padding: 0 4px 2px; min-width: 50px; line-height: 1.15; }
+    .rk-t.dayh th small { display: block; font-size: 8px; font-weight: 600; color: #6E6E73; }
+    .rk-t.dayh th.we, .rk-t.dayh th.we small { color: #FF9F0A; }
+    .rk-t.dayh td { padding: 6px 4px; text-align: center; font-size: 12px; }
+    .rk-t.dayh td.dy b { font-size: 12px; }
+    .rk-t.dayh td.dy i { font-size: 9px; }
+    .rk-t.dayh td.stk, .rk-t.dayh th.stk { position: sticky; left: 0; z-index: 2; text-align: left; min-width: 84px; max-width: 96px; padding-left: 10px;
+      background-color: var(--panel-dark); background-image: linear-gradient(rgba(255,255,255,.07), rgba(255,255,255,.07)); }
+    .rk-t.dayh th.stk { background-image: none; }
+    .rk-t.dayh td.stk { border-radius: 14px 0 0 14px; color: var(--yellow); cursor: pointer; font-size: 12px; }
+    .rk-t.dayh td.stk small { display: block; color: #8E8E93; font-size: 9px; font-weight: 600; }
+    .rk-t.dayh td.gap { border-radius: 0; }
+    .rk-t.dayh td.dy.sep, .rk-t.dayh th.sep { border-right: 1px solid rgba(255,255,255,.10); }
+    .rk-t.dayh td.hl { background: rgba(255,214,0,.12); }
+    .rk-t.dayh td.rl { font-size: 11px; color: #AEAEB2; text-align: left; padding-left: 10px; }
+    .rk-sum3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .rk-sum3 > div { background: rgba(255,255,255,.055); border-radius: 16px; padding: 10px 12px; }
+    .rk-sum3 small { display: block; font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .rk-sum3 b { display: block; font-family: var(--f-num); font-size: 16px; margin-top: 2px; }
+    .rk-sum3 i { display: block; font-style: normal; font-size: 11px; color: #AEAEB2; font-weight: 600; margin-top: 1px; }
+
     .rk-a { display: inline-block; width: 14px; margin-right: 4px; font-size: 12px; text-align: center; }
     .a-up { color: #34C759; } .a-ur { color: #A6E22E; } .a-fl { color: #FFD60A; } .a-dr { color: #FF9F0A; } .a-dn { color: #FF453A; }
     .rk-shbar { display: inline-block; width: 46px; height: 6px; border-radius: 100px; background: rgba(255,255,255,.1); vertical-align: middle; margin-left: 6px; overflow: hidden; }
@@ -2257,7 +2281,7 @@
     // =========================================================
     const RK_MON = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
     const RK_CAT_NAME = { SMARTPHONE: 'Smartphone', IPHONE: 'iPhone', TABLET: 'Tablet', IPAD: 'iPad' };
-    const rk = { data: null, cat: 'SMARTPHONE', period: 'Q1', metric: 'rev', yoyBrand: 'ALL' };
+    const rk = { data: null, cat: 'SMARTPHONE', period: 'Q1', metric: 'rev', yoyBrand: 'ALL', dayMonth: null, dayCmp: undefined, dayBrand: null };
     let rkCharts = [];
 
     function openRanking() {
@@ -2372,52 +2396,115 @@
       requestAnimationFrame(() => body.querySelectorAll('[data-h]').forEach(i => { i.style.height = i.dataset.h + '%'; }));
     }
 
-    // ===== 📅 รายวัน: แบรนด์ไหน วันไหน เปิดกี่บาท กี่ Unit (ของเดือนที่เลือก) =====
+    // ===== 📅 รายวัน: แบรนด์ = แถว · วัน = คอลัมน์ (ซ้าย→ขวา) · จิ้มแบรนด์ดูรายตัว · เทียบเดือน =====
     const RK_DOW = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
     function rkDayHTML(solo) {
       const D = rk.data, y = D.year, cm = D.curMonth;
       const dailyCat = ((D.daily || {})[rk.cat]) || null;
       if (!D.daily) return `<div class="rk-panel rk-empty" style="color:#AEAEB2">ยังไม่มีข้อมูลรายวัน — อัปเดตโค้ด Code.gs / API.gs ตามที่แจ้ง แล้วกด 🔄 อัปเดตข้อมูล 1 ครั้ง</div>`;
+      const num = v => Math.round(Number(v) || 0);
+      const hasM = mm => Object.keys(dailyCat || {}).some(b => dailyCat[b][mm]);
+      const arr = (b, mm, k) => ((dailyCat && dailyCat[b] && dailyCat[b][mm]) || {})[k] || [];
+      const sumTo = (b, mm, k, to) => rkSum(arr(b, mm, k), 0, to);
+
       if (rk.dayMonth == null || rk.dayMonth > cm) rk.dayMonth = cm;
       const m = rk.dayMonth;
-      // เดือนที่มีข้อมูลในหมวดนี้
-      const hasM = mm => Object.keys(dailyCat || {}).some(b => dailyCat[b][mm]);
-      const chips = `<div class="rk-chips">${RK_MON.map((n, i) => i > cm ? '' : (hasM(i) || i === m)
-        ? `<button class="${i === m ? 'on' : ''}" onclick="rk.dayMonth=${i};haptic(6);rkRender()">${n}</button>` : '').join('')}</div>`;
+      let cmp = rk.dayCmp;                                   // undefined = อัตโนมัติ (เดือนก่อนหน้าที่มีข้อมูล) · null = ไม่เทียบ
+      if (cmp === undefined) { cmp = null; for (let i = m - 1; i >= 0; i--) if (hasM(i)) { cmp = i; break; } }
+      if (cmp === m || (cmp != null && (cmp > cm || !hasM(cmp)))) cmp = null;
       const days = new Date(y, m + 1, 0).getDate();
       const lastDay = m === cm ? Math.min(days, Number(D.day) || days) : days;
-      const brands = Object.keys(dailyCat || {}).filter(b => dailyCat[b][m] && rkSum(dailyCat[b][m].rev, 0, 31) + rkSum(dailyCat[b][m].unit, 0, 31) > 0)
-        .sort((a, b) => rkSum(dailyCat[b][m].rev, 0, 31) - rkSum(dailyCat[a][m].rev, 0, 31));
-      const head = `<div class="rk-ph"><b>📅 ${RK_CAT_NAME[rk.cat]} · ${RK_MON[m]} ${y}</b><span>บาท / เครื่อง ต่อวัน${m === cm ? ' · ถึงวันที่ ' + lastDay : ''}</span></div>`;
-      if (!brands.length) return chips + `<div class="rk-panel">${head}<div class="rk-empty" style="color:#8E8E93">ไม่มีข้อมูลรายวันของ ${RK_MON[m]}</div></div>`;
+      const cmpTo = cmp != null ? Math.min(lastDay, new Date(y, cmp + 1, 0).getDate()) : 0;   // เทียบช่วงวันที่เดียวกัน
 
-      const num = v => Math.round(Number(v) || 0);
-      const baht = v => { v = num(v); return rkCompact() && Math.abs(v) >= 1000 ? (Math.abs(v) >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : Math.round(v / 1000) + 'K') : v.toLocaleString('th-TH'); };
-      const cell = (r, u, cls) => (!r && !u) ? `<td class="dy zero">–</td>` : `<td class="dy ${cls || ''}"><b>${baht(r)}</b><i>${fmtUnit(u)} เครื่อง</i></td>`;
-      const get = (b, d, k) => num(((dailyCat[b][m] || {})[k] || [])[d]);
+      const allBrands = Object.keys(dailyCat || {}).filter(b => hasMonthBrand(b, m) || (cmp != null && hasMonthBrand(b, cmp)))
+        .sort((p, q) => sumTo(q, m, 'rev', 31) - sumTo(p, m, 'rev', 31));
+      function hasMonthBrand(b, mm) { return dailyCat[b][mm] && rkSum(dailyCat[b][mm].rev, 0, 31) + rkSum(dailyCat[b][mm].unit, 0, 31) > 0; }
+      if (solo && allBrands.length) rk.dayBrand = allBrands[0];
+      if (rk.dayBrand && allBrands.indexOf(rk.dayBrand) === -1) rk.dayBrand = null;
+      const sel = rk.dayBrand;
 
-      let t = `<div class="rk-panel">${head}<div class="rk-tw"><table class="rk-t"><thead><tr><th class="l">วันที่</th>`;
-      brands.forEach(b => { t += `<th>${solo ? RK_CAT_NAME[rk.cat] : b}</th>`; });
-      if (!solo) t += '<th>รวม</th>';
-      t += '</tr></thead><tbody>';
-      // แถวรวมทั้งเดือน
-      t += `<tr class="sum"><td class="dd"><b>รวม</b></td>`;
-      let gR = 0, gU = 0;
-      brands.forEach(b => { const r = rkSum(dailyCat[b][m].rev, 0, days), u = rkSum(dailyCat[b][m].unit, 0, days); gR += r; gU += u; t += cell(r, u); });
-      if (!solo) t += cell(gR, gU);
-      t += '</tr>';
-      for (let d = 0; d < lastDay; d++) {
-        const dow = RK_DOW[new Date(y, m, d + 1).getDay()];
-        const rs = brands.map(b => get(b, d, 'rev')), us = brands.map(b => get(b, d, 'unit'));
-        const mx = Math.max(...rs);
-        const tr = rs.reduce((a, v) => a + v, 0), tu = us.reduce((a, v) => a + v, 0);
-        t += `<tr><td class="dd"><b>${d + 1}</b><small>${dow}</small></td>`;
-        brands.forEach((b, i) => { t += cell(rs[i], us[i], brands.length > 1 && mx > 0 && rs[i] === mx ? 'best' : ''); });
-        if (!solo) t += cell(tr, tu);
-        t += '</tr>';
+      // ----- ตัวเลือก: เดือน / เทียบกับ / แบรนด์ -----
+      const mChips = RK_MON.map((n, i) => i > cm ? '' : (hasM(i) || i === m)
+        ? `<button class="${i === m ? 'on' : ''}" onclick="rk.dayMonth=${i};haptic(6);rkRender()">${n}</button>` : '').join('');
+      const cChips = `<button class="${cmp == null ? 'on' : ''}" onclick="rk.dayCmp=null;haptic(6);rkRender()">ไม่เทียบ</button>` +
+        RK_MON.map((n, i) => (i > cm || i === m || !hasM(i)) ? '' : `<button class="${i === cmp ? 'on' : ''}" onclick="rk.dayCmp=${i};haptic(6);rkRender()">${n}</button>`).join('');
+      const bChips = solo ? '' : `<div class="rk-chips"><span class="rk-lab">แบรนด์</span><button class="${!sel ? 'on' : ''}" onclick="rk.dayBrand=null;haptic(6);rkRender()">ทุกแบรนด์</button>` +
+        allBrands.map(b => `<button class="${b === sel ? 'on' : ''}" onclick="rk.dayBrand='${b}';haptic(6);rkRender()">${b}</button>`).join('') + '</div>';
+      const chips = `<div class="rk-chips"><span class="rk-lab">เดือน</span>${mChips}</div>` +
+                    `<div class="rk-chips"><span class="rk-lab">เทียบกับ</span>${cChips}</div>` + bChips;
+
+      const head = `<div class="rk-ph"><b>📅 ${RK_CAT_NAME[rk.cat]}${sel && !solo ? ' · ' + sel : ''} · ${RK_MON[m]} ${y}</b><span>${m === cm ? 'ถึงวันที่ ' + lastDay : 'ทั้งเดือน'}${cmp != null ? ' · เทียบ ' + RK_MON[cmp] + ' (วันที่ 1–' + cmpTo + ')' : ''}</span></div>`;
+      if (!allBrands.length) return `<div class="rk-panel">${chips}${head}<div class="rk-empty" style="color:#8E8E93">ไม่มีข้อมูลรายวันของ ${RK_MON[m]}</div></div>`;
+
+      // ----- ตัวช่วยแสดงผล -----
+      const kfmt = v => { v = num(v); const a = Math.abs(v); return a >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : a >= 1e5 ? Math.round(v / 1000) + 'K' : a >= 1000 ? (v / 1000).toFixed(1) + 'K' : String(v); };
+      const sg = v => (v > 0 ? '+' : '') + kfmt(v);
+      const sgU = v => (v > 0 ? '+' : '') + fmtUnit(v);
+      const pctOf = (a, b) => b > 0 ? (a - b) / b * 100 : null;
+      const pctH = (a, b) => { const g = pctOf(a, b); return g == null ? (a > 0 ? '<span style="color:#8E8E93">ใหม่</span>' : '–') : `<span class="${g >= 0 ? 'a-up' : 'a-dn'}">${g >= 0 ? '+' : ''}${g.toFixed(0)}%</span>`; };
+      const cell = (r, u, cls) => (!r && !u) ? `<td class="dy zero ${cls || ''}">–</td>` : `<td class="dy ${cls || ''}"><b>${kfmt(r)}</b><i>${fmtUnit(u)}</i></td>`;
+      const dayTh = (cls) => { let t = ''; for (let d = 1; d <= lastDay; d++) { const w = new Date(y, m, d).getDay(); t += `<th class="${w === 0 || w === 6 ? 'we' : ''}">${d}<small>${RK_DOW[w]}</small></th>`; } return t; };
+
+      // ================= มุมมองรายแบรนด์ =================
+      if (sel) {
+        const R = arr(sel, m, 'rev'), U = arr(sel, m, 'unit');
+        const CR = cmp != null ? arr(sel, cmp, 'rev') : [], CU = cmp != null ? arr(sel, cmp, 'unit') : [];
+        const totR = rkSum(R, 0, lastDay), totU = rkSum(U, 0, lastDay);
+        const cR = cmp != null ? rkSum(CR, 0, cmpTo) : 0, cU = cmp != null ? rkSum(CU, 0, cmpTo) : 0;
+        let bestD = 0; for (let d = 0; d < lastDay; d++) if (num(R[d]) > num(R[bestD])) bestD = d;
+        const sold = (() => { let n = 0; for (let d = 0; d < lastDay; d++) if (num(R[d]) > 0 || num(U[d]) > 0) n++; return n; })();
+        const py = (D.prev && D.prev[rk.cat] && D.prev[rk.cat][sel]) || null;
+        let cards = `<div><small>ยอดเดือนนี้</small><b>฿${num(totR).toLocaleString('th-TH')}</b><i>${fmtUnit(totU)} เครื่อง · เฉลี่ย ฿${kfmt(totR / Math.max(1, lastDay))}/วัน</i></div>`;
+        if (cmp != null) cards += `<div><small>${RK_MON[cmp]} (วันที่ 1–${cmpTo})</small><b>฿${num(cR).toLocaleString('th-TH')}</b><i>${fmtUnit(cU)} เครื่อง</i></div>` +
+          `<div><small>ต่างจาก ${RK_MON[cmp]}</small><b>${pctH(totR, cR)}</b><i>${sg(totR - cR)} บาท · ${sgU(totU - cU)} เครื่อง</i></div>`;
+        cards += `<div><small>วันที่ขายสูงสุด</small><b>${bestD + 1} ${RK_MON[m]}</b><i>฿${kfmt(R[bestD])} · ${fmtUnit(U[bestD])} เครื่อง · ขาย ${sold}/${lastDay} วัน</i></div>`;
+        if (py && num(py.rev[m]) > 0) cards += `<div><small>${RK_MON[m]} ปีก่อน (ทั้งเดือน)</small><b>฿${num(py.rev[m]).toLocaleString('th-TH')}</b><i>${fmtUnit(py.unit[m])} เครื่อง</i></div>`;
+
+        let t = `<div class="rk-tw"><table class="rk-t dayh"><thead><tr><th class="stk l"></th>${dayTh()}</tr></thead><tbody>`;
+        const rowsOf = (label, sub, rs, us, hl) => {
+          let tr = `<tr><td class="stk">${label}<small>${sub}</small></td>`;
+          for (let d = 0; d < lastDay; d++) tr += cell(num(rs[d]), num(us[d]), hl && num(rs[d]) > 0 && d === bestD ? 'hl' : '');
+          return tr + '</tr>';
+        };
+        t += rowsOf(RK_MON[m], 'บาท / เครื่อง', R, U, true);
+        if (cmp != null) {
+          t += rowsOf(RK_MON[cmp], 'บาท / เครื่อง', CR.slice(0, cmpTo), CU.slice(0, cmpTo), false);
+          let tr = `<tr><td class="stk">ต่าง<small>เดือนนี้ − ${RK_MON[cmp]}</small></td>`;
+          for (let d = 0; d < lastDay; d++) {
+            if (d >= cmpTo) { tr += `<td class="dy zero">–</td>`; continue; }
+            const dr = num(R[d]) - num(CR[d]), du = num(U[d]) - num(CU[d]);
+            tr += (!dr && !du) ? `<td class="dy zero">–</td>` : `<td class="dy"><b class="${dr >= 0 ? 'a-up' : 'a-dn'}">${sg(dr)}</b><i>${sgU(du)}</i></td>`;
+          }
+          t += tr + '</tr>';
+        }
+        t += '</tbody></table></div>';
+        return `<div class="rk-panel">${chips}${head}<div class="rk-sum3">${cards}</div>${t}</div>`;
       }
-      t += '</tbody></table></div></div>';
-      return chips + t;
+
+      // ================= มุมมองทุกแบรนด์ (แบรนด์ = แถว, วัน = คอลัมน์) =================
+      let t = `<div class="rk-tw"><table class="rk-t dayh"><thead><tr><th class="stk l">แบรนด์</th><th class="sep">รวม</th>`;
+      if (cmp != null) t += `<th>${RK_MON[cmp]}</th><th class="sep">ต่าง</th>`;
+      t += dayTh() + '</tr></thead><tbody>';
+      const colMax = [];
+      for (let d = 0; d < lastDay; d++) colMax[d] = Math.max.apply(null, allBrands.map(b => num(arr(b, m, 'rev')[d])));
+      const rowHtml = (name, subTxt, R, U, CR, CU, isSum) => {
+        const totR = rkSum(R, 0, lastDay), totU = rkSum(U, 0, lastDay);
+        let tr = `<tr${isSum ? ' class="sum"' : ''}><td class="stk"${isSum ? '' : ` onclick="rk.dayBrand='${name}';haptic(6);rkRender()"`}>${isSum ? 'รวม' : name}<small>${subTxt}</small></td>`;
+        tr += cell(totR, totU, 'sep');
+        if (cmp != null) {
+          const cR = rkSum(CR, 0, cmpTo), cU = rkSum(CU, 0, cmpTo);
+          tr += cell(cR, cU) + `<td class="dy sep"><b>${pctH(totR, cR)}</b><i>${sgU(totU - cU)}</i></td>`;
+        }
+        for (let d = 0; d < lastDay; d++) tr += cell(num(R[d]), num(U[d]), !isSum && allBrands.length > 1 && colMax[d] > 0 && num(R[d]) === colMax[d] ? 'best' : '');
+        return tr + '</tr>';
+      };
+      allBrands.forEach(b => { t += rowHtml(b, 'แตะดูรายวัน ›', arr(b, m, 'rev'), arr(b, m, 'unit'), arr(b, cmp == null ? m : cmp, 'rev'), arr(b, cmp == null ? m : cmp, 'unit'), false); });
+      if (allBrands.length > 1) {
+        const sumArr = (mm, k) => { const o = new Array(31).fill(0); allBrands.forEach(b => arr(b, mm, k).forEach((v, i) => { o[i] += Number(v) || 0; })); return o; };
+        t += rowHtml('', 'ทุกแบรนด์', sumArr(m, 'rev'), sumArr(m, 'unit'), cmp == null ? [] : sumArr(cmp, 'rev'), cmp == null ? [] : sumArr(cmp, 'unit'), true);
+      }
+      t += '</tbody></table></div>';
+      return `<div class="rk-panel">${chips}${head}${t}</div>`;
     }
 
     function rkQHTML() {
