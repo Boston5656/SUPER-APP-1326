@@ -705,6 +705,15 @@
     .rk-t td.tot { color: var(--yellow); }
     .rk-t td.qx { color: #E5E5EA; background: rgba(255,255,255,.07); }
     .rk-t tr.sum td { background: rgba(255,214,0,.14); color: var(--yellow); }
+    /* รายวัน: ช่องละ 2 บรรทัด (฿ / Unit) */
+    .rk-t td.dy { padding: 6px 8px; line-height: 1.25; }
+    .rk-t td.dy b { display: block; font-size: 13px; }
+    .rk-t td.dy i { display: block; font-style: normal; font-size: 10px; color: #8E8E93; font-weight: 600; }
+    .rk-t td.dy.best b { color: var(--yellow); }
+    .rk-t td.dd { text-align: left; color: #E5E5EA; width: 54px; }
+    .rk-t td.dd small { display: block; font-size: 9px; color: #8E8E93; font-weight: 600; }
+    .rk-t td.dy.zero { color: rgba(255,255,255,.22); }
+    .rk-t tr.sum td.dy b, .rk-t tr.sum td.dy i { color: var(--yellow); }
     .rk-a { display: inline-block; width: 14px; margin-right: 4px; font-size: 12px; text-align: center; }
     .a-up { color: #34C759; } .a-ur { color: #A6E22E; } .a-fl { color: #FFD60A; } .a-dr { color: #FF9F0A; } .a-dn { color: #FF453A; }
     .rk-shbar { display: inline-block; width: 46px; height: 6px; border-radius: 100px; background: rgba(255,255,255,.1); vertical-align: middle; margin-left: 6px; overflow: hidden; }
@@ -1069,7 +1078,7 @@
         <button data-c="SMARTPHONE" class="on">📱 Smartphone</button><button data-c="IPHONE"> iPhone</button><button data-c="TABLET">📟 Tablet</button><button data-c="IPAD"> iPad</button>
       </nav>
       <nav class="rk-seg rk-periods" id="rk-periods">
-        <button data-p="Q1">Q1</button><button data-p="Q2">Q2</button><button data-p="Q3">Q3</button><button data-p="Q4">Q4</button><button data-p="Y" class="rk-y">ทั้งปี</button><button data-p="YOY" class="rk-y">📈 vs ปีก่อน</button>
+        <button data-p="Q1">Q1</button><button data-p="Q2">Q2</button><button data-p="Q3">Q3</button><button data-p="Q4">Q4</button><button data-p="Y" class="rk-y">ทั้งปี</button><button data-p="YOY" class="rk-y">📈 vs ปีก่อน</button><button data-p="DAY" class="rk-y">📅 รายวัน</button>
       </nav>
       <section id="rk-body"><div class="rk-loading">กำลังโหลด Ranking…</div></section>
     </div>
@@ -2355,11 +2364,60 @@
       if (!rk.data) return;
       const solo = rk.cat === 'IPHONE' || rk.cat === 'IPAD';
       rkCharts.forEach(c => { try { c.destroy(); } catch (e) {} }); rkCharts = [];
-      const mt = document.getElementById('rk-metric'); if (mt) mt.style.display = solo && rk.period !== 'YOY' ? 'none' : '';
+      const mt = document.getElementById('rk-metric'); if (mt) mt.style.display = (solo && rk.period !== 'YOY') || rk.period === 'DAY' ? 'none' : '';
+      if (rk.period === 'DAY') { body.innerHTML = rkDayHTML(solo); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
       if (rk.period === 'YOY') { body.innerHTML = '<div class="rk-yoyg">' + rkYoyHTML(solo) + '</div>'; rkYoyCharts(solo); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
       body.innerHTML = rk.period === 'Y' ? (solo ? rkSoloYearHTML() : rkYearHTML(false)) : (solo ? rkSoloQHTML() : rkQHTML());
       animateIn(body.querySelectorAll('.rk-pc, .rk-panel, .rk-mc'), 'ios-in', 50, 0, 400);
       requestAnimationFrame(() => body.querySelectorAll('[data-h]').forEach(i => { i.style.height = i.dataset.h + '%'; }));
+    }
+
+    // ===== 📅 รายวัน: แบรนด์ไหน วันไหน เปิดกี่บาท กี่ Unit (ของเดือนที่เลือก) =====
+    const RK_DOW = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
+    function rkDayHTML(solo) {
+      const D = rk.data, y = D.year, cm = D.curMonth;
+      const dailyCat = ((D.daily || {})[rk.cat]) || null;
+      if (!D.daily) return `<div class="rk-panel rk-empty" style="color:#AEAEB2">ยังไม่มีข้อมูลรายวัน — อัปเดตโค้ด Code.gs / API.gs ตามที่แจ้ง แล้วกด 🔄 อัปเดตข้อมูล 1 ครั้ง</div>`;
+      if (rk.dayMonth == null || rk.dayMonth > cm) rk.dayMonth = cm;
+      const m = rk.dayMonth;
+      // เดือนที่มีข้อมูลในหมวดนี้
+      const hasM = mm => Object.keys(dailyCat || {}).some(b => dailyCat[b][mm]);
+      const chips = `<div class="rk-chips">${RK_MON.map((n, i) => i > cm ? '' : (hasM(i) || i === m)
+        ? `<button class="${i === m ? 'on' : ''}" onclick="rk.dayMonth=${i};haptic(6);rkRender()">${n}</button>` : '').join('')}</div>`;
+      const days = new Date(y, m + 1, 0).getDate();
+      const lastDay = m === cm ? Math.min(days, Number(D.day) || days) : days;
+      const brands = Object.keys(dailyCat || {}).filter(b => dailyCat[b][m] && rkSum(dailyCat[b][m].rev, 0, 31) + rkSum(dailyCat[b][m].unit, 0, 31) > 0)
+        .sort((a, b) => rkSum(dailyCat[b][m].rev, 0, 31) - rkSum(dailyCat[a][m].rev, 0, 31));
+      const head = `<div class="rk-ph"><b>📅 ${RK_CAT_NAME[rk.cat]} · ${RK_MON[m]} ${y}</b><span>บาท / เครื่อง ต่อวัน${m === cm ? ' · ถึงวันที่ ' + lastDay : ''}</span></div>`;
+      if (!brands.length) return chips + `<div class="rk-panel">${head}<div class="rk-empty" style="color:#8E8E93">ไม่มีข้อมูลรายวันของ ${RK_MON[m]}</div></div>`;
+
+      const num = v => Math.round(Number(v) || 0);
+      const baht = v => { v = num(v); return rkCompact() && Math.abs(v) >= 1000 ? (Math.abs(v) >= 1e6 ? (v / 1e6).toFixed(2) + 'M' : Math.round(v / 1000) + 'K') : v.toLocaleString('th-TH'); };
+      const cell = (r, u, cls) => (!r && !u) ? `<td class="dy zero">–</td>` : `<td class="dy ${cls || ''}"><b>${baht(r)}</b><i>${fmtUnit(u)} เครื่อง</i></td>`;
+      const get = (b, d, k) => num(((dailyCat[b][m] || {})[k] || [])[d]);
+
+      let t = `<div class="rk-panel">${head}<div class="rk-tw"><table class="rk-t"><thead><tr><th class="l">วันที่</th>`;
+      brands.forEach(b => { t += `<th>${solo ? RK_CAT_NAME[rk.cat] : b}</th>`; });
+      if (!solo) t += '<th>รวม</th>';
+      t += '</tr></thead><tbody>';
+      // แถวรวมทั้งเดือน
+      t += `<tr class="sum"><td class="dd"><b>รวม</b></td>`;
+      let gR = 0, gU = 0;
+      brands.forEach(b => { const r = rkSum(dailyCat[b][m].rev, 0, days), u = rkSum(dailyCat[b][m].unit, 0, days); gR += r; gU += u; t += cell(r, u); });
+      if (!solo) t += cell(gR, gU);
+      t += '</tr>';
+      for (let d = 0; d < lastDay; d++) {
+        const dow = RK_DOW[new Date(y, m, d + 1).getDay()];
+        const rs = brands.map(b => get(b, d, 'rev')), us = brands.map(b => get(b, d, 'unit'));
+        const mx = Math.max(...rs);
+        const tr = rs.reduce((a, v) => a + v, 0), tu = us.reduce((a, v) => a + v, 0);
+        t += `<tr><td class="dd"><b>${d + 1}</b><small>${dow}</small></td>`;
+        brands.forEach((b, i) => { t += cell(rs[i], us[i], brands.length > 1 && mx > 0 && rs[i] === mx ? 'best' : ''); });
+        if (!solo) t += cell(tr, tu);
+        t += '</tr>';
+      }
+      t += '</tbody></table></div></div>';
+      return chips + t;
     }
 
     function rkQHTML() {
