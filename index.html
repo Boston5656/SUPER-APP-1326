@@ -723,9 +723,10 @@
     .rk-t.dayh td { padding: 6px 4px; text-align: center; font-size: 12px; }
     .rk-t.dayh td.dy b { font-size: 12px; }
     .rk-t.dayh td.dy i { font-size: 9px; }
-    .rk-t.dayh td.stk, .rk-t.dayh th.stk { position: sticky; left: 0; z-index: 2; text-align: left; min-width: 84px; max-width: 96px; padding-left: 10px;
-      background-color: var(--panel-dark); background-image: linear-gradient(rgba(255,255,255,.07), rgba(255,255,255,.07)); }
-    .rk-t.dayh th.stk { background-image: none; }
+    .rk-t.dayh td.stk, .rk-t.dayh th.stk { position: sticky; left: 0; z-index: 2; text-align: left; width: 84px; min-width: 84px; max-width: 84px; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 6px 4px 6px 10px;
+      background-color: #1E1E21; background-image: linear-gradient(rgba(255,255,255,.07), rgba(255,255,255,.07)); }
+    .rk-t.dayh th.stk { background-image: none; background-color: #1E1E21; }
+    .rk-t.dayh tr.sum td.stk { background-image: linear-gradient(rgba(255,214,0,.14), rgba(255,214,0,.14)); color: var(--yellow); }
     .rk-t.dayh td.stk { border-radius: 14px 0 0 14px; color: var(--yellow); cursor: pointer; font-size: 12px; }
     .rk-t.dayh td.stk small { display: block; color: #8E8E93; font-size: 9px; font-weight: 600; }
     .rk-t.dayh td.gap { border-radius: 0; }
@@ -737,6 +738,26 @@
     .rk-sum3 small { display: block; font-size: 10px; color: #8E8E93; font-weight: 700; }
     .rk-sum3 b { display: block; font-family: var(--f-num); font-size: 16px; margin-top: 2px; }
     .rk-sum3 i { display: block; font-style: normal; font-size: 11px; color: #AEAEB2; font-weight: 600; margin-top: 1px; }
+    .rk-t.dayh td.stk em, .rk-t.dayh td.nm em { font-style: normal; opacity: .55; margin-left: 2px; }
+    .rk-t.dayh td.nm { text-align: left; color: var(--yellow); cursor: pointer; padding-left: 10px; font-size: 12px; }
+    .rk-t.dayh.rk-dsum th, .rk-t.dayh.rk-dsum td { min-width: 0; }
+    .rk-t.dayh.rk-dsum th.l { padding-left: 10px; }
+    .rk-dsumw { display: none; }
+    .rk-sublab { display: none; font-size: 10px; font-weight: 800; color: #8E8E93; letter-spacing: .06em; margin: 14px 0 6px; }
+    @media (max-width: 700px) {
+      .rk-t.dayh .sumc { display: none; }
+      .rk-dsumw { display: block; }
+      .rk-sublab { display: block; }
+      .rk-t.dayh td.stk, .rk-t.dayh th.stk { width: 68px; min-width: 68px; max-width: 68px; padding-left: 8px; }
+      .rk-t.dayh th { min-width: 46px; }
+      .rk-t.dayh td.dy b { font-size: 11.5px; }
+      .rk-chips.dchips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; margin-bottom: 8px; }
+      .rk-chips.dchips::-webkit-scrollbar { display: none; }
+      .rk-chips.dchips button, .rk-chips.dchips .rk-lab { flex: 0 0 auto; }
+      .rk-chips.dchips button { padding: 6px 11px; }
+      .rk-sum3 { grid-template-columns: 1fr 1fr; }
+      #rk-body .rk-panel { padding: 14px 12px; }
+    }
 
     .rk-a { display: inline-block; width: 14px; margin-right: 4px; font-size: 12px; text-align: center; }
     .a-up { color: #34C759; } .a-ur { color: #A6E22E; } .a-fl { color: #FFD60A; } .a-dr { color: #FF9F0A; } .a-dn { color: #FF453A; }
@@ -2389,7 +2410,7 @@
       const solo = rk.cat === 'IPHONE' || rk.cat === 'IPAD';
       rkCharts.forEach(c => { try { c.destroy(); } catch (e) {} }); rkCharts = [];
       const mt = document.getElementById('rk-metric'); if (mt) mt.style.display = (solo && rk.period !== 'YOY') || rk.period === 'DAY' ? 'none' : '';
-      if (rk.period === 'DAY') { body.innerHTML = rkDayHTML(solo); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
+      if (rk.period === 'DAY') { body.innerHTML = rkDayHTML(solo); rkDayFix(body); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
       if (rk.period === 'YOY') { body.innerHTML = '<div class="rk-yoyg">' + rkYoyHTML(solo) + '</div>'; rkYoyCharts(solo); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
       body.innerHTML = rk.period === 'Y' ? (solo ? rkSoloYearHTML() : rkYearHTML(false)) : (solo ? rkSoloQHTML() : rkQHTML());
       animateIn(body.querySelectorAll('.rk-pc, .rk-panel, .rk-mc'), 'ios-in', 50, 0, 400);
@@ -2428,10 +2449,10 @@
         ? `<button class="${i === m ? 'on' : ''}" onclick="rk.dayMonth=${i};haptic(6);rkRender()">${n}</button>` : '').join('');
       const cChips = `<button class="${cmp == null ? 'on' : ''}" onclick="rk.dayCmp=null;haptic(6);rkRender()">ไม่เทียบ</button>` +
         RK_MON.map((n, i) => (i > cm || i === m || !hasM(i)) ? '' : `<button class="${i === cmp ? 'on' : ''}" onclick="rk.dayCmp=${i};haptic(6);rkRender()">${n}</button>`).join('');
-      const bChips = solo ? '' : `<div class="rk-chips"><span class="rk-lab">แบรนด์</span><button class="${!sel ? 'on' : ''}" onclick="rk.dayBrand=null;haptic(6);rkRender()">ทุกแบรนด์</button>` +
+      const bChips = solo ? '' : `<div class="rk-chips dchips"><span class="rk-lab">แบรนด์</span><button class="${!sel ? 'on' : ''}" onclick="rk.dayBrand=null;haptic(6);rkRender()">ทุกแบรนด์</button>` +
         allBrands.map(b => `<button class="${b === sel ? 'on' : ''}" onclick="rk.dayBrand='${b}';haptic(6);rkRender()">${b}</button>`).join('') + '</div>';
-      const chips = `<div class="rk-chips"><span class="rk-lab">เดือน</span>${mChips}</div>` +
-                    `<div class="rk-chips"><span class="rk-lab">เทียบกับ</span>${cChips}</div>` + bChips;
+      const chips = `<div class="rk-chips dchips"><span class="rk-lab">เดือน</span>${mChips}</div>` +
+                    `<div class="rk-chips dchips"><span class="rk-lab">เทียบกับ</span>${cChips}</div>` + bChips;
 
       const head = `<div class="rk-ph"><b>📅 ${RK_CAT_NAME[rk.cat]}${sel && !solo ? ' · ' + sel : ''} · ${RK_MON[m]} ${y}</b><span>${m === cm ? 'ถึงวันที่ ' + lastDay : 'ทั้งเดือน'}${cmp != null ? ' · เทียบ ' + RK_MON[cmp] + ' (วันที่ 1–' + cmpTo + ')' : ''}</span></div>`;
       if (!allBrands.length) return `<div class="rk-panel">${chips}${head}<div class="rk-empty" style="color:#8E8E93">ไม่มีข้อมูลรายวันของ ${RK_MON[m]}</div></div>`;
@@ -2460,7 +2481,7 @@
         cards += `<div><small>วันที่ขายสูงสุด</small><b>${bestD + 1} ${RK_MON[m]}</b><i>฿${kfmt(R[bestD])} · ${fmtUnit(U[bestD])} เครื่อง · ขาย ${sold}/${lastDay} วัน</i></div>`;
         if (py && num(py.rev[m]) > 0) cards += `<div><small>${RK_MON[m]} ปีก่อน (ทั้งเดือน)</small><b>฿${num(py.rev[m]).toLocaleString('th-TH')}</b><i>${fmtUnit(py.unit[m])} เครื่อง</i></div>`;
 
-        let t = `<div class="rk-tw"><table class="rk-t dayh"><thead><tr><th class="stk l"></th>${dayTh()}</tr></thead><tbody>`;
+        let t = `<div class="rk-tw" data-end="${m === cm ? 1 : 0}"><table class="rk-t dayh"><thead><tr><th class="stk l"></th>${dayTh()}</tr></thead><tbody>`;
         const rowsOf = (label, sub, rs, us, hl) => {
           let tr = `<tr><td class="stk">${label}<small>${sub}</small></td>`;
           for (let d = 0; d < lastDay; d++) tr += cell(num(rs[d]), num(us[d]), hl && num(rs[d]) > 0 && d === bestD ? 'hl' : '');
@@ -2482,29 +2503,47 @@
       }
 
       // ================= มุมมองทุกแบรนด์ (แบรนด์ = แถว, วัน = คอลัมน์) =================
-      let t = `<div class="rk-tw"><table class="rk-t dayh"><thead><tr><th class="stk l">แบรนด์</th><th class="sep">รวม</th>`;
-      if (cmp != null) t += `<th>${RK_MON[cmp]}</th><th class="sep">ต่าง</th>`;
-      t += dayTh() + '</tr></thead><tbody>';
+      const sumArr = (mm, k) => { const o = new Array(31).fill(0); allBrands.forEach(b => arr(b, mm, k).forEach((v, i) => { o[i] += Number(v) || 0; })); return o; };
+      const lines = allBrands.map(b => ({ name: b, R: arr(b, m, 'rev'), U: arr(b, m, 'unit'), CR: cmp == null ? [] : arr(b, cmp, 'rev'), CU: cmp == null ? [] : arr(b, cmp, 'unit'), isSum: false }));
+      if (allBrands.length > 1) lines.push({ name: '', R: sumArr(m, 'rev'), U: sumArr(m, 'unit'), CR: cmp == null ? [] : sumArr(cmp, 'rev'), CU: cmp == null ? [] : sumArr(cmp, 'unit'), isSum: true });
       const colMax = [];
       for (let d = 0; d < lastDay; d++) colMax[d] = Math.max.apply(null, allBrands.map(b => num(arr(b, m, 'rev')[d])));
-      const rowHtml = (name, subTxt, R, U, CR, CU, isSum) => {
-        const totR = rkSum(R, 0, lastDay), totU = rkSum(U, 0, lastDay);
-        let tr = `<tr${isSum ? ' class="sum"' : ''}><td class="stk"${isSum ? '' : ` onclick="rk.dayBrand='${name}';haptic(6);rkRender()"`}>${isSum ? 'รวม' : name}<small>${subTxt}</small></td>`;
-        tr += cell(totR, totU, 'sep');
-        if (cmp != null) {
-          const cR = rkSum(CR, 0, cmpTo), cU = rkSum(CU, 0, cmpTo);
-          tr += cell(cR, cU) + `<td class="dy sep"><b>${pctH(totR, cR)}</b><i>${sgU(totU - cU)}</i></td>`;
-        }
-        for (let d = 0; d < lastDay; d++) tr += cell(num(R[d]), num(U[d]), !isSum && allBrands.length > 1 && colMax[d] > 0 && num(R[d]) === colMax[d] ? 'best' : '');
-        return tr + '</tr>';
-      };
-      allBrands.forEach(b => { t += rowHtml(b, 'แตะดูรายวัน ›', arr(b, m, 'rev'), arr(b, m, 'unit'), arr(b, cmp == null ? m : cmp, 'rev'), arr(b, cmp == null ? m : cmp, 'unit'), false); });
-      if (allBrands.length > 1) {
-        const sumArr = (mm, k) => { const o = new Array(31).fill(0); allBrands.forEach(b => arr(b, mm, k).forEach((v, i) => { o[i] += Number(v) || 0; })); return o; };
-        t += rowHtml('', 'ทุกแบรนด์', sumArr(m, 'rev'), sumArr(m, 'unit'), cmp == null ? [] : sumArr(cmp, 'rev'), cmp == null ? [] : sumArr(cmp, 'unit'), true);
-      }
+      const tots = L => ({ r: rkSum(L.R, 0, lastDay), u: rkSum(L.U, 0, lastDay), cr: cmp != null ? rkSum(L.CR, 0, cmpTo) : 0, cu: cmp != null ? rkSum(L.CU, 0, cmpTo) : 0 });
+      const diffTd = (T, cls) => `<td class="dy ${cls || ''}"><b>${pctH(T.r, T.cr)}</b><i>${sgU(T.u - T.cu)}</i></td>`;
+      const pick = n => `onclick="rk.dayBrand='${n}';haptic(6);rkRender()"`;
+
+      // สรุปทั้งเดือน (โชว์เฉพาะจอแคบ/แนวตั้ง — จอกว้างใช้คอลัมน์ในตารางรายวันแทน)
+      let sm = `<div class="rk-dsumw"><div class="rk-tw"><table class="rk-t dayh rk-dsum"><thead><tr><th class="l">แบรนด์</th><th>รวม</th>${cmp != null ? `<th>${RK_MON[cmp]}</th><th>ต่าง</th>` : ''}</tr></thead><tbody>`;
+      lines.forEach(L => {
+        const T = tots(L);
+        sm += `<tr${L.isSum ? ' class="sum"' : ''}><td class="nm"${L.isSum ? '' : ' ' + pick(L.name)}>${L.isSum ? 'รวม' : L.name + ' <em>›</em>'}</td>${cell(T.r, T.u)}${cmp != null ? cell(T.cr, T.cu) + diffTd(T) : ''}</tr>`;
+      });
+      sm += `</tbody></table></div></div><div class="rk-sublab">รายวัน · เลื่อนดูไปทางขวา ▸</div>`;
+
+      let t = `<div class="rk-tw" data-end="${m === cm ? 1 : 0}"><table class="rk-t dayh"><thead><tr><th class="stk l">แบรนด์</th><th class="sep sumc">รวม</th>`;
+      if (cmp != null) t += `<th class="sumc">${RK_MON[cmp]}</th><th class="sep sumc">ต่าง</th>`;
+      t += dayTh() + '</tr></thead><tbody>';
+      lines.forEach(L => {
+        const T = tots(L);
+        let tr = `<tr${L.isSum ? ' class="sum"' : ''}><td class="stk"${L.isSum ? '' : ' ' + pick(L.name)}>${L.isSum ? 'รวม' : L.name + '<em>›</em>'}</td>`;
+        tr += cell(T.r, T.u, 'sep sumc');
+        if (cmp != null) tr += cell(T.cr, T.cu, 'sumc') + diffTd(T, 'sep sumc');
+        for (let d = 0; d < lastDay; d++) tr += cell(num(L.R[d]), num(L.U[d]), !L.isSum && allBrands.length > 1 && colMax[d] > 0 && num(L.R[d]) === colMax[d] ? 'best' : '');
+        t += tr + '</tr>';
+      });
       t += '</tbody></table></div>';
-      return `<div class="rk-panel">${chips}${head}${t}</div>`;
+      return `<div class="rk-panel">${chips}${head}${sm}${t}</div>`;
+    }
+
+    // หลังวาดหน้ารายวัน: เลื่อนปุ่มที่เลือกให้อยู่กลางแถว + ตารางโชว์วันล่าสุดก่อน (เฉพาะจอแคบ)
+    function rkDayFix(root) {
+      try {
+        root.querySelectorAll('.rk-chips.dchips').forEach(row => {
+          const on = row.querySelector('button.on');
+          if (on && row.scrollWidth > row.clientWidth) row.scrollLeft = on.offsetLeft - (row.clientWidth - on.offsetWidth) / 2;
+        });
+        if (window.innerWidth <= 700) root.querySelectorAll('.rk-tw[data-end="1"]').forEach(w => { w.scrollLeft = w.scrollWidth; });
+      } catch (e) {}
     }
 
     function rkQHTML() {
