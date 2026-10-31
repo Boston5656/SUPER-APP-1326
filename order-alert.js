@@ -9,7 +9,7 @@
 
   var FB_VER = '10.12.2';
   var POLL_MS = 15000;
-  var S = { user: null, ver: '', list: null, cfg: null, timer: 0, subs: [], audio: null, unlocked: false, pending: '', busy: false, started: false };
+  var S = { exp: {}, skew: 0, user: null, ver: '', list: null, cfg: null, timer: 0, subs: [], audio: null, unlocked: false, pending: '', busy: false, started: false };
   var LS = {
     get: function (k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } },
     set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -67,13 +67,13 @@
   }
   function buzz(p) { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} }
   function phrase() { var s = (S.cfg && S.cfg.cfg && S.cfg.cfg.sound) || { mode: 'fun', fun: 'ORDER มาแล้วพี่น้อง มาเด้อสู', polite: 'มีออเดอร์ใหม่ค่ะ', sayModel: true }; return s; }
-  function alertNew(o) {
+  function alertNew(o, title, say2) {
     var s = phrase(), line = [o.brand, o.model, o.color, o.cap].filter(Boolean).join(' ');
-    banner('🔥 ' + (s.mode === 'polite' ? s.polite : s.fun), line + (o.qty > 1 ? ' ×' + o.qty : '') + ' · ' + (o.owner || ''), o.no, 'new');
+    banner(title || ('🔥 ' + (s.mode === 'polite' ? s.polite : s.fun)), line + (o.qty > 1 ? ' ×' + o.qty : '') + ' · ' + (o.owner || ''), o.no, 'new');
     buzz([200, 80, 200, 80, 400]);
     if (!soundOn()) return;
     tone('new');
-    setTimeout(function () { say((s.mode === 'polite' ? s.polite : s.fun) + (s.sayModel ? ' ' + o.brand + ' ' + o.model : '')); }, 1500);
+    setTimeout(function () { say((s.mode === 'polite' ? s.polite : s.fun) + (say2 ? ' ' + say2 : '') + (s.sayModel ? ' ' + o.brand + ' ' + o.model : '')); }, 1500);
   }
   function alertMine(title, body, no, warn) {
     banner(title, body, no, warn ? 'warn' : 'me');
@@ -139,7 +139,13 @@
     prev.forEach(function (o) { pm[o.no] = o; });
     next.forEach(function (o) {
       var p = pm[o.no];
-      if (!p) { if (o.status === 'new' && me.role !== 'PC' && o.ownerAcct !== me.acct) alertNew(o); return; }
+      if (!p) {
+        if (o.status !== 'new' || me.role === 'PC' || o.ownerAcct === me.acct || myLevel() === 'off') return;
+        var as = o.assign;
+        if (as && !expired(o)) { if (as.acct === me.acct) alertNew(o, '🎯 ' + String(o.owner || '').split(' · ')[0] + ' เลือกคุณรับเคส! กดรับใน ' + (as.mins || 3) + ' นาที', 'สำหรับ ' + (me.nick || '')); }
+        else alertNew(o);
+        return;
+      }
       var line = [o.brand, o.model, o.color, o.cap].filter(Boolean).join(' ');
       if (o.ownerAcct === me.acct && p.status !== o.status) {
         if (o.status === 'back') alertMine('↩️ ' + ((o.back && o.back.reason) || 'ส่งกลับ PC'), line + (o.phone ? ' · ' + o.phone : '') + ' · จาก ' + (o.staff || ''), o.no, true);
@@ -157,9 +163,28 @@
   }
   function setQueue(q, quiet) {
     if (!q || !q.list) return;
+    if (q.now) S.skew = q.now - Date.now();
+    var first = !S.list;
     if (!quiet) diff(S.list, q.list);
-    S.list = q.list; S.ver = q.ver || S.ver; S.now = q.now; emit();
+    S.list = q.list; S.ver = q.ver || S.ver; S.now = q.now;
+    if (first) S.list.forEach(function (o) { if (o.assign && expired(o)) S.exp[o.no] = 1; });   // เปิดแอปมาเจอที่หมดเวลาไปแล้ว ไม่ต้องร้อง
+    emit();
   }
+  // 🎯 จองให้คนที่ PC เลือก · หมดเวลา = สละสิทธิ์ → เด้งเรียกคนอื่น (นับเวลาในเครื่อง ไม่ต้องรอหลังบ้าน)
+  function myLevel() { return (S.cfg && S.cfg.me && S.cfg.me.level) || ''; }
+  function expired(o) { return o.assign && Date.now() + (S.skew || 0) >= o.assign.until; }
+  setInterval(function () {
+    if (!S.started || !S.list) return;
+    var me = S.user || {};
+    if (me.role === 'PC' || myLevel() === 'off') return;
+    S.list.forEach(function (o) {
+      if (o.status !== 'new' || !o.assign || S.exp[o.no] || !expired(o)) return;
+      S.exp[o.no] = 1;
+      if (o.assign.acct === me.acct || o.ownerAcct === me.acct) { emit(); return; }
+      alertNew(o, '⏰ ' + o.assign.nick + ' ไม่ได้รับใน ' + (o.assign.mins || 3) + ' นาที — ใครว่างรับได้เลย');
+      emit();
+    });
+  }, 1000);
   function tick() {
     clearTimeout(S.timer);
     if (!S.started) return;
