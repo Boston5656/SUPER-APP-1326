@@ -3633,6 +3633,24 @@
   .sa-amt:disabled { background: #3a3a3c; color: #6e6e73; }
   .sa-spin { width: 34px; height: 34px; border: 4px solid #444; border-top-color: #FFD700; border-radius: 50%; animation: saSpin .8s linear infinite; }
   @keyframes saSpin { to { transform: rotate(360deg); } }
+  /* ⚡ ตั้งค่างานโฟกัส */
+  .fc-row { display: grid; grid-template-columns: 1fr 1fr 34px; grid-template-areas: "f o x" "v v v"; gap: 6px; background: #2C2C2E; border-radius: 18px; padding: 8px; margin-bottom: 8px; }
+  .fc-row select, .fc-row input { min-width: 0; height: 38px; border-radius: 12px; border: 0; padding: 0 10px; font-weight: 700; font-size: 13px; outline: none; }
+  .fc-row select { background: #3A3A3C; color: #fff; } .fc-row input { grid-area: v; background: #fff; color: #000; text-transform: uppercase; }
+  .fc-row .fc-x { grid-area: x; height: 38px; border-radius: 12px; background: #3A1D1F; color: #FF6B60; font-weight: 900; }
+  .fc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fc-chip { border-radius: 9999px; padding: 9px 13px; font-weight: 700; font-size: 12px; background: #2C2C2E; color: #ccc; transition: transform .4s var(--spring); }
+  .fc-chip:active { transform: scale(.92); }
+  .fc-chip.on { background: #FFD700; color: #000; }
+  .fc-chip small { opacity: .6; font-weight: 600; margin-left: 4px; }
+  .fc-res { background: #2C2C2E; border-radius: 20px; padding: 14px; margin-top: 10px; font-size: 12.5px; }
+  .fc-res b.big { display: block; font-size: 22px; color: #FFD700; margin: 2px 0 6px; }
+  .fc-res .tp { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,.06); color: #ddd; }
+  .fc-res .tp span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fc-warn { color: #FFB340; font-weight: 700; margin-top: 8px; }
+  .fc-note { font-size: 11px; color: #8E8E93; font-weight: 600; line-height: 1.5; margin: 0 6px 12px; }
+  .sa-pill.fc-off { opacity: .45; }
+  .fc-mini { border-radius: 9999px; height: 38px; padding: 0 14px; font-weight: 800; font-size: 12px; background: #2C2C2E; color: #fff; }
   #sa-fab { width: 52px; height: 52px; border-radius: 50%; background: #1C1C1E; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,.25); transition: transform .5s var(--spring); }
   #sa-fab:active { transform: scale(.85); transition-duration: .1s; }
 </style>
@@ -3647,6 +3665,7 @@
       <div class="flex gap-2 mt-4">
         <button id="sa-tab-staff" class="sa-tab active" onclick="saTab('staff')">👤 รายชื่อ</button>
         <button id="sa-tab-target" class="sa-tab" onclick="saTab('target')">🎯 แก้ไขเป้า</button>
+        <button id="sa-tab-focus" class="sa-tab" onclick="saTab('focus')">⚡ งานโฟกัส</button>
       </div>
     </div>
     <div id="sa-body" class="sa-body"></div>
@@ -3703,6 +3722,8 @@
   }
 
   function saClose() {
+    if (fcDirty && !confirm('งานโฟกัสมีที่แก้แต่ยังไม่บันทึก — ปิดเลยไหม?')) return;
+    fcItems = null; fcDirty = false;
     document.getElementById('sa-modal').style.display = 'none';
     document.body.style.overflow = '';
     if (saDirty) { saDirty = false; _saOrigOpenDashboard(); }
@@ -3711,6 +3732,8 @@
   function saTab(t) {
     document.getElementById('sa-tab-staff').classList.toggle('active', t === 'staff');
     document.getElementById('sa-tab-target').classList.toggle('active', t === 'target');
+    document.getElementById('sa-tab-focus').classList.toggle('active', t === 'focus');
+    if (t === 'focus') { fcOpen(); return; }
     if (t === 'staff') saRenderStaffList(); else saRenderTargetList();
     document.getElementById('sa-body').scrollTop = 0;
     saAnimateList();
@@ -3892,6 +3915,146 @@
     if (missing) return alert(`ยังไม่ได้ใส่ยอดของ ${missing}`);
     if (!assignments.length && !confirm(`ไม่ได้เลือกใครเลย — จะล้างเป้า ${c.name} ของทุกคนใช่ไหม?`)) return;
     saCall('saveCategoryTarget', [c.key, assignments], 'กำลังบันทึกเป้า + อัปเดต Dashboard...', () => saTab('target'));
+  }
+
+  /* ---------- แท็บ: ⚡ งานโฟกัส (เป้า / ฐาน / เกณฑ์นับ) ---------- */
+  const FC_FIELD = { CATE: 'Category', SUBCATE: 'Sub Cate', BRAND: 'แบรนด์', MODEL: 'Model', PNAME: 'ชื่อสินค้า', PCODE: 'รหัสสินค้า', MAPPED: 'หมวด (ระบบ)' };
+  const FC_OP = { eq: 'เท่ากับ', start: 'ขึ้นต้นด้วย', has: 'มีคำว่า', not: 'ไม่ใช่' };
+  const FC_BASE = { SMP: 'Smartphone (Android)', IPHONE: 'iPhone', IPAD: 'iPad', WATCH: 'Apple Watch', TABLET: 'Tablet (Android)', SAMSUNG: 'Samsung มือถือ', GADGET: 'Gadget (BTB มี Serial)' };
+  const FC_FIN = { UFUND_P: 'U-Fund Personal', UFUND_S: 'U-Fund Student', SF: 'Samsung Finance+' };
+  const FC_LINE = { iphone: 'iPhone', smp: 'Smartphone', ipad: 'iPad', tablet: 'Tablet', watch: 'Watch' };
+  let fcData = null, fcItems = null, fcDirty = false, fcIdx = -1, fcPrev = null;
+
+  function fcOpen() {
+    if (fcItems) return fcRenderList();
+    document.getElementById('sa-body').innerHTML = '<p class="text-center text-zinc-400 text-sm py-10">กำลังโหลดงานโฟกัส...</p>';
+    google.script.run.withSuccessHandler(fcLoaded)
+      .withFailureHandler(e => { document.getElementById('sa-body').innerHTML = `<p class="text-center text-zinc-400 text-sm py-10">โหลดไม่สำเร็จ: ${saEsc(e.message)}${/getFocusConfig|ไม่พบคำสั่ง|ยังไม่ได้ใส่/.test(e.message) ? '<br>— วาง FocusConfig.gs + Code.gs + API.gs ใหม่ แล้ว Deploy เป็น New version' : ''}</p>`; })
+      .getFocusConfig(currentUser.empId);
+  }
+  function fcLoaded(d) { fcData = d; fcItems = JSON.parse(JSON.stringify(d.items || [])); fcDirty = false; fcIdx = -1; fcRenderList(); }
+  function fcRuleText(it) {
+    if (it.source === 'finance') return '💳 ' + ((it.fin && it.fin.codes) || []).map(c => FC_FIN[c]).join(' + ') + ' · ' + ((it.fin && it.fin.lines) || []).map(l => FC_LINE[l]).join('/');
+    if (!it.rules || !it.rules.length) return '⚠️ ยังไม่ได้ตั้งเงื่อนไขนับ';
+    return it.rules.map(r => `${FC_FIELD[r.f]} ${FC_OP[r.op]} ${r.v}`).join(it.mode === 'any' ? ' หรือ ' : ' และ ');
+  }
+  function fcBaseText(it) { return (it.base || []).map(b => FC_BASE[b]).join(' + ') || '⚠️ ยังไม่เลือกฐาน'; }
+
+  function fcRenderList() {
+    fcIdx = -1;
+    const snap = fcData && fcData.snap;
+    let h = `<p class="fc-note">${fcData.saved ? '✏️ ใช้ค่าที่ตั้งเองอยู่' : '📄 ตอนนี้ใช้เกณฑ์เดิม + เป้าจากชีต GUIDE'} · แตะงานเพื่อแก้ เป้า / ฐาน / นับจากอะไร${snap ? ' · ข้อมูลทดสอบจากรอบอัปเดต ' + saEsc(snap.at) : ''}</p>`;
+    h += `<button class="sa-btn sa-btn-yellow mb-4" onclick="fcEditNew()">+ เพิ่มงานโฟกัส</button>`;
+    fcItems.forEach((it, i) => {
+      const cnt = snap && snap.counts && snap.counts[it.name];
+      h += `<div class="sa-pill${it.show ? '' : ' fc-off'}" onclick="fcEdit(${i})">
+        <div class="min-w-0"><span class="block font-bold text-sm truncate">${saEsc(it.name)}${it.show ? '' : ' · ซ่อน'}</span>
+        <span class="block text-[10px] text-zinc-400 truncate">ฐาน ${saEsc(fcBaseText(it))}${cnt != null ? ' · ล่าสุด ' + cnt + ' ชิ้น' : ''}</span>
+        <span class="block text-[10px] text-zinc-500 truncate">${saEsc(fcRuleText(it))}</span></div>
+        <span class="sa-badge">${it.show ? saFmt(it.target) + '%' : '—'}</span></div>`;
+    });
+    h += `<div class="mt-4 space-y-2">
+      <button class="sa-btn sa-btn-yellow" onclick="fcSave()" ${fcDirty ? '' : 'style="opacity:.45"'}>💾 บันทึก + อัปเดต Dashboard${fcDirty ? ' (มีที่แก้)' : ''}</button>
+      ${fcData.saved ? '<button class="sa-btn sa-btn-red" onclick="fcReset()">↩︎ กลับไปใช้เกณฑ์เดิม</button>' : ''}</div>
+      <p class="fc-note mt-3">ถ้าสินค้า 1 ชิ้นตรงหลายงาน จะนับเข้างานที่เงื่อนไขละเอียดกว่า (ตรงทุกข้อ + หลายเงื่อนไข) · เท่ากันนับเข้างานที่อยู่บนกว่า</p>`;
+    document.getElementById('sa-body').innerHTML = h;
+    saAnimateList();
+  }
+  function fcEditNew() {
+    fcItems.push({ name: '', target: 0, show: true, source: 'product', mode: 'all', rules: [{ f: 'BRAND', op: 'eq', v: '' }], base: ['SMP', 'IPHONE'] });
+    fcDirty = true; fcEdit(fcItems.length - 1);
+  }
+  function fcEdit(i) { fcIdx = i; fcPrev = null; fcRenderEdit(); document.getElementById('sa-body').scrollTop = 0; }
+  function fcSet(k, v) { const it = fcItems[fcIdx]; it[k] = v; fcDirty = true; fcPrev = null; }
+  function fcRenderEdit() {
+    const it = fcItems[fcIdx], B = (fcData.snap && fcData.snap.B) || {};
+    const chip = (on, label, fn, extra) => `<button class="fc-chip${on ? ' on' : ''}" onclick="${fn}">${label}${extra != null ? '<small>' + extra + '</small>' : ''}</button>`;
+    let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button>
+      <label class="sa-label">ชื่องานโฟกัส</label>
+      <input class="sa-input" value="${saEsc(it.name)}" placeholder="เช่น SANDISK" oninput="fcSet('name', this.value.toUpperCase())" style="text-transform:uppercase">
+      <div class="grid grid-cols-2 gap-2">
+        <div><label class="sa-label">เป้า %</label><input class="sa-input" inputmode="decimal" value="${saEsc(it.target)}" oninput="fcSet('target', saNum(this.value) || 0)"></div>
+        <div><label class="sa-label">โชว์ใน Dashboard</label><div class="grid grid-cols-2 gap-2">
+          <button class="sa-pos${it.show ? ' active' : ''}" onclick="fcSet('show', true); fcRenderEdit()">โชว์</button>
+          <button class="sa-pos${!it.show ? ' active' : ''}" onclick="fcSet('show', false); fcRenderEdit()">ซ่อน</button></div></div>
+      </div>
+      <label class="sa-label">ฐาน (ตัวหาร) — เลือกได้หลายอย่าง · ตัวเลข = จำนวนเครื่องเดือนนี้</label>
+      <div class="fc-chips">${Object.keys(FC_BASE).map(k => chip((it.base || []).includes(k), FC_BASE[k], `fcToggle('base','${k}')`, B[k] != null ? B[k] : null)).join('')}</div>
+      <label class="sa-label">นับจาก</label>
+      <div class="grid grid-cols-2 gap-2">
+        <button class="sa-pos${it.source !== 'finance' ? ' active' : ''}" onclick="fcSource('product')">🛍️ สินค้าในบิล</button>
+        <button class="sa-pos${it.source === 'finance' ? ' active' : ''}" onclick="fcSource('finance')">💳 ไฟแนนซ์ (ผ่อน)</button></div>`;
+    if (it.source === 'finance') {
+      const f = it.fin || (it.fin = { codes: [], lines: [] });
+      h += `<label class="sa-label">ไฟแนนซ์</label><div class="fc-chips">${Object.keys(FC_FIN).map(k => chip(f.codes.includes(k), FC_FIN[k], `fcToggleFin('codes','${k}')`)).join('')}</div>
+        <label class="sa-label">นับเครื่องประเภท</label><div class="fc-chips">${Object.keys(FC_LINE).map(k => chip(f.lines.includes(k), FC_LINE[k], `fcToggleFin('lines','${k}')`)).join('')}</div>`;
+    } else {
+      it.rules = it.rules || [];
+      h += `<div class="grid grid-cols-2 gap-2 mt-2">
+          <button class="sa-pos${it.mode !== 'any' ? ' active' : ''}" onclick="fcSet('mode','all'); fcRenderEdit()">ต้องตรงทุกข้อ</button>
+          <button class="sa-pos${it.mode === 'any' ? ' active' : ''}" onclick="fcSet('mode','any'); fcRenderEdit()">ตรงข้อใดข้อหนึ่ง</button></div>
+        <label class="sa-label">เงื่อนไข · ใส่หลายค่าคั่นด้วย , เช่น TECHPRO, QPLUS</label>` +
+        it.rules.map((r, j) => `<div class="fc-row">
+          <select onchange="fcRule(${j},'f',this.value)">${Object.keys(FC_FIELD).map(k => `<option value="${k}"${k === r.f ? ' selected' : ''}>${FC_FIELD[k]}</option>`).join('')}</select>
+          <select onchange="fcRule(${j},'op',this.value)">${Object.keys(FC_OP).map(k => `<option value="${k}"${k === r.op ? ' selected' : ''}>${FC_OP[k]}</option>`).join('')}</select>
+          <button class="fc-x" onclick="fcRuleDel(${j})">✕</button>
+          <input value="${saEsc(r.v)}" placeholder="ค่า" oninput="fcRule(${j},'v',this.value.toUpperCase())"></div>`).join('') +
+        `<button class="fc-mini" onclick="fcRuleAdd()">+ เพิ่มเงื่อนไข</button>`;
+    }
+    h += `<button class="sa-btn mt-4" style="background:#2C2C2E;color:#fff" onclick="fcPreview()">🔍 ทดสอบนับกับข้อมูลเดือนนี้</button>
+      <div id="fc-res">${fcPrev ? fcPrevHTML(fcPrev) : ''}</div>
+      <div class="grid grid-cols-3 gap-2 mt-4">
+        <button class="fc-mini" onclick="fcMove(-1)" ${fcIdx === 0 ? 'disabled style="opacity:.35"' : ''}>↑ ขึ้น</button>
+        <button class="fc-mini" onclick="fcMove(1)" ${fcIdx === fcItems.length - 1 ? 'disabled style="opacity:.35"' : ''}>↓ ลง</button>
+        <button class="fc-mini" style="background:#3A1D1F;color:#FF6B60" onclick="fcDelete(this)">ลบงานนี้</button></div>
+      <button class="sa-btn sa-btn-yellow mt-3" onclick="fcRenderList()">✓ เสร็จ (กดบันทึกในหน้ารายการ)</button>`;
+    document.getElementById('sa-body').innerHTML = h;
+  }
+  function fcToggle(k, v) { const a = fcItems[fcIdx][k] = fcItems[fcIdx][k] || []; const i = a.indexOf(v); i === -1 ? a.push(v) : a.splice(i, 1); fcDirty = true; fcPrev = null; fcRenderEdit(); }
+  function fcToggleFin(k, v) { const a = fcItems[fcIdx].fin[k]; const i = a.indexOf(v); i === -1 ? a.push(v) : a.splice(i, 1); fcDirty = true; fcPrev = null; fcRenderEdit(); }
+  function fcSource(v) { const it = fcItems[fcIdx]; it.source = v; if (v === 'finance' && !it.fin) it.fin = { codes: ['UFUND_P'], lines: ['iphone', 'smp'] }; if (v === 'product' && !it.rules) { it.rules = [{ f: 'BRAND', op: 'eq', v: '' }]; it.mode = 'all'; } fcDirty = true; fcPrev = null; fcRenderEdit(); }
+  function fcRule(j, k, v) { fcItems[fcIdx].rules[j][k] = v; fcDirty = true; fcPrev = null; }
+  function fcRuleAdd() { fcItems[fcIdx].rules.push({ f: 'BRAND', op: 'eq', v: '' }); fcDirty = true; fcRenderEdit(); }
+  function fcRuleDel(j) { fcItems[fcIdx].rules.splice(j, 1); fcDirty = true; fcPrev = null; fcRenderEdit(); }
+  function fcMove(d) { const j = fcIdx + d; if (j < 0 || j >= fcItems.length) return; const t = fcItems[fcIdx]; fcItems[fcIdx] = fcItems[j]; fcItems[j] = t; fcIdx = j; fcDirty = true; fcPrev = null; fcRenderEdit(); }
+  function fcDelete(btn) {
+    if (!btn.dataset.sure) { btn.dataset.sure = 1; btn.textContent = 'ยืนยันลบ?'; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.sure; btn.textContent = 'ลบงานนี้'; } }, 3000); return; }
+    fcItems.splice(fcIdx, 1); fcDirty = true; fcRenderList();
+  }
+  function fcPrevHTML(r) {
+    if (r.error) return `<div class="fc-res">${saEsc(r.error)}</div>`;
+    return `<div class="fc-res">นับได้ <b class="big">${saFmt(r.count)} ชิ้น ÷ ฐาน ${saFmt(r.base)} = ${r.per.toFixed(1)}%</b>
+      ${r.top.length ? '<div class="text-[11px] text-zinc-400 mb-1">สินค้าที่นับได้ (' + r.products + ' รายการ)</div>' + r.top.map(t => `<div class="tp"><span>${saEsc(t.name)}</span><b>${t.unit}</b></div>`).join('') : '<div class="text-zinc-400">ไม่พบสินค้าที่ตรงเงื่อนไขในข้อมูลเดือนนี้</div>'}
+      ${r.overlap ? `<div class="fc-warn">⚠️ ตรงเงื่อนไขอีก ${r.overlap} ชิ้น แต่ถูกนับเข้า ${r.lostTo.map(x => saEsc(x.name) + ' (' + x.unit + ')').join(', ')} — เลื่อนงานนี้ขึ้น หรือเพิ่มเงื่อนไขให้ละเอียดขึ้น</div>` : ''}
+      <div class="text-[10px] text-zinc-500 mt-2">ข้อมูลรอบอัปเดต ${saEsc(r.at || '')}</div></div>`;
+  }
+  function fcPreview() {
+    const it = fcItems[fcIdx];
+    if (!String(it.name || '').trim()) return alert('ใส่ชื่องานโฟกัสก่อน');
+    document.getElementById('fc-res').innerHTML = '<div class="fc-res text-zinc-400">กำลังนับ...</div>';
+    google.script.run.withSuccessHandler(r => { fcPrev = r; const el = document.getElementById('fc-res'); if (el) el.innerHTML = fcPrevHTML(r); })
+      .withFailureHandler(e => { const el = document.getElementById('fc-res'); if (el) el.innerHTML = `<div class="fc-res">ทดสอบไม่สำเร็จ: ${saEsc(e.message)}</div>`; })
+      .previewFocusItem(currentUser.empId, fcItems, fcIdx);
+  }
+  function fcSave() {
+    if (!fcDirty) return;
+    const bad = fcItems.find(it => !String(it.name || '').trim()) ? 'มีงานที่ยังไม่ได้ใส่ชื่อ'
+      : (fcItems.find(it => it.show && !(it.base || []).length) || {}).name ? 'งาน ' + fcItems.find(it => it.show && !(it.base || []).length).name + ' ยังไม่ได้เลือกฐาน' : '';
+    if (bad) return alert(bad);
+    fcRun('saveFocusConfig', [fcItems], 'กำลังบันทึก + คำนวณ Dashboard ใหม่...');
+  }
+  function fcReset() {
+    if (!confirm('กลับไปใช้เกณฑ์เดิม + เป้าจากชีต GUIDE? (ค่าที่ตั้งเองจะหาย)')) return;
+    fcRun('resetFocusConfig', [], 'กำลังคืนค่าเดิม + คำนวณ Dashboard ใหม่...');
+  }
+  function fcRun(fn, args, text) {
+    const ld = document.getElementById('sa-loading');
+    document.getElementById('sa-loading-text').innerText = text; ld.style.display = 'flex';
+    const runner = google.script.run.withSuccessHandler(d => {
+      ld.style.display = 'none'; saDirty = true; fcLoaded(d);
+      if (d.syncError) alert('บันทึกแล้ว ✅ แต่คำนวณ Dashboard ไม่สำเร็จ:\n' + d.syncError + '\n\nกด 🔄 อัปเดตข้อมูล ใน Google Sheet อีกครั้ง');
+    }).withFailureHandler(e => { ld.style.display = 'none'; alert('❌ ' + e.message); });
+    runner[fn].apply(runner, [currentUser.empId].concat(args));
   }
 </script>
 <!-- ===================== END STAFF ADMIN ===================== -->
