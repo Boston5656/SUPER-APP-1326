@@ -152,7 +152,7 @@
       cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;
       background: linear-gradient(160deg, #2C2C2E 0%, #161618 70%); border: 0;
       box-shadow: 0 18px 34px -20px rgba(0,0,0,.85);
-      transition: transform .5s var(--spring), background .35s, color .35s, box-shadow .35s; animation: riseIn .5s var(--ios-ease) both;
+      transition: transform .55s cubic-bezier(.3,1.5,.5,1), background .35s, color .35s, box-shadow .35s;
       -webkit-tap-highlight-color: transparent; isolation: isolate; }
     /* 💧 Liquid Glass: แสงสะท้อนตามนิ้ว + ฟองแก้วกระจายตอนกด */
     .schedule-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 3; opacity: 0;
@@ -162,8 +162,7 @@
       transition: opacity .45s var(--ios-ease); }
     .schedule-card.pressing { transform: scale(.955); transition: transform .18s var(--ios-ease), background .35s, color .35s, box-shadow .35s; }
     .schedule-card.pressing::after { opacity: 1; transition: opacity .12s; }
-    .schedule-card.morph { animation: glassPop .62s var(--spring) both; }
-    @keyframes glassPop { 0% { transform: scale(.955); } 45% { transform: scale(1.035); } 100% { transform: scale(1); } }
+    .schedule-card.enter { animation: riseIn .5s var(--ios-ease) both; }
     .lg-drop { position: absolute; z-index: 2; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; pointer-events: none;
       background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), rgba(255,255,255,.12) 55%, rgba(255,255,255,.04));
       -webkit-backdrop-filter: blur(6px) saturate(180%) brightness(1.15); backdrop-filter: blur(6px) saturate(180%) brightness(1.15);
@@ -419,7 +418,13 @@
     var unreachableUsers = new Set(); 
     var clickTimer = null; 
     // 🗓️ ประเภทวันหยุด/ลา (มาจากหลังบ้าน · แก้ได้ใน ⚙️ ตั้งค่า)
-    var TYPES = [], SUM = null;
+    var DEFAULT_TYPES = [
+      { name: 'H', cat: 'H', label: 'หยุดประจำสัปดาห์', report: false }, { name: 'V', cat: 'V', label: 'พักร้อน/ลา', report: false },
+      { name: 'M', cat: 'M', label: 'ประชุม', report: false }, { name: 'NPI', cat: 'M', label: 'NPI', report: false },
+      { name: 'ลากิจ', cat: 'V', label: '', report: true }, { name: 'ลาป่วย', cat: 'SICK', label: '', report: true },
+      { name: 'ใช้นักขัตฤกษ์', cat: 'V', label: '', report: true }, { name: 'ออกงานนอกสถานที่', cat: 'M', label: '', report: true },
+      { name: 'สลับหยุด', cat: 'H', label: '', report: true }, { name: 'สลับกะงาน', cat: 'WORK', label: '', report: true }];
+    var TYPES = DEFAULT_TYPES.slice(), SUM = null, FIRST_SCH = true;
     var CAT_BADGE = { WORK: 'ON DUTY', H: 'DAY OFF', V: 'LEAVE', SICK: 'SICK', M: 'OUTSIDE' };
     var CAT_NAME = { WORK: 'เข้างานปกติ', H: 'H · หยุด', V: 'V · ลา/พักร้อน', SICK: 'ลาป่วย', M: 'M · ประชุม/ออกงาน' };
     var CAT_COLOR = { WORK: '#1C1C1E', H: '#FF453A', V: '#32A1CE', SICK: '#B3261E', M: '#0A84FF' };
@@ -436,7 +441,7 @@
         var card = e.target.closest('.schedule-card'); if (!card) return;
         var r = card.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
         card.style.setProperty('--mx', x + 'px'); card.style.setProperty('--my', y + 'px');
-        card.classList.remove('morph'); card.classList.add('pressing');
+        card.classList.remove('enter'); card.classList.add('pressing');
         if (reduce) return;
         var d = document.createElement('i'); d.className = 'lg-drop'; d.style.left = x + 'px'; d.style.top = y + 'px';
         card.appendChild(d); setTimeout(function () { d.remove(); }, 620);
@@ -449,8 +454,7 @@
       ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
         list.addEventListener(ev, function (e) {
           var card = e.target.closest && e.target.closest('.schedule-card'); if (!card || !card.classList.contains('pressing')) return;
-          up(card); void card.offsetWidth; card.classList.add('morph');
-          setTimeout(function () { card.classList.remove('morph'); }, 650);
+          up(card);   // ปล่อยนิ้ว → เด้งกลับครั้งเดียวด้วย spring transition
         }, true);
       });
     })();
@@ -516,7 +520,7 @@
       var nameOptions = "";
       var selectedDate = document.getElementById('date-picker').value;
       
-      TYPES = data.types && data.types.length ? data.types : TYPES;
+      TYPES = data.types && data.types.length ? data.types : DEFAULT_TYPES;
       var cnt = { in: 0, wait: 0, off: 0, out: 0, lost: 0 };
       data.team.forEach(function(p, index) {
         var shift = String(p.shift || "").trim();
@@ -526,7 +530,7 @@
         if (rep && !t) cat = 'M';                       // ประเภทที่ไม่รู้จัก = ถือว่าไม่อยู่ร้าน
         var text = rep ? (rep.remark || (t && t.label) || rep.type) : (t ? (t.label || t.name) : (shift || '-'));
         if (rep && cat === 'WORK') text = (rep.remark ? rep.remark + ' · ' : '') + (shift || rep.type);
-        var cls = 'schedule-card', badge = CAT_BADGE[cat];
+        var cls = 'schedule-card' + (FIRST_SCH ? ' enter' : ''), badge = CAT_BADGE[cat];
         if (cat !== 'WORK') {
           checkedInUsers.delete(p.nickname); unreachableUsers.delete(p.nickname);
           cls += ' c-' + cat; cat === 'M' ? cnt.out++ : cnt.off++;
@@ -542,6 +546,7 @@
       });
       document.getElementById('schedule-list').innerHTML = schHtml || "<div class='loading' style='grid-column:1/-1'>ยังไม่มีทีม — เพิ่มได้ที่ ⚙️ ตั้งค่า</div>";
       SUM = cnt; renderSchSum();
+      if (FIRST_SCH) { FIRST_SCH = false; setTimeout(function () { document.querySelectorAll('#schedule-list .enter').forEach(function (c) { c.classList.remove('enter'); }); }, 1000); }
       document.getElementById('rep-type').innerHTML = TYPES.filter(function (t) { return t.report; })
         .map(function (t) { return '<option>' + esc(t.name) + '</option>'; }).join('');
       document.getElementById('rep-name').innerHTML = nameOptions;
@@ -704,7 +709,13 @@
         SET = d; if (fn !== 'getSettings') SET_DIRTY = true;
         if (fn === 'getSettings' || fn === 'saveTypes') TEDIT = null;
         renderSettings(); if (okText) { setMsg('✓ ' + okText); toast(okText); }
-      }).withFailureHandler(function (e) { setMsg((e && e.message) || 'ไม่สำเร็จ', true); if (navigator.vibrate) navigator.vibrate([20, 40, 20]); });
+      }).withFailureHandler(function (e) {
+        var m = (e && e.message) || 'ไม่สำเร็จ';
+        if (/ไม่พบคำสั่ง|ยังไม่ได้ใส่ฟังก์ชัน/.test(m)) m += ' — หลังบ้านยังเป็นตัวเก่า: วาง ASM.gs + API.gs ตัวใหม่ แล้ว Deploy เป็น New version';
+        if (fn === 'getSettings' && !SET) document.getElementById('set-body').innerHTML = '<div class="set-sec"><h4>⚠️ เปิดตั้งค่าไม่ได้</h4><p>' + esc(m) + '</p></div>';
+        else setMsg(m, true);
+        if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
+      });
       runner[fn].apply(runner, args);
       setMsg('กำลังบันทึก…');
     }
@@ -752,7 +763,7 @@
     // ---- 🗓️ ประเภทวันหยุด / ลา ----
     var TEDIT = null;   // แก้ในเครื่องก่อน แล้วกด "บันทึกประเภท"
     function typesSectionHTML() {
-      if (!TEDIT) TEDIT = JSON.parse(JSON.stringify(SET.types || []));
+      if (!TEDIT) TEDIT = JSON.parse(JSON.stringify(SET.types && SET.types.length ? SET.types : TYPES));
       var opt = function (v) { return ['WORK', 'H', 'V', 'SICK', 'M'].map(function (c) { return '<option value="' + c + '"' + (c === v ? ' selected' : '') + '>' + CAT_NAME[c] + '</option>'; }).join(''); };
       return '<div class="set-sec"><h4>🗓️ ประเภทวันหยุด / ลา <small>' + TEDIT.length + ' ประเภท</small></h4>' +
         '<p>ตั้งว่าแต่ละคำในชีต "ตารางงาน" (เช่น H, V) หรือประเภทที่แจ้งในฟอร์ม (เช่น ลาพักร้อน) จะโชว์บนการ์ดเป็นอะไร · ติ๊ก 📝 = มีให้เลือกในฟอร์ม "แจ้ง Report"</p>' +
@@ -779,11 +790,7 @@
     }
     function tyReset(btn) {
       if (!sure(btn, 'แตะอีกครั้ง — กลับเป็นค่าเริ่มต้น')) return;
-      TEDIT = [{ name: 'H', cat: 'H', label: 'หยุดประจำสัปดาห์', report: false }, { name: 'V', cat: 'V', label: 'พักร้อน/ลา', report: false },
-        { name: 'M', cat: 'M', label: 'ประชุม', report: false }, { name: 'NPI', cat: 'M', label: 'NPI', report: false },
-        { name: 'ลากิจ', cat: 'V', label: '', report: true }, { name: 'ลาป่วย', cat: 'SICK', label: '', report: true },
-        { name: 'ใช้นักขัตฤกษ์', cat: 'V', label: '', report: true }, { name: 'ออกงานนอกสถานที่', cat: 'M', label: '', report: true },
-        { name: 'สลับหยุด', cat: 'H', label: '', report: true }, { name: 'สลับกะงาน', cat: 'WORK', label: '', report: true }];
+      TEDIT = JSON.parse(JSON.stringify(DEFAULT_TYPES));
       renderSettings(); setMsg('กด "บันทึกประเภท" เพื่อใช้ค่านี้');
     }
     function setCopyLink(btn) {
