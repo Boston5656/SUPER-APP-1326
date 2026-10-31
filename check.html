@@ -1562,7 +1562,9 @@
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
       }
-    </style>
+        .ord-hint { margin: 0 0 12px; padding: 11px 14px; border-radius: 16px; background: rgba(28,28,30,.9); color: #FFD600; font-size: 12.5px; font-weight: 600; line-height: 1.5; }
+    .ord-hint b, .ord-hint u { color: #fff; }
+  </style>
   </head>
   <body>
     <div id="toastRoot"></div>
@@ -1606,6 +1608,7 @@
             <div class="ts-row"><span class="ts-dot"></span><span class="loading-pill" style="background:transparent;padding:0"><span class="spin"></span>กำลังโหลดสรุปวันนี้</span></div>
           </div>
 
+          <div class="ord-hint">🧾 ขายผ่านแอป <b>Order</b> = ลูกค้าเซ็นแล้วยอดเข้าหน้านี้เอง <u>ไม่ต้องบันทึกซ้ำ</u> · ฟอร์มนี้ใช้กับการขายที่ไม่ได้เปิด Order</div>
           <div class="card custom-card">
             <form id="salesForm" onsubmit="handleSalesSubmit(event)">
               <div class="field">

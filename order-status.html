@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD600">
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@600;700;800&display=swap" rel="stylesheet">
+  <title>สถานะเครื่องของคุณ · BaNANA ID1326</title>
+  <script src="gas.js?v=2026.11.01-1"></script>
+  <style>
+    :root { --y: #FFD600; --d: #1C1C1E; --ok: #30D158; --ease: cubic-bezier(.32,.72,0,1); }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; color: var(--d); font-family: 'IBM Plex Sans Thai', -apple-system, sans-serif; -webkit-font-smoothing: antialiased;
+      background: radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%), #FFD600; background-attachment: fixed; padding: calc(16px + env(safe-area-inset-top)) 16px calc(30px + env(safe-area-inset-bottom)); }
+    .w { max-width: 560px; margin: 0 auto; }
+    @keyframes rise { 0% { opacity: 0; transform: translateY(14px); } 100% { opacity: 1; transform: none; } }
+    @keyframes pulse { 50% { transform: scale(1.25); opacity: .5; } }
+    .eb { display: inline-flex; gap: 8px; align-items: center; padding: 6px 14px 6px 6px; border-radius: 100px; background: rgba(28,28,30,.08); font: 700 11.5px 'Kanit', sans-serif; letter-spacing: 1px; }
+    .eb i { width: 24px; height: 24px; border-radius: 8px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-style: normal; }
+    h1 { font: 800 28px/1.15 'Kanit', sans-serif; margin: 10px 0 4px; } .sub { font-weight: 600; font-size: 13.5px; color: rgba(28,28,30,.65); margin-bottom: 14px; }
+    .c { background: rgba(255,251,234,.95); border-radius: 26px; padding: 16px; margin-bottom: 12px; box-shadow: 0 20px 40px -24px rgba(90,70,0,.55); animation: rise .5s var(--ease) both; }
+    .dk { background: var(--d); color: #fff; }
+    .big { font: 800 22px/1.25 'Kanit', sans-serif; } .big small { display: block; font: 600 14px 'IBM Plex Sans Thai', sans-serif; color: #AEAEB2; margin-top: 2px; }
+    .stt { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 12px 14px; border-radius: 18px; background: #2A2A2D; font-weight: 700; font-size: 15px; }
+    .stt .d { width: 12px; height: 12px; border-radius: 50%; background: var(--y); flex-shrink: 0; animation: pulse 1.4s ease-in-out infinite; } .stt.ok .d { background: var(--ok); animation: none; }
+    .stt b { color: var(--y); font-family: 'Kanit', sans-serif; } .stt.ok b { color: #7CE495; }
+    .steps { display: flex; gap: 4px; margin-top: 12px; } .steps i { flex: 1; height: 6px; border-radius: 100px; background: #3A3A3C; } .steps i.on { background: var(--y); }
+    .kv { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 12px; font-size: 13px; font-weight: 600; } .kv div { background: #2A2A2D; border-radius: 12px; padding: 8px 10px; } .kv small { display: block; color: #AEAEB2; font-size: 11px; }
+    h3 { font: 800 16px 'Kanit', sans-serif; margin: 0 0 8px; }
+    .ci { display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,.05); font-size: 13.5px; font-weight: 600; } .ci:last-child { border: 0; } .ci small { display: block; color: #D70015; }
+    .terms { white-space: pre-wrap; font-size: 13.5px; line-height: 1.65; color: #3A3A3C; font-weight: 500; }
+    .ok { color: #1E7B34; } .muted { color: #8A8270; font-size: 12px; font-weight: 600; }
+    .loading { text-align: center; padding: 40px 0; font-weight: 700; color: #8A8270; }
+  </style>
+</head>
+<body>
+  <div class="w">
+    <span class="eb"><i>🍌</i>BaNANA · FUTURE PARK RANGSIT · ID1326</span>
+    <h1 id="h">สถานะเครื่องของคุณ</h1>
+    <div class="sub" id="sub">อัปเดตอัตโนมัติทุก 30 วินาที</div>
+    <div id="out"><div class="loading">กำลังโหลด…</div></div>
+  </div>
+  <script>
+    const q = new URLSearchParams(location.search), NO = q.get('o') || '', KEY = q.get('k') || '';
+    const TH_M = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const pad = n => String(n).padStart(2, '0');
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const hm = t => t ? `${pad(new Date(t).getHours())}:${pad(new Date(t).getMinutes())}` : '';
+    const dt = t => { const d = new Date(t); return `${d.getDate()} ${TH_M[d.getMonth()]} ${d.getFullYear() + 543}`; };
+    function load() {
+      fetch(SYS1326.API_URL, { method: 'POST', body: JSON.stringify({ app: 'order', fn: 'orderStatus', args: [NO, KEY] }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
+        .then(r => r.json()).then(j => paint(j.data || { error: j.error })).catch(() => { if (!document.querySelector('.c')) document.getElementById('out').innerHTML = '<div class="c">เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง</div>'; });
+    }
+    function paint(x) {
+      if (!x || x.error) { document.getElementById('out').innerHTML = `<div class="c">${esc((x && x.error) || 'ไม่พบข้อมูล')}</div>`; return; }
+      const STEP = { new: 1, claimed: 2, back: 2, picked: 3, parked: 3, done: 4, cancel: 0 };
+      let st = '', ok = false;
+      if (x.status === 'done') { st = 'รับเครื่องเรียบร้อยแล้ว'; ok = true; }
+      else if (x.status === 'cancel') st = 'รายการนี้ถูกยกเลิก';
+      else if (x.status === 'parked') { ok = x.park && x.park.ready; st = ok ? 'เครื่องพร้อมแล้ว — มารับได้เลย 🎉' : x.park && x.park.readyAt ? 'กำลังดำเนินการ · คาดว่าเสร็จ <b>' + hm(x.park.readyAt) + ' น.</b>' : 'กำลังดำเนินการ'; }
+      else if (x.status === 'new') st = 'รับรายการแล้ว · กำลังส่งให้พนักงาน';
+      else if (x.status === 'claimed') st = x.work && x.work.kind === 'branch' ? 'กำลังนำเครื่องมาจากสาขาใกล้เคียง' + (x.work.eta ? ' · ประมาณ <b>' + hm(x.work.eta) + ' น.</b>' : '') : 'พนักงานกำลังเตรียมเครื่อง';
+      else if (x.status === 'back') st = 'พนักงานกำลังตรวจสอบข้อมูล';
+      else if (x.status === 'picked') st = 'กำลังตรวจสภาพเครื่องกับคุณ';
+      document.getElementById('h').textContent = x.status === 'done' ? 'สำเนาใบรับเครื่อง' : 'สถานะเครื่องของคุณ';
+      document.getElementById('sub').textContent = x.status === 'done' ? 'เก็บลิงก์นี้ไว้ใช้ตอนเคลม / ติดต่อร้าน' : 'อัปเดตอัตโนมัติทุก 30 วินาที';
+      const n = STEP[x.status] || 0;
+      let h = `<div class="c dk"><div class="big">${esc(x.brand)} ${esc(x.model)}<small>${esc([x.color, x.cap].filter(Boolean).join(' · '))}${x.qty > 1 ? ' · ' + x.qty + ' เครื่อง' : ''}</small></div>
+        <div class="stt ${ok ? 'ok' : ''}"><span class="d"></span><span>${st}</span></div>
+        ${x.status !== 'cancel' ? `<div class="steps">${[1, 2, 3, 4].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</div>` : ''}
+        <div class="kv"><div><small>เลขที่</small>#${esc(x.no)}</div><div><small>ลูกค้า</small>${esc(x.cust)} ${esc(x.phone)}</div>
+        ${x.imei ? `<div><small>IMEI / SN</small>${esc(x.imei)}</div>` : ''}${x.signedAt ? `<div><small>รับเครื่อง</small>${dt(x.signedAt)} ${hm(x.signedAt)}</div>` : ''}</div></div>`;
+      if (x.status === 'done') {
+        h += `<div class="c"><h3>🛡️ รับประกันเปลี่ยนเครื่อง 7 วัน</h3><div class="ok" style="font-weight:800;font-size:15px">ถึงวันที่ ${dt(x.until)}</div><div class="muted">เงื่อนไขฉบับ ${esc(x.ver)}</div></div>`;
+        h += `<div class="c"><h3>📋 ผลตรวจสภาพเครื่องตอนรับ</h3>${x.check.map(c => `<div class="ci"><span>${c.ok ? '✅' : '❌'}</span><span>${esc(c.name)}${!c.ok && c.note ? `<small>${esc(c.note)}</small>` : ''}</span></div>`).join('')}</div>`;
+        h += `<div class="c"><h3>เงื่อนไขที่คุณยอมรับ</h3><div class="terms">${esc(x.notice)}\n\n${esc(x.warranty)}</div></div>`;
+        if (x.transferText) h += `<div class="c"><h3>📲 นโยบายการโอนย้ายข้อมูล</h3><div class="terms">${esc(x.transferText)}</div></div>`;
+        h += `<div class="muted" style="text-align:center">${esc(x.store)} · กรุณานำใบกำกับภาษีฉบับจริง + กล่องและอุปกรณ์ครบชุดมาเมื่อเคลม</div>`;
+      }
+      document.getElementById('out').innerHTML = h;
+    }
+    if (!NO || !KEY) document.getElementById('out').innerHTML = '<div class="c">ลิงก์ไม่ถูกต้อง</div>'; else { load(); setInterval(() => { if (!document.hidden) load(); }, 30000); }
+  </script>
+</body>
+</html>

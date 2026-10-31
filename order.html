@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD600">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <title>Order 1326</title>
+  <script>window.GAS_APP = 'order';</script>
+  <script src="staff-names.js?v=2026.10.09-1"></script>
+  <script src="gas.js?v=2026.11.01-1"></script>
+  <script src="order-alert.js?v=2026.11.01-1"></script>
+  <style>
+    :root { --y: #FFD600; --d: #1C1C1E; --d2: #2C2C2E; --g: #8E8E93; --ok: #30D158; --no: #FF453A; --or: #FF9F0A;
+      --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); --spring-soft: cubic-bezier(.22,1.18,.36,1); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; border: 0; cursor: pointer; color: inherit; }
+    html, body { overflow-x: hidden; }
+    body { margin: 0; min-height: 100vh; color: var(--d); font-family: 'IBM Plex Sans Thai', -apple-system, sans-serif; -webkit-font-smoothing: antialiased;
+      background: radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%), radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%), #FFD600;
+      background-attachment: fixed; padding: calc(8px + env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom)); }
+    .kn { font-family: 'Kanit', 'IBM Plex Sans Thai', sans-serif; }
+    @keyframes riseIn { 0% { opacity: 0; transform: translateY(14px) scale(.985); filter: blur(3px); } 100% { opacity: 1; transform: none; filter: none; } }
+    @keyframes blink { 50% { opacity: .25; } }
+    @keyframes glow { 0%,100% { box-shadow: 0 22px 44px -22px rgba(0,0,0,.75), 0 0 0 0 rgba(255,214,0,.0); } 50% { box-shadow: 0 22px 44px -22px rgba(0,0,0,.75), 0 0 0 5px rgba(255,214,0,.45); } }
+    @keyframes shake { 0%,100% { transform: none; } 20% { transform: rotate(-8deg); } 40% { transform: rotate(8deg); } 60% { transform: rotate(-5deg); } 80% { transform: rotate(4deg); } }
+    .rise { animation: riseIn .6s var(--ios-ease) both; }
+    .wrap { max-width: 1280px; margin: 0 auto; }
+
+    .navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 50; display: flex; gap: 8px; align-items: stretch; max-width: 1280px; margin: 0 auto 16px; }
+    [data-sys-back-slot] { display: flex; } [data-sys-back-slot]:empty { display: none; }
+    .homeb { width: 48px; border-radius: 18px; background: rgba(28,28,30,.86); color: var(--y); font-size: 20px; font-weight: 800; display: none; align-items: center; justify-content: center; text-decoration: none; }
+    .seg { position: relative; flex: 1; display: flex; gap: 2px; padding: 5px; border-radius: 100px; background: rgba(255,255,255,.72);
+      -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px); border: 1px solid rgba(255,255,255,.7); box-shadow: 0 8px 28px -10px rgba(60,48,0,.35); min-width: 0; }
+    .seg .glider { position: absolute; top: 5px; bottom: 5px; left: 0; width: 0; border-radius: 100px; background: var(--d); box-shadow: 0 6px 16px -4px rgba(0,0,0,.45); transition: transform .55s var(--spring-soft), width .55s var(--spring-soft); }
+    .seg button { position: relative; z-index: 1; flex: 1; background: none; border-radius: 100px; padding: 11px 4px; font-weight: 700; font-size: 14px; color: #6E6E73; transition: color .35s var(--ios-ease), transform .25s; white-space: nowrap; }
+    .seg button.on { color: #fff; } .seg button:active { transform: scale(.94); }
+    .seg button i { font-style: normal; display: inline-flex; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 4px; border-radius: 100px; background: var(--no); color: #fff; font-size: 11px; align-items: center; justify-content: center; vertical-align: 1px; }
+    .seg button i:empty { display: none; }
+    .rb { width: 50px; border-radius: 50%; background: var(--d); color: var(--y); font-size: 19px; box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); transition: transform .35s var(--spring); flex-shrink: 0; }
+    .rb:active { transform: scale(.88); } .rb.ring { animation: shake .8s ease-in-out 2; }
+
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 100px; background: rgba(28,28,30,.08); font: 700 11.5px 'Kanit', sans-serif; letter-spacing: 1.2px; color: rgba(28,28,30,.75); }
+    .eyebrow .ic { width: 24px; height: 24px; border-radius: 8px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .eyebrow .live { width: 7px; height: 7px; border-radius: 50%; background: var(--d); animation: blink 1.6s infinite; }
+    h1 { margin: 10px 0 4px; font: 800 30px/1.1 'Kanit', sans-serif; letter-spacing: -.3px; }
+    .sub { font-weight: 600; font-size: 13px; color: rgba(28,28,30,.6); margin-bottom: 12px; }
+    .hrow { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .newb { display: inline-flex; align-items: center; gap: 10px; border-radius: 22px; padding: 14px 22px; background: var(--d); color: var(--y); font: 800 16px 'Kanit', sans-serif; box-shadow: 0 16px 30px -14px rgba(0,0,0,.8); transition: transform .35s var(--spring); }
+    .newb:active { transform: scale(.94); } .newb span { font-size: 22px; line-height: 1; }
+    .sndchip { display: inline-flex; align-items: center; gap: 6px; border-radius: 100px; padding: 8px 14px; background: rgba(28,28,30,.08); font-weight: 800; font-size: 12.5px; transition: transform .3s var(--spring); }
+    .sndchip:active { transform: scale(.92); } .sndchip.off { background: var(--d); color: var(--y); animation: glow 1.8s ease-in-out infinite; }
+
+    .grid { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); }
+    .grid > * { min-width: 0; }
+    @media (min-width: 1000px) { .grid.q { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; } .grid.r { grid-template-columns: 380px minmax(0, 1fr); align-items: start; } .grid.r > .lft { position: sticky; top: 80px; } }
+    .dk { background: var(--d); color: #fff; border-radius: 28px; padding: 18px; box-shadow: 0 22px 44px -22px rgba(0,0,0,.75); position: relative; overflow: hidden; animation: riseIn .55s var(--ios-ease) both; }
+    .dk::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 60% at 15% 0%, rgba(255,214,0,.12), transparent 70%); pointer-events: none; }
+    .lc { background: rgba(255,251,234,.94); border-radius: 28px; padding: 16px 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); animation: riseIn .55s var(--ios-ease) both; }
+    .ch { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 0 4px 12px; position: relative; }
+    .ch b { font: 700 17px 'Kanit', sans-serif; } .ch small { color: #6E6E73; font-weight: 600; font-size: 12px; text-align: right; }
+    .dk .ch small { color: #AEAEB2; }
+    .empty { text-align: center; color: #8A8270; font-weight: 600; padding: 18px 0 10px; font-size: 13px; }
+    .dk .empty { color: #8E8E93; }
+    .loading { text-align: center; padding: 30px 0; color: #8A8270; font-weight: 600; }
+
+    /* การ์ด Order */
+    .oc { position: relative; background: #FFFDF5; border-radius: 22px; padding: 13px 14px; margin-bottom: 9px; cursor: pointer; transition: transform .4s var(--spring); animation: riseIn .45s var(--ios-ease) both; }
+    .oc:active { transform: scale(.975); }
+    .oc .t1 { display: flex; align-items: center; gap: 7px; font: 700 12px 'Kanit', sans-serif; letter-spacing: .3px; }
+    .oc .t1 .bd { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .oc .t1 .no { color: #8A8270; font-weight: 600; }
+    .oc .t1 .st { margin-left: auto; border-radius: 100px; padding: 3px 10px; font-size: 11px; background: #F2EBD0; white-space: nowrap; }
+    .oc .md { font: 800 18px/1.25 'Kanit', sans-serif; margin: 5px 0 2px; } .oc .md small { font: 600 13px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; margin-left: 4px; }
+    .oc .mt { font-size: 12.5px; font-weight: 600; color: #6E6E73; line-height: 1.5; }
+    .oc .ln { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .tg { display: inline-flex; align-items: center; gap: 4px; border-radius: 100px; padding: 4px 10px; background: #F2EBD0; font-weight: 700; font-size: 11.5px; white-space: nowrap; }
+    .tg.tm { font-family: 'Kanit', sans-serif; font-variant-numeric: tabular-nums; } .tg.late { background: #FFE5E3; color: #D70015; } .tg.blue { background: #E1EEFF; color: #0A58CA; } .tg.or { background: #FFF1D6; color: #8A5300; } .tg.gr { background: #E3F9E9; color: #1E7B34; }
+    .oc .act { margin-top: 10px; display: flex; gap: 8px; }
+    .oc .act button { flex: 1; height: 46px; border-radius: 15px; font: 800 15px 'IBM Plex Sans Thai', sans-serif; transition: transform .3s var(--spring); }
+    .oc .act button:active { transform: scale(.94); }
+    .btn-y { background: linear-gradient(180deg, #FFE033, #FFD600); color: var(--d); box-shadow: 0 10px 22px -12px rgba(242,194,0,1); }
+    .btn-d { background: var(--d); color: var(--y); }
+    .oc.new { background: var(--d); color: #fff; animation: riseIn .45s var(--ios-ease) both, glow 1.8s ease-in-out .5s infinite; }
+    .oc.new .t1 .no, .oc.new .mt { color: #AEAEB2; } .oc.new .t1 .st { background: var(--y); color: var(--d); } .oc.new .md small { color: #AEAEB2; }
+    .oc.new .tg { background: #2C2C2E; color: #E5E5EA; } .oc.new .tg.late { background: #5C1A16; color: #FFB4AE; }
+    .oc.back { box-shadow: inset 4px 0 0 var(--or); } .oc.back .t1 .st { background: #FFF1D6; color: #8A5300; }
+    .oc.picked .t1 .st { background: #E1EEFF; color: #0A58CA; } .oc.claimed .t1 .st { background: #E3F9E9; color: #1E7B34; }
+    .oc.parked { background: #F5F1E2; } .oc.parked .t1 .st { background: #E5DCF7; color: #5B2DB0; }
+    .oc.mine::after { content: 'ของฉัน'; position: absolute; top: -7px; right: 14px; background: var(--d); color: var(--y); font: 800 10px 'Kanit', sans-serif; padding: 2px 8px; border-radius: 100px; letter-spacing: .5px; }
+    .oc.new.mine::after { background: var(--y); color: var(--d); }
+    .dn { display: flex; align-items: center; gap: 10px; background: #FFFDF5; border-radius: 16px; padding: 9px 12px; margin-bottom: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .dn .bd { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; } .dn b { font: 700 13.5px 'Kanit', sans-serif; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .dn small { color: #8A8270; font-weight: 600; white-space: nowrap; }
+    .dn.cancel b { text-decoration: line-through; color: #8A8270; }
+    .sec { margin: 4px 4px 8px; font: 800 13px 'Kanit', sans-serif; letter-spacing: .4px; color: rgba(28,28,30,.7); display: flex; align-items: center; gap: 8px; }
+    .sec i { font-style: normal; background: var(--d); color: var(--y); border-radius: 100px; padding: 1px 9px; font-size: 12px; }
+
+    /* แผ่นล่าง */
+    .sheet { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center; visibility: hidden; pointer-events: none; transition: visibility 0s linear .45s; }
+    .sheet.open { visibility: visible; pointer-events: auto; transition: none; }
+    .sheet .bd { position: absolute; inset: 0; background: rgba(0,0,0,.42); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; transition: opacity .42s var(--ios-ease); }
+    .sheet.open .bd { opacity: 1; }
+    .sheet .box { position: relative; width: min(680px, 100%); max-height: 94vh; overflow-y: auto; overscroll-behavior: contain; background: #F7F7F9; border-radius: 30px 30px 0 0; padding: 10px 16px 0;
+      transform: translateY(100%); transition: transform .55s var(--ios-ease); -webkit-overflow-scrolling: touch; }
+    .sheet.open .box { transform: none; }
+    .sheet.lv2 { z-index: 120; } .sheet.lv3 { z-index: 140; }
+    @media (min-width: 700px) { .sheet { align-items: center; padding: 16px; } .sheet .box { border-radius: 30px; transform: translateY(24px) scale(.97); opacity: 0; transition: transform .5s var(--spring), opacity .3s; } .sheet.open .box { transform: none; opacity: 1; } }
+    .grab { width: 40px; height: 5px; border-radius: 3px; background: #D1D1D6; margin: 0 auto 10px; }
+    .shd { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .shd .ic { width: 44px; height: 44px; border-radius: 14px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .shd > div { flex: 1; min-width: 0; } .shd h3 { margin: 0; font: 800 18px 'Kanit', sans-serif; } .shd small { font-size: 12px; color: #6E6E73; font-weight: 600; }
+    .x { width: 34px; height: 34px; border-radius: 50%; background: #E9E9EE; color: #6E6E73; font-weight: 800; flex-shrink: 0; }
+    .lab { margin: 14px 4px 6px; font: 800 12.5px 'IBM Plex Sans Thai', sans-serif; display: flex; justify-content: space-between; gap: 8px; } .lab small { color: #8E8E93; font-weight: 600; }
+    .lab .req { color: #D70015; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips button { border-radius: 100px; padding: 9px 14px; background: #fff; font-weight: 700; font-size: 13px; box-shadow: 0 1px 2px rgba(0,0,0,.06); transition: transform .3s var(--spring), background .2s, color .2s; display: inline-flex; align-items: center; gap: 6px; }
+    .chips button:active { transform: scale(.9); } .chips button.on { background: var(--d); color: var(--y); }
+    .chips button .bd { width: 8px; height: 8px; border-radius: 50%; }
+    .inp, textarea, select.inp { width: 100%; border: 0; border-radius: 16px; padding: 13px 14px; font: 600 15px 'IBM Plex Sans Thai', sans-serif; background: #fff; color: var(--d); outline: none; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.55; font-weight: 500; font-size: 14px; }
+    .inp:focus, textarea:focus { box-shadow: 0 0 0 2px var(--y); }
+    .inp.big { font: 800 20px 'Kanit', sans-serif; letter-spacing: .5px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .irow { display: flex; gap: 8px; align-items: stretch; } .irow .inp { flex: 1; min-width: 0; }
+    .irow .sq { width: 54px; border-radius: 16px; background: var(--d); color: var(--y); font-size: 20px; flex-shrink: 0; }
+    .stp { display: flex; align-items: center; gap: 6px; }
+    .stp button { width: 46px; height: 46px; border-radius: 15px; background: #fff; font-size: 22px; font-weight: 700; transition: transform .25s var(--spring); }
+    .stp button:active { transform: scale(.85); } .stp button.p { background: var(--d); color: var(--y); }
+    .stp b { min-width: 44px; text-align: center; font: 800 22px 'Kanit', sans-serif; }
+    .tgl { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border-radius: 18px; padding: 12px 14px; font-weight: 700; font-size: 14px; }
+    .tgl small { display: block; font-weight: 600; font-size: 11.5px; color: #8E8E93; }
+    .sw { width: 52px; height: 32px; border-radius: 100px; background: #E5E5EA; position: relative; flex-shrink: 0; transition: background .25s; }
+    .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.25); transition: transform .35s var(--spring); }
+    .sw.on { background: var(--ok); } .sw.on::after { transform: translateX(20px); }
+    .sfoot { position: sticky; bottom: 0; display: flex; gap: 8px; padding: 14px 0 calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(rgba(247,247,249,0), #F7F7F9 30%); z-index: 3; }
+    .sfoot button { flex: 1; height: 54px; border-radius: 17px; font: 800 15px 'IBM Plex Sans Thai', sans-serif; transition: transform .3s var(--spring); }
+    .sfoot button:active { transform: scale(.95); }
+    .b-no { background: #E9E9EE; color: var(--d); } .b-red { background: #FFE5E3; color: #D70015; }
+    .b-yes { flex: 1.8 !important; background: linear-gradient(180deg, #FFE033, #FFD600); color: var(--d); box-shadow: 0 10px 22px -12px rgba(242,194,0,1); }
+    .b-yes:disabled, .b-dk:disabled { opacity: .45; } .b-dk { flex: 1.8 !important; background: var(--d); color: var(--y); }
+
+    /* รายละเอียด */
+    .hero { background: var(--d); color: #fff; border-radius: 24px; padding: 16px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 70% at 10% 0%, rgba(255,214,0,.16), transparent 70%); pointer-events: none; }
+    .hero .t1 { display: flex; gap: 8px; align-items: center; font: 700 12px 'Kanit', sans-serif; color: #AEAEB2; position: relative; }
+    .hero .t1 .st { margin-left: auto; background: var(--y); color: var(--d); border-radius: 100px; padding: 4px 12px; font-size: 12px; }
+    .hero .md { font: 800 24px/1.2 'Kanit', sans-serif; margin: 6px 0 2px; position: relative; } .hero .md small { display: block; font: 600 14px 'IBM Plex Sans Thai', sans-serif; color: #E5E5EA; margin-top: 2px; }
+    .kv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: 12px; position: relative; }
+    .kv div { background: #2A2A2D; border-radius: 14px; padding: 8px 11px; min-width: 0; } .kv small { display: block; color: #AEAEB2; font-size: 11px; font-weight: 600; } .kv b { display: block; font: 700 14px 'Kanit', sans-serif; overflow-wrap: anywhere; }
+    .kv .w { grid-column: 1 / -1; }
+    .note { border-radius: 18px; padding: 12px 14px; margin-top: 10px; font-size: 13.5px; font-weight: 600; line-height: 1.55; }
+    .note.or { background: #FFF1D6; color: #6B4100; } .note.bl { background: #E1EEFF; color: #0A3D8A; } .note.pu { background: #EEE6FB; color: #42208A; } .note.gr { background: #E3F9E9; color: #1E5B2E; } .note.rd { background: #FFE5E3; color: #8C1D18; } .note.wh { background: #fff; color: #3A3A3C; }
+    .note b { font-family: 'Kanit', sans-serif; }
+    .acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .acts button { min-height: 54px; border-radius: 17px; padding: 8px 10px; background: #fff; font: 800 14px 'IBM Plex Sans Thai', sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.06); transition: transform .3s var(--spring); line-height: 1.3; }
+    .acts button:active { transform: scale(.95); } .acts button small { display: block; font-weight: 600; font-size: 11px; color: #8E8E93; }
+    .acts .full { grid-column: 1 / -1; } .acts .y { background: linear-gradient(180deg, #FFE033, #FFD600); box-shadow: 0 10px 22px -12px rgba(242,194,0,1); } .acts .d { background: var(--d); color: var(--y); } .acts .d small { color: #AEAEB2; }
+    .acts .r { background: #FFE5E3; color: #D70015; } .acts button:disabled { opacity: .4; }
+    .wk { background: #fff; border-radius: 20px; padding: 12px; margin-top: 12px; }
+    .wk .chips button { background: #F2F2F7; box-shadow: none; padding: 8px 12px; }
+    .wk .chips button.on { background: var(--d); color: var(--y); }
+    .tl { margin: 12px 0 0; padding: 0; list-style: none; }
+    .tl li { display: flex; gap: 10px; padding: 6px 0; font-size: 13px; font-weight: 600; color: #3A3A3C; }
+    .tl li time { font: 700 12px 'Kanit', sans-serif; color: #8E8E93; width: 42px; flex-shrink: 0; padding-top: 1px; }
+    .tl li span { flex: 1; min-width: 0; } .tl li small { color: #8E8E93; display: block; font-weight: 600; }
+    .cl { background: #fff; border-radius: 20px; padding: 4px 12px; margin-top: 10px; }
+    .cl .ci { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid #F2F2F7; font-size: 13.5px; font-weight: 600; }
+    .cl .ci:last-child { border-bottom: 0; } .cl .ci i { font-style: normal; width: 22px; flex-shrink: 0; } .cl .ci small { display: block; color: #D70015; font-weight: 600; font-size: 12px; }
+    .ph { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .ph .im { position: relative; width: 92px; height: 92px; border-radius: 16px; overflow: hidden; background: #E9E9EE; flex-shrink: 0; }
+    .ph .im img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+    .ph .im .rm { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; font-size: 13px; font-weight: 800; }
+    .ph .im .sl { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, rgba(0,0,0,.7)); color: #fff; font-size: 9.5px; font-weight: 700; padding: 10px 6px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ph .im.up::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,.55) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="none" stroke="%231C1C1E" stroke-width="4" stroke-dasharray="60 30"><animateTransform attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur=".8s" repeatCount="indefinite"/></circle></svg>') center/34px no-repeat; }
+    .ph .add { width: 92px; height: 92px; border-radius: 16px; border: 2px dashed #C7C7CC; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; color: #6E6E73; cursor: pointer; flex-shrink: 0; }
+    .ph .add small { font-size: 11px; font-weight: 700; } .ph .add input { display: none; }
+    .sigimg { background: #fff; border-radius: 18px; padding: 8px; margin-top: 10px; text-align: center; } .sigimg img { max-width: 100%; max-height: 140px; }
+    .qr { display: flex; gap: 14px; align-items: center; background: #fff; border-radius: 20px; padding: 12px; margin-top: 10px; }
+    .qr .qb { width: 132px; height: 132px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #F2F2F7; border-radius: 12px; font-size: 11px; color: #8E8E93; font-weight: 700; text-align: center; overflow: hidden; }
+    .qr .qb img, .qr .qb canvas { width: 124px !important; height: 124px !important; }
+    .qr p { margin: 0; font-size: 12.5px; font-weight: 600; color: #3A3A3C; line-height: 1.5; } .qr button { margin-top: 8px; border-radius: 100px; padding: 8px 14px; background: var(--d); color: var(--y); font-weight: 800; font-size: 12.5px; }
+
+    /* Check List */
+    .ckh { display: flex; align-items: center; gap: 10px; margin: 4px 0 8px; }
+    .ckh .bar { flex: 1; height: 8px; border-radius: 100px; background: #E5E5EA; overflow: hidden; } .ckh .bar i { display: block; height: 100%; width: 0; border-radius: 100px; background: var(--ok); transition: width .5s var(--ios-ease); }
+    .ckh b { font: 800 14px 'Kanit', sans-serif; white-space: nowrap; }
+    .ck { background: #fff; border-radius: 18px; padding: 11px 12px; margin-bottom: 7px; transition: box-shadow .2s; }
+    .ck .r1 { display: flex; align-items: center; gap: 10px; } .ck .r1 span { flex: 1; min-width: 0; font-weight: 700; font-size: 14px; line-height: 1.35; } .ck .r1 span small { display: block; color: #8E8E93; font-size: 11px; font-weight: 700; }
+    .ck .pf { display: flex; background: #F2F2F7; border-radius: 14px; padding: 3px; gap: 3px; flex-shrink: 0; }
+    .ck .pf button { width: 50px; height: 40px; border-radius: 11px; background: none; font-size: 18px; transition: background .2s, transform .25s var(--spring); }
+    .ck .pf button:active { transform: scale(.85); }
+    .ck.ok { box-shadow: inset 0 0 0 2px var(--ok); } .ck.ok .pf .y { background: var(--ok); }
+    .ck.bad { box-shadow: inset 0 0 0 2px var(--no); } .ck.bad .pf .n { background: var(--no); }
+    .ck .fx { display: none; margin-top: 9px; } .ck.bad .fx { display: block; }
+    .ck .fx .inp { background: #FFF5F4; font-size: 14px; padding: 11px 12px; }
+    .ck .fx .ph { margin-top: 8px; } .ck .fx .ph .im, .ck .fx .ph .add { width: 72px; height: 72px; }
+
+    /* หน้าลูกค้าเซ็น */
+    #signv { position: fixed; inset: 0; z-index: 200; background: #FFFBEA; overflow-y: auto; -webkit-overflow-scrolling: touch; transform: translateY(100%); transition: transform .6s var(--ios-ease); visibility: hidden; }
+    #signv.open { transform: none; visibility: visible; }
+    #signv .in { max-width: 760px; margin: 0 auto; padding: calc(16px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); }
+    #signv h2 { font: 800 26px/1.2 'Kanit', sans-serif; margin: 8px 0 4px; } #signv .lead { color: #6E6E73; font-weight: 600; font-size: 14px; margin-bottom: 14px; }
+    .sgc { background: #fff; border-radius: 22px; padding: 14px 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+    .sgc h4 { margin: 0 0 8px; font: 800 16px 'Kanit', sans-serif; }
+    .terms { white-space: pre-wrap; font-size: 14px; line-height: 1.65; color: #3A3A3C; max-height: 240px; overflow-y: auto; background: #FAFAFA; border-radius: 14px; padding: 12px; font-weight: 500; }
+    .agree { display: flex; gap: 12px; align-items: flex-start; margin-top: 10px; padding: 12px; border-radius: 16px; background: #F2F2F7; cursor: pointer; font-weight: 700; font-size: 14.5px; line-height: 1.45; transition: background .2s; }
+    .agree .bx { width: 28px; height: 28px; border-radius: 9px; border: 2.5px solid #C7C7CC; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #fff; transition: all .25s var(--spring); font-size: 16px; color: transparent; }
+    .agree.on { background: #E3F9E9; } .agree.on .bx { background: var(--ok); border-color: var(--ok); color: #fff; transform: scale(1.08); }
+    .pad { position: relative; background: #fff; border-radius: 18px; border: 2px dashed #C7C7CC; height: 210px; touch-action: none; overflow: hidden; }
+    .pad canvas { width: 100%; height: 100%; display: block; }
+    .pad .hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #C7C7CC; font: 700 18px 'Kanit', sans-serif; pointer-events: none; }
+    .pad .base { position: absolute; left: 24px; right: 24px; bottom: 48px; border-bottom: 1.5px solid #E5E5EA; pointer-events: none; }
+    .sgfoot { display: flex; gap: 8px; margin-top: 14px; }
+    .sgfoot button { height: 58px; border-radius: 18px; font: 800 16px 'IBM Plex Sans Thai', sans-serif; flex: 1; transition: transform .3s var(--spring); }
+    .sgfoot button:active { transform: scale(.95); }
+    .ckmini { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 4px 12px; font-size: 13px; font-weight: 600; }
+    .ckmini div { padding: 3px 0; } .ckmini .bad { color: #D70015; }
+
+    /* รายงาน */
+    .rnav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+    .rnav button { border-radius: 100px; padding: 10px 15px; background: rgba(255,255,255,.7); font-weight: 800; font-size: 13px; transition: transform .3s var(--spring); }
+    .rnav button.on { background: var(--d); color: var(--y); } .rnav button:active { transform: scale(.92); }
+    .rnav input { border: 0; border-radius: 100px; padding: 9px 12px; font: 700 13px 'IBM Plex Sans Thai', sans-serif; background: rgba(255,255,255,.7); }
+    .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; position: relative; }
+    .tile { background: #2A2A2D; border-radius: 16px; padding: 10px 12px; min-width: 0; }
+    .tile small { display: block; color: #AEAEB2; font-weight: 600; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tile b { display: block; font: 800 24px 'Kanit', sans-serif; margin-top: 2px; } .tile b.y { color: var(--y); } .tile b.g { color: #7CE495; } .tile b.r { color: #FF8A80; } .tile b span { font-size: 13px; color: #8E8E93; margin-left: 2px; }
+    .tile i { font-style: normal; font-size: 11px; color: #8E8E93; font-weight: 600; }
+    .hb { display: grid; grid-template-columns: minmax(0, 1fr) 90px 34px; gap: 8px; align-items: center; padding: 6px 2px; font-size: 13px; font-weight: 700; }
+    .hb span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .hb em { height: 10px; border-radius: 100px; background: #F2EBD0; overflow: hidden; } .hb em s { display: block; height: 100%; border-radius: 100px; background: var(--d); }
+    .hb b { text-align: right; font-family: 'Kanit', sans-serif; }
+    .dk .hb em { background: rgba(255,255,255,.1); } .dk .hb em s { background: var(--y); }
+    .srch { width: 100%; border: 0; border-radius: 16px; padding: 12px 14px; font: 600 14px 'IBM Plex Sans Thai', sans-serif; background: #fff; outline: none; margin-bottom: 10px; }
+    .rr { display: grid; grid-template-columns: 54px minmax(0, 1fr) auto; gap: 10px; align-items: center; background: #FFFDF5; border-radius: 16px; padding: 9px 12px; margin-bottom: 6px; cursor: pointer; font-size: 12.5px; font-weight: 600; transition: transform .3s var(--spring); }
+    .rr:active { transform: scale(.98); }
+    .rr time { font: 700 12px 'Kanit', sans-serif; color: #8A8270; line-height: 1.25; } .rr b { display: block; font: 700 14px 'Kanit', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .rr small { color: #8A8270; }
+    .rr .s { text-align: right; white-space: nowrap; font-size: 11.5px; } .rr .s b { font-size: 13px; }
+
+    /* ตั้งค่า */
+    .stabs { display: flex; gap: 6px; overflow-x: auto; margin: 0 -2px 10px; padding: 2px; scrollbar-width: none; }
+    .stabs button { border-radius: 100px; padding: 9px 14px; background: #fff; font-weight: 800; font-size: 13px; white-space: nowrap; }
+    .stabs button.on { background: var(--d); color: var(--y); }
+    .ptab { width: 100%; border-collapse: collapse; font-size: 13px; } .ptab td { padding: 8px 6px; border-bottom: 1px solid #F2F2F7; font-weight: 600; } .ptab td b { font-family: 'Kanit', sans-serif; }
+
+    .toast { position: fixed; left: 50%; top: calc(70px + env(safe-area-inset-top)); transform: translate(-50%, -20px); opacity: 0; z-index: 400; background: var(--d); color: var(--y); font-weight: 700; font-size: 13.5px; padding: 11px 18px; border-radius: 100px; box-shadow: 0 12px 26px -10px rgba(0,0,0,.6); transition: all .45s var(--spring); pointer-events: none; max-width: 92vw; text-align: center; }
+    .toast.on { opacity: 1; transform: translate(-50%, 0); } .toast.err { background: #D70015; color: #fff; }
+    #zoom { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,.92); display: none; align-items: center; justify-content: center; padding: 16px; } #zoom.on { display: flex; } #zoom img { max-width: 100%; max-height: 100%; border-radius: 12px; }
+    #scanv { position: fixed; inset: 0; z-index: 450; background: #000; display: none; flex-direction: column; } #scanv.on { display: flex; }
+    #scanv #reader { flex: 1; } #scanv .bar { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); display: flex; gap: 8px; } #scanv .bar button { flex: 1; height: 52px; border-radius: 16px; font-weight: 800; background: #fff; }
+    #scanv p { color: #fff; text-align: center; margin: 0; padding: calc(14px + env(safe-area-inset-top)) 12px 8px; font-weight: 700; }
+    #view-report { display: none; }
+    @media (max-width: 420px) { h1 { font-size: 26px; } .tile b { font-size: 21px; } .newb { padding: 13px 18px; font-size: 15px; } .seg button { font-size: 13px; } }
+  </style>
+</head>
+<body>
+  <div class="navrow rise">
+    <span data-sys-back-slot></span><a class="homeb" id="homeb" href="index.html" aria-label="เมนูหลัก">‹</a>
+    <div class="seg" id="tabSeg"><div class="glider" id="glider"></div>
+      <button class="on" id="t-queue" onclick="setView('queue')">🧾 คิว Order<i id="qBadge"></i></button>
+      <button id="t-report" onclick="setView('report')">📊 Report</button>
+    </div>
+    <button class="rb" id="bellBtn" onclick="openBell()" aria-label="แจ้งเตือน">🔔</button>
+    <button class="rb" id="gearBtn" onclick="openSettings()" aria-label="ตั้งค่า" style="display:none">⚙️</button>
+  </div>
+
+  <div class="wrap">
+    <!-- 🧾 คิว -->
+    <div id="view-queue">
+      <div class="hrow rise">
+        <div>
+          <span class="eyebrow"><span class="ic">🧾</span>ORDER 1326 · <i class="live"></i> LIVE</span>
+          <h1>Order &amp; Check List</h1>
+          <div class="sub" id="qSub">เปิดบิล → รับเคส → เบิกเครื่อง → Check List → ลูกค้าเซ็น</div>
+          <button class="sndchip" id="sndChip" onclick="soundChip()">🔊 เข้ากะ — แตะเพื่อเปิดเสียง</button>
+        </div>
+        <button class="newb" onclick="openNew()"><span>＋</span>เปิดบิล Order</button>
+      </div>
+      <div class="grid q">
+        <div>
+          <div id="qNew"></div>
+          <div id="qWork"></div>
+        </div>
+        <div>
+          <div id="qPark"></div>
+          <div class="lc" id="qDoneBox" style="animation-delay:.08s"><div class="ch"><b>✅ ปิดเคสวันนี้</b><small id="qDoneN"></small></div><div id="qDone"><div class="loading">กำลังโหลด…</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📊 Report -->
+    <div id="view-report">
+      <div class="rise">
+        <span class="eyebrow"><span class="ic">📊</span>ORDER REPORT</span>
+        <h1>Report Order</h1>
+        <div class="sub">ใครรับเคส · ส่งกลับเพราะอะไร · เคสยาวแยกกลุ่ม ไม่ปนเคสปกติ</div>
+      </div>
+      <div class="rnav rise" id="rNav">
+        <button class="on" data-r="today">วันนี้</button><button data-r="7">7 วัน</button><button data-r="month">เดือนนี้</button><button data-r="prev">เดือนก่อน</button>
+        <input type="date" id="rFrom"><input type="date" id="rTo">
+      </div>
+      <div class="grid r">
+        <div class="lft"><div class="dk" id="rKpi"><div class="loading">กำลังโหลด…</div></div><div id="rSide"></div></div>
+        <div class="lc" style="animation-delay:.06s">
+          <div class="ch"><b>🔎 ค้นหาใบ Order</b><small>เบอร์ · IMEI · ชื่อ · เลขที่ · รุ่น</small></div>
+          <input class="srch" id="rSearch" placeholder="เช่น 0812345678 หรือ 3567…" oninput="renderReportList()">
+          <div id="rList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ＋ เปิดบิล -->
+  <div class="sheet" id="newS"><div class="bd" onclick="closeS('newS')"></div><div class="box">
+    <div class="grab"></div>
+    <div class="shd"><span class="ic">🧾</span><div><h3>เปิดบิล Order</h3><small>กดส่งแล้วเด้งแจ้งพนักงานในกะทันที</small></div><button class="x" onclick="closeS('newS')">✕</button></div>
+    <div class="lab"><span>แบรนด์ <span class="req">*</span></span></div><div class="chips" id="nBrand"></div>
+    <div class="lab"><span>รุ่น <span class="req">*</span></span><small>เช่น Galaxy A56 5G</small></div>
+    <input class="inp big" id="nModel" maxlength="60" placeholder="พิมพ์รุ่น" list="nModelList" autocomplete="off"><datalist id="nModelList"></datalist>
+    <div class="lab"><span>สี</span></div><div class="chips" id="nColor"></div>
+    <input class="inp" id="nColorX" maxlength="30" placeholder="หรือพิมพ์สี" style="margin-top:6px">
+    <div class="lab"><span>ความจุ</span></div><div class="chips" id="nCap"></div>
+    <div class="lab"><span>จำนวน</span></div>
+    <div class="stp"><button onclick="qty(-1)">−</button><b id="nQty">1</b><button class="p" onclick="qty(1)">＋</button></div>
+    <div class="lab"><span>ชื่อ-สกุลลูกค้า</span></div><input class="inp" id="nCust" maxlength="60" placeholder="ชื่อ นามสกุล" autocomplete="off">
+    <div class="lab"><span>เบอร์ที่สมัคร 7Club+</span><small>10 หลัก</small></div><input class="inp big" id="nPhone" inputmode="tel" maxlength="12" placeholder="08x-xxx-xxxx" autocomplete="off" oninput="fmtPhone(this)">
+    <div class="lab"><span>ประเภทชำระ</span></div><div class="chips" id="nPay"></div>
+    <div class="lab"><span>🎯 งานโฟกัสที่ลูกค้าเอา</span><small>ชุดเดียวกับ Check List · แก้ได้ตอนทำ Check List</small></div><div class="chips" id="nExtra"></div>
+    <div class="lab"><span></span></div>
+    <div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>📲 ลูกค้าต้องการย้ายข้อมูล<small>ลูกค้าจะต้องกดยอมรับนโยบายย้ายข้อมูลตอนเซ็น</small></span><span class="sw" id="nTransfer"></span></div>
+    <div class="lab"><span>หมายเหตุ</span></div><textarea id="nNote" maxlength="200" placeholder="เช่น ลูกค้ารอหน้าร้าน / เอาเครื่องโชว์ไม่ได้"></textarea>
+    <div class="sfoot"><button class="b-no" onclick="closeS('newS')">ยกเลิก</button><button class="b-yes" id="nSend" onclick="sendNew()">🔔 ส่ง Order</button></div>
+  </div></div>
+
+  <!-- 📄 รายละเอียด -->
+  <div class="sheet" id="detS"><div class="bd" onclick="closeDetail()"></div><div class="box" id="detBox"></div></div>
+  <!-- แผ่นย่อย (ส่งกลับ / พักเคส / ส่งต่อ / ยกเลิก / เบิกแล้ว) -->
+  <div class="sheet lv2" id="miniS"><div class="bd" onclick="closeS('miniS')"></div><div class="box" id="miniBox"></div></div>
+  <!-- ✅ Check List -->
+  <div class="sheet lv2" id="ckS"><div class="bd" onclick="closeS('ckS')"></div><div class="box" id="ckBox"></div></div>
+  <!-- ⚙️ ตั้งค่า -->
+  <div class="sheet" id="setS"><div class="bd" onclick="closeS('setS')"></div><div class="box" id="setBox"></div></div>
+
+  <!-- ✍️ ลูกค้าเซ็น -->
+  <div id="signv"><div class="in" id="signIn"></div></div>
+  <div id="scanv"><p>เล็งบาร์โค้ด IMEI / SN ข้างกล่อง</p><div id="reader"></div><div class="bar"><button onclick="stopScan()">ปิด / พิมพ์เอง</button></div></div>
+  <div id="zoom" onclick="this.classList.remove('on')"><img alt=""></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const BRAND_COLORS = { SAMSUNG: '#1E40FF', APPLE: '#1C1C1E', OPPO: '#16A34A', VIVO: '#38BDF8', XIAOMI: '#FF6900', REALME: '#FFC300', HUAWEI: '#DC2626', HONOR: '#8B5CF6',
+      IQOO: '#5E5CE6', INFINIX: '#84CC16', TCL: '#EF4444', ZTE: '#0EA5E9', TECNO: '#F472B6', NOTHING: '#A1A1AA' };
+    const bc = b => BRAND_COLORS[String(b || '').toUpperCase().split(/[\s\/]+/)[0]] || '#8E8E93';
+    const TH_MS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const pad = n => String(n).padStart(2, '0');
+    const isoOf = dt => `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const hm = t => t ? `${pad(new Date(t).getHours())}:${pad(new Date(t).getMinutes())}` : '';
+    const dmy = t => { const d = new Date(t); return `${d.getDate()} ${TH_MS[d.getMonth()]}`; };
+    const phoneTxt = p => p && p.length === 10 ? `${p.slice(0, 3)}-${p.slice(3, 6)}-${p.slice(6)}` : (p || '');
+    const OA = window.OrderAlert;
+    const IN_FRAME = window.parent !== window;
+    if (!IN_FRAME) document.getElementById('homeb').style.display = 'flex';
+    const WORK = { store: '📦 เบิกในร้าน', branch: '🚗 ไปเบิกต่างสาขา', transfer: '📲 ย้ายข้อมูล', wait: '⏳ รอลูกค้า / เอกสาร' };
+    const LABEL = { new: 'รอคนรับ', claimed: 'รับเคสแล้ว', back: 'ส่งกลับ PC', picked: 'เบิกเครื่องแล้ว', parked: 'พักเคส', done: 'ปิดเคสแล้ว', cancel: 'ยกเลิก' };
+    let CFG = null, Q = [], SKEW = 0, VIEW = 'queue', CUR = null, NEW = {}, CK = null, MEDIA = {}, REP = null;
+
+    function vib(ms) { try { navigator.vibrate && navigator.vibrate(ms || 8); } catch (e) {} }
+    function toast(m, err) { const t = document.getElementById('toast'); t.textContent = m; t.classList.toggle('err', !!err); t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), err ? 4200 : 2200); }
+    function openS(id) { const s = document.getElementById(id); s.classList.add('open'); vib(6); }
+    function closeS(id) { document.getElementById(id).classList.remove('open'); }
+    function glide() { const on = document.querySelector('#tabSeg button.on'), g = document.getElementById('glider'); if (on) { g.style.width = on.offsetWidth + 'px'; g.style.transform = `translateX(${on.offsetLeft - 5}px)`; } }
+    window.addEventListener('resize', glide);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(glide);
+    document.addEventListener('pointerdown', () => { try { OA.unlock(); } catch (e) {} paintSound(); }, { capture: true, passive: true });
+    const run = (fn, ...args) => new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(no)[fn](...args));
+    const me = () => (CFG && CFG.me) || {};
+    const isStaff = () => me().role && me().role !== 'PC';
+    const isMgr = () => !!me().mgr;
+    const nowS = () => Date.now() + SKEW;
+    // 📋 รายชื่อ / แบรนด์ / งานโฟกัส = ชุดเดียวกับแอป Check List
+    function CHK() {
+      const c = (CFG && CFG.chk) || {}, pick = (k, d) => (Array.isArray(c[k]) && c[k].length ? c[k] : (d || []));
+      return { sales: pick('sales', window.SALES_STAFF), receivers: pick('receivers', window.CASE_RECEIVERS), brands: pick('brands', window.BRANDS),
+        types: pick('types', window.DEVICE_TYPES), focus: pick('focus', window.FOCUS_ITEMS), focusQty: (c.focus && c.focus.length ? (c.focusQty || []) : (window.FOCUS_QTY || [])).map(x => String(x).toUpperCase()) };
+    }
+    const baseFocus = f => String(f).replace(/\s+x\d+$/i, '').trim();
+    const qtyOf = f => { const m = String(f).match(/\sx(\d+)$/i); return m ? +m[1] : 1; };
+
+    // ===================== เริ่ม =====================
+    run('getConfig').then(c => { CFG = c; try { OA.setCfg(c); } catch (e) {} onCfg(); }).catch(e => {
+      document.getElementById('qDone').innerHTML = `<div class="empty">โหลดไม่สำเร็จ: ${esc(e.message)}${/ไม่พบคำสั่ง|ยังไม่ได้ใส่/.test(e.message) ? '<br>— วาง Order.gs + API.gs แล้ว Deploy เป็น New version' : ''}</div>`;
+    });
+    function onCfg() {
+      document.getElementById('gearBtn').style.display = isMgr() ? '' : 'none';
+      document.getElementById('qSub').textContent = isStaff() ? 'Order เด้ง → กด "รับเคส" คนแรกได้ไป → เบิกเครื่อง → ส่งให้ PC' : 'เปิดบิล → รอพนักงานรับเคส → ทำ Check List → ให้ลูกค้าเซ็น';
+      OA.start();
+      OA.subscribe(st => { if (st.list) { Q = st.list; renderQueue(); } paintSound(); });
+      run('getQueue').then(q => { SKEW = (q.now || Date.now()) - Date.now(); OA.setQueue(q, true); }).catch(() => {});
+      const p = (OA.takePending && OA.takePending()) || new URLSearchParams(location.search).get('id');
+      if (p) setTimeout(() => showOrder(p), 300);
+    }
+    window.showOrder = showOrder;
+    window.addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.type === 'open-order' && e.data.oid) { setView('queue'); showOrder(e.data.oid); } });
+    function paintSound() {
+      const c = document.getElementById('sndChip'); let st = null; try { st = OA.state(); } catch (e) {}
+      const on = st ? st.sound : true, unlocked = st && st.unlocked;
+      if (!on) { c.textContent = '🔇 เสียงปิดอยู่ — แตะเพื่อเปิด'; c.classList.add('off'); }
+      else if (!unlocked) { c.textContent = '🔊 เข้ากะ — แตะเพื่อเปิดเสียง'; c.classList.add('off'); }
+      else { c.textContent = '🔊 เสียงพร้อม · ' + ((CFG && CFG.cfg.sound.mode) === 'polite' ? 'โหมดสุภาพ' : 'โหมดฮา') + ' · แตะเพื่อลองฟัง'; c.classList.remove('off'); }
+    }
+    function soundChip() { OA.unlock(); if (!OA.soundOn()) OA.setSound(true); paintSound(); OA.test(); }
+    function openBell() { OA.openSetup(); }
+    setInterval(tickTimers, 1000);
+    function setView(v) {
+      VIEW = v; vib(6);
+      ['queue', 'report'].forEach(k => { document.getElementById('t-' + k).classList.toggle('on', k === v); document.getElementById('view-' + k).style.display = k === v ? 'block' : 'none'; });
+      glide(); if (v === 'report') loadReport();
+    }
+
+    // ===================== 🧾 คิว =====================
+    function mins(ms) { const s = Math.max(0, Math.floor(ms / 1000)); const m = Math.floor(s / 60); return m >= 60 ? `${Math.floor(m / 60)} ชม. ${m % 60} น.` : `${m}:${pad(s % 60)}`; }
+    function workTag(o) {
+      const w = o.work; if (!w || o.status !== 'claimed') return '';
+      const late = w.eta && nowS() > w.eta;
+      return `<span class="tg ${w.kind === 'branch' ? 'blue' : w.kind === 'transfer' ? 'or' : ''} ${late ? 'late' : ''}">${WORK[w.kind] || ''}${w.text ? ' ' + esc(w.text) : ''}${w.eta ? ' · เสร็จ ~' + hm(w.eta) : ''}</span>`;
+    }
+    function card(o) {
+      const mine = (o.staffAcct && o.staffAcct === me().acct) || (o.ownerAcct === me().acct);
+      const since = o.status === 'new' ? o.created : o.status === 'parked' && o.park ? o.park.at : o.status === 'back' && o.back ? o.back.at : o.status === 'picked' ? o.pickedAt : o.claimedAt || o.created;
+      const lim = CFG ? CFG.cfg.claimMin : 3;
+      const tags = [];
+      tags.push(`<span class="tg tm" data-since="${since}" data-lim="${o.status === 'new' ? lim : 0}">⏱ ${mins(nowS() - since)}</span>`);
+      if (o.staff) tags.push(`<span class="tg">🙋 ${esc(o.staff)}</span>`);
+      if (o.status === 'back' && o.back) tags.push(`<span class="tg or">↩️ ${esc(o.back.reason)}</span>`);
+      if (o.status === 'parked' && o.park) tags.push(`<span class="tg">${o.park.readyNow ? '✅ พร้อมส่งมอบ' : o.park.readyAt ? '🅿️ เสร็จ ~' + hm(o.park.readyAt) : '🅿️ พักอยู่'}</span>`, o.park.backAt ? `<span class="tg">🍜 ลูกค้ากลับ ${hm(o.park.backAt)}</span>` : '', o.park.where ? `<span class="tg">📍 ${esc(o.park.where)}</span>` : '');
+      if (o.status === 'picked') tags.push(`<span class="tg ${o.checkDone ? 'gr' : 'blue'}">${o.checkDone ? '✅ Check List ครบ · รอลูกค้าเซ็น' : '📋 รอ PC ทำ Check List'}</span>`);
+      if (o.transfer) tags.push(`<span class="tg or">📲 ย้ายข้อมูล</span>`);
+      const wt = workTag(o); if (wt) tags.push(wt);
+      const claimBtn = o.status === 'new' && isStaff() ? `<div class="act"><button class="btn-y" onclick="event.stopPropagation();claim('${o.no}',this)">🙋 รับเคส</button></div>` : '';
+      return `<div class="oc ${o.status}${mine ? ' mine' : ''}" onclick="showOrder('${o.no}')">
+        <div class="t1"><span class="bd" style="background:${bc(o.brand)}"></span>${esc(o.brand)}<span class="no">#${esc(o.no)}</span><span class="st">${LABEL[o.status] || o.status}</span></div>
+        <div class="md">${esc(o.model)}<small>${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' ×' + o.qty : ''}</small></div>
+        <div class="mt">👤 ${esc(o.owner)}${o.pay ? ' · 💳 ' + esc(o.pay) : ''}${o.extras ? ' · ➕ ' + esc(o.extras) : ''}</div>
+        <div class="ln">${tags.filter(Boolean).join('')}</div>${claimBtn}</div>`;
+    }
+    function renderQueue() {
+      const act = Q.filter(o => ['new', 'claimed', 'back', 'picked', 'parked'].includes(o.status));
+      const nw = act.filter(o => o.status === 'new').sort((a, b) => a.created - b.created);
+      const mineFirst = (a, b) => ((b.staffAcct === me().acct || b.ownerAcct === me().acct) - (a.staffAcct === me().acct || a.ownerAcct === me().acct)) || a.created - b.created;
+      const wk = act.filter(o => ['claimed', 'back', 'picked'].includes(o.status)).sort(mineFirst);
+      const pk = act.filter(o => o.status === 'parked').sort(mineFirst);
+      const dn = Q.filter(o => o.status === 'done' || o.status === 'cancel').sort((a, b) => b.closedAt - a.closedAt);
+      document.getElementById('qBadge').textContent = isStaff() ? (nw.length || '') : (act.filter(o => o.status === 'back' && o.ownerAcct === me().acct).length || '');
+      document.getElementById('qNew').innerHTML = nw.length ? `<div class="sec">🔥 รอคนรับ <i>${nw.length}</i></div>` + nw.map(card).join('')
+        : `<div class="lc" style="margin-bottom:14px"><div class="empty">✨ ไม่มี Order รอรับ${isStaff() ? ' — มีใหม่จะเด้งเสียงทันที' : ''}</div></div>`;
+      document.getElementById('qWork').innerHTML = wk.length ? `<div class="sec">⚙️ กำลังทำ <i>${wk.length}</i></div>` + wk.map(card).join('') : '';
+      document.getElementById('qPark').innerHTML = pk.length ? `<div class="sec">🅿️ พักเคส · รอลูกค้า <i>${pk.length}</i></div>` + pk.map(card).join('') + '<div style="height:6px"></div>' : '';
+      document.getElementById('qDoneN').textContent = dn.length ? dn.filter(o => o.status === 'done').length + ' ใบ' : '';
+      document.getElementById('qDone').innerHTML = dn.length ? dn.map(o => `<div class="dn ${o.status}" onclick="showOrder('${o.no}')"><span class="bd" style="background:${bc(o.brand)}"></span><b>${esc(o.brand)} ${esc(o.model)} ${esc(o.color)}</b><small>${o.status === 'cancel' ? 'ยกเลิก' : '✍️ ' + hm(o.closedAt)} · ${esc(o.staff || '-')}</small></div>`).join('')
+        : '<div class="empty">ยังไม่มีเคสที่ปิดวันนี้</div>';
+      if (CUR && document.getElementById('detS').classList.contains('open')) {
+        const fresh = Q.find(o => o.no === CUR.no);
+        if (fresh && (fresh.status !== CUR.status || fresh.staffAcct !== CUR.staffAcct || JSON.stringify(fresh.work) !== JSON.stringify(CUR.work) || fresh.checkDone !== CUR.checkDone || JSON.stringify(fresh.park) !== JSON.stringify(CUR.park))) loadDetail(CUR.no, true);
+      }
+    }
+    function tickTimers() {
+      document.querySelectorAll('[data-since]').forEach(el => {
+        const s = +el.dataset.since, lim = +el.dataset.lim; if (!s) return;
+        el.textContent = '⏱ ' + mins(nowS() - s);
+        if (lim) el.classList.toggle('late', nowS() - s > lim * 60000);
+      });
+    }
+
+    // ===================== ＋ เปิดบิล =====================
+    function chipSet(id, list, sel, multi, colors) {
+      const box = document.getElementById(id);
+      box.innerHTML = list.map(v => `<button type="button" data-v="${esc(v)}" class="${(multi ? (sel || []).includes(v) : sel === v) ? 'on' : ''}">${colors ? `<span class="bd" style="background:${bc(v)}"></span>` : ''}${esc(v)}</button>`).join('');
+      box.onclick = e => {
+        const b = e.target.closest('button'); if (!b) return; vib(5);
+        if (multi) b.classList.toggle('on');
+        else { const was = b.classList.contains('on'); box.querySelectorAll('button').forEach(x => x.classList.remove('on')); if (!was) b.classList.add('on'); }
+        if (id === 'nColor') document.getElementById('nColorX').value = '';
+      };
+    }
+    const chipVal = id => { const b = document.querySelector(`#${id} button.on`); return b ? b.dataset.v : ''; };
+    const chipVals = id => [...document.querySelectorAll(`#${id} button.on`)].map(b => b.dataset.v);
+    function openNew() {
+      if (!CFG) { toast('รอโหลดตั้งค่าแป๊บนึง'); return; }
+      const c = CFG.cfg, b = me().role === 'PC' ? me().brand : '';
+      const K = CHK(), myB = K.brands.find(x => x.toUpperCase().split(/[\s\/]+/).includes(String(b).toUpperCase())) || '';
+      chipSet('nBrand', K.brands, myB, false, true);
+      chipSet('nColor', c.colors, ''); chipSet('nCap', c.caps, ''); chipSet('nPay', c.pays, ''); chipSet('nExtra', K.focus, [], true);
+      ['nModel', 'nColorX', 'nCust', 'nPhone', 'nNote'].forEach(i => document.getElementById(i).value = '');
+      document.getElementById('nQty').textContent = '1'; document.getElementById('nTransfer').classList.remove('on');
+      const models = [...new Set(Q.map(o => o.model))].slice(0, 30);
+      document.getElementById('nModelList').innerHTML = models.map(m => `<option value="${esc(m)}">`).join('');
+      document.getElementById('nSend').disabled = false;
+      openS('newS');
+    }
+    function qty(d) { const el = document.getElementById('nQty'); el.textContent = Math.max(1, Math.min(20, (+el.textContent || 1) + d)); vib(5); }
+    function fmtPhone(el) { const d = el.value.replace(/\D/g, '').slice(0, 10); el.value = d.length > 6 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}` : d.length > 3 ? `${d.slice(0, 3)}-${d.slice(3)}` : d; }
+    function sendNew() {
+      const f = { brand: chipVal('nBrand'), model: document.getElementById('nModel').value.trim(), color: document.getElementById('nColorX').value.trim() || chipVal('nColor'), cap: chipVal('nCap'),
+        qty: +document.getElementById('nQty').textContent, cust: document.getElementById('nCust').value.trim(), phone: document.getElementById('nPhone').value.replace(/\D/g, ''),
+        pay: chipVal('nPay'), extras: chipVals('nExtra'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim() };
+      if (!f.brand) return toast('เลือกแบรนด์ก่อน', 1);
+      if (!f.model) { document.getElementById('nModel').focus(); return toast('ใส่รุ่นก่อน', 1); }
+      if (f.phone && !/^0\d{9}$/.test(f.phone)) return toast('เบอร์ 7Club+ ต้องเป็นเลข 10 หลัก', 1);
+      const b = document.getElementById('nSend'); b.disabled = true; b.textContent = 'กำลังส่ง…';
+      run('createOrder', f).then(r => { b.textContent = '🔔 ส่ง Order'; OA.setQueue(r.queue, true); closeS('newS'); toast('🔔 ส่ง Order #' + r.order.no + ' แล้ว — แจ้งพนักงานในกะ'); vib([20, 40, 20]); })
+        .catch(e => { b.disabled = false; b.textContent = '🔔 ส่ง Order'; toast(e.message, 1); });
+    }
+
+    // ===================== 🙋 รับเคส =====================
+    function claim(no, btn) {
+      if (btn) { btn.disabled = true; btn.textContent = 'กำลังรับ…'; }
+      run('claim', no).then(r => {
+        OA.setQueue(r.queue, true);
+        if (r.ok) { toast('🙋 รับเคสแล้ว — เคสนี้เป็นของคุณ'); vib([15, 30, 15]); showOrder(no, r.order); }
+        else { toast('😅 ' + r.message, 1); vib([60, 40, 60]); }
+      }).catch(e => { if (btn) { btn.disabled = false; btn.textContent = '🙋 รับเคส'; } toast(e.message, 1); });
+    }
+
+    // ===================== 📄 รายละเอียด =====================
+    function showOrder(no, data) {
+      const base = Q.find(o => o.no === no);
+      CUR = data || base || { no: no };
+      if (data) renderDetail(); else { document.getElementById('detBox').innerHTML = `<div class="grab"></div>${base ? '' : ''}<div class="loading">กำลังเปิดใบ #${esc(no)}…</div>`; }
+      openS('detS');
+      if (!data) loadDetail(no);
+    }
+    function loadDetail(no, quiet) {
+      run('getOrder', no).then(o => { if (CUR && CUR.no !== no) return; CUR = o; renderDetail(); }).catch(e => { if (!quiet) document.getElementById('detBox').innerHTML = `<div class="grab"></div><div class="empty">${esc(e.message)}</div>`; });
+    }
+    function closeDetail() { closeS('detS'); setTimeout(() => { if (!document.getElementById('detS').classList.contains('open')) CUR = null; }, 500); }
+    function apply(r, msg) { if (r.queue) OA.setQueue(r.queue, true); if (r.order) { CUR = r.order; renderDetail(); } if (msg) toast(msg); vib([12, 30, 12]); }
+    function act(fn, args, msg, btn) {
+      if (btn) btn.disabled = true;
+      return run(fn, ...args).then(r => { apply(r, msg); return r; }).catch(e => { if (btn) btn.disabled = false; toast(e.message, 1); throw e; });
+    }
+    const H_LABEL = { sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '🅿️ พักเคส', unpark: '▶️ กลับมาทำต่อ', ready: '✅ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก' };
+    function histLine(h) {
+      let x = '';
+      if (h.a === 'work') x = (WORK[h.kind] || '') + (h.text ? ' ' + h.text : '') + (h.mins ? ' · ~' + h.mins + ' นาที' : '');
+      if (h.a === 'back') x = h.reason + (h.text ? ' — ' + h.text : '');
+      if (h.a === 'fix') x = Object.keys(h.ch || {}).map(k => (k === 'phone' ? 'เบอร์ ' + phoneTxt(h.ch[k][0]) + ' → ' + phoneTxt(h.ch[k][1]) : h.ch[k][0] + ' → ' + h.ch[k][1])).join(' · ') + (h.text ? ' · ' + h.text : '');
+      if (h.a === 'hand') x = h.from + ' → ' + h.to + (h.text ? ' · ' + h.text : '');
+      if (h.a === 'park') x = (h.mins ? 'เสร็จ ~' + h.mins + ' นาที' : '') + (h.where ? ' · เครื่องอยู่ ' + h.where : '') + (h.text ? ' · ' + h.text : '');
+      if (h.a === 'check') x = h.done ? 'ครบทุกข้อ' + (h.fails ? ` (ไม่ผ่าน ${h.fails} ข้อ)` : '') : 'ยังไม่ครบ';
+      if (h.a === 'cancel') x = h.reason;
+      if (h.a === 'picked' && h.imei) x = 'IMEI ' + h.imei;
+      if (h.a === 'sale') x = h.ok ? 'สำเร็จ' : 'ไม่สำเร็จ';
+      return `<li><time>${hm(h.t)}</time><span>${H_LABEL[h.a] || h.a} · ${esc(h.by)}${x ? `<small>${esc(x)}</small>` : ''}</span></li>`;
+    }
+    function renderDetail() {
+      const o = CUR; if (!o || !o.status) return;
+      const m = me(), mine = o.staffAcct === m.acct, owner = o.ownerAcct === m.acct, ownerish = owner || (m.role === 'PC' && m.brand === o.brand) || m.mgr;
+      const asg = mine || m.mgr, act = ['new', 'claimed', 'back', 'picked', 'parked'].includes(o.status);
+      const c = CFG ? CFG.cfg : {};
+      let h = `<div class="grab"></div><div class="shd"><span class="ic">🧾</span><div><h3>Order #${esc(o.no)}</h3><small>เปิดบิล ${dmy(o.created)} ${hm(o.created)} · ${esc(o.owner)}</small></div><button class="x" onclick="closeDetail()">✕</button></div>`;
+      h += `<div class="hero"><div class="t1"><span style="width:9px;height:9px;border-radius:50%;background:${bc(o.brand)}"></span>${esc(o.brand)}<span class="st">${LABEL[o.status]}</span></div>
+        <div class="md">${esc(o.model)}<small>${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' · จำนวน ' + o.qty : ''}</small></div>
+        <div class="kv"><div><small>ลูกค้า</small><b>${esc(o.cust || '-')}</b></div><div><small>เบอร์ 7Club+</small><b>${esc(phoneTxt(o.phone) || '-')}</b></div>
+        <div><small>ประเภทชำระ</small><b>${esc(o.pay || '-')}</b></div><div><small>พนักงานผู้รับ</small><b>${esc(o.staff || '—')}</b></div>
+        <div class="w"><small>IMEI / SN</small><b>${esc(o.imei || '— ยังไม่ได้ใส่')}</b></div>
+        ${o.extras ? `<div class="w"><small>🎯 งานโฟกัส</small><b>${esc(o.extras)}</b></div>` : ''}</div></div>`;
+      if (o.sale) h += `<div class="note ${o.sale.saved ? (o.sale.saved.ok ? 'gr' : 'rd') : 'wh'}">💰 <b>ข้อมูลขาย</b> · ${esc(o.sale.emp || 'ยังไม่เลือกพนักงานขาย')} · ${o.sale.price ? '฿' + Number(o.sale.price).toLocaleString('en-US') : 'ยังไม่ใส่ราคา'} · ผู้รับเคส ${esc(o.sale.receiver || o.staff || '-')}<br><small>${esc(o.sale.model)}${o.sale.type ? ', ' + esc(o.sale.type) : ''}</small>
+        ${o.sale.saved ? (o.sale.saved.ok ? '<br>📊 <b>บันทึกเข้า Check List แล้ว</b> ' + hm(o.sale.saved.at) + ' — ไม่ต้องบันทึกซ้ำ' : '<br>⚠️ บันทึกเข้า Check List ไม่สำเร็จ: ' + esc(o.sale.saved.err)) : '<br>📊 ลูกค้าเซ็นแล้วจะเข้า Check List ให้เอง'}</div>`;
+      if (o.status === 'done' && (!o.sale || !o.sale.saved || !o.sale.saved.ok) && (ownerish || mine)) h += `<div class="acts"><button class="y full" onclick="act('pushSale',['${o.no}'],'📊 บันทึกเข้า Check List แล้ว',this)">📊 บันทึกเข้า Check List อีกครั้ง</button></div>`;
+      if (o.transfer) h += `<div class="note or">📲 <b>ลูกค้าต้องการย้ายข้อมูล</b> — ตอนเซ็นต้องกดยอมรับนโยบายย้ายข้อมูลด้วย</div>`;
+      if (o.note) h += `<div class="note wh">📝 ${esc(o.note)}</div>`;
+      if (o.status === 'back' && o.back) h += `<div class="note or">↩️ <b>${esc(o.back.reason)}</b>${o.back.text ? ' — ' + esc(o.back.text) : ''}<br><small>ส่งกลับโดย ${esc(o.back.by)} · ${hm(o.back.at)}</small></div>`;
+      if (o.status === 'claimed' && o.work) h += `<div class="note ${o.work.kind === 'branch' ? 'bl' : 'gr'}">${WORK[o.work.kind]}${o.work.text ? ' <b>' + esc(o.work.text) + '</b>' : ''}${o.work.eta ? ' · เสร็จประมาณ <b>' + hm(o.work.eta) + '</b>' : ''}</div>`;
+      if (o.status === 'parked' && o.park) h += `<div class="note pu">🅿️ <b>พักเคส</b>${o.park.readyAt ? ' · เสร็จประมาณ <b>' + hm(o.park.readyAt) + '</b>' : ''}${o.park.backAt ? ' · ลูกค้ากลับมา <b>' + hm(o.park.backAt) + '</b>' : ''}${o.park.where ? '<br>📍 เครื่องอยู่: <b>' + esc(o.park.where) + '</b>' : ''}${o.park.text ? '<br>' + esc(o.park.text) : ''}${o.park.readyNow ? '<br>✅ <b>พร้อมส่งมอบแล้ว</b> (' + hm(o.park.readyNow) + ')' : ''}</div>`;
+      if (o.hand && act) h += `<div class="note wh">🔁 รับช่วงจาก ${esc(o.hand.from)} · ${hm(o.hand.at)}${o.hand.text ? ' — ' + esc(o.hand.text) : ''}</div>`;
+      if (o.status === 'cancel' && o.cancel) h += `<div class="note rd">✖️ ยกเลิกโดย ${esc(o.cancel.by)} · ${esc(o.cancel.reason)}</div>`;
+
+      // ปุ่มตามขั้น
+      const B = [];
+      if (o.status === 'new') {
+        if (isStaff()) B.push(`<button class="y full" onclick="claim('${o.no}',this)">🙋 รับเคสนี้<small>คนแรกที่กดได้ไป</small></button>`);
+        else B.push(`<button class="full" disabled>⏳ รอพนักงานกดรับเคส…</button>`);
+      }
+      if (o.status === 'claimed' && asg) {
+        h += workPanel(o);
+        B.push(`<button class="d full" onclick="pickedSheet()">📦 เบิกเครื่องแล้ว ส่งให้ PC<small>PC จะได้แจ้งเตือนให้ทำ Check List</small></button>`);
+        B.push(`<button onclick="backSheet()">↩️ ส่งกลับ PC<small>ไม่พบ 7Club+ ฯลฯ</small></button>`);
+      }
+      if (o.status === 'back') {
+        if (ownerish) h += fixPanel(o);
+        else h += `<div class="note wh">⏳ รอ PC แก้ข้อมูล — แก้แล้วเคสจะกลับมาที่ ${esc(o.staff)} อัตโนมัติ</div>`;
+      }
+      if (['picked', 'parked', 'claimed'].includes(o.status) && (ownerish || mine)) {
+        B.push(`<button class="${o.status === 'claimed' ? '' : 'd'}" onclick="openCheck()">📋 Check List<small>${o.checkDone ? '✅ ครบแล้ว · แก้ได้' : (o.check ? 'ทำไปบางส่วน' : 'ยังไม่ได้ทำ')}</small></button>`);
+        const sx = o.sale || {}, saleOk = sx.emp && sx.price && sx.model, okSign = o.checkDone && o.imei && saleOk;
+        B.push(`<button class="${okSign ? 'y' : ''}" ${okSign ? '' : 'disabled'} onclick="openSign()">✍️ ให้ลูกค้าเซ็น<small>${okSign ? 'ปิดเคส + เข้า Check List' : !o.checkDone ? 'ทำ Check List ให้ครบก่อน' : !o.imei ? 'ใส่ IMEI ก่อน' : 'ใส่ข้อมูลขายให้ครบก่อน'}</small></button>`);
+      }
+      if (o.status === 'picked' && mine) B.push(`<button onclick="backSheet()">↩️ ส่งกลับ PC<small>ข้อมูลผิด</small></button>`);
+      if (['claimed', 'picked'].includes(o.status) && (asg || ownerish)) B.push(`<button onclick="parkSheet()">🅿️ พักเคส<small>ย้ายข้อมูลนาน / ลูกค้าไปทานข้าว</small></button>`);
+      if (o.status === 'parked' && (asg || ownerish)) {
+        if (!o.park.readyNow) B.push(`<button class="y" onclick="act('unpark',['${o.no}',true],'✅ แจ้งว่าพร้อมส่งมอบแล้ว',this)">✅ พร้อมส่งมอบ<small>ลูกค้าเห็นในลิงก์สถานะ</small></button>`);
+        B.push(`<button onclick="act('unpark',['${o.no}',false],'▶️ กลับมาทำต่อ',this)">▶️ เลิกพัก ทำต่อ<small>ลูกค้ากลับมาแล้ว</small></button>`);
+      }
+      if (['claimed', 'picked', 'parked', 'back'].includes(o.status) && asg) B.push(`<button onclick="handSheet()">🔁 ส่งต่อเคส<small>หมดกะ / ติดลูกค้า</small></button>`);
+      if (act && (owner || m.mgr)) B.push(`<button class="r" onclick="cancelSheet()">✖️ ยกเลิก Order<small>ลูกค้าเปลี่ยนใจ / เปิดผิด</small></button>`);
+      if (B.length) h += `<div class="acts">${B.join('')}</div>`;
+
+      // Check List / รูป / ลายเซ็น
+      if (o.check && o.check.items) {
+        const items = (c.items || Object.keys(o.check.items));
+        const done = items.filter(n => o.check.items[n]).length;
+        h += `<div class="lab"><span>📋 Check List ${done}/${items.length}${o.check.verified7 ? ' · ✅ ตรวจ 7Club+ / ใบกำกับภาษีแล้ว' : ''}</span><small>${esc(o.check.by)} · ${hm(o.check.at)}</small></div><div class="cl">` +
+          items.map(n => { const v = o.check.items[n]; return `<div class="ci"><i>${!v ? '⚪' : v.ok ? '✅' : '❌'}</i><span>${esc(n)}${v && !v.ok && v.note ? `<small>${esc(v.note)}</small>` : ''}</span></div>`; }).join('') + '</div>';
+      }
+      if (o.photos || (o.sign && o.sign.file)) h += `<div class="lab"><span>📷 รูป${o.sign ? ' + ลายเซ็น' : ''}</span><small>${o.photos} รูป</small></div><div id="dMedia"><div class="ph">${'<div class="im up"></div>'.repeat(Math.min(o.photos || 1, 4))}</div></div>`;
+      if (o.sign) h += `<div class="note gr">✍️ <b>ลูกค้าเซ็นรับเครื่องแล้ว</b> ${dmy(o.sign.at)} ${hm(o.sign.at)} · ${esc(o.sign.name || '')}<br><small>ยอมรับเงื่อนไขรับประกัน${o.transfer ? ' + นโยบายย้ายข้อมูล' : ''} + การเก็บข้อมูล · เงื่อนไขฉบับ ${esc(o.sign.ver)} · ประกัน 7 วันถึง ${dmy(o.sign.at + 7 * 86400000)}</small></div>`;
+      if (o.custLink) h += `<div class="qr"><div class="qb" id="qrBox">QR</div><div><p><b>📱 ลิงก์สถานะสำหรับลูกค้า</b><br>${o.status === 'done' ? 'สำเนาดิจิทัล: Check List + เงื่อนไข 7 วัน เก็บไว้ในมือถือลูกค้า' : 'ให้ลูกค้าสแกนไว้ ดูได้ว่าเคสถึงไหน / พร้อมรับเมื่อไหร่'}</p><button onclick="copyLink()">คัดลอกลิงก์</button></div></div>`;
+      if (o.h && o.h.length) {
+        const hs = o.h.filter((x, i, a) => !(x.a === 'photo' && a[i + 1] && a[i + 1].a === 'photo'));
+        h += `<div class="lab"><span>🕒 ไทม์ไลน์</span></div><ul class="tl">${hs.map(histLine).join('')}</ul>`;
+      }
+      h += `<div style="height:calc(24px + env(safe-area-inset-bottom))"></div>`;
+      document.getElementById('detBox').innerHTML = h;
+      if (o.photos || (o.sign && o.sign.file)) loadMedia(o.no);
+      if (o.custLink) drawQR(custUrl(o));
+    }
+    function custUrl(o) { return new URL(`order-status.html?o=${encodeURIComponent(o.no)}&k=${encodeURIComponent(o.custLink)}`, location.href).href; }
+    function copyLink() { const u = custUrl(CUR); (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast('📋 คัดลอกลิงก์แล้ว')).catch(() => prompt('ก๊อปลิงก์นี้', u)); }
+    function drawQR(text) {
+      const go = () => { const b = document.getElementById('qrBox'); if (!b || !window.QRCode) return; b.innerHTML = ''; try { new QRCode(b, { text, width: 124, height: 124, correctLevel: QRCode.CorrectLevel.M }); } catch (e) { b.textContent = 'QR'; } };
+      if (window.QRCode) return go();
+      const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js'; s.onload = go; s.onerror = () => { const b = document.getElementById('qrBox'); if (b) b.textContent = 'แสดง QR ไม่ได้ — กดคัดลอกลิงก์'; }; document.head.appendChild(s);
+    }
+    function loadMedia(no) {
+      const paint = md => {
+        const el = document.getElementById('dMedia'); if (!el || !CUR || CUR.no !== no) return;
+        el.innerHTML = (md.photos.length ? `<div class="ph">${md.photos.map(p => `<div class="im"><img src="${p.src}" alt="" onclick="zoom(this.src)"><span class="sl">${esc(slotTxt(p.slot))}</span></div>`).join('')}</div>` : '') +
+          (md.sig ? `<div class="sigimg"><img src="${md.sig}" alt="ลายเซ็นลูกค้า"></div>` : '');
+      };
+      if (MEDIA[no] && MEDIA[no].n === (CUR.photos || 0) + (CUR.sign ? 1 : 0)) return paint(MEDIA[no].d);
+      run('getMedia', no).then(md => { MEDIA[no] = { n: (CUR.photos || 0) + (CUR.sign ? 1 : 0), d: md }; paint(md); }).catch(() => { const el = document.getElementById('dMedia'); if (el) el.innerHTML = '<div class="empty">โหลดรูปไม่สำเร็จ</div>'; });
+    }
+    const slotTxt = s => String(s || '').startsWith('fail:') ? '❌ ' + s.slice(5) : s === 'park' ? '🅿️ ก่อนพัก' : '📷 ตัวเครื่อง';
+    function zoom(src) { const z = document.getElementById('zoom'); z.querySelector('img').src = src; z.classList.add('on'); }
+
+    // งานที่กำลังทำ (คนรับเคส)
+    let WK = null;
+    function workPanel(o) {
+      WK = { kind: (o.work && o.work.kind) || 'store', mins: (o.work && o.work.mins) || 0, text: (o.work && o.work.text) || '' };
+      return `<div class="wk"><div class="lab" style="margin-top:2px"><span>กำลังทำอะไรอยู่</span><small>PC เจ้าของบิลจะได้แจ้งเตือน</small></div>
+        <div class="chips" id="wkKind">${Object.keys(WORK).map(k => `<button data-v="${k}" class="${WK.kind === k ? 'on' : ''}">${WORK[k]}</button>`).join('')}</div>
+        <div class="lab"><span>ใช้เวลาประมาณ</span></div>
+        <div class="chips" id="wkMin">${[0, 10, 15, 30, 45, 60, 120].map(n => `<button data-v="${n}" class="${WK.mins === n ? 'on' : ''}">${n ? n + ' นาที' : 'ไม่ระบุ'}</button>`).join('')}</div>
+        <input class="inp" id="wkText" maxlength="80" placeholder="เช่น ไปเบิกที่ ID1067 / รอเอกสารไฟแนนซ์" value="${esc(WK.text)}" style="margin-top:8px">
+        <div class="acts" style="margin-top:8px"><button class="d full" onclick="saveWork(this)">📣 อัปเดตให้ PC รู้</button></div></div>`;
+    }
+    document.addEventListener('click', e => {
+      const b = e.target.closest('#wkKind button, #wkMin button'); if (!b) return;
+      b.parentNode.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); vib(5);
+      if (b.closest('#wkKind') && b.dataset.v === 'branch' && !document.getElementById('wkText').value) document.getElementById('wkText').placeholder = 'ไปเบิกที่สาขาไหน เช่น ID1067';
+    });
+    function saveWork(btn) {
+      const k = (document.querySelector('#wkKind button.on') || {}).dataset, mn = (document.querySelector('#wkMin button.on') || {}).dataset;
+      act('setWork', [CUR.no, k ? k.v : 'store', mn ? +mn.v : 0, document.getElementById('wkText').value.trim()], '📣 อัปเดตแล้ว — PC ได้แจ้งเตือน', btn);
+    }
+    // PC แก้ข้อมูล (ส่งกลับ)
+    function fixPanel(o) {
+      return `<div class="wk"><div class="lab" style="margin-top:2px"><span>✍️ แก้ข้อมูลแล้วส่งกลับ</span><small>เคสกลับไปที่ ${esc(o.staff)} คนเดิม</small></div>
+        <div class="lab"><span>เบอร์ 7Club+</span></div><input class="inp big" id="fxPhone" inputmode="tel" maxlength="12" value="${esc(phoneTxt(o.phone))}" oninput="fmtPhone(this)">
+        <div class="two" style="margin-top:8px"><input class="inp" id="fxCust" placeholder="ชื่อลูกค้า" value="${esc(o.cust)}"><input class="inp" id="fxPay" placeholder="ประเภทชำระ" value="${esc(o.pay)}"></div>
+        <div class="two" style="margin-top:8px"><input class="inp" id="fxColor" placeholder="สี" value="${esc(o.color)}"><input class="inp" id="fxCap" placeholder="ความจุ" value="${esc(o.cap)}"></div>
+        <input class="inp" id="fxText" maxlength="160" placeholder="บอกพนักงาน เช่น ลูกค้าสมัครใหม่แล้ว / ใช้เบอร์ภรรยา" style="margin-top:8px">
+        <div class="acts" style="margin-top:8px"><button class="y full" onclick="sendFix(this)">✍️ แก้แล้ว ส่งกลับให้ ${esc(o.staff)}</button></div></div>`;
+    }
+    function sendFix(btn) {
+      const v = id => document.getElementById(id).value.trim();
+      act('fixBack', [CUR.no, { phone: v('fxPhone').replace(/\D/g, ''), cust: v('fxCust'), pay: v('fxPay'), color: v('fxColor'), cap: v('fxCap') }, v('fxText')], '✍️ ส่งกลับให้พนักงานแล้ว', btn);
+    }
+
+    // ===================== แผ่นย่อย =====================
+    function mini(html) { document.getElementById('miniBox').innerHTML = `<div class="grab"></div>${html}`; openS('miniS'); }
+    function miniHead(ic, t, s) { return `<div class="shd"><span class="ic">${ic}</span><div><h3>${t}</h3><small>${s || ''}</small></div><button class="x" onclick="closeS('miniS')">✕</button></div>`; }
+    function backSheet() {
+      mini(miniHead('↩️', 'ส่งกลับ PC', 'PC เจ้าของบิลได้แจ้งเตือนคนเดียว') + `<div class="lab"><span>เหตุผล</span></div><div class="chips" id="bkR">${CFG.cfg.backReasons.map(r => `<button data-v="${esc(r)}">${esc(r)}</button>`).join('')}<button data-v="อื่นๆ">อื่นๆ</button></div>
+        <div class="lab"><span>รายละเอียดเพิ่ม</span></div><textarea id="bkT" maxlength="160" placeholder="เช่น เบอร์นี้ไม่มีในระบบ ลองเช็กกับลูกค้า"></textarea>
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ยกเลิก</button><button class="b-dk" onclick="doBack(this)">↩️ ส่งกลับ PC</button></div>`);
+      chipBind('bkR');
+    }
+    function chipBind(id, multi) { document.getElementById(id).onclick = e => { const b = e.target.closest('button'); if (!b) return; vib(5); if (multi) b.classList.toggle('on'); else { b.parentNode.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); } }; }
+    function doBack(btn) {
+      const r = chipVal('bkR'); if (!r) return toast('เลือกเหตุผลก่อน', 1);
+      act('sendBack', [CUR.no, r, document.getElementById('bkT').value.trim()], '↩️ ส่งกลับ PC แล้ว', btn).then(() => closeS('miniS')).catch(() => {});
+    }
+    function pickedSheet() {
+      mini(miniHead('📦', 'เบิกเครื่องแล้ว', 'ส่งให้ PC ทำ Check List ต่อ') + `<div class="lab"><span>IMEI / SN</span><small>ใส่ตอนนี้ หรือให้ PC ใส่ตอน Check List ก็ได้</small></div>
+        <div class="irow"><input class="inp big" id="pkI" maxlength="40" placeholder="สแกนหรือพิมพ์" value="${esc(CUR.imei || '')}" autocomplete="off"><button class="sq" onclick="startScan('pkI')">📷</button></div>
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ยกเลิก</button><button class="b-dk" onclick="doPicked(this)">📦 ส่งให้ PC</button></div>`);
+    }
+    function doPicked(btn) { act('markPicked', [CUR.no, document.getElementById('pkI').value.trim()], '📦 แจ้ง PC แล้ว', btn).then(() => closeS('miniS')).catch(() => {}); }
+    function parkSheet() {
+      const tn = new Date(Date.now() + 90 * 60000);
+      mini(miniHead('🅿️', 'พักเคส · รอลูกค้า', 'ย้ายออกจากคิวหลัก ไม่มีแจ้งเตือนกวนระหว่างรอ') + `<div class="lab"><span>ทำเสร็จประมาณ</span></div>
+        <div class="chips" id="pkM">${[30, 60, 90, 120, 180].map(n => `<button data-v="${n}" class="${n === 120 ? 'on' : ''}">${n < 60 ? n + ' นาที' : n / 60 + ' ชม.'}</button>`).join('')}</div>
+        <div class="lab"><span>ลูกค้าจะกลับมาตอน</span><small>เตือนคุณก่อน 15 นาที</small></div><input class="inp big" type="time" id="pkB" value="${pad(tn.getHours())}:${pad(Math.round(tn.getMinutes() / 5) * 5 % 60)}">
+        <div class="lab"><span>📍 เครื่องอยู่ที่ไหน</span></div><div class="chips" id="pkW">${['ชาร์จอยู่หลังเคาน์เตอร์', 'ลิ้นชักเคาน์เตอร์', 'ห้องสต๊อก', 'อยู่กับ PC'].map(w => `<button data-v="${w}">${w}</button>`).join('')}</div>
+        <input class="inp" id="pkWx" maxlength="80" placeholder="หรือพิมพ์ เช่น ลิ้นชัก 2" style="margin-top:6px">
+        <div class="lab"><span>หมายเหตุ</span></div><textarea id="pkT" maxlength="160" placeholder="เช่น ย้ายข้อมูล iCloud 120GB / ลูกค้าไปทานข้าวชั้น 3"></textarea>
+        <div class="note wh" style="margin-top:8px">💡 ถ่ายรูปเครื่องก่อนเริ่มย้าย (ใน Check List) กันเรื่อง "รอยมาตั้งแต่แรก" · ให้ลูกค้าสแกน QR ในใบนี้ไว้ดูสถานะ</div>
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ยกเลิก</button><button class="b-dk" onclick="doPark(this)">🅿️ พักเคส</button></div>`);
+      chipBind('pkM'); chipBind('pkW');
+    }
+    function doPark(btn) {
+      const p = { readyMins: +(chipVal('pkM') || 0), backAt: document.getElementById('pkB').value, where: document.getElementById('pkWx').value.trim() || chipVal('pkW'), text: document.getElementById('pkT').value.trim() };
+      act('park', [CUR.no, p], '🅿️ พักเคสแล้ว', btn).then(() => closeS('miniS')).catch(() => {});
+    }
+    function handSheet() {
+      mini(miniHead('🔁', 'ส่งต่อเคส', 'คนรับช่วงได้แจ้งเตือนพร้อมรายละเอียดทั้งหมด') + `<div class="lab"><span>ส่งให้</span></div><div class="chips" id="hdP"><div class="loading" style="padding:10px">กำลังโหลดรายชื่อ…</div></div>
+        <div class="lab"><span>ฝากบอกอะไร</span></div><textarea id="hdT" maxlength="160" placeholder="เช่น ย้ายข้อมูลเหลือ 30% ลูกค้ากลับมา 15:00 เครื่องอยู่ลิ้นชัก 2"></textarea>
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ยกเลิก</button><button class="b-dk" onclick="doHand(this)">🔁 ส่งต่อ</button></div>`);
+      run('staffList').then(l => { const box = document.getElementById('hdP'); box.innerHTML = l.filter(p => p.acct !== CUR.staffAcct).map(p => `<button data-v="${esc(p.acct)}" data-n="${esc(p.nick)}">${esc(p.nick)}</button>`).join('') || '<div class="empty">ไม่มีรายชื่อ</div>'; chipBind('hdP'); });
+    }
+    function doHand(btn) {
+      const b = document.querySelector('#hdP button.on'); if (!b) return toast('เลือกคนรับช่วงก่อน', 1);
+      act('handover', [CUR.no, b.dataset.v, b.dataset.n, document.getElementById('hdT').value.trim()], '🔁 ส่งต่อให้ ' + b.dataset.n + ' แล้ว', btn).then(() => closeS('miniS')).catch(() => {});
+    }
+    function cancelSheet() {
+      mini(miniHead('✖️', 'ยกเลิก Order #' + CUR.no, 'ยกเลิกแล้วแก้กลับไม่ได้') + `<div class="chips" id="cnR">${['ลูกค้าเปลี่ยนใจ', 'เปิดบิลผิด / ซ้ำ', 'ไม่มีของ', 'ไฟแนนซ์ไม่ผ่าน'].map(r => `<button data-v="${r}">${r}</button>`).join('')}</div>
+        <textarea id="cnT" maxlength="120" placeholder="หรือพิมพ์เหตุผล" style="margin-top:8px"></textarea>
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ไม่ยกเลิก</button><button class="b-red" style="flex:1.6" onclick="doCancel(this)">✖️ ยืนยันยกเลิก</button></div>`);
+      chipBind('cnR');
+    }
+    function doCancel(btn) { const r = document.getElementById('cnT').value.trim() || chipVal('cnR'); if (!r) return toast('ใส่เหตุผลก่อน', 1); act('cancelOrder', [CUR.no, r], 'ยกเลิกแล้ว', btn).then(() => closeS('miniS')).catch(() => {}); }
+
+    // ===================== 📷 รูป / สแกน =====================
+    function shrink(file, max, q) {
+      return new Promise((ok, no) => {
+        const url = URL.createObjectURL(file), img = new Image();
+        img.onload = () => { const s = Math.min(1, (max || 1280) / Math.max(img.naturalWidth, img.naturalHeight)); const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', q || .72)); };
+        img.onerror = () => no(new Error('อ่านรูปไม่ได้')); img.src = url;
+      });
+    }
+    let SCAN = null, SCAN_T = '';
+    function startScan(target) {
+      SCAN_T = target; document.getElementById('scanv').classList.add('on');
+      const go = () => {
+        try {
+          SCAN = new Html5Qrcode('reader');
+          SCAN.start({ facingMode: 'environment' }, { fps: 12, qrbox: (w, h) => ({ width: Math.min(w * .9, 340), height: 120 }) }, txt => {
+            const t = String(txt).toUpperCase().replace(/\s+/g, ''), im = t.match(/\d{15}/);
+            document.getElementById(SCAN_T).value = im ? im[0] : t.replace(/^(IMEI|SN|S\/N)[:\-]?/, ''); vib([20, 30, 20]); stopScan(); toast('📷 สแกนแล้ว: ' + document.getElementById(SCAN_T).value);
+            const el = document.getElementById(SCAN_T); el.dispatchEvent(new Event('input'));
+          }).catch(e => { toast('เปิดกล้องไม่ได้: ' + (e.message || e), 1); stopScan(); });
+        } catch (e) { toast('เปิดกล้องไม่ได้', 1); stopScan(); }
+      };
+      if (window.Html5Qrcode) return go();
+      const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js'; s.onload = go; s.onerror = () => { toast('โหลดตัวสแกนไม่สำเร็จ — พิมพ์ IMEI เอง', 1); stopScan(); }; document.head.appendChild(s);
+    }
+    function stopScan() { document.getElementById('scanv').classList.remove('on'); if (SCAN) { const s = SCAN; SCAN = null; s.stop().then(() => s.clear()).catch(() => {}); } }
+
+    // ===================== 📋 Check List =====================
+    function openCheck() {
+      const o = CUR, c = CFG.cfg;
+      const K = CHK(), sx = o.sale || {};
+      const nick = s => String(s || '').split(' · ')[0].trim(), inList = (l, v) => l.find(x => x === v) || '';
+      CK = { items: JSON.parse(JSON.stringify((o.check && o.check.items) || {})), imei: o.imei || '', verified7: !!(o.check && o.check.verified7), photos: (o.photoList || []).slice(), local: {},
+        focus: (sx.focus || (o.extras || '').split(',')).map(x => String(x).trim()).filter(Boolean),
+        sale: { emp: sx.emp || inList(K.sales, nick(o.owner)), receiver: sx.receiver || inList(K.receivers, o.staff) || o.staff || '', model: sx.model || [o.model, o.cap, o.color].filter(Boolean).join(' '),
+          price: sx.price || '', type: sx.type || autoType(o.model), stockCode: sx.stockCode || '' } };
+      renderCheck(); openS('ckS');
+      if (CK.photos.length) run('getMedia', o.no).then(md => { md.photos.forEach(p => CK.local[p.id] = p.src); renderPhotos(); }).catch(() => {});
+    }
+    function renderCheck() {
+      const c = CFG.cfg, o = CUR;
+      document.getElementById('ckBox').innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">📋</span><div><h3>Check List · #${esc(o.no)}</h3><small>${esc(o.brand)} ${esc(o.model)} ${esc(o.color)} ${esc(o.cap)}</small></div><button class="x" onclick="closeS('ckS')">✕</button></div>
+        <div class="ckh"><div class="bar"><i id="ckBar"></i></div><b id="ckN"></b></div>
+        <div class="lab"><span>IMEI / SN <span class="req">*</span></span><small>สแกนบาร์โค้ดข้างกล่อง</small></div>
+        <div class="irow"><input class="inp big" id="ckI" maxlength="40" value="${esc(CK.imei)}" placeholder="สแกนหรือพิมพ์" autocomplete="off" oninput="CK.imei=this.value.trim().toUpperCase()"><button class="sq" onclick="startScan('ckI')">📷</button></div>
+        <div class="lab"><span>ทดสอบเครื่องทีละข้อ <span class="req">*</span></span><small>✅ ผ่าน · ❌ มีปัญหา (ต้องใส่อาการ + รูป)</small></div>
+        <div id="ckList">${c.items.map((n, i) => ckRow(n, i)).join('')}</div>
+        <div class="lab"><span>📷 รูปรอบตัวเครื่อง</span><small>กันเรื่อง "รอยมาตั้งแต่แรก" · แนะนำ 2 รูป</small></div>
+        <div class="ph" id="ckBody"></div>
+        <div class="lab" style="margin-top:20px"><span style="font-size:15px">💰 ข้อมูลขาย</span><small>ลูกค้าเซ็นแล้วเข้า Check List ให้เอง</small></div>
+        <div class="note wh" id="ckStock" style="margin-top:0">📦 ใส่ IMEI ด้านบน → ดึงรุ่น + ราคาจาก STOCK ให้เอง</div>
+        <div class="lab"><span>📱 รุ่นที่ขาย <span class="req">*</span></span></div><input class="inp" id="ckModel" maxlength="80" value="${esc(CK.sale.model)}">
+        <div class="lab"><span>💵 ราคาขาย (บาท) <span class="req">*</span></span></div><input class="inp big" id="ckPrice" type="number" inputmode="numeric" value="${esc(CK.sale.price)}" placeholder="ระบุราคา">
+        <div class="lab"><span>📦 ประเภทสินค้า</span><small>ไม่เลือก = Smartphone / iPhone</small></div><div class="chips" id="ckType">${CHK().types.map(t => `<button data-v="${esc(t)}" class="${CK.sale.type === t ? 'on' : ''}">${esc(t)}</button>`).join('')}</div>
+        <div class="lab"><span>👤 พนักงานขาย <span class="req">*</span></span></div><div class="chips" id="ckEmp">${CHK().sales.map(t => `<button data-v="${esc(t)}" class="${CK.sale.emp === t ? 'on' : ''}">${esc(t)}</button>`).join('')}</div>
+        <div class="lab"><span>🙋 พนักงานผู้รับเคส</span></div><div class="chips" id="ckRcv">${[...new Set(CHK().receivers.concat(CK.sale.receiver && !CHK().receivers.includes(CK.sale.receiver) ? [CK.sale.receiver] : []))].map(t => `<button data-v="${esc(t)}" class="${CK.sale.receiver === t ? 'on' : ''}">${esc(t)}</button>`).join('')}</div>
+        <div class="lab"><span>🎯 งานโฟกัสที่ขายได้</span><small>เลือกได้หลายรายการ</small></div><div class="chips" id="ckX">${CHK().focus.map(x => `<button data-v="${esc(x)}" class="${CK.focus.some(f => baseFocus(f).toUpperCase() === x.toUpperCase()) ? 'on' : ''}">${esc(x)}</button>`).join('')}</div>
+        <div id="ckQty"></div>
+        <div class="lab"><span></span></div>
+        <div class="tgl" onclick="CK.verified7=!CK.verified7;this.querySelector('.sw').classList.toggle('on',CK.verified7)"><span>✅ ตรวจข้อมูล 7Club+ และใบกำกับภาษีกับลูกค้าแล้ว<small>${esc(c.notice).slice(0, 90)}…</small></span><span class="sw ${CK.verified7 ? 'on' : ''}"></span></div>
+        <div class="sfoot"><button class="b-no" onclick="closeS('ckS')">ปิด</button><button class="b-yes" id="ckSave" onclick="saveCheck()">💾 บันทึก Check List</button></div>`;
+      chipBind('ckType'); chipBind('ckEmp'); chipBind('ckRcv');
+      // แตะ = เลือก / แตะซ้ำ = เอาออก (ประเภทสินค้า)
+      document.getElementById('ckType').onclick = e => { const b = e.target.closest('button'); if (!b) return; const was = b.classList.contains('on'); b.parentNode.querySelectorAll('button').forEach(x => x.classList.remove('on')); if (!was) b.classList.add('on'); vib(5); };
+      document.getElementById('ckX').onclick = e => { const b = e.target.closest('button'); if (!b) return; b.classList.toggle('on'); vib(5); const v = b.dataset.v;
+        if (b.classList.contains('on')) { if (!CK.focus.some(f => baseFocus(f) === v)) CK.focus.push(v); } else CK.focus = CK.focus.filter(f => baseFocus(f) !== v); paintQty(); };
+      document.getElementById('ckI').addEventListener('input', () => { clearTimeout(CK._t); CK._t = setTimeout(stockLookup, 450); });
+      paintQty(); if (CK.imei) stockLookup(true);
+      document.getElementById('ckList').onclick = e => {
+        const b = e.target.closest('.pf button'); if (!b) return;
+        const n = b.closest('.ck').dataset.n; vib(6);
+        CK.items[n] = Object.assign({}, CK.items[n] || {}, { ok: b.classList.contains('y') });
+        paintCk(n); progress();
+        if (!CK.items[n].ok) setTimeout(() => { const i = b.closest('.ck').querySelector('.fx .inp'); if (i && !i.value) i.focus(); }, 200);
+      };
+      progress(); renderPhotos();
+    }
+    function ckRow(n, i) {
+      return `<div class="ck" data-n="${esc(n)}" id="ck${i}"><div class="r1"><span>${esc(n)}<small>${i + 1} / ${CFG.cfg.items.length}</small></span><div class="pf"><button class="y" aria-label="ผ่าน">✅</button><button class="n" aria-label="ไม่ผ่าน">❌</button></div></div>
+        <div class="fx"><input class="inp" maxlength="160" placeholder="อาการ เช่น กล้องหลังมีฝุ่นในเลนส์ ลูกค้ารับทราบ" oninput="CK.items[this.closest('.ck').dataset.n].note=this.value"><div class="ph" data-slot="fail:${esc(n)}"></div></div></div>`;
+    }
+    function paintCk(n) {
+      const el = [...document.querySelectorAll('#ckList .ck')].find(x => x.dataset.n === n); if (!el) return;
+      const v = CK.items[n]; el.classList.toggle('ok', !!v && v.ok === true); el.classList.toggle('bad', !!v && v.ok === false);
+      const inp = el.querySelector('.fx .inp'); if (v && v.note && inp.value !== v.note) inp.value = v.note;
+    }
+    function progress() {
+      const items = CFG.cfg.items; items.forEach(paintCk);
+      const n = items.filter(x => CK.items[x] && (CK.items[x].ok === true || CK.items[x].ok === false)).length;
+      document.getElementById('ckBar').style.width = (n / items.length * 100) + '%';
+      document.getElementById('ckN').textContent = `${n}/${items.length}`;
+    }
+    function renderPhotos() {
+      const thumbs = slot => CK.photos.filter(p => p.slot === slot).map(p => `<div class="im ${p.up ? 'up' : ''}">${CK.local[p.id] ? `<img src="${CK.local[p.id]}" onclick="zoom(this.src)" alt="">` : ''}${p.up ? '' : `<button class="rm" onclick="rmPhoto('${p.id}')">✕</button>`}</div>`).join('');
+      const add = slot => `<label class="add">📷<small>ถ่ายรูป</small><input type="file" accept="image/*" capture="environment" onchange="addPhoto(this,'${esc(slot)}')"></label>`;
+      const b = document.getElementById('ckBody'); if (b) b.innerHTML = thumbs('body') + add('body');
+      document.querySelectorAll('#ckList .ph[data-slot]').forEach(el => { el.innerHTML = thumbs(el.dataset.slot) + add(el.dataset.slot); });
+    }
+    function addPhoto(input, slot) {
+      const f = input.files && input.files[0]; input.value = ''; if (!f) return;
+      shrink(f, 1280, .72).then(du => {
+        const tmp = 'tmp' + Date.now(); CK.local[tmp] = du; CK.photos.push({ id: tmp, slot, up: true }); renderPhotos();
+        return run('addPhoto', CUR.no, slot, du).then(r => {
+          const p = CK.photos.find(x => x.id === tmp); p.id = r.id; p.up = false; CK.local[r.id] = du; delete CK.local[tmp];
+          CUR = r.order; renderPhotos(); delete MEDIA[CUR.no];
+        }).catch(e => { CK.photos = CK.photos.filter(x => x.id !== tmp); renderPhotos(); toast('อัปรูปไม่สำเร็จ: ' + e.message, 1); });
+      }).catch(e => toast(e.message, 1));
+    }
+    function rmPhoto(id) { if (!confirm('ลบรูปนี้?')) return; run('removePhoto', CUR.no, id).then(r => { CK.photos = CK.photos.filter(p => p.id !== id); CUR = r.order; delete MEDIA[CUR.no]; renderPhotos(); }).catch(e => toast(e.message, 1)); }
+    function autoType(name) {
+      const u = String(name || '').toUpperCase(), want = /\bIPAD/.test(u) ? 'IPAD' : /WATCH/.test(u) ? 'WATCH' : /\bTAB\b|TABLET|\bPAD\b/.test(u) ? 'TAB' : '';
+      return want ? (CHK().types.find(t => t.toUpperCase().includes(want)) || '') : '';
+    }
+    function paintQty() {
+      const Q = CHK().focusQty, el = document.getElementById('ckQty'); if (!el) return;
+      const sel = CK.focus.filter(f => Q.includes(baseFocus(f).toUpperCase()));
+      el.innerHTML = sel.map(f => `<div class="tgl" style="margin-top:6px;padding:8px 12px"><span>${esc(baseFocus(f))}<small>จำนวน</small></span><div class="stp"><button onclick="fq('${esc(baseFocus(f))}',-1)">−</button><b>${qtyOf(f)}</b><button class="p" onclick="fq('${esc(baseFocus(f))}',1)">＋</button></div></div>`).join('');
+    }
+    function fq(name, d) { CK.focus = CK.focus.map(f => { if (baseFocus(f) !== name) return f; const n = Math.max(1, Math.min(20, qtyOf(f) + d)); return n > 1 ? name + ' x' + n : name; }); vib(5); paintQty(); }
+    // 📦 IMEI → รุ่น / ราคา / รหัสสินค้า จาก STOCK (ตัวเดียวกับปุ่มสแกนในแอป Check List)
+    let STK = null, STK_LOADING = null;
+    function stockIdx() { if (STK) return Promise.resolve(STK); if (!STK_LOADING) STK_LOADING = run('getSerialIndex').then(d => { const m = new Map(); (d.serials || []).forEach(r => m.set(r[0], r[1])); STK = { map: m, products: d.products || {}, sold: d.sold || {}, at: d.at }; return STK; }).catch(e => { STK_LOADING = null; throw e; }); return STK_LOADING; }
+    function stockLookup(quiet) {
+      const el = document.getElementById('ckStock'); if (!el) return;
+      const t = String(document.getElementById('ckI').value || '').toUpperCase().replace(/\s+/g, ''); if (t.length < 6) { el.className = 'note wh'; el.textContent = '📦 ใส่ IMEI ด้านบน → ดึงรุ่น + ราคาจาก STOCK ให้เอง'; return; }
+      el.className = 'note wh'; el.textContent = '📦 กำลังค้นในสต๊อก…';
+      stockIdx().then(S => {
+        let sn = S.map.has(t) ? t : ((t.match(/\d{15}/) || [])[0] && S.map.has(t.match(/\d{15}/)[0]) ? t.match(/\d{15}/)[0] : '');
+        if (!sn && t.length >= 8) { const hit = []; S.map.forEach((_, k) => { if (k.length >= 8 && (k.endsWith(t) || t.endsWith(k))) hit.push(k); }); if (hit.length === 1) sn = hit[0]; }
+        if (!sn) { el.className = 'note or'; el.textContent = '📦 ไม่พบ IMEI นี้ในสต๊อก (อัปเดต ' + (S.at || '-') + ') — ใส่รุ่น / ราคาเอง'; CK.sale.stockCode = ''; return; }
+        const code = S.map.get(sn), p = S.products[code] || ['', '', 0], sold = S.sold[sn];
+        CK.sale.stockCode = code;
+        const mEl = document.getElementById('ckModel'), pEl = document.getElementById('ckPrice'), n = Math.round(Number(String(p[2]).replace(/[^\d.]/g, '')) || 0);
+        if (!quiet || !CUR.sale || !CUR.sale.model) { if (p[0]) mEl.value = p[0]; }
+        if (n && (!pEl.value || !quiet)) pEl.value = n;
+        if (!chipVal('ckType')) { const at = autoType(p[0]); if (at) document.querySelectorAll('#ckType button').forEach(b => b.classList.toggle('on', b.dataset.v === at)); }
+        el.className = sold ? 'note rd' : 'note gr';
+        el.innerHTML = sold ? `⚠️ IMEI …${esc(sn.slice(-6))} <b>บันทึกขายไปแล้ว</b> เมื่อ ${esc(sold.at)}${sold.emp ? ' โดย ' + esc(sold.emp) : ''} — เช็กว่าไม่ใช่เครื่องเดียวกัน`
+          : `📦 <b>${esc(p[0])}</b> · ฿${n.toLocaleString('en-US')} <small>(ราคาในสต๊อก · เช็กราคาขายจริงอีกที)</small>`;
+        if (sn !== t) document.getElementById('ckI').value = sn, CK.imei = sn;
+      }).catch(() => { el.className = 'note or'; el.textContent = '📦 โหลดสต๊อกไม่สำเร็จ — ใส่รุ่น / ราคาเอง'; });
+    }
+    function saveCheck() {
+      const c = CFG.cfg, miss = c.items.filter(n => !CK.items[n] || (CK.items[n].ok !== true && CK.items[n].ok !== false));
+      const noNote = c.items.filter(n => CK.items[n] && CK.items[n].ok === false && !String(CK.items[n].note || '').trim());
+      const sale = { model: document.getElementById('ckModel').value.trim(), price: document.getElementById('ckPrice').value, type: chipVal('ckType'), emp: chipVal('ckEmp'), receiver: chipVal('ckRcv'),
+        focus: CK.focus, stockCode: CK.sale.stockCode };
+      const b = document.getElementById('ckSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+      run('saveCheck', CUR.no, { items: CK.items, imei: CK.imei || document.getElementById('ckI').value.trim(), verified7: CK.verified7, sale }).then(r => {
+        apply(r); b.disabled = false; b.textContent = '💾 บันทึก Check List';
+        if (miss.length) { toast(`บันทึกแล้ว — ยังเหลือ ${miss.length} ข้อ`, 1); const i = c.items.indexOf(miss[0]); document.getElementById('ck' + i).scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+        if (noNote.length) { toast('ข้อที่ ❌ ต้องใส่อาการก่อน', 1); return; }
+        if (!r.order.imei) { toast('ใส่ IMEI ก่อนให้ลูกค้าเซ็น', 1); document.getElementById('ckI').focus(); return; }
+        if (!sale.price || !sale.emp || !sale.model) { toast('บันทึกแล้ว — ใส่ข้อมูลขายให้ครบ (' + (!sale.emp ? 'พนักงานขาย' : !sale.price ? 'ราคา' : 'รุ่น') + ')', 1); document.getElementById(!sale.emp ? 'ckEmp' : !sale.price ? 'ckPrice' : 'ckModel').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+        closeS('ckS'); toast('✅ Check List ครบ — ให้ลูกค้าเซ็นได้เลย');
+      }).catch(e => { b.disabled = false; b.textContent = '💾 บันทึก Check List'; toast(e.message, 1); });
+    }
+
+    // ===================== ✍️ ลูกค้าเซ็น =====================
+    let SG = null;
+    function openSign() {
+      const o = CUR, c = CFG.cfg, items = c.items;
+      SG = { agree: { warranty: false, pdpa: false, transfer: false }, strokes: [], ink: 0 };
+      const fails = items.filter(n => o.check.items[n] && o.check.items[n].ok === false);
+      document.getElementById('signIn').innerHTML = `
+        <span class="eyebrow"><span class="ic">✍️</span>BaNANA FUTURE PARK RANGSIT · ID1326</span>
+        <h2>ตรวจสอบและยืนยันรับเครื่อง</h2><div class="lead">กรุณาอ่านและกดยอมรับทีละข้อ แล้วเซ็นชื่อด้านล่าง</div>
+        <div class="sgc"><h4>📱 ${esc(o.brand)} ${esc(o.model)}</h4><div style="font-weight:600;font-size:14px;color:#3A3A3C;line-height:1.7">${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' · ' + o.qty + ' เครื่อง' : ''}<br>IMEI / SN: <b>${esc(o.imei)}</b><br>ลูกค้า: ${esc(o.cust || '-')} · 7Club+ ${esc(phoneTxt(o.phone) || '-')}${o.extras ? '<br>ซื้อเพิ่ม: ' + esc(o.extras) : ''}${o.sale && o.sale.price ? '<br>ราคา: <b>฿' + Number(o.sale.price).toLocaleString('en-US') + '</b>' : ''}</div></div>
+        <div class="sgc"><h4>📋 ผลตรวจสภาพเครื่อง (${items.length - fails.length}/${items.length} ผ่าน)</h4><div class="ckmini">${items.map(n => { const v = o.check.items[n] || {}; return `<div class="${v.ok === false ? 'bad' : ''}">${v.ok === false ? '❌' : '✅'} ${esc(n)}${v.ok === false && v.note ? ' — ' + esc(v.note) : ''}</div>`; }).join('')}</div></div>
+        <div class="sgc"><h4>🛡️ เงื่อนไขการรับประกัน</h4><div class="terms">${esc(c.notice)}\n\n${esc(c.warranty)}</div>
+          <div class="agree" data-k="warranty"><span class="bx">✓</span><span>ข้าพเจ้าได้ตรวจสอบสภาพเครื่องตามรายการข้างต้น และยอมรับเงื่อนไขการรับประกันสินค้า 7 วัน</span></div></div>
+        ${o.transfer ? `<div class="sgc"><h4>📲 นโยบายการโอนย้ายข้อมูล</h4><div class="terms">${esc(c.transfer)}</div>
+          <div class="agree" data-k="transfer"><span class="bx">✓</span><span>ข้าพเจ้ารับทราบนโยบายการโอนย้ายข้อมูล ได้สำรองข้อมูลสำคัญแล้ว และยินยอมให้ร้านช่วยโอนย้ายข้อมูล</span></div></div>` : ''}
+        <div class="sgc"><h4>🔒 การเก็บข้อมูล</h4><div style="font-size:14px;font-weight:500;line-height:1.6;color:#3A3A3C">${esc(c.pdpa)}</div>
+          <div class="agree" data-k="pdpa"><span class="bx">✓</span><span>ข้าพเจ้ายินยอมให้ร้านเก็บข้อมูลตามที่ระบุ</span></div></div>
+        <div class="sgc"><h4>✍️ ลงชื่อ เพื่อรับทราบ และรับเครื่อง</h4>
+          <input class="inp" id="sgName" maxlength="60" value="${esc(o.cust || '')}" placeholder="ชื่อ-สกุล ผู้รับเครื่อง" style="background:#F2F2F7;margin-bottom:10px">
+          <div class="pad" id="sgPad"><div class="base"></div><div class="hint" id="sgHint">เซ็นชื่อตรงนี้</div><canvas id="sgCv"></canvas></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;font-weight:600;color:#8E8E93"><span>${new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })} · ${hm(Date.now())} น.</span><button class="sndchip" onclick="sgClear()">ล้างลายเซ็น</button></div></div>
+        <div class="sgfoot"><button class="b-no" onclick="closeSign()">ย้อนกลับ</button><button class="b-yes" id="sgOk" disabled onclick="doSign()" style="flex:2">ยืนยันรับเครื่อง</button></div>`;
+      document.querySelectorAll('#signIn .agree').forEach(a => a.onclick = () => { const k = a.dataset.k; SG.agree[k] = !SG.agree[k]; a.classList.toggle('on', SG.agree[k]); vib(8); sgCheck(); });
+      document.getElementById('signv').classList.add('open'); document.getElementById('signv').scrollTop = 0;
+      setTimeout(sgInit, 80);
+    }
+    function closeSign() { document.getElementById('signv').classList.remove('open'); }
+    function sgInit() {
+      const cv = document.getElementById('sgCv'), r = cv.getBoundingClientRect(), dpr = Math.min(3, window.devicePixelRatio || 1);
+      cv.width = r.width * dpr; cv.height = r.height * dpr;
+      const g = cv.getContext('2d'); g.scale(dpr, dpr); g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = '#111'; SG.g = g; SG.w = r.width; SG.h = r.height;
+      let cur = null, last = null;
+      const pt = e => { const b = cv.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top, p: e.pressure && e.pressure !== .5 ? e.pressure : .5, t: performance.now() }; };
+      cv.onpointerdown = e => { e.preventDefault(); cv.setPointerCapture(e.pointerId); last = pt(e); cur = [last]; SG.strokes.push(cur); document.getElementById('sgHint').style.display = 'none'; g.beginPath(); g.arc(last.x, last.y, 1.2, 0, 7); g.fillStyle = '#111'; g.fill(); };
+      cv.onpointermove = e => {
+        if (!cur) return; e.preventDefault();
+        (e.getCoalescedEvents ? e.getCoalescedEvents() : [e]).forEach(ev => {
+          const p = pt(ev), d = Math.hypot(p.x - last.x, p.y - last.y); if (d < .7) return;
+          const v = d / Math.max(1, p.t - last.t), w = Math.max(1.3, Math.min(3.6, 3.4 - v * 1.1));
+          g.lineWidth = w; g.beginPath(); g.moveTo(last.x, last.y); g.lineTo(p.x, p.y); g.stroke();
+          p.w = w; cur.push(p); SG.ink += d; last = p;
+        });
+        sgCheck();
+      };
+      cv.onpointerup = cv.onpointercancel = () => { cur = null; sgCheck(); };
+    }
+    function sgClear() { if (!SG || !SG.g) return; SG.g.clearRect(0, 0, SG.w, SG.h); SG.strokes = []; SG.ink = 0; document.getElementById('sgHint').style.display = ''; sgCheck(); }
+    function sgCheck() { const o = CUR, a = SG.agree; document.getElementById('sgOk').disabled = !(a.warranty && a.pdpa && (!o.transfer || a.transfer) && SG.ink > 60); }
+    function sgPng() {
+      // วาดใหม่ลงภาพขนาด 600px (ไฟล์เล็ก ~10 KB) พื้นโปร่งใส หมึกดำ
+      const xs = SG.strokes.flat(), minX = Math.min(...xs.map(p => p.x)) - 8, maxX = Math.max(...xs.map(p => p.x)) + 8, minY = Math.min(...xs.map(p => p.y)) - 8, maxY = Math.max(...xs.map(p => p.y)) + 8;
+      const W = 600, s = Math.min(W / (maxX - minX), 220 / (maxY - minY), 2.5), H = Math.ceil((maxY - minY) * s);
+      const c = document.createElement('canvas'); c.width = Math.ceil((maxX - minX) * s); c.height = H; const g = c.getContext('2d');
+      g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = '#111'; g.fillStyle = '#111';
+      SG.strokes.forEach(st => { if (st.length === 1) { g.beginPath(); g.arc((st[0].x - minX) * s, (st[0].y - minY) * s, 1.4 * s, 0, 7); g.fill(); return; } for (let i = 1; i < st.length; i++) { g.lineWidth = (st[i].w || 2.2) * s; g.beginPath(); g.moveTo((st[i - 1].x - minX) * s, (st[i - 1].y - minY) * s); g.lineTo((st[i].x - minX) * s, (st[i].y - minY) * s); g.stroke(); } });
+      return c.toDataURL('image/png');
+    }
+    function doSign() {
+      const b = document.getElementById('sgOk'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+      run('sign', CUR.no, { sig: sgPng(), agree: SG.agree, name: document.getElementById('sgName').value.trim(), device: navigator.userAgent.slice(0, 80) }).then(r => {
+        closeSign(); apply(r, '✅ ลูกค้าเซ็นแล้ว — ปิดเคสเรียบร้อย'); vib([20, 40, 20, 40, 60]);
+      }).catch(e => { b.disabled = false; b.textContent = 'ยืนยันรับเครื่อง'; toast(e.message, 1); });
+    }
+
+    // ===================== 📊 Report =====================
+    let RANGE = 'today';
+    document.getElementById('rNav').onclick = e => { const b = e.target.closest('button'); if (!b) return; RANGE = b.dataset.r; document.querySelectorAll('#rNav button').forEach(x => x.classList.toggle('on', x === b)); vib(5); loadReport(); };
+    ['rFrom', 'rTo'].forEach(id => document.getElementById(id).onchange = () => { RANGE = 'custom'; document.querySelectorAll('#rNav button').forEach(x => x.classList.remove('on')); loadReport(); });
+    function rangeOf() {
+      const d = new Date(), t = isoOf(d);
+      if (RANGE === 'today') return [t, t];
+      if (RANGE === '7') return [isoOf(new Date(Date.now() - 6 * 86400000)), t];
+      if (RANGE === 'month') return [t.slice(0, 8) + '01', t];
+      if (RANGE === 'prev') { const p = new Date(d.getFullYear(), d.getMonth() - 1, 1), e = new Date(d.getFullYear(), d.getMonth(), 0); return [isoOf(p), isoOf(e)]; }
+      return [document.getElementById('rFrom').value || t, document.getElementById('rTo').value || t];
+    }
+    function loadReport() {
+      const [f, t] = rangeOf(); document.getElementById('rFrom').value = f; document.getElementById('rTo').value = t;
+      document.getElementById('rKpi').innerHTML = '<div class="loading">กำลังโหลด…</div>';
+      run('report', f, t).then(r => { REP = r; renderReport(); }).catch(e => { document.getElementById('rKpi').innerHTML = `<div class="empty">${esc(e.message)}</div>`; });
+    }
+    const med = a => { if (!a.length) return 0; const s = a.slice().sort((x, y) => x - y), m = Math.floor(s.length / 2); return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
+    const mtxt = v => v >= 60 ? (v / 60).toFixed(1) + '<span>ชม.</span>' : Math.round(v) + '<span>นาที</span>';
+    function bars(obj, cls) { const ks = Object.keys(obj).sort((a, b) => obj[b] - obj[a]); const mx = Math.max(1, ...ks.map(k => obj[k])); return ks.length ? ks.map(k => `<div class="hb"><span>${esc(k)}</span><em><s style="width:${obj[k] / mx * 100}%"></s></em><b>${obj[k]}</b></div>`).join('') : '<div class="empty">ไม่มี</div>'; }
+    function renderReport() {
+      const L = REP.list, done = L.filter(o => o.status === 'done'), cancel = L.filter(o => o.status === 'cancel');
+      const waits = L.filter(o => o.claimedAt).map(o => (o.claimedAt - o.created) / 60000);
+      const special = o => o.branch || o.parked || o.transfer;
+      const normal = done.filter(o => !special(o)).map(o => (o.closedAt - o.created) / 60000);
+      const backs = {}, backBrand = {}, staff = {}, fails = {}, branchM = {};
+      L.forEach(o => {
+        (o.backList || []).forEach(r => { backs[r] = (backs[r] || 0) + 1; backBrand[o.brand] = (backBrand[o.brand] || 0) + 1; });
+        if (o.staff && o.claimedAt) staff[o.staff] = (staff[o.staff] || 0) + 1;
+        (o.fails || []).forEach(f => fails[f] = (fails[f] || 0) + 1);
+        if (o.branch) branchM[o.model] = (branchM[o.model] || 0) + 1;
+      });
+      const nBack = Object.values(backs).reduce((a, b) => a + b, 0), parked = L.filter(o => o.parked), branch = L.filter(o => o.branch);
+      const pm = parked.map(o => o.parkMins).filter(Boolean);
+      document.getElementById('rKpi').innerHTML = `<div class="ch"><b>📊 ภาพรวม</b><small>${dmy(new Date(REP.from + 'T00:00:00'))}${REP.from !== REP.to ? ' – ' + dmy(new Date(REP.to + 'T00:00:00')) : ''}</small></div>
+        <div class="tiles"><div class="tile"><small>Order ทั้งหมด</small><b class="y">${L.length}</b></div><div class="tile"><small>ปิดเคส (เซ็นแล้ว)</small><b class="g">${done.length}</b></div><div class="tile"><small>ยกเลิก</small><b>${cancel.length}</b></div>
+        <div class="tile"><small>รอคนรับ (กลาง)</small><b class="${med(waits) > (CFG ? CFG.cfg.claimMin : 3) ? 'r' : 'g'}">${waits.length ? mtxt(med(waits)) : '-'}</b><i>เร็วสุด–ช้าสุด ${waits.length ? Math.round(Math.min(...waits)) + '–' + Math.round(Math.max(...waits)) : '-'} น.</i></div>
+        <div class="tile"><small>เคสปกติ เปิดบิล→เซ็น</small><b>${normal.length ? mtxt(med(normal)) : '-'}</b><i>${normal.length} เคส (ไม่รวมเคสยาว)</i></div>
+        <div class="tile"><small>ส่งกลับ PC</small><b class="${nBack ? 'r' : ''}">${nBack}</b><i>ครั้ง</i></div></div>
+        <div class="ch" style="margin-top:16px"><b>🙋 รับเคส</b><small>ใครรับไปกี่ใบ</small></div>${bars(staff)}`;
+      document.getElementById('rSide').innerHTML = `
+        <div class="lc" style="margin-top:14px"><div class="ch"><b>↩️ ส่งกลับ PC เพราะอะไร</b><small>${nBack} ครั้ง</small></div>${bars(backs)}${nBack ? `<div class="ch" style="margin-top:10px"><b style="font-size:14px">แยกแบรนด์</b></div>${bars(backBrand)}` : ''}</div>
+        <div class="lc" style="margin-top:14px"><div class="ch"><b>⏳ เคสยาว (แยกไว้ ไม่ปนเคสปกติ)</b></div>
+          <div class="hb"><span>🚗 ไปเบิกต่างสาขา</span><em><s style="width:${L.length ? branch.length / L.length * 100 : 0}%"></s></em><b>${branch.length}</b></div>
+          <div class="hb"><span>🅿️ พักเคส${pm.length ? ` · เฉลี่ย ${Math.round(pm.reduce((a, b) => a + b, 0) / pm.length)} นาที` : ''}</span><em><s style="width:${L.length ? parked.length / L.length * 100 : 0}%"></s></em><b>${parked.length}</b></div>
+          <div class="hb"><span>📲 ย้ายข้อมูล</span><em><s style="width:${L.length ? L.filter(o => o.transfer).length / L.length * 100 : 0}%"></s></em><b>${L.filter(o => o.transfer).length}</b></div>
+          ${Object.keys(branchM).length ? `<div class="ch" style="margin-top:10px"><b style="font-size:14px">รุ่นที่ต้องไปเบิกต่างสาขา</b><small>ใช้คุยเรื่องขอสต๊อก</small></div>${bars(branchM)}` : ''}</div>
+        <div class="lc" style="margin-top:14px"><div class="ch"><b>❌ ข้อที่ตรวจไม่ผ่าน</b></div>${bars(fails)}</div>`;
+      renderReportList();
+    }
+    function renderReportList() {
+      if (!REP) return;
+      const q = document.getElementById('rSearch').value.trim().toUpperCase().replace(/-/g, '');
+      const L = REP.list.slice().sort((a, b) => b.created - a.created).filter(o => !q || [o.no, o.phone, o.imei, o.cust, o.model, o.brand, o.staff, o.owner].join(' ').toUpperCase().replace(/-/g, '').includes(q));
+      document.getElementById('rList').innerHTML = L.length ? L.slice(0, 300).map(o => `<div class="rr" onclick="showOrder('${o.no}')"><time>${dmy(o.created)}<br>${hm(o.created)}</time>
+        <div><b><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${bc(o.brand)};margin-right:5px"></span>${esc(o.brand)} ${esc(o.model)} ${esc(o.color)}</b><small>#${esc(o.no)} · ${esc(o.cust || '-')} · ${esc(phoneTxt(o.phone))}${o.backs ? ' · ↩️' + o.backs : ''}${o.branch ? ' · 🚗' : ''}${o.parked ? ' · 🅿️' : ''}</small></div>
+        <div class="s"><b>${LABEL[o.status]}</b><br><small>${esc(o.staff || '-')}${o.claimedAt ? ' · รับใน ' + Math.round((o.claimedAt - o.created) / 60000) + ' น.' : ''}</small></div></div>`).join('')
+        : '<div class="empty">ไม่พบใบ Order</div>';
+    }
+
+    // ===================== ⚙️ ตั้งค่า (ผู้จัดการ) =====================
+    let STAB = 'gen';
+    function openSettings() { renderSettings(); openS('setS'); }
+    function renderSettings() {
+      const c = CFG.cfg, tabs = { gen: '⏱ ทั่วไป', list: '📝 ตัวเลือก', items: '📋 Check List', terms: '🛡️ เงื่อนไข', push: '🔔 แจ้งเตือนมือถือ' };
+      const lines = k => esc((c[k] || []).join('\n'));
+      let body = '';
+      if (STAB === 'gen') body = `<div class="two"><div><div class="lab"><span>เตือนซ้ำถ้าไม่มีคนรับ (นาที)</span></div><input class="inp big" id="sClaim" type="number" min="1" max="60" value="${c.claimMin}"></div><div><div class="lab"><span>แจ้งผู้จัดการ (นาที)</span></div><input class="inp big" id="sMgr" type="number" min="1" max="60" value="${c.mgrMin}"></div></div>
+        <div class="lab"><span>เวลาปิดร้าน</span><small>เตือนเคสค้างก่อนปิด 1 ชม.</small></div><input class="inp big" id="sClose" type="time" value="${esc(c.closeTime)}">
+        <div class="lab"><span></span></div><div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>เด้งเฉพาะคนที่เข้ากะวันนี้<small>ดูจากตารางกะ · คนหยุด / ลา ไม่โดนปลุก</small></span><span class="sw ${c.onlyOnShift ? 'on' : ''}" id="sShift"></span></div>
+        <div class="lab"><span>🔊 เสียงเรียก (พูดในแอป)</span></div><div class="chips" id="sMode"><button data-v="fun" class="${c.sound.mode !== 'polite' ? 'on' : ''}">😆 โหมดฮา</button><button data-v="polite" class="${c.sound.mode === 'polite' ? 'on' : ''}">🙂 โหมดสุภาพ</button></div>
+        <input class="inp" id="sFun" maxlength="80" value="${esc(c.sound.fun)}" placeholder="ประโยคโหมดฮา" style="margin-top:8px"><input class="inp" id="sPol" maxlength="80" value="${esc(c.sound.polite)}" placeholder="ประโยคโหมดสุภาพ" style="margin-top:6px">
+        <div class="lab"><span></span></div><div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>พูดชื่อแบรนด์ + รุ่นต่อท้าย<small>เช่น "…มาเด้อสู SAMSUNG Galaxy A56"</small></span><span class="sw ${c.sound.sayModel !== false ? 'on' : ''}" id="sSay"></span></div>`;
+      if (STAB === 'list') body = `<div class="note bl">🏷️ แบรนด์ · 🎯 งานโฟกัส · 👤 รายชื่อพนักงานขาย / ผู้รับเคส ใช้ชุดเดียวกับแอป <b>Check List</b> — แก้ที่ Check List › ⚙️ ตั้งค่า</div>` + ['colors:สี', 'caps:ความจุ', 'pays:ประเภทชำระ', 'backReasons:เหตุผลส่งกลับ PC'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span><small>1 บรรทัด = 1 ตัวเลือก</small></div><textarea id="s_${k}" rows="4">${lines(k)}</textarea>`; }).join('');
+      if (STAB === 'items') body = `<div class="lab"><span>รายการตรวจเครื่อง</span><small>1 บรรทัด = 1 ข้อ · เรียงตามลำดับที่ทดสอบจริง</small></div><textarea id="s_items" rows="15">${lines('items')}</textarea><div class="note or">แก้รายการ = ขึ้นเงื่อนไขฉบับใหม่ · ใบที่ลูกค้าเซ็นไปแล้วยังจำฉบับเดิม</div>`;
+      if (STAB === 'terms') body = `<div class="note wh">ฉบับปัจจุบัน: <b>${esc(c.termsVer)}</b> · แก้ข้อความ = ขึ้นฉบับใหม่อัตโนมัติ</div>` + ['notice:ข้อความ 7Club+ / ใบกำกับภาษี', 'warranty:เงื่อนไขรับประกัน 7 วัน', 'transfer:นโยบายย้ายข้อมูล', 'pdpa:การเก็บข้อมูล (PDPA)'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span></div><textarea id="s_${k}" rows="${k === 'pdpa' || k === 'notice' ? 3 : 8}">${esc(c[k])}</textarea>`; }).join('');
+      if (STAB === 'push') body = `<div class="note ${CFG.push.ready ? 'gr' : 'or'}">${CFG.push.ready ? '✅ ตั้งค่าแจ้งเตือนมือถือแล้ว (โปรเจกต์ ' + esc(CFG.push.web.projectId) + ')' : '⚠️ ยังไม่ได้ตั้งค่า — ตอนนี้แจ้งเตือนได้เฉพาะตอนเปิดแอปค้างไว้'}</div>
+        <div class="lab"><span>1) firebaseConfig</span><small>ก๊อปทั้งก้อนจาก Firebase มาวาง</small></div><textarea id="fbWeb" rows="7" placeholder="const firebaseConfig = {&#10;  apiKey: &quot;...&quot;,&#10;  ...&#10;};"></textarea>
+        <div class="lab"><span>2) Web Push certificate (Key pair)</span><small>Cloud Messaging › Web configuration</small></div><input class="inp" id="fbVapid" placeholder="BKx…" value="${esc((CFG.push.web && CFG.push.web.vapidKey) || '')}">
+        <div class="lab"><span>3) ไฟล์ Service account (.json)</span><small>เก็บในหลังบ้านเท่านั้น</small></div><input class="inp" id="fbSa" type="file" accept=".json,application/json">
+        <div class="acts"><button class="y full" onclick="saveFb(this)">💾 บันทึกการตั้งค่าแจ้งเตือน</button></div>
+        <div class="lab"><span>👥 ใครเปิดแจ้งเตือนแล้ว</span><small><a href="#" onclick="loadPushStatus();return false">รีเฟรช</a></small></div><div class="cl" id="pushSt"><div class="loading">กำลังโหลด…</div></div>`;
+      document.getElementById('setBox').innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">⚙️</span><div><h3>ตั้งค่า Order</h3><small>เฉพาะผู้จัดการ</small></div><button class="x" onclick="closeS('setS')">✕</button></div>
+        <div class="stabs">${Object.keys(tabs).map(k => `<button class="${k === STAB ? 'on' : ''}" onclick="STAB='${k}';renderSettings()">${tabs[k]}</button>`).join('')}</div>${body}
+        ${STAB !== 'push' ? `<div class="sfoot"><button class="b-no" onclick="closeS('setS')">ปิด</button><button class="b-yes" onclick="saveSet(this)">💾 บันทึก</button></div>` : '<div style="height:24px"></div>'}`;
+      if (STAB === 'gen') chipBind('sMode');
+      if (STAB === 'push') loadPushStatus();
+    }
+    function saveSet(btn) {
+      const s = {}, v = id => document.getElementById(id);
+      if (STAB === 'gen') Object.assign(s, { claimMin: +v('sClaim').value, mgrMin: +v('sMgr').value, closeTime: v('sClose').value, onlyOnShift: v('sShift').classList.contains('on'),
+        sound: { mode: chipVal('sMode') || 'fun', fun: v('sFun').value, polite: v('sPol').value, sayModel: v('sSay').classList.contains('on') } });
+      if (STAB === 'list') ['colors', 'caps', 'pays', 'backReasons'].forEach(k => s[k] = v('s_' + k).value.split('\n').map(x => x.trim()).filter(Boolean));
+      if (STAB === 'items') s.items = v('s_items').value.split('\n').map(x => x.trim()).filter(Boolean);
+      if (STAB === 'terms') ['notice', 'warranty', 'transfer', 'pdpa'].forEach(k => s[k] = v('s_' + k).value.trim());
+      btn.disabled = true;
+      run('saveSettings', s).then(c => { CFG = c; OA.setCfg(c); btn.disabled = false; toast('💾 บันทึกแล้ว'); renderSettings(); paintSound(); }).catch(e => { btn.disabled = false; toast(e.message, 1); });
+    }
+    function saveFb(btn) {
+      const web = document.getElementById('fbWeb').value.trim(), vapid = document.getElementById('fbVapid').value.trim(), f = document.getElementById('fbSa').files[0];
+      const send = sa => { btn.disabled = true; run('saveFirebase', { web: web || (CFG.push.web ? Object.assign({}, CFG.push.web, { vapidKey: vapid }) : null), vapidKey: vapid, sa }).then(c => { CFG = c; OA.setCfg(c); btn.disabled = false; toast('✅ บันทึกแล้ว — ให้ทุกคนกด 🔔 เปิดแจ้งเตือน'); renderSettings(); }).catch(e => { btn.disabled = false; toast(e.message, 1); }); };
+      if (!web && !CFG.push.web) return toast('วาง firebaseConfig ก่อน', 1);
+      if (f) { const r = new FileReader(); r.onload = () => send(r.result); r.readAsText(f); } else send('');
+    }
+    function loadPushStatus() {
+      run('pushStatus').then(r => {
+        const el = document.getElementById('pushSt'); if (!el) return;
+        el.innerHTML = `<table class="ptab">${r.people.map(p => `<tr><td><b>${esc(p.nick)}</b><br><small style="color:#8E8E93">${p.role === 'PC' ? 'PC ' + esc(p.brand) : p.role === 'MANAGER' ? 'ผู้จัดการ' : 'พนักงาน'}${p.shift ? ' · กะ: ' + esc(p.shift) : ''}</small></td><td style="text-align:right">${p.devices ? `✅ ${p.devices} เครื่อง<br><small style="color:#8E8E93">${esc(p.last)}</small>` : '<span style="color:#D70015">ยังไม่เปิด</span>'}</td></tr>`).join('')}</table>`;
+      }).catch(e => { const el = document.getElementById('pushSt'); if (el) el.innerHTML = `<div class="empty">${esc(e.message)}</div>`; });
+    }
+  </script>
+</body>
+</html>

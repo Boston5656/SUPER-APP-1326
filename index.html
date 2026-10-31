@@ -8,7 +8,8 @@
   <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
-  <script src="gas.js?v=2026.10.31-1"></script>
+  <script src="gas.js?v=2026.11.01-1"></script>
+  <script src="order-alert.js?v=2026.11.01-1"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1380,7 +1381,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.10.31-1';
+    const APP_VER = '2026.11.01-1';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -1410,10 +1411,11 @@
       8: "https://boston5656.github.io/STOCK-1326/",
       9: "https://boston5656.github.io/Scanner1326/",
       11: "collage.html",
-      12: "market.html"
+      12: "market.html",
+      13: "order.html"
     };
 
-    const EVERYONE_APPS = [10, 11, 12];   // แอปที่ทุกคนเห็น: Ranking, รวมภาพ, Market Share
+    const EVERYONE_APPS = [10, 11, 12, 13];   // แอปที่ทุกคนเห็น: Ranking, รวมภาพ, Market Share, Order
     const APP_DEFS = [
       { id: 1, name: "Dash สาขา", icon: `<svg viewBox="0 0 24 24"><path d="M3 3v18h18M9 15l3-3 4 4 5-5" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
       { id: 2, name: "Dash พนักงาน", icon: `<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" stroke="black" stroke-width="2.5" fill="none"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
@@ -1426,7 +1428,8 @@
       { id: 9, name: "Scanner", icon: `<svg viewBox="0 0 24 24"><path d="M3 7V4a1 1 0 011-1h3M17 3h3a1 1 0 011 1v3M21 17v3a1 1 0 01-1 1h-3M7 21H4a1 1 0 01-1-1v-3" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M7 8v8M11 8v8M14 8v8M17 8v8" stroke="black" stroke-width="2.5" stroke-linecap="round"/></svg>` },
       { id: 10, name: "Ranking", icon: `<svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4z" stroke="black" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M17 5h3v2a3 3 0 01-3 3M7 5H4v2a3 3 0 003 3" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
       { id: 11, name: "รวมภาพ", icon: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="11" rx="2" stroke="black" stroke-width="2.5" fill="none"/><rect x="13" y="3" width="8" height="6" rx="2" stroke="black" stroke-width="2.5" fill="none"/><rect x="13" y="11" width="8" height="10" rx="2" stroke="black" stroke-width="2.5" fill="none"/><rect x="3" y="16" width="8" height="5" rx="2" stroke="black" stroke-width="2.5" fill="none"/></svg>` },
-      { id: 12, name: "Market Share", icon: `<svg viewBox="0 0 24 24"><path d="M12 3v9h9" stroke="black" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-9-9" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M15 3.5A9 9 0 0120.5 9" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` }
+      { id: 12, name: "Market Share", icon: `<svg viewBox="0 0 24 24"><path d="M12 3v9h9" stroke="black" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-9-9" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M15 3.5A9 9 0 0120.5 9" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>` },
+      { id: 13, name: "Order", icon: `<svg viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" stroke="black" stroke-width="2.4" fill="none" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h3" stroke="black" stroke-width="2.4" stroke-linecap="round"/></svg>` }
     ];
 
     let currentUser = null; let pieChart = null; let lastDashboardData = null;
@@ -1578,6 +1581,7 @@
       if (window.SYS1326) { SYS1326.setToken(''); if (SYS1326.clearCache) SYS1326.clearCache(); }
       closeFrameApp(true);
       dropFrames();
+      try { window.OrderAlert && OrderAlert.stop(); } catch (e) {}
       currentUser = null;
       document.getElementById('page-dashboard').classList.add('hidden');
       document.getElementById('page-rank').classList.add('hidden');
@@ -1870,6 +1874,7 @@
       grid.innerHTML = html;
       document.getElementById('hub-admin').style.display = String(currentUser.empId) === '15628' ? 'flex' : 'none';
       loadHubBadges();
+      try { window.OrderAlert && OrderAlert.start(); } catch (e) {}   // 🔔 เช็ก Order ใหม่ + เสียงเรียก
       grid.querySelectorAll('.app-item').forEach(el => {
         el.addEventListener('pointerdown', () => { el.classList.remove('boing'); el.classList.add('pressed'); haptic(6); });
         ['pointerleave', 'pointercancel'].forEach(ev => el.addEventListener(ev, () => el.classList.remove('pressed')));
@@ -2001,6 +2006,20 @@
     });
     // ล้างแอปที่เปิดค้างไว้เมื่อออกจากระบบ
     function dropFrames() { Object.keys(frameCache).forEach(k => { frameCache[k].remove(); delete frameCache[k]; }); }
+
+    // 🧾 เปิดแอป Order ไปที่ใบนั้น (จากแถบแจ้งเตือน / กดแจ้งเตือนมือถือ)
+    window.openOrderApp = function (no) {
+      if (!currentUser) return;
+      const loaded = !!frameCache[13];
+      openFrameApp(13);
+      if (loaded && no) { try { window.OrderAlert && OrderAlert.takePending(); frameCache[13].contentWindow.postMessage({ type: 'open-order', oid: no }, location.origin); } catch (e) {} }
+    };
+    (function () {
+      const p = new URLSearchParams(location.search).get('order');
+      if (!p) return;
+      history.replaceState(history.state, '', location.pathname);
+      window.addEventListener('load', () => setTimeout(() => { if (currentUser && window.OrderAlert) OrderAlert.open(p); }, 400));
+    })();
 
     function openApp(id) {
       if (id === 10) { openRanking(); return; }   // ทุกคนเปิดได้ · PC เห็นยอดแบบปิดหลักท้าย (XXX) เหมือน Dash PC
