@@ -146,25 +146,65 @@
     .sch-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; font-weight: 600; color: rgba(28,28,30,.65); margin: 0 4px 12px; }
     .sch-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
     .main-card-container { background: rgba(255,251,234,.92); border-radius: 30px; padding: 16px 14px; margin-bottom: 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); }
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
-    .schedule-card { position: relative; background: #FFFDF5; color: var(--d); border-radius: 22px; padding: 38px 14px 13px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;
-      box-shadow: 0 8px 18px -14px rgba(90,70,0,.5); border: 2px solid transparent; transition: transform .3s var(--spring), background-color .2s, border-color .2s; animation: riseIn .5s var(--ios-ease) both; }
-    .schedule-card:active { transform: scale(.95); }
-    .shift-badge { position: absolute; top: 12px; right: 12px; padding: 3px 9px; border-radius: 100px; font: 800 9.5px 'Kanit', sans-serif; letter-spacing: .4px; pointer-events: none; z-index: 2; }
-    .schedule-card .badge-duty { background: var(--d); color: var(--y); }
-    .schedule-card .badge-off { background: #fff; color: var(--d); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
-    .schedule-card .badge-checkedin { background: #15803D; color: #fff; }
-    .schedule-card .badge-unreachable { background: var(--y); color: var(--d); }
-    .sch-name { font: 800 18px 'Kanit', sans-serif; margin-bottom: 1px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sch-branch { font-size: 12.5px; font-weight: 700; margin-bottom: 8px; color: #6E6E73; pointer-events: none; }
-    .sch-shift { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
-    .shift-H { background: #FF453A; } .shift-sick { background: #B3261E; } .shift-M { background: #0A84FF; } .shift-V { background: #32A1CE; }
-    .shift-H > div:not(.shift-badge), .shift-sick > div:not(.shift-badge), .shift-M > div:not(.shift-badge), .shift-V > div:not(.shift-badge) { color: #fff !important; }
-    .checked-in { background: #D9F7E3; border-color: #30D158; }
-    .checked-in .sch-branch { color: #15803D; }
-    .status-unreachable { background: var(--d); }
-    .status-unreachable > div:not(.shift-badge) { color: #fff !important; }
-    .status-unreachable .sch-branch { color: var(--y) !important; }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 12px; }
+    /* การ์ดหลังดำ (ยังไม่เข้างาน) → ขาว (เข้างานแล้ว) · สีตามประเภทหยุด/ลา */
+    .schedule-card { position: relative; overflow: hidden; color: #fff; border-radius: 24px; padding: 16px 16px 14px; min-height: 132px; display: flex; flex-direction: column;
+      cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;
+      background: linear-gradient(160deg, #2C2C2E 0%, #161618 70%); border: 0;
+      box-shadow: 0 18px 34px -20px rgba(0,0,0,.85);
+      transition: transform .5s var(--spring), background .35s, color .35s, box-shadow .35s; animation: riseIn .5s var(--ios-ease) both;
+      -webkit-tap-highlight-color: transparent; isolation: isolate; }
+    /* 💧 Liquid Glass: แสงสะท้อนตามนิ้ว + ฟองแก้วกระจายตอนกด */
+    .schedule-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 3; opacity: 0;
+      background: radial-gradient(160px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.38), rgba(255,255,255,.08) 45%, transparent 70%),
+                  linear-gradient(180deg, rgba(255,255,255,.22), transparent 38%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.55), inset 0 -10px 24px -14px rgba(255,255,255,.35);
+      transition: opacity .45s var(--ios-ease); }
+    .schedule-card.pressing { transform: scale(.955); transition: transform .18s var(--ios-ease), background .35s, color .35s, box-shadow .35s; }
+    .schedule-card.pressing::after { opacity: 1; transition: opacity .12s; }
+    .schedule-card.morph { animation: glassPop .62s var(--spring) both; }
+    @keyframes glassPop { 0% { transform: scale(.955); } 45% { transform: scale(1.035); } 100% { transform: scale(1); } }
+    .lg-drop { position: absolute; z-index: 2; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), rgba(255,255,255,.12) 55%, rgba(255,255,255,.04));
+      -webkit-backdrop-filter: blur(6px) saturate(180%) brightness(1.15); backdrop-filter: blur(6px) saturate(180%) brightness(1.15);
+      box-shadow: inset 0 1px 2px rgba(255,255,255,.8), inset 0 -2px 6px rgba(0,0,0,.18), 0 6px 18px -6px rgba(0,0,0,.35);
+      animation: lgDrop .6s cubic-bezier(.2,.8,.2,1) forwards; }
+    @keyframes lgDrop {
+      0% { transform: scale(.4); opacity: .95; }
+      55% { opacity: .6; -webkit-backdrop-filter: blur(3px) saturate(160%) brightness(1.08); backdrop-filter: blur(3px) saturate(160%) brightness(1.08); }
+      100% { transform: scale(11); opacity: 0; -webkit-backdrop-filter: blur(0) saturate(100%) brightness(1); backdrop-filter: blur(0) saturate(100%) brightness(1); } }
+    .shift-badge { position: absolute; top: 14px; right: 14px; padding: 4px 10px; border-radius: 100px; font: 800 9.5px 'Kanit', sans-serif; letter-spacing: .5px; pointer-events: none; z-index: 4;
+      background: rgba(255,255,255,.12); color: #D1D1D6; -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25); transition: background .35s, color .35s; }
+    .sch-name, .sch-branch, .sch-shift { position: relative; z-index: 1; }
+    .sch-name { font: 800 21px/1.15 'Kanit', sans-serif; margin-top: 18px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -.2px; }
+    .sch-branch { font: 600 12px 'IBM Plex Sans Thai', sans-serif; color: #8E8E93; margin-top: 2px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sch-shift { margin-top: auto; padding-top: 10px; font: 700 15px 'Kanit', sans-serif; color: var(--y); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+    /* ✅ เข้างานแล้ว = การ์ดขาว */
+    .schedule-card.checked-in { background: linear-gradient(160deg, #FFFFFF 0%, #F2F2F5 100%); color: var(--d); box-shadow: 0 20px 36px -18px rgba(0,0,0,.45); }
+    .schedule-card.checked-in .sch-branch { color: #6E6E73; }
+    .schedule-card.checked-in .sch-shift { color: var(--d); }
+    .schedule-card.checked-in .shift-badge { background: #30D158; color: #fff; }
+    /* 📵 ติดต่อไม่ได้ = การ์ดเหลือง */
+    .schedule-card.status-unreachable { background: linear-gradient(160deg, #FFE45C, #FFC800); color: var(--d); box-shadow: 0 20px 36px -18px rgba(120,90,0,.6); }
+    .schedule-card.status-unreachable .sch-branch { color: rgba(28,28,30,.65); }
+    .schedule-card.status-unreachable .sch-shift { color: var(--d); }
+    .schedule-card.status-unreachable .shift-badge { background: var(--d); color: var(--y); }
+    /* หยุด / ลา / ป่วย / ออกงาน (ตามประเภทที่ตั้งค่า) */
+    .schedule-card.c-H { background: linear-gradient(160deg, #FF5A4F, #D92D20); }
+    .schedule-card.c-V { background: linear-gradient(160deg, #40B4E5, #1F86B8); }
+    .schedule-card.c-SICK { background: linear-gradient(160deg, #B3261E, #7A1610); }
+    .schedule-card.c-M { background: linear-gradient(160deg, #2E95FF, #0060D6); }
+    .schedule-card.c-H, .schedule-card.c-V, .schedule-card.c-SICK, .schedule-card.c-M { cursor: default; }
+    .schedule-card.c-H .sch-branch, .schedule-card.c-V .sch-branch, .schedule-card.c-SICK .sch-branch, .schedule-card.c-M .sch-branch { color: rgba(255,255,255,.75); }
+    .schedule-card.c-H .sch-shift, .schedule-card.c-V .sch-shift, .schedule-card.c-SICK .sch-shift, .schedule-card.c-M .sch-shift { color: #fff; }
+    .schedule-card.c-H .shift-badge, .schedule-card.c-V .shift-badge, .schedule-card.c-SICK .shift-badge, .schedule-card.c-M .shift-badge { background: rgba(255,255,255,.28); color: #fff; }
+    /* สรุปบนสุด */
+    .sch-sum { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+    .sch-sum span { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 100px; background: var(--d); color: #fff; font: 700 12.5px 'IBM Plex Sans Thai', sans-serif; box-shadow: 0 10px 20px -14px rgba(0,0,0,.7); }
+    .sch-sum b { font: 800 15px 'Kanit', sans-serif; color: var(--y); }
+    .sch-sum i { width: 10px; height: 10px; border-radius: 3px; }
+    .main-card-container.dk { background: rgba(28,28,30,.06); border-color: rgba(255,255,255,.5); }
     .report-header { display: flex; align-items: center; gap: 8px; margin: 0 4px 12px; font: 700 17px 'Kanit', sans-serif; color: var(--d); }
     .report-item { background: #FFFDF5; border-radius: 20px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 8px 18px -14px rgba(90,70,0,.5); }
     .report-item .ri-top { color: #A15C00; font-size: 12px; font-weight: 800; margin-bottom: 6px; }
@@ -225,6 +265,16 @@
     .set-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
     .set-head h3 { flex: 1; text-align: left !important; margin: 0 !important; }
     .set-x { width: 34px; height: 34px; border-radius: 50%; border: 0; background: #E9E9EE; color: #6E6E73; font-weight: 800; cursor: pointer; }
+    .ty-list { margin-top: 6px; }
+    .ty-row { display: grid; grid-template-columns: 8px minmax(0,1fr) minmax(0,1.2fr) auto auto; grid-template-areas: "c n s k x" "c l l l l"; gap: 6px; align-items: center; padding: 8px 0; border-top: 1px solid #F2F2F7; }
+    .ty-row:first-child { border-top: 0; }
+    .ty-row > i { grid-area: c; align-self: stretch; border-radius: 4px; }
+    .ty-row > input:nth-of-type(1) { grid-area: n; } .ty-row > select { grid-area: s; } .ty-row > input:nth-of-type(2) { grid-area: l; }
+    .ty-row > .ty-chk { grid-area: k; } .ty-row > button { grid-area: x; height: 38px; padding: 0 12px; }
+    .ty-row input, .ty-row select { min-width: 0; border: 0; border-radius: 10px; padding: 9px 10px; background: #F2F2F7; font: 600 13.5px 'IBM Plex Sans Thai', sans-serif; color: var(--d); outline: none; box-sizing: border-box; width: 100%; }
+    .ty-row input:focus { box-shadow: 0 0 0 2px var(--y); }
+    .ty-chk { display: flex; align-items: center; gap: 3px; font-size: 14px; padding: 0 4px; cursor: pointer; white-space: nowrap; }
+    .ty-chk input { width: 18px; height: 18px; padding: 0; accent-color: #1C1C1E; }
     .set-msg { font-size: 12px; font-weight: 700; color: #15803D; min-height: 16px; margin-top: 6px; }
     .set-msg.err { color: #D70015; }
   </style>
@@ -304,7 +354,8 @@
         <input type="date" id="date-picker" class="date-input" onchange="fetchData()">
         <button class="btn-report-inline" onclick="openModal()">＋ แจ้ง Report</button>
       </div>
-      <div class="sch-legend"><span>แตะการ์ด = เข้างานแล้ว · แตะสองที = ติดต่อไม่ได้</span></div>
+      <div class="sch-sum" id="sch-sum"></div>
+      <div class="sch-legend"><span>แตะการ์ด = เข้างานแล้ว (ขาว) · แตะสองที = ติดต่อไม่ได้ (เหลือง) · แตะซ้ำ = ยกเลิก</span></div>
     </div>
     
     <!-- โครงสร้างแบ่งซ้าย-ขวา สำหรับ Desktop -->
@@ -367,6 +418,51 @@
     var checkedInUsers = new Set(); 
     var unreachableUsers = new Set(); 
     var clickTimer = null; 
+    // 🗓️ ประเภทวันหยุด/ลา (มาจากหลังบ้าน · แก้ได้ใน ⚙️ ตั้งค่า)
+    var TYPES = [], SUM = null;
+    var CAT_BADGE = { WORK: 'ON DUTY', H: 'DAY OFF', V: 'LEAVE', SICK: 'SICK', M: 'OUTSIDE' };
+    var CAT_NAME = { WORK: 'เข้างานปกติ', H: 'H · หยุด', V: 'V · ลา/พักร้อน', SICK: 'ลาป่วย', M: 'M · ประชุม/ออกงาน' };
+    var CAT_COLOR = { WORK: '#1C1C1E', H: '#FF453A', V: '#32A1CE', SICK: '#B3261E', M: '#0A84FF' };
+    function typeOf(v) {
+      var k = String(v || '').trim().toUpperCase(); if (!k) return null;
+      return TYPES.find(function (t) { return String(t.name).trim().toUpperCase() === k; }) || null;
+    }
+    // 💧 Liquid Glass ตอนกดการ์ด (ทุกการ์ด) — แสงตามนิ้ว + ฟองแก้ว + เด้งแบบสปริง
+    (function () {
+      var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var list = document.getElementById('schedule-list');
+      var up = function (card) { if (card) card.classList.remove('pressing'); };
+      list.addEventListener('pointerdown', function (e) {
+        var card = e.target.closest('.schedule-card'); if (!card) return;
+        var r = card.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+        card.style.setProperty('--mx', x + 'px'); card.style.setProperty('--my', y + 'px');
+        card.classList.remove('morph'); card.classList.add('pressing');
+        if (reduce) return;
+        var d = document.createElement('i'); d.className = 'lg-drop'; d.style.left = x + 'px'; d.style.top = y + 'px';
+        card.appendChild(d); setTimeout(function () { d.remove(); }, 620);
+      });
+      list.addEventListener('pointermove', function (e) {
+        var card = e.target.closest('.schedule-card.pressing'); if (!card) return;
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px'); card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) {
+        list.addEventListener(ev, function (e) {
+          var card = e.target.closest && e.target.closest('.schedule-card'); if (!card || !card.classList.contains('pressing')) return;
+          up(card); void card.offsetWidth; card.classList.add('morph');
+          setTimeout(function () { card.classList.remove('morph'); }, 650);
+        }, true);
+      });
+    })();
+    function renderSchSum() {
+      var c = SUM; if (!c) return;
+      document.getElementById('sch-sum').innerHTML =
+        '<span><i style="background:#30D158"></i>เข้างานแล้ว <b>' + c.in + '</b></span>' +
+        '<span><i style="background:#fff"></i>ยังไม่เข้า <b>' + c.wait + '</b></span>' +
+        (c.lost ? '<span><i style="background:#FFD600"></i>ติดต่อไม่ได้ <b>' + c.lost + '</b></span>' : '') +
+        '<span><i style="background:#FF453A"></i>หยุด/ลา <b>' + c.off + '</b></span>' +
+        (c.out ? '<span><i style="background:#0A84FF"></i>ประชุม/ออกงาน <b>' + c.out + '</b></span>' : '');
+    }
 
     window.onload = function() {
       var tzoffset = (new Date()).getTimezoneOffset() * 60000;
@@ -420,61 +516,34 @@
       var nameOptions = "";
       var selectedDate = document.getElementById('date-picker').value;
       
+      TYPES = data.types && data.types.length ? data.types : TYPES;
+      var cnt = { in: 0, wait: 0, off: 0, out: 0, lost: 0 };
       data.team.forEach(function(p, index) {
-        var shift = p.shift || "";
-        var cardClass = "schedule-card";
-        var displayShift = shift;
-        
-        var personReport = data.reports.find(r => r.name === p.nickname);
-        var badgeHtml = `<div class="shift-badge badge-duty">ON DUTY</div>`; 
-        
-        if (personReport) {
-            checkedInUsers.delete(p.nickname);
-            unreachableUsers.delete(p.nickname);
-
-            displayShift = personReport.remark ? personReport.remark : personReport.type;
-            
-            if (personReport.type === "ลาป่วย") { 
-                cardClass += " shift-sick"; shift = "REPORTED"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
-            } else if (personReport.type === "ลากิจ" || personReport.type === "ใช้นักขัตฤกษ์") { 
-                cardClass += " shift-V"; shift = "REPORTED"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
-            } else if (personReport.type === "ออกงานนอกสถานที่") { 
-                cardClass += " shift-M"; shift = "REPORTED";
-            } else if (personReport.type === "สลับหยุด") { 
-                cardClass += " shift-H"; shift = "REPORTED"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
-            } else if (personReport.type === "สลับกะงาน") { 
-                shift = "WORK"; 
-            }
-        } else {
-            if (shift === "H") { 
-                cardClass += " shift-H"; displayShift = "หยุดประจำสัปดาห์"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
-            }
-            else if (shift === "V") { 
-                cardClass += " shift-V"; displayShift = "พักร้อน/ลา"; badgeHtml = `<div class="shift-badge badge-off">DAY OFF</div>`;
-            }
-            else if (shift === "M" || shift.toUpperCase() === "NPI") { 
-                cardClass += " shift-M"; displayShift = shift.toUpperCase(); 
-            }
-        }
-
-        if (checkedInUsers.has(p.nickname)) { 
-          cardClass += " checked-in"; 
-          badgeHtml = `<div class="shift-badge badge-checkedin">เข้างานแล้ว</div>`;
-        } else if (unreachableUsers.has(p.nickname)) { 
-          cardClass += " status-unreachable"; 
-          badgeHtml = `<div class="shift-badge badge-unreachable">ติดต่อไม่ได้</div>`;
-        }
-        
-        schHtml += `
-        <div class="${cardClass}" style="animation-delay:${Math.min(index * 30, 420)}ms" data-nick="${esc(p.nickname)}" onclick="handleCardClick(this, '${esc(shift)}', this.dataset.nick)">
-          ${badgeHtml}
-          <div class="sch-name">${esc(p.nickname)}</div>
-          <div class="sch-branch">${esc(p.id)}${p.role ? ' · ' + esc(p.role) : ''}</div>
-          <div class="sch-shift">${displayShift}</div>
-        </div>`;
-        nameOptions += `<option value="${index}">${esc(p.nickname)} (${esc(p.branch)})</option>`;
+        var shift = String(p.shift || "").trim();
+        var rep = data.reports.find(function (r) { return r.name === p.nickname; });
+        var t = rep ? typeOf(rep.type) : typeOf(shift);
+        var cat = t ? t.cat : 'WORK';
+        if (rep && !t) cat = 'M';                       // ประเภทที่ไม่รู้จัก = ถือว่าไม่อยู่ร้าน
+        var text = rep ? (rep.remark || (t && t.label) || rep.type) : (t ? (t.label || t.name) : (shift || '-'));
+        if (rep && cat === 'WORK') text = (rep.remark ? rep.remark + ' · ' : '') + (shift || rep.type);
+        var cls = 'schedule-card', badge = CAT_BADGE[cat];
+        if (cat !== 'WORK') {
+          checkedInUsers.delete(p.nickname); unreachableUsers.delete(p.nickname);
+          cls += ' c-' + cat; cat === 'M' ? cnt.out++ : cnt.off++;
+        } else if (checkedInUsers.has(p.nickname)) { cls += ' checked-in'; badge = 'เข้างานแล้ว'; cnt.in++; }
+        else if (unreachableUsers.has(p.nickname)) { cls += ' status-unreachable'; badge = 'ติดต่อไม่ได้'; cnt.lost++; }
+        else cnt.wait++;
+        schHtml += '<div class="' + cls + '" style="animation-delay:' + Math.min(index * 30, 420) + 'ms" data-nick="' + esc(p.nickname) + '" data-cat="' + cat + '" onclick="handleCardClick(this, this.dataset.cat, this.dataset.nick)">' +
+          '<div class="shift-badge">' + esc(badge) + '</div>' +
+          '<div class="sch-name">' + esc(p.nickname) + '</div>' +
+          '<div class="sch-branch">' + esc(p.id) + (p.role ? ' · ' + esc(p.role) : '') + '</div>' +
+          '<div class="sch-shift">' + esc(text) + '</div></div>';
+        nameOptions += '<option value="' + index + '">' + esc(p.nickname) + ' (' + esc(p.branch) + ')</option>';
       });
-      document.getElementById('schedule-list').innerHTML = schHtml;
+      document.getElementById('schedule-list').innerHTML = schHtml || "<div class='loading' style='grid-column:1/-1'>ยังไม่มีทีม — เพิ่มได้ที่ ⚙️ ตั้งค่า</div>";
+      SUM = cnt; renderSchSum();
+      document.getElementById('rep-type').innerHTML = TYPES.filter(function (t) { return t.report; })
+        .map(function (t) { return '<option>' + esc(t.name) + '</option>'; }).join('');
       document.getElementById('rep-name').innerHTML = nameOptions;
 
       var repHtml = "";
@@ -633,6 +702,7 @@
     function setCall(fn, args, okText) {
       var runner = google.script.run.withSuccessHandler(function (d) {
         SET = d; if (fn !== 'getSettings') SET_DIRTY = true;
+        if (fn === 'getSettings' || fn === 'saveTypes') TEDIT = null;
         renderSettings(); if (okText) { setMsg('✓ ' + okText); toast(okText); }
       }).withFailureHandler(function (e) { setMsg((e && e.message) || 'ไม่สำเร็จ', true); if (navigator.vibrate) navigator.vibrate([20, 40, 20]); });
       runner[fn].apply(runner, args);
@@ -675,8 +745,46 @@
         '<input id="np-id" maxlength="20" list="np-ids" placeholder="ID สาขา เช่น ID1326" oninput="setFillBranch(this)"><input id="np-branch" maxlength="60" placeholder="ชื่อสาขา">' +
         '<datalist id="np-ids">' + Object.keys(ids).map(function (k) { return '<option value="' + esc(k) + '">' + esc(ids[k]) + '</option>'; }).join('') + '</datalist>' +
         '<button class="sbtn full" onclick="setAddPerson()">＋ เพิ่มคนในทีม</button></div></div>';
+      h += typesSectionHTML();
       h += '<div class="set-msg" id="set-msg"></div>';
       document.getElementById('set-body').innerHTML = h;
+    }
+    // ---- 🗓️ ประเภทวันหยุด / ลา ----
+    var TEDIT = null;   // แก้ในเครื่องก่อน แล้วกด "บันทึกประเภท"
+    function typesSectionHTML() {
+      if (!TEDIT) TEDIT = JSON.parse(JSON.stringify(SET.types || []));
+      var opt = function (v) { return ['WORK', 'H', 'V', 'SICK', 'M'].map(function (c) { return '<option value="' + c + '"' + (c === v ? ' selected' : '') + '>' + CAT_NAME[c] + '</option>'; }).join(''); };
+      return '<div class="set-sec"><h4>🗓️ ประเภทวันหยุด / ลา <small>' + TEDIT.length + ' ประเภท</small></h4>' +
+        '<p>ตั้งว่าแต่ละคำในชีต "ตารางงาน" (เช่น H, V) หรือประเภทที่แจ้งในฟอร์ม (เช่น ลาพักร้อน) จะโชว์บนการ์ดเป็นอะไร · ติ๊ก 📝 = มีให้เลือกในฟอร์ม "แจ้ง Report"</p>' +
+        '<div class="ty-list">' + TEDIT.map(function (t, i) {
+          return '<div class="ty-row"><i style="background:' + CAT_COLOR[t.cat] + '"></i>' +
+            '<input value="' + esc(t.name) + '" placeholder="ชื่อ / ตัวอักษร" oninput="tySet(' + i + ',\'name\',this.value)">' +
+            '<select onchange="tySet(' + i + ',\'cat\',this.value);renderSettings()">' + opt(t.cat) + '</select>' +
+            '<input value="' + esc(t.label) + '" placeholder="ข้อความบนการ์ด" oninput="tySet(' + i + ',\'label\',this.value)">' +
+            '<label class="ty-chk" title="แสดงในฟอร์มแจ้ง"><input type="checkbox"' + (t.report ? ' checked' : '') + ' onchange="tySet(' + i + ',\'report\',this.checked)">📝</label>' +
+            '<button class="sbtn r" onclick="tyDel(' + i + ')">✕</button></div>';
+        }).join('') + '</div>' +
+        '<div class="set-row" style="margin-top:10px"><button class="sbtn g" style="flex:1" onclick="tyAdd()">＋ เพิ่มประเภท</button>' +
+        '<button class="sbtn y" style="flex:1" onclick="tySave()">บันทึกประเภท</button></div>' +
+        '<div class="set-row" style="margin-top:6px;justify-content:flex-end"><button class="sbtn g" onclick="tyReset(this)">ใช้ค่าเริ่มต้นเดิม</button></div></div>';
+    }
+    function tySet(i, k, v) { if (TEDIT[i]) TEDIT[i][k] = v; }
+    function tyAdd() { TEDIT.push({ name: '', cat: 'V', label: '', report: true }); renderSettings(); var r = document.querySelectorAll('.ty-row input:first-of-type'); if (r.length) r[r.length - 1].focus(); }
+    function tyDel(i) { TEDIT.splice(i, 1); renderSettings(); }
+    function tySave() {
+      var list = TEDIT.filter(function (t) { return String(t.name).trim(); });
+      if (!list.length) return setMsg('ต้องมีอย่างน้อย 1 ประเภท', true);
+      TEDIT = null;
+      setCall('saveTypes', [list], 'บันทึกประเภทวันหยุด/ลาแล้ว');
+    }
+    function tyReset(btn) {
+      if (!sure(btn, 'แตะอีกครั้ง — กลับเป็นค่าเริ่มต้น')) return;
+      TEDIT = [{ name: 'H', cat: 'H', label: 'หยุดประจำสัปดาห์', report: false }, { name: 'V', cat: 'V', label: 'พักร้อน/ลา', report: false },
+        { name: 'M', cat: 'M', label: 'ประชุม', report: false }, { name: 'NPI', cat: 'M', label: 'NPI', report: false },
+        { name: 'ลากิจ', cat: 'V', label: '', report: true }, { name: 'ลาป่วย', cat: 'SICK', label: '', report: true },
+        { name: 'ใช้นักขัตฤกษ์', cat: 'V', label: '', report: true }, { name: 'ออกงานนอกสถานที่', cat: 'M', label: '', report: true },
+        { name: 'สลับหยุด', cat: 'H', label: '', report: true }, { name: 'สลับกะงาน', cat: 'WORK', label: '', report: true }];
+      renderSettings(); setMsg('กด "บันทึกประเภท" เพื่อใช้ค่านี้');
     }
     function setCopyLink(btn) {
       if (!REPORT_URL) return;
@@ -739,40 +847,31 @@
       }
     }
 
-    function handleCardClick(el, shiftType, nickname) {
-      if(shiftType === "H" || shiftType === "V" || shiftType === "M" || shiftType === "REPORTED") {
-        checkedInUsers.delete(nickname);
-        unreachableUsers.delete(nickname);
-        return;
-      }
-      if (window.navigator && window.navigator.vibrate) { navigator.vibrate(15); }
-      
+    // แตะ 1 ที = เข้างานแล้ว (การ์ดขาว) · แตะ 2 ที = ติดต่อไม่ได้ (การ์ดเหลือง) · การ์ดหยุด/ลา แตะไม่ได้
+    function handleCardClick(el, cat, nickname) {
+      if (cat !== 'WORK') return;
+      if (navigator.vibrate) navigator.vibrate(12);
+      var badge = el.querySelector('.shift-badge');
+      var set = function (mode) {
+        el.classList.toggle('checked-in', mode === 'in'); el.classList.toggle('status-unreachable', mode === 'lost');
+        checkedInUsers.delete(nickname); unreachableUsers.delete(nickname);
+        if (mode === 'in') checkedInUsers.add(nickname); if (mode === 'lost') unreachableUsers.add(nickname);
+        badge.textContent = mode === 'in' ? 'เข้างานแล้ว' : mode === 'lost' ? 'ติดต่อไม่ได้' : 'ON DUTY';
+        if (SUM) {
+          var cards = document.querySelectorAll('#schedule-list .schedule-card[data-cat="WORK"]');
+          SUM.in = 0; SUM.lost = 0; SUM.wait = 0;
+          cards.forEach(function (c) { c.classList.contains('checked-in') ? SUM.in++ : c.classList.contains('status-unreachable') ? SUM.lost++ : SUM.wait++; });
+          renderSchSum();
+        }
+      };
       if (clickTimer == null) {
-          var wasYellow = el.classList.contains('status-unreachable');
-          if(wasYellow) {
-              unreachableUsers.delete(nickname);
-              el.classList.remove('status-unreachable');
-          }
-          
-          el.classList.toggle('checked-in');
-          if (el.classList.contains('checked-in')) { checkedInUsers.add(nickname); } 
-          else { checkedInUsers.delete(nickname); }
-
-          clickTimer = setTimeout(function () { clickTimer = null; }, 300); 
+        var wasIn = el.classList.contains('checked-in'), wasLost = el.classList.contains('status-unreachable');
+        set(wasIn || wasLost ? 'none' : 'in');
+        clickTimer = setTimeout(function () { clickTimer = null; }, 320);
       } else {
-          clearTimeout(clickTimer);
-          clickTimer = null;
-          
-          if(checkedInUsers.has(nickname)) {
-              checkedInUsers.delete(nickname);
-              el.classList.remove('checked-in');
-          }
-          
-          el.classList.toggle('status-unreachable');
-          if (el.classList.contains('status-unreachable')) { unreachableUsers.add(nickname); } 
-          else { unreachableUsers.delete(nickname); }
+        clearTimeout(clickTimer); clickTimer = null;
+        set('lost');
       }
-      updateBadge(el, nickname);
     }
 
     function openModal() { document.getElementById('reportModal').style.display = 'flex'; }
