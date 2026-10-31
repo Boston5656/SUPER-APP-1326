@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD600">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <title>ASM Report</title>
+  <!-- หน้า Report สาธารณะ: หัวหน้าเปิดดูได้โดยไม่ต้องล็อกอิน (ต้องมีกุญแจ ?k= ในลิงก์) · อ่านอย่างเดียว -->
+  <script src="gas.js?v=2026.10.31-1"></script>
+  <style>
+    :root { --y: #FFD600; --d: #1C1C1E; --d2: #2C2C2E; --ok: #30D158; --no: #FF453A; --warn: #FF9F0A;
+      --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; color: var(--d); font-family: 'IBM Plex Sans Thai', -apple-system, sans-serif; -webkit-font-smoothing: antialiased;
+      background: radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%), radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%), #FFD600;
+      background-attachment: fixed; padding: calc(16px + env(safe-area-inset-top)) 16px calc(32px + env(safe-area-inset-bottom)); }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(14px); filter: blur(3px); } to { opacity: 1; transform: none; filter: none; } }
+    @keyframes blink { 50% { opacity: .25; } }
+    .rise { animation: riseIn .6s var(--ios-ease) both; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 100px; background: rgba(28,28,30,.08); font: 700 11.5px 'Kanit', sans-serif; letter-spacing: 1.2px; color: rgba(28,28,30,.75); }
+    .eyebrow .ic { width: 24px; height: 24px; border-radius: 8px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .eyebrow .live { width: 7px; height: 7px; border-radius: 50%; background: var(--d); animation: blink 1.6s infinite; }
+    h1 { margin: 12px 0 2px; font: 800 30px/1.15 'Kanit', sans-serif; letter-spacing: -.3px; overflow-wrap: anywhere; }
+    .sub { font-weight: 600; font-size: 14px; color: rgba(28,28,30,.65); margin-bottom: 16px; }
+    .grid { display: grid; gap: 14px; }
+    @media (min-width: 900px) { .grid { grid-template-columns: 380px minmax(0, 1fr); align-items: start; } .lft { position: sticky; top: 16px; } }
+    .pcard { background: var(--d); color: #fff; border-radius: 28px; padding: 20px; box-shadow: 0 22px 44px -22px rgba(0,0,0,.75); }
+    .prow { display: flex; align-items: center; gap: 20px; }
+    .ring { position: relative; width: 136px; height: 136px; flex-shrink: 0; }
+    .ring svg { transform: rotate(-90deg); width: 136px; height: 136px; }
+    .ring .trk { stroke: var(--d2); } .ring .bar { stroke: var(--y); stroke-linecap: round; transition: stroke-dashoffset 1.1s var(--ios-ease); }
+    .ring .c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ring .c b { font: 800 32px 'Kanit', sans-serif; color: var(--y); line-height: 1; }
+    .ring .c small { color: #AEAEB2; font-weight: 600; font-size: 12px; margin-top: 4px; }
+    .pnum small { color: #AEAEB2; font-weight: 600; font-size: 13px; }
+    .pnum .big { font: 800 38px/1.05 'Kanit', sans-serif; } .pnum .big span { color: #8E8E93; font-size: 22px; }
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
+    .kpi { background: #2A2A2D; border-radius: 16px; padding: 10px 12px; }
+    .kpi small { display: flex; align-items: center; gap: 6px; color: #AEAEB2; font-weight: 600; font-size: 12px; white-space: nowrap; }
+    .kpi small i { width: 8px; height: 8px; border-radius: 50%; }
+    .kpi b { display: block; font: 800 26px 'Kanit', sans-serif; margin-top: 2px; }
+    .kpi.no b { color: #FF8A80; } .kpi.warn b { color: #FFD60A; }
+    .foot { margin-top: 12px; color: #8E8E93; font-weight: 600; font-size: 12px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+    .lcard { background: rgba(255,251,234,.94); border-radius: 30px; padding: 16px 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); }
+    .sec { margin-bottom: 14px; } .sec:last-child { margin-bottom: 0; }
+    .sec h3 { margin: 0 4px 8px; display: flex; justify-content: space-between; align-items: center; font: 700 16px 'Kanit', sans-serif; }
+    .sec h3 small { font: 600 12.5px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; }
+    .list { display: grid; gap: 8px; }
+    @media (min-width: 600px) { .list { grid-template-columns: 1fr 1fr; } }
+    .br { display: flex; align-items: center; gap: 10px; background: #FFFDF5; border-radius: 18px; padding: 11px 12px 11px 14px; box-shadow: 0 8px 18px -14px rgba(90,70,0,.5); animation: riseIn .5s var(--ios-ease) both; }
+    .br .t { flex: 1; min-width: 0; }
+    .br .t b { display: block; font: 800 17px 'Kanit', sans-serif; }
+    .br .t span { display: block; color: #6E6E73; font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .st { flex-shrink: 0; border-radius: 100px; padding: 6px 12px 6px 10px; font: 700 12.5px 'Kanit', sans-serif; display: inline-flex; align-items: center; gap: 6px; }
+    .st i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .st.ok { background: #D9F7E3; color: #15803D; } .st.no { background: #FFE1DD; color: #C0261C; } .st.warn { background: #FFF0C2; color: #A15C00; }
+    .msg { text-align: center; padding: 60px 16px; font-weight: 700; color: rgba(28,28,30,.7); }
+    .msg b { display: block; font: 800 22px 'Kanit', sans-serif; margin-bottom: 6px; color: var(--d); }
+    .done { text-align: center; padding: 18px; font: 700 16px 'Kanit', sans-serif; color: #15803D; }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app"><div class="msg">กำลังโหลด Report…</div></div>
+  <script>
+    var KEY = new URLSearchParams(location.search).get('k') || '';
+    var LBL = { ok: 'ส่งแล้ว', no: 'ยังไม่ส่ง', warn: 'ไม่พบสาขา' };
+    function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function thDate() {
+      var d = new Date(), days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์'], mon = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+      return days[d.getDay()] + ' ' + d.getDate() + ' ' + mon[d.getMonth()] + ' ' + (d.getFullYear() + 543);
+    }
+    var first = true;
+    function render(d) {
+      var app = document.getElementById('app');
+      if (!d || d.status !== 'success') {
+        app.innerHTML = '<div class="msg"><b>เปิด Report ไม่ได้</b>' + esc((d && d.message) || 'ลองใหม่อีกครั้ง') + '</div>';
+        return;
+      }
+      document.title = 'Report · ' + (d.title || 'ASM');
+      var c = { ok: [], no: [], warn: [] };
+      d.tasks.forEach(function (t) { (c[t.k] || c.warn).push(t); });
+      var all = d.tasks.length, pct = all ? Math.round(c.ok.length / all * 100) : 0, C = 2 * Math.PI * 56;
+      var sec = function (k, title) {
+        if (!c[k].length) return '';
+        return '<div class="sec"><h3>' + title + ' <small>' + c[k].length + ' สาขา</small></h3><div class="list">' + c[k].map(function (t, i) {
+          return '<div class="br" style="animation-delay:' + (first ? Math.min(i * 30, 400) : 0) + 'ms"><div class="t"><b>' + esc(t.id) + '</b><span>' + esc(t.name) + '</span></div><span class="st ' + k + '"><i></i>' + LBL[k] + '</span></div>';
+        }).join('') + '</div></div>';
+      };
+      app.innerHTML =
+        '<div class="' + (first ? 'rise' : '') + '"><span class="eyebrow"><span class="ic">⬆</span>ASM REPORT · <i class="live"></i> LIVE</span>' +
+        '<h1>' + esc(d.title || 'รายงานส่งงาน') + '</h1><div class="sub">' + esc(d.am || '') + ' · ' + thDate() + '</div></div>' +
+        '<div class="grid"><div class="lft"><div class="pcard' + (first ? ' rise' : '') + '">' +
+          '<div class="prow"><div class="ring"><svg viewBox="0 0 136 136"><circle class="trk" cx="68" cy="68" r="56" fill="none" stroke-width="13"/><circle class="bar" id="bar" cx="68" cy="68" r="56" fill="none" stroke-width="13" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + C.toFixed(1) + '"/></svg>' +
+          '<div class="c"><b>' + pct + '%</b><small>ส่งแล้ว</small></div></div>' +
+          '<div class="pnum"><small>สาขาที่ส่งงาน</small><div class="big">' + c.ok.length + ' <span>/ ' + all + '</span></div><small>' + (c.no.length ? 'เหลืออีก ' + c.no.length + ' สาขา' : (all ? 'ครบทุกสาขาแล้ว 🎉' : '-')) + '</small></div></div>' +
+          '<div class="kpis"><div class="kpi"><small><i style="background:var(--ok)"></i>ส่งแล้ว</small><b>' + c.ok.length + '</b></div>' +
+          '<div class="kpi no"><small><i style="background:var(--no)"></i>ยังไม่ส่ง</small><b>' + c.no.length + '</b></div>' +
+          '<div class="kpi warn"><small><i style="background:var(--warn)"></i>ไม่พบสาขา</small><b>' + c.warn.length + '</b></div></div>' +
+          '<div class="foot"><span>แก้ไขล่าสุด ' + esc(d.updated || '-') + '</span><span>ดึงข้อมูล ' + esc(String(d.at || '').slice(-5)) + ' น. · อัปเดตเองทุก 1 นาที</span></div>' +
+        '</div></div><div class="lcard' + (first ? ' rise' : '') + '">' +
+          sec('no', '❎ ยังไม่ส่ง') + sec('warn', '⚠️ ไม่พบสาขา') + sec('ok', '✅ ส่งแล้ว') +
+          (!c.no.length && !c.warn.length && all ? '<div class="done">ครบทุกสาขาแล้ว 🎉</div>' : '') +
+          (!all ? '<div class="msg">ยังไม่มีรายการสาขา</div>' : '') +
+        '</div></div>';
+      requestAnimationFrame(function () { requestAnimationFrame(function () { var b = document.getElementById('bar'); if (b) b.style.strokeDashoffset = (C * (1 - pct / 100)).toFixed(1); }); });
+      first = false;
+    }
+    function load() {
+      if (!KEY) return render({ status: 'error', message: 'ลิงก์ไม่ครบ — ขอลิงก์ Report ใหม่จากผู้จัดการ' });
+      fetch(window.SYS1326.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+        body: JSON.stringify({ app: 'asm', fn: 'asmReport', args: [KEY] }) })
+        .then(function (r) { return r.text(); })
+        .then(function (t) { var j = JSON.parse(t); render(j && j.ok ? j.data : { status: 'error', message: (j && j.error) || 'โหลดไม่สำเร็จ' }); })
+        .catch(function () { if (first) render({ status: 'error', message: 'เชื่อมต่อไม่ได้ ลองรีเฟรชอีกครั้ง' }); });
+    }
+    load();
+    setInterval(function () { if (!document.hidden) load(); }, 60000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) load(); });
+  </script>
+</body>
+</html>

@@ -19,6 +19,7 @@
     if (window.parent && window.parent !== window) {
       try { window.parent.postMessage({ type: 'sys1326-auth' }, location.origin); return; } catch (e) {}
     }
+    if (typeof window.onSysAuth === 'function') { try { window.onSysAuth(); } catch (e) {} return; }   // หน้าเมนูหลัก → กลับหน้าล็อกอิน
     if (!/index\.html$|\/$/.test(location.pathname)) location.href = 'index.html';
   }
 
@@ -125,7 +126,7 @@
             var ge = new Error(hint); ge.gBusy = !/doPost|Deploy/.test(hint); throw ge;
           }
           if (res.ok) {
-            if (fn === 'authenticateUser' && res.data && res.data.token) setToken(res.data.token);
+            if (/^(authenticateUser|loginAccount|registerAccount)$/.test(fn) && res.data && res.data.token) setToken(res.data.token);
             ok && ok(res.data);
           } else {
             if (res.auth) needLogin();

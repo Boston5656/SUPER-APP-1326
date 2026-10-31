@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
   <title>ASM Track</title>
   <script>window.GAS_APP = 'asm';</script>
-  <script src="gas.js?v=2026.10.09-1"></script>
+  <script src="gas.js?v=2026.10.31-1"></script>
     <style>
     :root {
       --bg-dark: #090a0f; 
@@ -22,152 +22,13 @@
       --accent-yellow: #ffd60a;
       --soft-shadow: 6px 8px 16px rgba(0, 0, 0, 0.45);
     }
-    body {
-      background-color: var(--bg-dark); color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 0; padding: 16px;
-      -webkit-tap-highlight-color: transparent;
-    }
-    
-    .header-box { text-align: center; margin-bottom: 24px; padding-top: 8px;}
-    .header-box h2 { margin: 0 0 4px 0; font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: 0.5px;}
-    .header-box p { margin: 0; color: var(--text-sub); font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
-    
-    .tab-container { display: flex; background: var(--card-container); border-radius: 50px; padding: 6px; margin-bottom: 24px; box-shadow: var(--soft-shadow); max-width: 500px; margin-left: auto; margin-right: auto;}
-    .tab-btn { flex: 1; text-align: center; padding: 12px; border-radius: 50px; color: var(--text-sub); font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.3s ease;}
-    .tab-btn.active { background: #32364a; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.3);}
-
-    .main-card-container { background: var(--card-container); border-radius: 24px; padding: 20px 16px; margin-bottom: 24px; box-shadow: 0 10px 24px rgba(0,0,0,0.25);}
-    
-    .title-input { 
-      background: transparent; color: var(--accent-yellow); font-size: 18px; font-weight: 800; 
-      text-align: center; border: none; outline: none; width: 100%; margin-bottom: 24px; 
-      letter-spacing: 0.5px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;
-    }
-    .title-input:focus { border-bottom: 1px solid var(--accent-yellow); }
-
-    .task-header-row { display: flex; gap: 8px; margin-bottom: 12px; padding: 0 8px; color: var(--text-sub); font-size: 13px; font-weight: 700; letter-spacing: 0.5px;}
-    .th-id { width: 25%; text-align: left; padding-left: 12px;}
-    .th-name { width: 45%; text-align: left; padding-left: 8px;}
-    .th-status { width: 30%; text-align: center; }
-
-    .task-row { display: flex; gap: 8px; margin-bottom: 12px; }
-    .task-box { border-radius: 50px; padding: 14px 16px; display: flex; align-items: center; font-size: 15px; font-weight: 700; box-shadow: var(--soft-shadow);}
-    .tb-id { width: 25%; background: var(--box-bg); justify-content: flex-start; color: #fff;}
-    .tb-name { width: 45%; background: var(--box-bg); justify-content: flex-start; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-    
-    .tb-status { width: 30%; justify-content: center; font-size: 14px; cursor: pointer; user-select: none; transition: transform 0.1s;}
-    .tb-status:active { transform: scale(0.92); }
-    
-    .status-green { background: linear-gradient(135deg, #28c76f, #128a43); color: #ffffff; }
-    .status-red { background: linear-gradient(135deg, #ff4d4f, #cb2027); color: #ffffff; }
-    .status-yellow { background: linear-gradient(135deg, #ffc107, #d39e00); color: #000000; }
-
-    .date-report-row { display: flex; justify-content: center; align-items: center; gap: 12px; margin-bottom: 24px;}
-    .date-input { background: var(--box-bg); color: #fff; border: none; padding: 12px 20px; border-radius: 50px; font-family: inherit; font-size: 15px; font-weight: 700; outline: none; box-shadow: var(--soft-shadow); margin:0;}
-    .btn-report-inline { background: var(--accent-yellow); color: #000; border: none; border-radius: 50px; padding: 0 20px; height: 46px; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: var(--soft-shadow); transition: 0.2s; display: flex; align-items: center; justify-content: center;}
-    .btn-report-inline:active { transform: scale(0.95); }
-
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
-    
-    .schedule-card { 
-      position: relative;
-      background: var(--box-bg); color: var(--text-sub); border-radius: 20px; 
-      padding: 16px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s, background 0.15s; 
-      box-shadow: var(--soft-shadow); user-select: none;
-    }
-    .schedule-card:active { transform: scale(0.96) translateY(2px); box-shadow: 1px 2px 5px rgba(0,0,0,0.6); }
-    
-    .shift-badge {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      pointer-events: none;
-      z-index: 10;
-    }
-    
-    .schedule-card .badge-duty { background: #ffd60a !important; color: #000000 !important; }
-    .schedule-card .badge-off { background: #ffffff !important; color: #000000 !important; }
-    .schedule-card .badge-checkedin { background: #128a43 !important; color: #ffffff !important; }
-    .schedule-card .badge-unreachable { background: #000000 !important; color: #ffd60a !important; }
-    
-    .shift-H { background: #ff4d4f !important; border:none; } 
-    .shift-sick { background: #b71c1c !important; border:none; } 
-    .shift-M { background: #0a84ff !important; border:none; } 
-    .shift-V { background: #32a1ce !important; border:none; } 
-    .shift-H *, .shift-sick *, .shift-M *, .shift-V * { color: #ffffff !important; }
-    
-    .checked-in { background: #ffffff !important; box-shadow: 0 4px 15px rgba(255,255,255,0.3) !important;}
-    .checked-in > div:not(.shift-badge) { color: #000000 !important; }
-    
-    .status-unreachable { background: #ffd60a !important; box-shadow: 0 4px 15px rgba(255,214,10,0.3) !important;}
-    .status-unreachable > div:not(.shift-badge) { color: #000000 !important; }
-
-    .sch-name { font-weight: 800; font-size: 17px; margin-bottom: 2px; pointer-events: none;}
-    .sch-branch { font-size: 13px; font-weight: 600; margin-bottom: 10px; opacity: 0.8; pointer-events: none;}
-    .sch-shift { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; padding-right: 20px;}
-
-    .report-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; color: var(--accent-yellow); font-size: 16px; font-weight: 800;}
-    .report-item { background: var(--box-bg); border-radius: 16px; padding: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: var(--soft-shadow);}
-    .report-badge { background: var(--accent-yellow); color: #000; padding: 4px 12px; border-radius: 50px; font-size: 12px; font-weight: 800; white-space: nowrap;}
-
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 200; backdrop-filter: blur(5px);}
-    .modal-content { background: var(--card-container); padding: 24px; border-radius: 24px; width: 90%; max-width: 380px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
-    .modal-content select, .modal-content input { width: 100%; padding: 16px; margin: 8px 0 20px 0; border-radius: 12px; border: none; background: var(--box-bg); color: #fff; box-sizing: border-box; font-size: 15px; font-weight: 600; box-shadow: inset 2px 4px 8px rgba(0,0,0,0.3);}
-    .btn-submit { background: linear-gradient(135deg, #28c76f, #128a43); color: #fff; width: 100%; padding: 16px; border: none; border-radius: 50px; font-weight: 800; font-size: 16px; margin-bottom: 12px; box-shadow: var(--soft-shadow);}
-    .btn-close { background: transparent; color: #ff4d4f; width: 100%; padding: 14px; border: 2px solid #ff4d4f; border-radius: 50px; font-size: 16px; font-weight: 700;}
-    
-    /* ควบคุมการแสดงผลแต่ละหน้าแท็บ (ค่าเริ่มต้นซ่อนงานตารางงานไว้ก่อน) */
-    #view-schedule { display: none; }
-
-    /* =========================================
-       ปรับแต่งเฉพาะจอคอมพิวเตอร์ (Desktop 16:9)
-       ========================================= */
-    @media (min-width: 992px) {
-      /* หน้าส่งงาน ASM: จัดกึ่งกลาง ควบคุมความกว้างไม่ให้ยืดเต็มจอจนเกินไป */
-      #view-task .main-card-container {
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      /* หน้างานตารางงาน: จัด Layout เป็น 2 คอลัมน์ ซ้าย-ขวา สวยงาม */
-      #view-schedule {
-        max-width: 1500px;
-        margin: 0 auto;
-      }
-      .desktop-schedule-layout {
-        display: flex;
-        gap: 24px;
-        align-items: flex-start;
-      }
-      .desktop-left-pane {
-        flex: 2.3; /* ฝั่งตารางพนักงาน */
-      }
-      .desktop-right-pane {
-        flex: 1; /* ฝั่งรายการแจ้ง Report */
-        position: sticky;
-        top: 24px;
-      }
-      .desktop-left-pane .main-card-container,
-      .desktop-right-pane .main-card-container {
-        margin-bottom: 0;
-      }
-    }
-
     /* =========================================================
        🎨 สไตล์ SUPER APP 1326 (เหลือง · การ์ดดำ · สปริง)
        ========================================================= */
     :root { --y:#FFD600; --d:#1C1C1E; --d2:#2A2A2D; --g:#8E8E93; --cream:#FFFBEA;
       --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); --spring-soft:cubic-bezier(.22,1.18,.36,1);
       --ok:#30D158; --no:#FF453A; --warn:#FF9F0A; }
-    .navrow, .navrow *, #view-task, #view-task *, .toast { box-sizing: border-box; }
+    .navrow, .navrow *, #view-task, #view-task *, #view-schedule, #view-schedule *, .toast { box-sizing: border-box; }
     body { color: var(--d); font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased;
       background: radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%), radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%), #FFD600;
       background-attachment: fixed; padding: calc(8px + env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom)); min-height: 100vh; }
@@ -178,7 +39,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .rise { animation: riseIn .6s var(--ios-ease) both; }
     .wrap { max-width: 760px; margin: 0 auto; }
-    #view-schedule { max-width: 1500px; margin: 0 auto; }
+    #view-schedule { display: none; max-width: 1180px; margin: 0 auto; }
 
     /* แถบบน: ปุ่มกลับ + สลับหน้า */
     .navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 50; display: flex; gap: 8px; align-items: stretch; max-width: 760px; margin: 0 auto 18px; }
@@ -274,22 +135,102 @@
     }
     @media (max-width: 420px) { .ring { width: 124px; height: 124px; } .ring svg { width: 124px; height: 124px; } .ring .c b { font-size: 28px; } .pnum .big { font-size: 34px; } .h-title h1 { font-size: 26px; } .kpi b { font-size: 24px; } .kpi { padding: 10px; } }
 
-    /* 🗓 หน้าตารางงาน = หน้าตาเดิมทุกอย่าง (พื้นดำ ฟอนต์เดิม แถบสลับแบบเดิม) */
-    body.sch { background: var(--bg-dark); color: var(--text-main); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding: calc(8px + env(safe-area-inset-top)) 16px 16px; }
-    body.sch .navrow { max-width: 500px; margin-bottom: 24px; }
-    body.sch .seg { background: var(--card-container); border: 0; border-radius: 50px; padding: 6px; box-shadow: var(--soft-shadow); -webkit-backdrop-filter: none; backdrop-filter: none; }
-    body.sch .seg .glider { top: 6px; bottom: 6px; background: #32364a; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
-    body.sch .seg button { font: 700 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--text-sub); padding: 12px; }
-    body.sch .seg button.on { color: #fff; }
-    #schHead { display: none; } body.sch #schHead { display: block; }
+    /* 🗓 หน้าตารางงาน — โทนเดียวกับแอป (เหลือง · การ์ดดำ/ครีม) */
+    #view-schedule .sch-top { max-width: 1500px; margin: 0 auto 14px; }
+    .date-report-row { display: flex; justify-content: flex-start; align-items: stretch; gap: 10px; margin: 0 0 14px; flex-wrap: wrap; }
+    .date-input { background: var(--d); color: #fff; border: 0; padding: 0 18px; height: 52px; border-radius: 22px; font: 700 16px 'Kanit', 'IBM Plex Sans Thai', sans-serif; outline: none; color-scheme: dark;
+      box-shadow: 0 12px 26px -14px rgba(0,0,0,.7); margin: 0; }
+    .btn-report-inline { background: var(--d); color: var(--y); border: 0; border-radius: 22px; padding: 0 20px; height: 52px; font: 800 15px 'Kanit', sans-serif; cursor: pointer;
+      box-shadow: 0 12px 26px -14px rgba(0,0,0,.7); transition: transform .3s var(--spring); display: flex; align-items: center; gap: 6px; }
+    .btn-report-inline:active { transform: scale(.94); }
+    .sch-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; font-weight: 600; color: rgba(28,28,30,.65); margin: 0 4px 12px; }
+    .sch-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+    .main-card-container { background: rgba(255,251,234,.92); border-radius: 30px; padding: 16px 14px; margin-bottom: 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); }
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .schedule-card { position: relative; background: #FFFDF5; color: var(--d); border-radius: 22px; padding: 38px 14px 13px; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation;
+      box-shadow: 0 8px 18px -14px rgba(90,70,0,.5); border: 2px solid transparent; transition: transform .3s var(--spring), background-color .2s, border-color .2s; animation: riseIn .5s var(--ios-ease) both; }
+    .schedule-card:active { transform: scale(.95); }
+    .shift-badge { position: absolute; top: 12px; right: 12px; padding: 3px 9px; border-radius: 100px; font: 800 9.5px 'Kanit', sans-serif; letter-spacing: .4px; pointer-events: none; z-index: 2; }
+    .schedule-card .badge-duty { background: var(--d); color: var(--y); }
+    .schedule-card .badge-off { background: #fff; color: var(--d); box-shadow: 0 1px 3px rgba(0,0,0,.15); }
+    .schedule-card .badge-checkedin { background: #15803D; color: #fff; }
+    .schedule-card .badge-unreachable { background: var(--y); color: var(--d); }
+    .sch-name { font: 800 18px 'Kanit', sans-serif; margin-bottom: 1px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sch-branch { font-size: 12.5px; font-weight: 700; margin-bottom: 8px; color: #6E6E73; pointer-events: none; }
+    .sch-shift { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+    .shift-H { background: #FF453A; } .shift-sick { background: #B3261E; } .shift-M { background: #0A84FF; } .shift-V { background: #32A1CE; }
+    .shift-H > div:not(.shift-badge), .shift-sick > div:not(.shift-badge), .shift-M > div:not(.shift-badge), .shift-V > div:not(.shift-badge) { color: #fff !important; }
+    .checked-in { background: #D9F7E3; border-color: #30D158; }
+    .checked-in .sch-branch { color: #15803D; }
+    .status-unreachable { background: var(--d); }
+    .status-unreachable > div:not(.shift-badge) { color: #fff !important; }
+    .status-unreachable .sch-branch { color: var(--y) !important; }
+    .report-header { display: flex; align-items: center; gap: 8px; margin: 0 4px 12px; font: 700 17px 'Kanit', sans-serif; color: var(--d); }
+    .report-item { background: #FFFDF5; border-radius: 20px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; box-shadow: 0 8px 18px -14px rgba(90,70,0,.5); }
+    .report-item .ri-top { color: #A15C00; font-size: 12px; font-weight: 800; margin-bottom: 6px; }
+    .report-item .ri-br { font-size: 13px; color: var(--d); font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .report-item .ri-br span { background: var(--d); color: var(--y); padding: 2px 8px; border-radius: 7px; font-size: 11px; }
+    .report-item .ri-note { font-size: 13px; color: #6E6E73; margin-top: 6px; font-weight: 600; }
+    .report-badge { background: var(--d); color: var(--y); padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+    .rep-empty { color: #8A8270; font-size: 14px; font-weight: 600; text-align: center; padding: 12px 0; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); justify-content: center; align-items: flex-end; z-index: 200;
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 12px 12px calc(12px + env(safe-area-inset-bottom)); box-sizing: border-box; }
+    @media (min-width: 640px) { .modal-overlay { align-items: center; } }
+    .modal-content { background: #F7F7F9; color: var(--d); padding: 20px 18px 16px; border-radius: 26px; width: 100%; max-width: 420px; box-shadow: 0 20px 50px -20px rgba(0,0,0,.6); animation: riseIn .45s var(--ios-ease) both; box-sizing: border-box; }
+    .modal-content h3 { margin: 0 0 12px; font: 800 19px 'Kanit', sans-serif; text-align: center; }
+    .modal-content label { display: block; margin: 0 4px 6px; font-size: 12.5px; font-weight: 800; color: var(--d); }
+    .modal-content select, .modal-content input { width: 100%; padding: 13px 14px; margin: 0 0 14px; border-radius: 14px; border: 0; background: #fff; color: var(--d); box-sizing: border-box;
+      font: 600 15px 'IBM Plex Sans Thai', sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.06); outline: none; }
+    .modal-content select:focus, .modal-content input:focus { box-shadow: 0 0 0 2px var(--y); }
+    .mrow { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-submit, .btn-close { flex: 1; height: 50px; border: 0; border-radius: 16px; font: 800 15px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; transition: transform .3s var(--spring); }
+    .btn-submit { flex: 1.5; background: linear-gradient(180deg, #FFE45C, #FFD600); color: var(--d); box-shadow: 0 10px 22px -12px rgba(242,194,0,1); }
+    .btn-close { background: #E9E9EE; color: var(--d); }
+    .btn-submit:active, .btn-close:active { transform: scale(.95); }
+    @media (min-width: 992px) {
+      .desktop-schedule-layout { display: flex; gap: 18px; align-items: flex-start; }
+      .desktop-left-pane { flex: 2.3; } .desktop-right-pane { flex: 1; position: sticky; top: calc(76px + env(safe-area-inset-top)); }
+      #view-schedule .navrow, .navrow { max-width: 1180px; }
+    }
+
+    /* แตะสองที = ไม่พบสาขา (กันซูมหน้าจอตอนแตะเร็ว) */
+    .st { touch-action: manipulation; -webkit-user-select: none; }
+    .tools { display: flex; gap: 8px; }
+    .tools .rbtn { height: 52px; font-size: 20px; }
+    .linkbtn { width: 100%; margin-top: 8px; border: 0; border-radius: 100px; padding: 13px; background: #2C2C2E; color: #fff; font: 700 14.5px 'Kanit', sans-serif; cursor: pointer; transition: transform .3s var(--spring), background .2s; }
+    .linkbtn:active { transform: scale(.96); } .linkbtn.done { background: var(--ok); }
+
+    /* ⚙️ ตั้งค่า ASM */
+    .set-sec { background: #fff; border-radius: 18px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .set-sec h4 { margin: 0 0 4px; font: 700 15px 'Kanit', sans-serif; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .set-sec h4 small { font: 600 11.5px 'IBM Plex Sans Thai', sans-serif; color: #8E8E93; }
+    .set-sec p { margin: 0 0 10px; font-size: 12px; font-weight: 600; color: #6E6E73; line-height: 1.45; }
+    .set-row { display: flex; gap: 6px; align-items: center; }
+    .set-row input, .set-row select { flex: 1; min-width: 0; border: 0; border-radius: 12px; padding: 11px 12px; background: #F2F2F7; font: 600 14px 'IBM Plex Sans Thai', sans-serif; color: var(--d); outline: none; box-sizing: border-box; }
+    .set-row input:focus { box-shadow: 0 0 0 2px var(--y); }
+    .sbtn { flex-shrink: 0; border: 0; border-radius: 12px; padding: 0 14px; height: 42px; background: var(--d); color: var(--y); font: 800 13px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; transition: transform .3s var(--spring); white-space: nowrap; }
+    .sbtn:active { transform: scale(.92); } .sbtn:disabled { opacity: .5; }
+    .sbtn.y { background: var(--y); color: var(--d); } .sbtn.g { background: #E9E9EE; color: var(--d); } .sbtn.r { background: #FFE5E3; color: #D70015; } .sbtn.r.sure { background: #D70015; color: #fff; }
+    .set-list { margin-top: 8px; max-height: 300px; overflow-y: auto; }
+    .set-item { display: flex; align-items: center; gap: 8px; padding: 8px 4px; border-top: 1px solid #F2F2F7; }
+    .set-item:first-child { border-top: 0; }
+    .set-item .t { flex: 1; min-width: 0; }
+    .set-item .t b { display: block; font: 700 14px 'Kanit', sans-serif; }
+    .set-item .t span { display: block; font-size: 12px; color: #6E6E73; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .set-item .t input { width: 100%; border: 0; border-radius: 10px; padding: 7px 9px; background: #F2F2F7; font: 600 13px 'IBM Plex Sans Thai', sans-serif; box-sizing: border-box; outline: none; }
+    .set-add { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+    .set-add input, .set-add select { border: 0; border-radius: 12px; padding: 11px 12px; background: #F2F2F7; font: 600 14px 'IBM Plex Sans Thai', sans-serif; color: var(--d); outline: none; min-width: 0; box-sizing: border-box; }
+    .set-add .full { grid-column: 1 / -1; }
+    #setModal .modal-content { max-width: 560px; max-height: 92vh; overflow-y: auto; }
+    .set-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .set-head h3 { flex: 1; text-align: left !important; margin: 0 !important; }
+    .set-x { width: 34px; height: 34px; border-radius: 50%; border: 0; background: #E9E9EE; color: #6E6E73; font-weight: 800; cursor: pointer; }
+    .set-msg { font-size: 12px; font-weight: 700; color: #15803D; min-height: 16px; margin-top: 6px; }
+    .set-msg.err { color: #D70015; }
   </style>
 </head>
 <body ontouchstart="">
 
-  <div class="header-box" id="schHead">
-    <h2>ระบบช่วยตามงาน ASM <span style="font-size: 12px; color: var(--text-sub); vertical-align: middle;">v2</span></h2>
-    <p id="head-sub2">กำลังโหลดข้อมูล...</p>
-  </div>
 
   <div class="navrow rise">
     <span data-sys-back-slot></span>
@@ -310,7 +251,10 @@
       <div class="h-sub" id="head-sub">กำลังโหลดข้อมูล...</div>
       <div class="h-row">
         <div class="datebox"><div class="lbl"><b id="tDate">-</b><small>วันนี้</small></div></div>
-        <button class="rbtn" type="button" id="tRefresh" onclick="fetchData(true)" aria-label="รีเฟรช"><span>↻</span></button>
+        <div class="tools">
+          <button class="rbtn" type="button" id="tRefresh" onclick="fetchData(true)" aria-label="รีเฟรช"><span>↻</span></button>
+          <button class="rbtn" type="button" onclick="openSettings()" aria-label="ตั้งค่า"><span>⚙️</span></button>
+        </div>
       </div>
     </div>
 
@@ -337,6 +281,7 @@
         <button type="button" data-f="no" onclick="setFilter('no')">ยังไม่ส่ง</button>
       </div>
       <button type="button" class="copybtn" id="copyBtn" onclick="copySummary()">📋 คัดลอกสรุปส่ง LINE</button>
+      <button type="button" class="linkbtn" id="linkBtn" onclick="copyReportLink()">🔗 คัดลอกลิงก์ Report ให้หัวหน้า</button>
     </div>
    </div>
 
@@ -345,15 +290,21 @@
       <div class="search"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6E6E73" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
         <input type="search" id="q" placeholder="ค้นหา ID / ชื่อสาขา" oninput="renderTasks()"></div>
       <div id="task-list"><div class="loading">กำลังโหลดข้อมูล...</div></div>
-      <div class="hint">แตะป้ายสถานะเพื่อเปลี่ยน: ส่งแล้ว → ยังไม่ส่ง → ไม่พบสาขา</div>
+      <div class="hint">แตะ 1 ที = สลับ ส่งแล้ว ↔ ยังไม่ส่ง · แตะ 2 ทีเร็วๆ = ไม่พบสาขา</div>
     </div>
   </div>
 
   <!-- หน้าที่ 2: งานตารางงาน -->
   <div id="view-schedule">
-    <div class="date-report-row">
-      <input type="date" id="date-picker" class="date-input" onchange="fetchData()">
-      <button class="btn-report-inline" onclick="openModal()">+ R</button>
+    <div class="sch-top rise">
+      <span class="eyebrow"><span class="ic">🗓</span>ASM TRACK · ตารางงานโซน</span>
+      <div class="h-title"><h1>ตารางงานวันนี้</h1></div>
+      <div class="h-sub" id="head-sub2">กำลังโหลดข้อมูล...</div>
+      <div class="date-report-row">
+        <input type="date" id="date-picker" class="date-input" onchange="fetchData()">
+        <button class="btn-report-inline" onclick="openModal()">＋ แจ้ง Report</button>
+      </div>
+      <div class="sch-legend"><span>แตะการ์ด = เข้างานแล้ว · แตะสองที = ติดต่อไม่ได้</span></div>
     </div>
     
     <!-- โครงสร้างแบ่งซ้าย-ขวา สำหรับ Desktop -->
@@ -368,7 +319,7 @@
       <!-- ฝั่งขวา: รายการแจ้งคำร้อง -->
       <div class="desktop-right-pane">
         <div class="main-card-container">
-          <div class="report-header">📋 รายการแจ้งคำร้อง ประจำวัน</div>
+          <div class="report-header">📋 แจ้งคำร้องประจำวัน</div>
           <div id="report-list"></div>
         </div>
       </div>
@@ -377,13 +328,21 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- ⚙️ ตั้งค่า ASM -->
+  <div class="modal-overlay" id="setModal" onclick="if(event.target===this)closeSettings()">
+    <div class="modal-content">
+      <div class="set-head"><h3>⚙️ ตั้งค่า ASM Track</h3><button class="set-x" onclick="closeSettings()" aria-label="ปิด">✕</button></div>
+      <div id="set-body"><div class="loading">กำลังโหลด…</div></div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="reportModal">
     <div class="modal-content">
-      <h3 style="margin-top:0; color:#fff; text-align:center; font-weight:800;">แจ้ง Report ลา/หยุด</h3>
-      <label style="color:var(--text-sub); font-size:14px; font-weight:600;">ชื่อพนักงาน (สาขา):</label>
+      <h3>แจ้ง Report ลา/หยุด</h3>
+      <label>ชื่อพนักงาน (สาขา)</label>
       <select id="rep-name"></select>
       
-      <label style="color:var(--text-sub); font-size:14px; font-weight:600;">ประเภทการแจ้ง:</label>
+      <label>ประเภทการแจ้ง</label>
       <select id="rep-type">
         <option>ลากิจ</option>
         <option>ลาป่วย</option>
@@ -393,11 +352,13 @@
         <option>สลับกะงาน</option>
       </select>
       
-      <label style="color:var(--text-sub); font-size:14px; font-weight:600;">หมายเหตุ:</label>
+      <label>หมายเหตุ</label>
       <input type="text" id="rep-remark" placeholder="ระบุเหตุผล หรือ กะงานที่สลับ...">
       
-      <button class="btn-submit" onclick="submitForm()">ส่งข้อมูล Report</button>
-      <button class="btn-close" onclick="closeModal()">ยกเลิก</button>
+      <div class="mrow">
+        <button class="btn-close" onclick="closeModal()">ยกเลิก</button>
+        <button class="btn-submit" onclick="submitForm()">ส่งข้อมูล Report</button>
+      </div>
     </div>
   </div>
 
@@ -433,7 +394,7 @@
     function fetchData(manual) {
       var selectedDate = document.getElementById('date-picker').value;
       if (!TASKS.length) document.getElementById('task-list').innerHTML = "<div class='loading'>กำลังโหลดข้อมูล...</div>";
-      document.getElementById('schedule-list').innerHTML = "<div style='text-align:center; color:#888; font-weight:600;'>กำลังโหลดข้อมูล...</div>";
+      document.getElementById('schedule-list').innerHTML = "<div class='loading' style='grid-column:1/-1'>กำลังโหลดข้อมูล...</div>";
       var rb = document.getElementById('tRefresh'); if (manual) rb.classList.add('spin');
       google.script.run.withSuccessHandler(function (d) { rb.classList.remove('spin'); renderApp(d); if (manual) toast('อัปเดตแล้ว'); })
         .withFailureHandler(function (e) { rb.classList.remove('spin'); toast('โหลดไม่สำเร็จ: ' + (e && e.message || '')); })
@@ -453,6 +414,7 @@
       document.getElementById('pUpd').textContent = 'อัปเดตล่าสุด ' + String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0') + ' น.';
       document.getElementById('tDate').textContent = thDate();
       renderProgress(); renderTasks();
+      if (!REPORT_URL && !loadReportLink.started) { loadReportLink.started = true; loadReportLink(false); }   // เตรียมไว้ → กดคัดลอกได้ทันที (iPhone ต้องคัดลอกตอนแตะ)
       globalTeam = data.team;
       var schHtml = "";
       var nameOptions = "";
@@ -504,19 +466,19 @@
         }
         
         schHtml += `
-        <div class="${cardClass}" onclick="handleCardClick(this, '${shift}', '${p.nickname}')">
+        <div class="${cardClass}" style="animation-delay:${Math.min(index * 30, 420)}ms" data-nick="${esc(p.nickname)}" onclick="handleCardClick(this, '${esc(shift)}', this.dataset.nick)">
           ${badgeHtml}
-          <div class="sch-name">${p.nickname}</div>
-          <div class="sch-branch">${p.id}</div>
+          <div class="sch-name">${esc(p.nickname)}</div>
+          <div class="sch-branch">${esc(p.id)}${p.role ? ' · ' + esc(p.role) : ''}</div>
           <div class="sch-shift">${displayShift}</div>
         </div>`;
-        nameOptions += `<option value="${index}">${p.nickname} (${p.branch})</option>`;
+        nameOptions += `<option value="${index}">${esc(p.nickname)} (${esc(p.branch)})</option>`;
       });
       document.getElementById('schedule-list').innerHTML = schHtml;
       document.getElementById('rep-name').innerHTML = nameOptions;
 
       var repHtml = "";
-      if (data.reports.length === 0) repHtml = "<div style='color:var(--text-sub); font-size:14px; font-weight:600; text-align:center; padding: 10px 0;'>ไม่มีรายการแจ้งวันนี้</div>";
+      if (data.reports.length === 0) repHtml = "<div class='rep-empty'>ไม่มีรายการแจ้งวันนี้</div>";
       
       data.reports.forEach(function(r) {
         var personInfo = globalTeam.find(t => t.nickname === r.name) || {};
@@ -529,19 +491,12 @@
         repHtml += `
         <div class="report-item">
           <div style="flex:1;">
-            <div style="color:var(--accent-yellow); font-size:12px; font-weight:800; margin-bottom:6px;">
-              🗓 วันที่ ${thaiDate} &nbsp;•&nbsp; 👤 ${r.name}
-            </div>
-            <div style="font-size:13px; color:#fff; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:6px;">
-              <span style="background:#32364a; padding:2px 8px; border-radius:6px; font-size:11px;">${pId}</span>
-              ${pBranch}
-            </div>
-            <div style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:600;">
-              📝 หมายเหตุ: ${remarkTxt}
-            </div>
+            <div class="ri-top">🗓 ${thaiDate} &nbsp;•&nbsp; 👤 ${esc(r.name)}</div>
+            <div class="ri-br"><span>${esc(pId)}</span>${esc(pBranch)}</div>
+            <div class="ri-note">📝 ${esc(remarkTxt)}</div>
           </div>
           <div style="margin-left:12px;">
-            <span class="report-badge">${r.type}</span>
+            <span class="report-badge">${esc(r.type)}</span>
           </div>
         </div>`;
       });
@@ -583,15 +538,32 @@
       moveGlider('fSeg', 'fGlider'); renderTasks();
       if (navigator.vibrate) navigator.vibrate(6);
     }
+    // แตะ 1 ที = สลับ ส่งแล้ว ↔ ยังไม่ส่ง · แตะ 2 ทีภายใน 0.4 วิ = ไม่พบสาขา
+    // บันทึกลงชีตหลังนิ้วหยุดแตะ (ส่งเฉพาะสถานะสุดท้าย ไม่ส่งซ้ำ)
+    var TAP_GAP = 400, TAP = {};
     function cycleTaskStatus(el, branchId) {
-      if (window.navigator && window.navigator.vibrate) { navigator.vibrate(15); }
       var t = TASKS.find(function (x) { return x.id === String(branchId); }); if (!t) return;
-      t.k = t.k === 'ok' ? 'no' : t.k === 'no' ? 'warn' : 'ok';
-      LAST_EDIT = Date.now();
+      var id = String(branchId), now = Date.now(), tp = TAP[id] || (TAP[id] = { last: 0, before: t.k, timer: null });
+      if (now - tp.last < TAP_GAP) {
+        t.k = 'warn'; tp.last = 0;
+        if (navigator.vibrate) navigator.vibrate([12, 40, 12]);
+      } else {
+        if (!tp.timer) tp.before = t.k;
+        t.k = t.k === 'ok' ? 'no' : 'ok';
+        tp.last = now;
+        if (navigator.vibrate) navigator.vibrate(12);
+      }
+      LAST_EDIT = now;
       el.className = 'st s-' + t.k; el.innerHTML = '<i></i>' + ST_LBL[t.k];
       void el.offsetWidth; el.classList.add('pop');
       renderProgress();
-      google.script.run.withFailureHandler(function () { toast('บันทึกสถานะไม่สำเร็จ ลองใหม่'); }).updateTaskStatus(branchId, ST_TXT[t.k]);
+      clearTimeout(tp.timer);
+      tp.timer = setTimeout(function () {
+        tp.timer = null;
+        if (t.k === tp.before) return;   // แตะไปแล้วกลับมาที่เดิม → ไม่ต้องบันทึก
+        var k = t.k; tp.before = k;
+        google.script.run.withFailureHandler(function () { toast('บันทึกสถานะไม่สำเร็จ ลองใหม่'); }).updateTaskStatus(id, ST_TXT[k]);
+      }, TAP_GAP + 50);
     }
     function copySummary() {
       var title = document.getElementById('task-dynamic-title').value || 'งาน';
@@ -616,6 +588,128 @@
     window.addEventListener('resize', function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); fitTitle(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); });
 
+
+    // =========================================================
+    // 🔗 ลิงก์ Report ให้หัวหน้า (เปิดดูได้โดยไม่ต้องล็อกอิน · อ่านอย่างเดียว)
+    // =========================================================
+    var REPORT_URL = '';
+    function reportUrl(key) { return new URL('asm-report.html?k=' + encodeURIComponent(key), location.href).href; }
+    function loadReportLink(renew, cb) {
+      google.script.run.withSuccessHandler(function (r) { REPORT_URL = r && r.key ? reportUrl(r.key) : ''; cb && cb(REPORT_URL); })
+        .withFailureHandler(function (e) { cb && cb('', e); }).getReportLink(!!renew);
+    }
+    function copyText(txt, ok, bad) {
+      var fallback = function () { var a = document.createElement('textarea'); a.value = txt; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); var good = false; try { good = document.execCommand('copy'); } catch (e) {} a.remove(); good ? ok() : bad(); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, fallback); else fallback();
+    }
+    function copyReportLink() {
+      var btn = document.getElementById('linkBtn');
+      var done = function () { btn.classList.add('done'); btn.textContent = '✓ คัดลอกลิงก์แล้ว — ส่งให้หัวหน้าได้เลย'; setTimeout(function () { btn.classList.remove('done'); btn.textContent = '🔗 คัดลอกลิงก์ Report ให้หัวหน้า'; }, 2400); };
+      var show = function () { openSettings(); toast('คัดลอกอัตโนมัติไม่ได้ — กดคัดลอกในหน้าตั้งค่า'); };
+      if (REPORT_URL) return copyText(REPORT_URL, done, show);
+      btn.textContent = 'กำลังสร้างลิงก์…';
+      loadReportLink(false, function (url, err) {
+        btn.textContent = '🔗 คัดลอกลิงก์ Report ให้หัวหน้า';
+        if (!url) return toast('สร้างลิงก์ไม่สำเร็จ: ' + (err && err.message || ''));
+        copyText(url, done, show);
+      });
+    }
+
+    // =========================================================
+    // ⚙️ ตั้งค่า: ASM / โซน · สาขาที่ติดตามงาน · ทีมในตารางงาน · ลิงก์ Report
+    // =========================================================
+    var SET = null, SET_DIRTY = false;
+    function openSettings() {
+      document.getElementById('setModal').style.display = 'flex';
+      if (!SET) document.getElementById('set-body').innerHTML = '<div class="loading">กำลังโหลด…</div>';
+      setCall('getSettings', [], null);
+      if (!REPORT_URL) loadReportLink(false, function () { if (SET) renderSettings(); });
+    }
+    function closeSettings() {
+      document.getElementById('setModal').style.display = 'none';
+      if (SET_DIRTY) { SET_DIRTY = false; fetchData(false); }
+    }
+    function setMsg(t, err) { var m = document.getElementById('set-msg'); if (m) { m.textContent = t || ''; m.className = 'set-msg' + (err ? ' err' : ''); } }
+    function setCall(fn, args, okText) {
+      var runner = google.script.run.withSuccessHandler(function (d) {
+        SET = d; if (fn !== 'getSettings') SET_DIRTY = true;
+        renderSettings(); if (okText) { setMsg('✓ ' + okText); toast(okText); }
+      }).withFailureHandler(function (e) { setMsg((e && e.message) || 'ไม่สำเร็จ', true); if (navigator.vibrate) navigator.vibrate([20, 40, 20]); });
+      runner[fn].apply(runner, args);
+      setMsg('กำลังบันทึก…');
+    }
+    // ปุ่มอันตราย: แตะครั้งแรก = ถามยืนยัน
+    function sure(btn, label) {
+      if (btn.classList.contains('sure')) return true;
+      document.querySelectorAll('.sbtn.sure').forEach(function (b) { b.classList.remove('sure'); if (b._lbl) b.textContent = b._lbl; });
+      btn._lbl = btn.textContent; btn.classList.add('sure'); btn.textContent = label || 'แตะอีกครั้งเพื่อยืนยัน';
+      clearTimeout(btn._t); btn._t = setTimeout(function () { btn.classList.remove('sure'); btn.textContent = btn._lbl; }, 3500);
+      if (navigator.vibrate) navigator.vibrate(10);
+      return false;
+    }
+    function renderSettings() {
+      if (!SET) return;
+      var b = SET.branches || [], tm = SET.team || [];
+      var ids = {}; tm.forEach(function (p) { ids[p.id] = p.branch; });
+      var h = '';
+      h += '<div class="set-sec"><h4>🔗 ลิงก์ Report ให้หัวหน้า</h4><p>หัวหน้าเปิดดูสถานะส่งงานได้เลย ไม่ต้องล็อกอิน ไม่ต้องเข้าแอป (ดูได้อย่างเดียว แก้ไม่ได้) · อัปเดตเองทุก 1 นาที</p>' +
+        '<div class="set-row"><input readonly id="set-link" value="' + esc(REPORT_URL || 'กำลังสร้างลิงก์…') + '" onclick="this.select()">' +
+        '<button class="sbtn y" onclick="setCopyLink(this)">คัดลอก</button><button class="sbtn g" onclick="if(REPORT_URL)window.open(REPORT_URL,\'_blank\')">เปิดดู</button></div>' +
+        '<div class="set-row" style="margin-top:8px;justify-content:flex-end"><button class="sbtn r" onclick="setRenewLink(this)">สร้างลิงก์ใหม่ (ลิงก์เก่าใช้ไม่ได้)</button></div></div>';
+      h += '<div class="set-sec"><h4>🧭 ASM / โซน</h4><p>ชื่อที่โชว์ใต้หัวข้อ เช่น "ZONE ASM ทศพล" — เปลี่ยน ASM แก้ตรงนี้ที่เดียว</p>' +
+        '<div class="set-row"><input id="set-am" maxlength="80" value="' + esc(SET.am) + '" placeholder="ชื่อ ASM / โซน"><button class="sbtn" onclick="setCall(\'saveZone\',[document.getElementById(\'set-am\').value],\'บันทึกชื่อ ASM แล้ว\')">บันทึก</button></div></div>';
+      h += '<div class="set-sec"><h4>🏬 สาขาที่ติดตามงาน <small>' + b.length + ' สาขา</small></h4><p>ชีต: ' + esc(SET.statusSheet) + ' · แก้ชื่อแล้วกดออกจากช่องจะบันทึกเอง</p><div class="set-list">' +
+        (b.length ? b.map(function (x, i) {
+          return '<div class="set-item"><div class="t"><b>' + esc(x.id) + '</b><input value="' + esc(x.name) + '" data-i="' + i + '" placeholder="ชื่อสาขา" onchange="setRenameBranch(this)"></div>' +
+            '<button class="sbtn r" data-i="' + i + '" onclick="setRemoveBranch(this)">ลบ</button></div>';
+        }).join('') : '<div class="empty">ยังไม่มีสาขา</div>') + '</div>' +
+        '<div class="set-add"><input id="nb-id" maxlength="20" placeholder="ID สาขา เช่น ID1326"><input id="nb-name" maxlength="60" placeholder="ชื่อสาขา">' +
+        '<button class="sbtn full" onclick="setAddBranch()">＋ เพิ่มสาขา</button></div>' +
+        '<div class="set-row" style="margin-top:10px"><button class="sbtn r" style="flex:1" onclick="setResetAll(this)">🔄 เริ่มงานใหม่ — ทุกสาขากลับเป็น "ยังไม่ส่ง"</button></div></div>';
+      h += '<div class="set-sec"><h4>👥 ทีมในหน้าตารางงาน <small>' + tm.length + ' คน</small></h4><p>ID สาขาต้องตรงกับหัวคอลัมน์แถว 8 ในชีต "ตารางงาน" (เช่น ID1326) ระบบถึงดึงกะให้ได้</p><div class="set-list">' +
+        tm.map(function (p, i) {
+          return '<div class="set-item"><div class="t"><b>' + esc(p.nickname) + ' <small style="color:#8E8E93;font-weight:600">' + esc(p.role) + '</small></b><span>' + esc(p.id) + ' · ' + esc(p.branch) + '</span></div>' +
+            '<button class="sbtn r" data-i="' + i + '" onclick="setRemovePerson(this)">ลบ</button></div>';
+        }).join('') + '</div>' +
+        '<div class="set-add"><input id="np-nick" maxlength="20" placeholder="ชื่อเล่น"><select id="np-role"><option>ABSM</option><option>BSM</option><option>SM</option></select>' +
+        '<input id="np-id" maxlength="20" list="np-ids" placeholder="ID สาขา เช่น ID1326" oninput="setFillBranch(this)"><input id="np-branch" maxlength="60" placeholder="ชื่อสาขา">' +
+        '<datalist id="np-ids">' + Object.keys(ids).map(function (k) { return '<option value="' + esc(k) + '">' + esc(ids[k]) + '</option>'; }).join('') + '</datalist>' +
+        '<button class="sbtn full" onclick="setAddPerson()">＋ เพิ่มคนในทีม</button></div></div>';
+      h += '<div class="set-msg" id="set-msg"></div>';
+      document.getElementById('set-body').innerHTML = h;
+    }
+    function setCopyLink(btn) {
+      if (!REPORT_URL) return;
+      copyText(REPORT_URL, function () { btn.textContent = '✓ แล้ว'; setTimeout(function () { btn.textContent = 'คัดลอก'; }, 1800); }, function () { var i = document.getElementById('set-link'); i.select(); toast('กดค้างที่ลิงก์แล้วเลือกคัดลอก'); });
+    }
+    function setRenewLink(btn) {
+      if (!sure(btn, 'แตะอีกครั้ง — ลิงก์เก่าจะใช้ไม่ได้')) return;
+      loadReportLink(true, function (url) { renderSettings(); if (url) { setMsg('✓ สร้างลิงก์ใหม่แล้ว อย่าลืมส่งให้หัวหน้าใหม่'); } });
+    }
+    function setAddBranch() {
+      var id = document.getElementById('nb-id').value.trim(), nm = document.getElementById('nb-name').value.trim();
+      if (!id) return setMsg('ใส่ ID สาขาก่อน', true);
+      setCall('addBranch', [id, nm], 'เพิ่มสาขา ' + id + ' แล้ว');
+    }
+    function setRenameBranch(inp) { var x = SET.branches[+inp.dataset.i]; if (x && inp.value.trim() !== x.name) setCall('renameBranch', [x.id, inp.value.trim()], 'แก้ชื่อ ' + x.id + ' แล้ว'); }
+    function setRemoveBranch(btn) { var x = SET.branches[+btn.dataset.i]; if (!x || !sure(btn, 'ยืนยันลบ?')) return; setCall('removeBranch', [x.id], 'ลบสาขา ' + x.id + ' แล้ว'); }
+    function setResetAll(btn) { if (!sure(btn, 'แตะอีกครั้ง — ทุกสาขาจะเป็น "ยังไม่ส่ง"')) return; setCall('resetAllStatus', [], 'ตั้งทุกสาขาเป็น "ยังไม่ส่ง" แล้ว'); }
+    function setFillBranch(inp) {
+      var v = inp.value.trim().toUpperCase(), hit = (SET.team || []).find(function (p) { return p.id === v; });
+      if (hit && !document.getElementById('np-branch').value) document.getElementById('np-branch').value = hit.branch;
+    }
+    function setAddPerson() {
+      var g = function (id) { return document.getElementById(id).value.trim(); };
+      var p = { nickname: g('np-nick'), role: g('np-role'), id: g('np-id').toUpperCase(), branch: g('np-branch') };
+      if (!p.nickname || !p.id) return setMsg('ใส่ชื่อเล่น และ ID สาขา', true);
+      if (!/^ID/i.test(p.id)) p.id = 'ID' + p.id;
+      setCall('saveTeam', [(SET.team || []).concat([p])], 'เพิ่ม ' + p.nickname + ' แล้ว');
+    }
+    function setRemovePerson(btn) {
+      var i = +btn.dataset.i, p = SET.team[i]; if (!p || !sure(btn, 'ยืนยันลบ?')) return;
+      setCall('saveTeam', [SET.team.filter(function (_, j) { return j !== i; })], 'ลบ ' + p.nickname + ' แล้ว');
+    }
+
     function saveTitle(newTitle) {
       google.script.run.updateTaskTitle(newTitle);
     }
@@ -625,7 +719,6 @@
         document.getElementById('tab-' + k).classList.toggle('on', k === tab);
         document.getElementById('view-' + k).style.display = k === tab ? 'block' : 'none';
       });
-      document.body.classList.toggle('sch', tab === 'schedule');
       moveGlider('tabSeg', 'tabGlider');
       if (tab === 'task') setTimeout(function () { moveGlider('fSeg', 'fGlider'); }, 30);
       if (navigator.vibrate) navigator.vibrate(6);

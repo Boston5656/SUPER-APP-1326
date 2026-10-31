@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="SUPER APP 1326">
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
-  <script src="gas.js?v=2026.10.09-1"></script>
+  <script src="gas.js?v=2026.10.31-1"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -431,13 +431,13 @@
       box-shadow: 0 30px 60px -20px rgba(60,48,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06) !important;
     }
     .login-box .inner-shadow { box-shadow: none !important; }
-    #loginId {
+    #loginId, #loginPass {
       background: rgba(255,255,255,0.08) !important; color: #fff !important;
       border: 1.5px solid rgba(255,255,255,0.08); border-radius: 18px !important;
       transition: border-color .3s, box-shadow .3s;
     }
-    #loginId::placeholder { color: #7C7C80; font-weight: 500; }
-    #loginId:focus { border-color: var(--yellow); box-shadow: 0 0 0 4px rgba(255,214,0,0.25); }
+    #loginId::placeholder, #loginPass::placeholder { color: #7C7C80; font-weight: 500; }
+    #loginId:focus, #loginPass:focus { border-color: var(--yellow); box-shadow: 0 0 0 4px rgba(255,214,0,0.25); }
 
     /* ---------- APP HUB: ไอคอนดำเงา + เส้นเหลือง ---------- */
     #welcomeText { font-family: var(--f-num); font-size: 1.35rem; }
@@ -851,6 +851,37 @@
       .rk-solo { grid-template-columns: 1fr; }
       .rk-big { font-size: 30px; }
     }
+
+    /* 🎯 Ranking งานโฟกัส */
+    .rk-cats .rk-fbtn.on { background: var(--yellow); color: var(--ink); }
+    .rk-panel > .rk-sum3:last-child { margin-bottom: 0; }
+    .rk-fctl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; }
+    .rk-fseg { flex: 1 1 260px; background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.06); box-shadow: none; }
+    .rk-fseg button { color: #AEAEB2; }
+    .rk-fseg button.on { background: var(--yellow); color: var(--ink); }
+    .rk-fnav { flex: 1 1 240px; display: flex; align-items: center; gap: 6px; }
+    .rk-fnav b { flex: 1; text-align: center; font-family: var(--f-num); font-size: 15px; white-space: nowrap; }
+    .rk-fnav b em { font-style: normal; font-size: 10px; font-weight: 800; color: var(--ink); background: var(--yellow); border-radius: 100px; padding: 2px 7px; margin-left: 4px; vertical-align: 2px; }
+    .rk-fnav button { width: 40px; height: 40px; flex-shrink: 0; border-radius: 13px; background: rgba(255,255,255,.08); color: #fff; font-size: 22px; line-height: 1; transition: transform .35s var(--spring); }
+    .rk-fnav button:active { transform: scale(.88); }
+    .rk-fnav button:disabled { opacity: .25; }
+    .rk-fgrp { margin: 0; flex: 1 1 100%; }
+    .rk-fitems > div { display: grid; grid-template-columns: minmax(96px, 30%) 1fr 44px; align-items: center; gap: 10px; padding: 6px 2px; }
+    .rk-fitems span { font-family: var(--f-num); font-size: 12.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-fitems span i { font-style: normal; color: var(--yellow); font-size: 9px; margin-right: 5px; vertical-align: 1px; }
+    .rk-fitems em { height: 10px; border-radius: 100px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .rk-fitems em s { display: block; height: 100%; width: 0; border-radius: 100px; background: linear-gradient(90deg, #FFE45C, #FFD600); transition: width 1s var(--ios-ease); }
+    .rk-fitems b { text-align: right; font-family: var(--f-num); font-size: 14px; }
+    .rk-fitems .zero span, .rk-fitems .zero b { color: rgba(255,255,255,.3); }
+    .rk-fbars { display: flex; align-items: flex-end; gap: 3px; height: 130px; padding-top: 4px; }
+    .rk-fbars > div { flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
+    .rk-fbars i { width: 100%; max-width: 26px; border-radius: 6px 6px 2px 2px; background: rgba(255,255,255,.2); transition: height 1s var(--ios-ease); }
+    .rk-fbars i.best { background: var(--yellow); }
+    .rk-fbars b { font-family: var(--f-num); font-size: 10px; color: #E5E5EA; min-height: 13px; }
+    .rk-fbars small { font-size: 9px; color: #8E8E93; font-weight: 700; }
+    .rk-fbars.month b { font-size: 8.5px; } .rk-fbars.month small { font-size: 8px; }
+    .rk-ft th.it { max-width: 74px; overflow: hidden; text-overflow: ellipsis; }
+    @media (max-width: 640px) { .rk-fbars.month b { display: none; } .rk-fbars.month > div:nth-child(even) small { visibility: hidden; } }
     /* แนวนอน / จอใหญ่: podium ซ้าย · ตารางขวา */
     @media (min-width: 1100px) and (orientation: landscape) {
       .rk-wrap { max-width: 1720px; }
@@ -886,7 +917,53 @@
     #hub-logout { position: fixed; z-index: 30; top: calc(14px + env(safe-area-inset-top)); right: 14px; background: #1C1C1E; color: #FFD600;
       box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); }
     #hub-logout:hover { background: #2C2C2E; }
-    #hub-announce { position: fixed; z-index: 30; top: calc(14px + env(safe-area-inset-top)); left: 14px; background: #1C1C1E; color: #FFD600; box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); }
+    #hub-admin { position: fixed; z-index: 30; top: calc(14px + env(safe-area-inset-top)); left: 14px; gap: 8px; }
+    #hub-admin .logout-btn { background: #1C1C1E; color: #FFD600; box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); }
+
+    /* 🔐 ล็อกอิน User / Password */
+    .lg-fields { display: flex; flex-direction: column; gap: 10px; }
+    .lg-pass { position: relative; }
+    .lg-pass input { padding-right: 52px !important; }
+    .lg-eye { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; font-size: 17px; cursor: pointer; opacity: .5; filter: grayscale(1) brightness(1.8); }
+    .lg-eye.dk { filter: none; }
+    .lg-eye.on { opacity: 1; }
+    .lg-hint { margin: 2px 4px 0; text-align: center; font-size: 11.5px; line-height: 1.45; font-weight: 600; color: rgba(255,255,255,.55); }
+    #loginBox .space-y-8 > * + * { margin-top: 22px; }
+
+    /* แผ่นล่างแบบ iOS (สร้างบัญชี / บัญชีผู้ใช้) */
+    .sx-sheet { position: fixed; inset: 0; z-index: 95; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.45);
+      -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 12px 12px calc(12px + env(safe-area-inset-bottom)); }
+    .sx-sheet.on { display: flex; animation: lsFade .25s ease both; }
+    @media (min-width: 640px) { .sx-sheet { align-items: center; } }
+    .sx-card { max-width: 460px; }
+    .sx-l { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 12px 4px 6px; font: 800 12.5px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; }
+    .sx-l small { font-weight: 600; font-size: 11px; color: #8E8E93; }
+    .sx-in { width: 100%; box-sizing: border-box; border: 0; border-radius: 14px; padding: 13px 14px; font: 600 15px 'IBM Plex Sans Thai', sans-serif; background: #fff; color: #1C1C1E; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+    .sx-in:focus { outline: 2px solid #FFD600; }
+    .lg-eye.dk { right: 4px; }
+    .sx-seg { display: flex; gap: 4px; padding: 4px; border-radius: 16px; background: #E9E9EE; }
+    .sx-seg button { flex: 1; border: 0; border-radius: 12px; padding: 11px 6px; background: none; font: 700 14px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; cursor: pointer; transition: background .25s, color .25s, transform .35s var(--spring); }
+    .sx-seg button:active { transform: scale(.95); }
+    .sx-seg button.on { background: #1C1C1E; color: #FFD600; box-shadow: 0 6px 14px -8px rgba(0,0,0,.6); }
+    .sx-seg button:disabled:not(.on) { opacity: .35; }
+    .sx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sx-chips button { border: 0; border-radius: 100px; padding: 9px 14px; background: #fff; font: 700 13px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; box-shadow: 0 1px 2px rgba(0,0,0,.06); cursor: pointer; transition: transform .35s var(--spring); }
+    .sx-chips button:active { transform: scale(.92); }
+    .sx-chips button.on { background: #1C1C1E; color: #FFD600; }
+    .sx-msg { min-height: 18px; margin: 12px 4px 0; font: 700 12.5px 'IBM Plex Sans Thai', sans-serif; color: #D70015; }
+    .sx-note { margin: 0 2px 10px; font: 600 11.5px/1.5 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; }
+    .sx-empty { text-align: center; padding: 22px 0; font: 700 13px 'IBM Plex Sans Thai', sans-serif; color: #8E8E93; }
+    .sx-grp { margin: 14px 4px 6px; font: 800 11px 'IBM Plex Sans Thai', sans-serif; letter-spacing: .06em; color: #8E8E93; }
+    .ac-row { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 16px; padding: 10px 10px 10px 12px; margin-bottom: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .ac-av { width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #1C1C1E; color: #FFD600; font: 800 15px 'IBM Plex Sans Thai', sans-serif; }
+    .ac-t { flex: 1; min-width: 0; }
+    .ac-t b { display: block; font: 800 14px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ac-t span { display: block; font: 600 11.5px 'IBM Plex Sans Thai', sans-serif; color: #6E6E73; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ac-t em { font-style: normal; color: #B25000; }
+    .ac-del { flex-shrink: 0; border: 0; border-radius: 12px; padding: 9px 12px; background: #FFE5E3; color: #D70015; font: 800 12.5px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; transition: transform .35s var(--spring), background .2s; }
+    .ac-del:active { transform: scale(.9); }
+    .ac-del.sure { background: #D70015; color: #fff; }
+    .ac-me { flex-shrink: 0; font: 700 11px 'IBM Plex Sans Thai', sans-serif; color: #8E8E93; padding: 0 6px; }
     #ann-sheet { position: fixed; inset: 0; z-index: 90; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.45);
       -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); padding: 12px 12px calc(12px + env(safe-area-inset-bottom)); }
     #ann-sheet.on { display: flex; animation: lsFade .25s ease both; }
@@ -983,7 +1060,14 @@
     <div class="login-box p-8 w-full max-w-sm relative" id="loginBox">
       <div class="absolute inset-0 rounded-[32px] inner-shadow pointer-events-none"></div>
       <div class="relative z-10 space-y-8">
-        <input type="text" id="loginId" placeholder="รหัสพนักงาน / ชื่อแบรนด์" class="w-full h-14 px-6 text-center text-lg font-bold text-black bg-white pill focus:outline-none">
+        <div class="lg-fields">
+          <input type="text" id="loginId" placeholder="User / รหัสพนักงาน / แบรนด์" autocomplete="username" autocapitalize="none" spellcheck="false" class="w-full h-14 px-6 text-center text-lg font-bold text-black bg-white pill focus:outline-none">
+          <div class="lg-pass">
+            <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password" class="w-full h-14 px-6 text-center text-lg font-bold text-black bg-white pill focus:outline-none">
+            <button type="button" class="lg-eye" onclick="togglePass('loginPass', this)" aria-label="แสดงรหัส">👁</button>
+          </div>
+          <p class="lg-hint">เข้าครั้งแรก: ใส่รหัสพนักงาน หรือ ชื่อแบรนด์ (PC) ไม่ต้องใส่ Password</p>
+        </div>
         <div class="slider-track" id="sliderContainer">
           <div class="slider-fill" id="sliderFill"></div>
           <div class="slider-text" id="sliderText">สไลด์เพื่อปลดล็อค</div>
@@ -1000,7 +1084,10 @@
 
   <!-- APP HUB -->
   <div id="page-hub" class="hidden page-login p-6 flex items-center justify-center">
-    <button id="hub-announce" class="logout-btn" onclick="openAnnounce()" aria-label="ประกาศเข้ากลุ่ม LINE" style="display:none">📢 <span>ประกาศ</span></button>
+    <div id="hub-admin" style="display:none">
+      <button id="hub-announce" class="logout-btn" onclick="openAnnounce()" aria-label="ประกาศเข้ากลุ่ม LINE">📢 <span>ประกาศ</span></button>
+      <button id="hub-users" class="logout-btn" onclick="openAccounts()" aria-label="จัดการบัญชีผู้ใช้">👥 <span>ผู้ใช้</span></button>
+    </div>
     <button id="hub-logout" class="logout-btn" onclick="askLogout()" aria-label="ออกจากระบบ">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
       <span>ออกจากระบบ</span>
@@ -1120,7 +1207,7 @@
         </div>
       </header>
       <nav class="rk-seg rk-cats" id="rk-cats">
-        <button data-c="SMARTPHONE" class="on">📱 Smartphone</button><button data-c="IPHONE"> iPhone</button><button data-c="TABLET">📟 Tablet</button><button data-c="IPAD"> iPad</button>
+        <button data-c="SMARTPHONE" class="on">📱 Smartphone</button><button data-c="IPHONE"> iPhone</button><button data-c="TABLET">📟 Tablet</button><button data-c="IPAD"> iPad</button><button data-c="FOCUS" class="rk-fbtn">🎯 โฟกัส</button>
       </nav>
       <nav class="rk-seg rk-periods" id="rk-periods">
         <button data-p="Q1">Q1</button><button data-p="Q2">Q2</button><button data-p="Q3">Q3</button><button data-p="Q4">Q4</button><button data-p="Y" class="rk-y">ทั้งปี</button><button data-p="YOY" class="rk-y">📈 vs ปีก่อน</button><button data-p="DAY" class="rk-y">📅 รายวัน</button>
@@ -1166,6 +1253,52 @@
     </div>
   </div>
 
+  <!-- 👤 สร้างบัญชี (เข้าครั้งแรกด้วยรหัสพนักงาน / ชื่อแบรนด์) -->
+  <div id="reg-sheet" class="sx-sheet">
+    <div class="ann-card sx-card">
+      <div class="ann-head">
+        <span class="ann-ic">👤</span>
+        <div><h3>สร้างบัญชีผู้ใช้</h3><small id="reg-sub">ตั้ง User / Password ไว้เข้าครั้งต่อไป</small></div>
+        <button class="ann-x" onclick="closeRegister()" aria-label="ปิด">✕</button>
+      </div>
+      <label class="sx-l">ชื่อเล่น</label>
+      <input class="sx-in" id="reg-nick" maxlength="20" placeholder="เช่น บอสตัน">
+      <label class="sx-l">ตำแหน่ง</label>
+      <div class="sx-seg" id="reg-pos">
+        <button type="button" data-v="STAFF" onclick="regPos('STAFF')">🧑‍💼 พนักงาน</button>
+        <button type="button" data-v="PC" onclick="regPos('PC')">🏷️ PC แบรนด์</button>
+      </div>
+      <div id="reg-brand-wrap" style="display:none">
+        <label class="sx-l">แบรนด์</label>
+        <div class="sx-chips" id="reg-brand"></div>
+      </div>
+      <label class="sx-l">User เข้าใช้งาน <small>ภาษาอังกฤษ/ตัวเลข 3–20 ตัว</small></label>
+      <input class="sx-in" id="reg-user" maxlength="20" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="เช่น boston">
+      <label class="sx-l">Password <small>อย่างน้อย 6 ตัว</small></label>
+      <div class="lg-pass"><input class="sx-in" id="reg-pass" type="password" autocomplete="new-password" placeholder="••••••"><button type="button" class="lg-eye dk" onclick="togglePass('reg-pass', this)" aria-label="แสดงรหัส">👁</button></div>
+      <label class="sx-l">ยืนยัน Password</label>
+      <input class="sx-in" id="reg-pass2" type="password" autocomplete="new-password" placeholder="••••••">
+      <div class="sx-msg" id="reg-msg"></div>
+      <div class="ann-row">
+        <button class="ann-no" onclick="closeRegister()">ยกเลิก</button>
+        <button class="ann-yes" id="reg-save" onclick="saveRegister()">บันทึกและเข้าใช้งาน</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 👥 จัดการบัญชีผู้ใช้ (ผู้จัดการ) -->
+  <div id="acct-sheet" class="sx-sheet" onclick="if(event.target===this)closeAccounts()">
+    <div class="ann-card sx-card">
+      <div class="ann-head">
+        <span class="ann-ic">👥</span>
+        <div><h3>บัญชีผู้ใช้</h3><small id="acct-sub">กำลังโหลด…</small></div>
+        <button class="ann-x" onclick="closeAccounts()" aria-label="ปิด">✕</button>
+      </div>
+      <p class="sx-note">ลืมรหัส หรือ เปลี่ยนคน → ลบบัญชี แล้วให้เข้าด้วยรหัสพนักงาน / ชื่อแบรนด์ เพื่อสร้างใหม่ · ระบบเก็บ Password แบบเข้ารหัส ผู้จัดการก็ดูไม่ได้</p>
+      <div id="acct-list"><div class="sx-empty">กำลังโหลด…</div></div>
+    </div>
+  </div>
+
   <!-- ยืนยันออกจากระบบ -->
   <div id="logout-sheet" onclick="if(event.target===this)closeLogout()">
     <div class="ls-card">
@@ -1194,7 +1327,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.10.09-1';
+    const APP_VER = '2026.10.31-1';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -1380,7 +1513,7 @@
 
     function askLogout() {
       var who = currentUser && (currentUser.name || currentUser.empId || currentUser.brand);
-      document.getElementById('ls-who').textContent = (who ? who + ' · ' : '') + 'ต้องใส่รหัสใหม่เพื่อเข้าใช้งานอีกครั้ง';
+      document.getElementById('ls-who').textContent = (who ? who + ' · ' : '') + 'ต้องใส่ User / Password ใหม่เพื่อเข้าใช้งานอีกครั้ง';
       document.getElementById('logout-sheet').classList.add('on');
     }
     function closeLogout() { document.getElementById('logout-sheet').classList.remove('on'); }
@@ -1397,8 +1530,11 @@
       document.getElementById('page-login').classList.remove('hidden');
       document.getElementById('loginBox').classList.remove('leaving');
       document.getElementById('loginId').value = '';
+      document.getElementById('loginPass').value = '';
+      closeRegister(); closeAccounts();
       resetSlider();
     }
+    window.onSysAuth = () => { if (currentUser) forceLogout(); };   // token หมดอายุ / บัญชีถูกลบ → กลับหน้าล็อกอิน
 
     ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'].forEach(evt => {
       window.addEventListener(evt, updateActivity, { passive: true });
@@ -1473,7 +1609,7 @@
       if (raw) {
         try {
           const session = JSON.parse(raw);
-          if (session.user && (Date.now() - session.lastActivity) < SESSION_TIMEOUT && window.SYS1326 && SYS1326.getToken()) {
+          if (session.user && session.user.acct && (Date.now() - session.lastActivity) < SESSION_TIMEOUT && window.SYS1326 && SYS1326.getToken()) {
             currentUser = session.user;
             document.getElementById('page-login').classList.add('hidden');
             document.getElementById('page-hub').classList.remove('hidden');
@@ -1496,28 +1632,167 @@
       }
       el.textContent = '⚠️ ' + ((err && err.message) || err);
     }
+    function enterApp(res) {
+      currentUser = res;
+      saveSession();
+      resetInactivityTimer();
+      document.getElementById('loginPass').value = '';
+      const le = document.getElementById('login-err'); if (le) le.remove();
+      document.getElementById('loginBox').classList.add('leaving');
+      setTimeout(() => {
+        document.getElementById('page-login').classList.add('hidden');
+        document.getElementById('page-hub').classList.remove('hidden');
+        buildAppHub();
+        document.getElementById('loginBox').classList.remove('leaving');
+        resetSlider();
+      }, 380);
+    }
     function processLogin() {
-      const input = document.getElementById('loginId').value;
-      if (!input) { shakeLogin(); resetSlider("กรุณากรอกรหัสก่อน"); return; }
+      const input = document.getElementById('loginId').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      if (!input) { shakeLogin(); resetSlider("กรุณากรอก User หรือ รหัส"); return; }
       setSliderText("กำลังเข้าสู่ระบบ...");
       google.script.run
         .withSuccessHandler(res => {
-          if (res.status === 'success') {
-            currentUser = res;
-            saveSession();
-            resetInactivityTimer();
-            document.getElementById('loginBox').classList.add('leaving');
-            setTimeout(() => {
-              document.getElementById('page-login').classList.add('hidden');
-              document.getElementById('page-hub').classList.remove('hidden');
-              buildAppHub();
-              document.getElementById('loginBox').classList.remove('leaving');
-              resetSlider();
-            }, 380);
-          } else { shakeLogin(); resetSlider(res.message); }
+          res = res || {};
+          if (res.status === 'success') enterApp(res);
+          else if (res.status === 'register') { resetSlider(); openRegister(res); }
+          else if (res.status === 'need_pass') { shakeLogin(); resetSlider('ใส่ Password ด้วยครับ'); document.getElementById('loginPass').focus(); }
+          else { const m = res.message || 'เข้าไม่ได้'; shakeLogin(); resetSlider(m.length > 24 ? 'เข้าไม่ได้ — ดูด้านล่าง' : m); if (m.length > 24) showLoginError(m); }
         })
         .withFailureHandler(err => { shakeLogin(); resetSlider("เชื่อมต่อไม่ได้"); showLoginError(err); })
-        .authenticateUser(input);
+        .loginAccount({ user: input, pass: pass });
+    }
+    // Enter ในช่องรหัส = สไลด์ให้เอง
+    ['loginId', 'loginPass'].forEach(id => document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      e.preventDefault();
+      if (id === 'loginId' && !document.getElementById('loginPass').value) { document.getElementById('loginPass').focus(); return; }
+      if (!sliderLocked) completeSlide();
+    }));
+    function togglePass(id, btn) {
+      const el = document.getElementById(id), show = el.type === 'password';
+      el.type = show ? 'text' : 'password';
+      btn.classList.toggle('on', show);
+      if (id === 'reg-pass') document.getElementById('reg-pass2').type = el.type;
+    }
+
+    // =========================================================
+    // 👤 สร้างบัญชี (เข้าครั้งแรก)
+    // =========================================================
+    let regInfo = null, regState = { pos: 'STAFF', brand: '' };
+    function openRegister(info) {
+      regInfo = info;
+      const isBrand = info.role === 'PC', isMgr = info.role === 'MANAGER';
+      regState = { pos: isBrand ? 'PC' : 'STAFF', brand: isBrand ? info.brand : '' };
+      document.getElementById('reg-sub').textContent = isBrand
+        ? `เข้าด้วยแบรนด์ ${info.brand} ครั้งแรก — ตั้ง User / Password ไว้เข้าครั้งต่อไป`
+        : `เข้าด้วยรหัส ${info.code} ครั้งแรก — ตั้ง User / Password ไว้เข้าครั้งต่อไป`;
+      ['reg-nick', 'reg-user', 'reg-pass', 'reg-pass2'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('reg-msg').textContent = '';
+      document.querySelectorAll('#reg-pos button').forEach(b => {
+        b.disabled = (isBrand && b.dataset.v === 'STAFF') || (isMgr && b.dataset.v === 'PC');
+      });
+      document.getElementById('reg-brand').innerHTML = (info.brands || []).map(b =>
+        `<button type="button" data-v="${b}" onclick="regBrand('${b}')"${isBrand && b !== info.brand ? ' disabled style="opacity:.35"' : ''}>${b}</button>`).join('');
+      regPos(regState.pos, true);
+      document.getElementById('reg-sheet').classList.add('on');
+      setTimeout(() => document.getElementById('reg-nick').focus(), 350);
+    }
+    function closeRegister() { const el = document.getElementById('reg-sheet'); if (el) el.classList.remove('on'); }
+    function regPos(v, quiet) {
+      const btn = document.querySelector(`#reg-pos button[data-v="${v}"]`);
+      if (!btn || btn.disabled) return;
+      regState.pos = v;
+      document.querySelectorAll('#reg-pos button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+      document.getElementById('reg-brand-wrap').style.display = v === 'PC' ? '' : 'none';
+      regBrand(regState.brand, true);
+      if (!quiet) haptic(6);
+    }
+    function regBrand(b, quiet) {
+      if (regInfo && regInfo.role === 'PC' && b !== regInfo.brand) return;
+      regState.brand = b || '';
+      document.querySelectorAll('#reg-brand button').forEach(x => x.classList.toggle('on', x.dataset.v === regState.brand));
+      if (!quiet) haptic(6);
+    }
+    function saveRegister() {
+      const v = id => document.getElementById(id).value;
+      const msg = document.getElementById('reg-msg');
+      const o = { code: regInfo.code, nick: v('reg-nick').trim(), pos: regState.pos, brand: regState.brand,
+                  user: v('reg-user').trim(), pass: v('reg-pass'), pass2: v('reg-pass2') };
+      const bad = !o.nick ? 'กรุณาใส่ชื่อเล่น'
+        : (o.pos === 'PC' && !o.brand) ? 'กรุณาเลือกแบรนด์'
+        : !/^[A-Za-z0-9._-]{3,20}$/.test(o.user) ? 'User ใช้ภาษาอังกฤษ/ตัวเลข 3–20 ตัว ไม่มีเว้นวรรค'
+        : !/[A-Za-z]/.test(o.user) ? 'User ต้องมีตัวอักษรภาษาอังกฤษอย่างน้อย 1 ตัว'
+        : o.pass.length < 6 ? 'Password ต้องมีอย่างน้อย 6 ตัว'
+        : o.pass !== o.pass2 ? 'ยืนยัน Password ไม่ตรงกัน' : '';
+      if (bad) { msg.textContent = bad; haptic([20, 40, 20]); return; }
+      msg.textContent = '';
+      const btn = document.getElementById('reg-save');
+      btn.disabled = true; btn.textContent = 'กำลังบันทึก…';
+      google.script.run
+        .withSuccessHandler(res => {
+          btn.disabled = false; btn.textContent = 'บันทึกและเข้าใช้งาน';
+          if (res && res.status === 'success') {
+            closeRegister();
+            document.getElementById('loginId').value = o.user;
+            enterApp(res);
+          } else { msg.textContent = (res && res.message) || 'บันทึกไม่สำเร็จ'; haptic([20, 40, 20]); }
+        })
+        .withFailureHandler(err => { btn.disabled = false; btn.textContent = 'บันทึกและเข้าใช้งาน'; msg.textContent = 'เชื่อมต่อไม่ได้: ' + err.message; })
+        .registerAccount(o);
+    }
+
+    // =========================================================
+    // 👥 บัญชีผู้ใช้ (ผู้จัดการ 15628) — ดู / ลบ
+    // =========================================================
+    let acctList = [];
+    function openAccounts() {
+      document.getElementById('acct-sheet').classList.add('on');
+      document.getElementById('acct-list').innerHTML = '<div class="sx-empty">กำลังโหลด…</div>';
+      document.getElementById('acct-sub').textContent = 'กำลังโหลด…';
+      google.script.run.withSuccessHandler(renderAccounts)
+        .withFailureHandler(e => { document.getElementById('acct-list').innerHTML = `<div class="sx-empty">โหลดไม่สำเร็จ: ${e.message}</div>`; })
+        .listAccounts();
+    }
+    function closeAccounts() { const el = document.getElementById('acct-sheet'); if (el) el.classList.remove('on'); }
+    function acEsc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+    function renderAccounts(list) {
+      acctList = list || [];
+      const n = r => acctList.filter(a => a.role === r).length;
+      document.getElementById('acct-sub').textContent = `ทั้งหมด ${acctList.length} บัญชี · ผจก. ${n('MANAGER')} · พนักงาน ${n('STAFF')} · PC ${n('PC')}`;
+      if (!acctList.length) { document.getElementById('acct-list').innerHTML = '<div class="sx-empty">ยังไม่มีใครสร้างบัญชี</div>'; return; }
+      const me = currentUser && String(currentUser.acct || '').toUpperCase();
+      const groups = [['MANAGER', 'ผู้จัดการ'], ['STAFF', 'พนักงาน'], ['PC', 'PC แบรนด์']];
+      let h = '';
+      groups.forEach(([r, label]) => {
+        const g = acctList.map((a, i) => ({ a, i })).filter(x => x.a.role === r);
+        if (!g.length) return;
+        h += `<div class="sx-grp">${label} (${g.length})</div>`;
+        g.forEach(({ a, i }) => {
+          const isMe = a.user.toUpperCase() === me;
+          h += `<div class="ac-row"><span class="ac-av">${acEsc(a.nick.charAt(0) || '?')}</span>
+            <div class="ac-t"><b>${acEsc(a.nick)}${a.brand ? ' · ' + acEsc(a.brand) : ''}</b>
+            <span>@${acEsc(a.user)} · รหัส ${acEsc(a.code)}${a.unknown ? ' · <em>⚠️ ไม่อยู่ในรายชื่อพนักงาน</em>' : ''}</span>
+            <span>เข้าล่าสุด ${acEsc(a.last || '-')}</span></div>
+            ${isMe ? '<span class="ac-me">คุณ</span>' : `<button type="button" class="ac-del" onclick="deleteAcct(${i}, this)">ลบ</button>`}</div>`;
+        });
+      });
+      document.getElementById('acct-list').innerHTML = h;
+      animateIn(document.querySelectorAll('#acct-list .ac-row'), 'ios-in', 30, 0, 400);
+    }
+    function deleteAcct(i, btn) {
+      const a = acctList[i]; if (!a) return;
+      if (!btn.classList.contains('sure')) {   // แตะครั้งแรก = ถามยืนยัน (กันกดโดน)
+        document.querySelectorAll('.ac-del.sure').forEach(b => { b.classList.remove('sure'); b.textContent = 'ลบ'; });
+        btn.classList.add('sure'); btn.textContent = 'ยืนยันลบ?'; haptic(10);
+        clearTimeout(btn._t); btn._t = setTimeout(() => { btn.classList.remove('sure'); btn.textContent = 'ลบ'; }, 3500);
+        return;
+      }
+      btn.disabled = true; btn.textContent = 'กำลังลบ…';
+      google.script.run.withSuccessHandler(list => { renderAccounts(list); haptic(15); })
+        .withFailureHandler(e => { btn.disabled = false; btn.textContent = 'ลบ'; btn.classList.remove('sure'); alert('ลบไม่สำเร็จ: ' + e.message); })
+        .deleteAccount(a.user);
     }
 
     // ===== APP HUB (ไอคอนเด้ง) =====
@@ -1538,7 +1813,7 @@
         }
       });
       grid.innerHTML = html;
-      document.getElementById('hub-announce').style.display = String(currentUser.empId) === '15628' ? '' : 'none';
+      document.getElementById('hub-admin').style.display = String(currentUser.empId) === '15628' ? 'flex' : 'none';
       loadHubBadges();
       grid.querySelectorAll('.app-item').forEach(el => {
         el.addEventListener('pointerdown', () => { el.classList.remove('boing'); el.classList.add('pressed'); haptic(6); });
@@ -2313,16 +2588,18 @@
       window.scrollTo(0, 0);
       rkWire();
       document.getElementById('rk-body').innerHTML = '<div class="rk-loading">กำลังโหลด Ranking…</div>';
+      rkSync();
+      if (rk.cat === 'FOCUS') rkRender();   // งานโฟกัสไม่ต้องรอข้อมูลแบรนด์
       google.script.run
         .withSuccessHandler(d => {
-          if (!d || d.error) { document.getElementById('rk-body').innerHTML = `<div class="rk-empty">${(d && d.error) || 'ไม่มีข้อมูล'}</div>`; return; }
-          rk.data = d;
+          if (!d || d.error) { rk.err = (d && d.error) || 'ไม่มีข้อมูล'; if (rk.cat !== 'FOCUS') document.getElementById('rk-body').innerHTML = `<div class="rk-empty">${rk.err}</div>`; return; }
+          rk.data = d; rk.err = '';
           rk.period = 'Q' + (Math.floor((d.curMonth || 0) / 3) + 1);
           document.getElementById('rk-year').textContent = d.year;
           document.getElementById('rk-upd').textContent = 'ข้อมูลถึง ' + d.updated + ' · ยอด Set Price ไม่รวม Premium';
-          rkSync(); rkRender();
+          rkSync(); if (rk.cat !== 'FOCUS') rkRender();
         })
-        .withFailureHandler(err => { document.getElementById('rk-body').innerHTML = `<div class="rk-empty">โหลดไม่สำเร็จ: ${err.message}</div>`; })
+        .withFailureHandler(err => { rk.err = 'โหลดไม่สำเร็จ: ' + err.message; if (rk.cat !== 'FOCUS') document.getElementById('rk-body').innerHTML = `<div class="rk-empty">${rk.err}</div>`; })
         .getRankingData(currentUser && currentUser.empId);
     }
 
@@ -2406,15 +2683,144 @@
 
     function rkRender() {
       const body = document.getElementById('rk-body');
-      if (!rk.data) return;
-      const solo = rk.cat === 'IPHONE' || rk.cat === 'IPAD';
+      const isF = rk.cat === 'FOCUS';
+      document.getElementById('rk-periods').style.display = isF ? 'none' : '';
+      document.querySelector('.rk-eyebrow').textContent = isF ? 'ID1326 · FOCUS CHALLENGE' : 'ID1326 · BRAND CHALLENGE';
       rkCharts.forEach(c => { try { c.destroy(); } catch (e) {} }); rkCharts = [];
-      const mt = document.getElementById('rk-metric'); if (mt) mt.style.display = (solo && rk.period !== 'YOY') || rk.period === 'DAY' ? 'none' : '';
+      const mt = document.getElementById('rk-metric');
+      if (isF) { if (mt) mt.style.display = 'none'; rkFocusRender(); return; }
+      if (!rk.data) { if (rk.err) body.innerHTML = `<div class="rk-empty">${rk.err}</div>`; else body.innerHTML = '<div class="rk-loading">กำลังโหลด Ranking…</div>'; return; }
+      const solo = rk.cat === 'IPHONE' || rk.cat === 'IPAD';
+      if (mt) mt.style.display = (solo && rk.period !== 'YOY') || rk.period === 'DAY' ? 'none' : '';
       if (rk.period === 'DAY') { body.innerHTML = rkDayHTML(solo); rkDayFix(body); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
       if (rk.period === 'YOY') { body.innerHTML = '<div class="rk-yoyg">' + rkYoyHTML(solo) + '</div>'; rkYoyCharts(solo); animateIn(body.querySelectorAll('.rk-panel'), 'ios-in', 60, 0, 300); return; }
       body.innerHTML = rk.period === 'Y' ? (solo ? rkSoloYearHTML() : rkYearHTML(false)) : (solo ? rkSoloQHTML() : rkQHTML());
       animateIn(body.querySelectorAll('.rk-pc, .rk-panel, .rk-mc'), 'ios-in', 50, 0, 400);
       requestAnimationFrame(() => body.querySelectorAll('[data-h]').forEach(i => { i.style.height = i.dataset.h + '%'; }));
+    }
+
+
+    // =========================================================
+    // 🎯 RANKING งานโฟกัส — รายวัน / รายเดือน / Q (จาก Check List)
+    // =========================================================
+    const RK_TH_MON = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+    const RK_TH_DOW = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+    const rkF = {};                                  // แคชในเครื่อง: 'day|2026-10-31' → { t, d }
+    rk.fRange = 'day'; rk.fKey = {}; rk.fGroup = 'staff';
+    const rkP2 = n => String(n).padStart(2, '0');
+    function rkFNow(range) {
+      const n = new Date();
+      if (range === 'day') return `${n.getFullYear()}-${rkP2(n.getMonth() + 1)}-${rkP2(n.getDate())}`;
+      if (range === 'month') return `${n.getFullYear()}-${rkP2(n.getMonth() + 1)}`;
+      return `${n.getFullYear()}-Q${Math.floor(n.getMonth() / 3) + 1}`;
+    }
+    function rkFLabel(range, key) {
+      if (range === 'day') { const [y, m, d] = key.split('-').map(Number), dt = new Date(y, m - 1, d); return `${RK_TH_DOW[dt.getDay()]} ${d} ${RK_TH_MON[m - 1]} ${y + 543}`; }
+      if (range === 'month') { const [y, m] = key.split('-').map(Number); return `${RK_TH_MON[m - 1]} ${y + 543}`; }
+      const [y, q] = key.split('-Q').map(Number); return `Q${q} ${y + 543} (${RK_TH_MON[(q - 1) * 3]}–${RK_TH_MON[q * 3 - 1]})`;
+    }
+    function rkFStep(range, key, dir) {
+      if (range === 'day') { const [y, m, d] = key.split('-').map(Number), dt = new Date(y, m - 1, d + dir); return `${dt.getFullYear()}-${rkP2(dt.getMonth() + 1)}-${rkP2(dt.getDate())}`; }
+      if (range === 'month') { const [y, m] = key.split('-').map(Number), dt = new Date(y, m - 1 + dir, 1); return `${dt.getFullYear()}-${rkP2(dt.getMonth() + 1)}`; }
+      let [y, q] = key.split('-Q').map(Number); q += dir; if (q < 1) { q = 4; y--; } if (q > 4) { q = 1; y++; } return `${y}-Q${q}`;
+    }
+    function rkFNav(dir) {
+      const r = rk.fRange, cur = rk.fKey[r] || rkFNow(r), next = rkFStep(r, cur, dir);
+      if (dir > 0 && next > rkFNow(r)) return;     // ไม่ไปอนาคต
+      rk.fKey[r] = next; haptic(6); rkFocusRender();
+    }
+    function rkFSet(k, v) { rk[k] = v; haptic(6); rkFocusRender(); }
+    const RK_PREV_LBL = { day: 'เมื่อวาน', month: 'เดือนก่อน', q: 'Q ก่อน' };
+    function rkFDelta(cur, prev, partial) {
+      if (!(prev > 0)) return cur > 0 ? '<span class="dl up">ใหม่</span>' : '';
+      const p = (cur - prev) / prev * 100, c = p > 0.5 ? 'up' : (p < -0.5 ? 'dn' : 'fl');
+      return `<span class="dl ${c}">${p > 0 ? '▲' : (p < 0 ? '▼' : '•')} ${Math.abs(p).toFixed(0)}% vs ${RK_PREV_LBL[rk.fRange]}${partial ? '*' : ''}</span>`;
+    }
+    function rkFocusRender() {
+      const body = document.getElementById('rk-body');
+      const r = rk.fRange, key = rk.fKey[r] || (rk.fKey[r] = rkFNow(r)), ck = r + '|' + key, hit = rkF[ck];
+      const isNow = key === rkFNow(r);
+      const ctl = `<div class="rk-panel rk-fctl">
+        <div class="rk-seg rk-fseg">${[['day', '📅 รายวัน'], ['month', '🗓️ รายเดือน'], ['q', '📊 ราย Q']].map(([v, t]) => `<button class="${r === v ? 'on' : ''}" onclick="rkFSet('fRange','${v}')">${t}</button>`).join('')}</div>
+        <div class="rk-fnav"><button onclick="rkFNav(-1)" aria-label="ก่อนหน้า">‹</button><b>${rkFLabel(r, key)}${isNow ? ' <em>' + (r === 'day' ? 'วันนี้' : 'ตอนนี้') + '</em>' : ''}</b><button onclick="rkFNav(1)" aria-label="ถัดไป"${isNow ? ' disabled' : ''}>›</button></div>
+        <div class="rk-chips rk-fgrp">${[['staff', '👤 พนักงานร้าน'], ['pc', '🏷️ PC'], ['brand', '🏢 แบรนด์']].map(([v, t]) => `<button class="${rk.fGroup === v ? 'on' : ''}" onclick="rkFSet('fGroup','${v}')">${t}</button>`).join('')}</div></div>`;
+      const fresh = hit && Date.now() - hit.t < 90000;
+      if (!fresh) {
+        google.script.run.withSuccessHandler(d => {
+          rkF[ck] = { t: Date.now(), d };
+          if (rk.cat === 'FOCUS' && rk.fRange === r && rk.fKey[r] === key) rkFocusRender();
+        }).withFailureHandler(e => {
+          rkF[ck] = { t: Date.now() - 80000, d: { status: 'error', message: e.message } };
+          if (rk.cat === 'FOCUS' && rk.fRange === r && rk.fKey[r] === key) rkFocusRender();
+        }).getFocusRanking(r, key);
+        if (!hit) { body.innerHTML = ctl + '<div class="rk-loading">กำลังโหลดงานโฟกัส…</div>'; return; }
+      }
+      const d = hit.d;
+      if (!d || d.status !== 'success') { body.innerHTML = ctl + `<div class="rk-panel rk-empty" style="color:#AEAEB2">${(d && (d.message || d.error)) || 'ยังไม่มีข้อมูล'}${/getFocusRanking|ไม่พบคำสั่ง|ยังไม่ได้ใส่/.test((d && (d.message || d.error)) || '') ? '<br><small>อัปเดต API.gs / Check.gs แล้ว Deploy เป็น New version</small>' : ''}</div>`; return; }
+      body.innerHTML = ctl + rkFocusHTML(d);
+      animateIn(body.querySelectorAll('.rk-pc, .rk-panel:not(.rk-fctl)'), 'ios-in', 50, 0, 400);
+      requestAnimationFrame(() => body.querySelectorAll('[data-w]').forEach(i => { i.style.width = i.dataset.w + '%'; }));
+      requestAnimationFrame(() => body.querySelectorAll('[data-h]').forEach(i => { i.style.height = i.dataset.h + '%'; }));
+    }
+    function rkFocusHTML(d) {
+      const e = v => acEsc(v), T = d.total, pcSet = new Set((d.pc || []).map(x => String(x).trim()));
+      const targets = new Set(d.targets || []);
+      const per = T.units ? (T.focus / T.units) : 0;
+      const sum = `<div class="rk-panel"><div class="rk-sum3">
+          <div><small>เครื่องที่ขาย</small><b>${fmtUnit(T.units)}</b><i>${d.range === 'day' ? '' : 'ช่วง ' + d.start.slice(8) + '/' + d.start.slice(5, 7) + '–' + d.end.slice(8) + '/' + d.end.slice(5, 7)}</i></div>
+          <div><small>งานโฟกัสรวม</small><b style="color:var(--yellow)">${fmtUnit(T.focus)} <span style="font-size:11px;color:#8E8E93">ชิ้น</span></b><i>${rkFDelta(T.focus, d.prevTotal, d.prevPartial)}</i></div>
+          <div><small>เฉลี่ยต่อเครื่อง</small><b>${per.toFixed(2)}</b><i>งาน/เครื่อง</i></div>
+          <div><small>ครอบคลุมเป้า</small><b style="color:${fcHex(T.cover)}">${pctTxt(T.cover)}%</b><i>เครื่องที่ติดงานเป้า</i></div>
+        </div></div>`;
+      // แยกตามงานโฟกัส
+      const items = d.items.filter(n => (T.items[n] || 0) > 0 || targets.has(n));
+      const maxI = Math.max(1, ...items.map(n => T.items[n] || 0));
+      const itemsH = `<div class="rk-panel"><div class="rk-ph"><b>🎯 แยกตามงานโฟกัส</b><span>● = งานเป้าหมาย</span></div><div class="rk-fitems">${
+        items.map(n => { const v = T.items[n] || 0; return `<div class="${v ? '' : 'zero'}"><span>${targets.has(n) ? '<i>●</i>' : ''}${e(n)}</span><em><s data-w="${(v / maxI * 100).toFixed(0)}"></s></em><b>${v ? fmtUnit(v) : '–'}</b></div>`; }).join('') || '<p class="rk-legend">ยังไม่มีข้อมูล</p>'}</div></div>`;
+      // กราฟตามเวลา
+      let sKeys = [], sLbl = k => k, sTitle = '';
+      if (d.range === 'day') { sKeys = Array.from({ length: 13 }, (_, i) => String(i + 10)); sLbl = k => k; sTitle = '⏰ รายชั่วโมง'; }
+      else if (d.range === 'month') { const n = Number(d.end.slice(8)); sKeys = Array.from({ length: n }, (_, i) => d.start.slice(0, 8) + rkP2(i + 1)); sLbl = k => String(Number(k.slice(8))); sTitle = '📅 รายวัน'; }
+      else { const y = d.start.slice(0, 4), m0 = Number(d.start.slice(5, 7)); sKeys = [0, 1, 2].map(i => y + '-' + rkP2(m0 + i)); sLbl = k => RK_TH_MON[Number(k.slice(5)) - 1]; sTitle = '🗓️ รายเดือน'; }
+      Object.keys(d.series || {}).forEach(k => { if (sKeys.indexOf(k) === -1 && d.range === 'day') sKeys.push(k); });
+      if (d.range === 'day') sKeys.sort((a, b) => a - b);
+      const maxS = Math.max(1, ...sKeys.map(k => d.series[k] || 0));
+      const best = sKeys.reduce((b, k) => (d.series[k] || 0) > (d.series[b] || 0) ? k : b, sKeys[0]);
+      const seriesH = `<div class="rk-panel"><div class="rk-ph"><b>${sTitle}</b><span>${(d.series[best] || 0) ? 'สูงสุด ' + sLbl(best) + (d.range === 'day' ? ':00' : '') + ' · ' + d.series[best] + ' ชิ้น' : 'ยังไม่มีข้อมูล'}</span></div>
+        <div class="rk-fbars ${d.range}">${sKeys.map(k => { const v = d.series[k] || 0; return `<div title="${v}"><b>${v || ''}</b><i data-h="${v ? Math.max(4, v / maxS * 100).toFixed(0) : 0}" class="${k === best && v ? 'best' : ''}" style="height:0"></i><small>${sLbl(k)}</small></div>`; }).join('')}</div></div>`;
+      // อันดับ
+      const G = rk.fGroup;
+      let list = (G === 'brand' ? d.brands : d.emps.filter(x => G === 'pc' ? pcSet.has(x.name) : !pcSet.has(x.name))).slice();
+      list.sort((a, b) => b.focus - a.focus || b.cover - a.cover || b.units - a.units);
+      let rank = 0, lastV = null;
+      list.forEach((x, i) => { const v = x.focus + '|' + x.cover; if (v !== lastV) { rank = i + 1; lastV = v; } x.rank = x.focus > 0 ? rank : null; });
+      const gName = { staff: 'พนักงานร้าน', pc: 'PC แบรนด์', brand: 'แบรนด์' }[G];
+      if (!list.length) return sum + `<div class="rk-qgrid"><div>${itemsH}</div><div><div class="rk-panel rk-empty" style="color:#8E8E93">ยังไม่มีบันทึกขายของ${gName}ในช่วงนี้</div>${seriesH}</div></div>`;
+      let pod = '<div class="rk-pod">';
+      [1, 0, 2].forEach(i => {
+        const x = list[i]; if (!x || !x.focus) { pod += '<div></div>'; return; }
+        pod += `<div class="rk-pc r${i + 1}"><div class="md">${i + 1}</div><div class="nm">${e(x.name)}</div>
+          <div class="v">${fmtUnit(x.focus)} <span style="font-size:11px;opacity:.6">ชิ้น</span></div>
+          <div class="sh">${x.units} เครื่อง · ${pctTxt(x.cover)}%</div>${rkFDelta(x.focus, x.prev, d.prevPartial)}</div>`;
+      });
+      pod += '</div>';
+      const cols = d.items.filter(n => list.some(x => x.items[n]));
+      let t = `<div class="rk-panel"><div class="rk-ph"><b>🏆 ${gName} · ${rkFLabel(d.range, d.key)}</b><span>เรียงตามจำนวนงานโฟกัส</span></div>
+        <div class="rk-tw"><table class="rk-t rk-ft"><thead><tr><th>#</th><th class="l">${G === 'brand' ? 'แบรนด์' : 'ชื่อ'}</th><th>เครื่อง</th><th>งาน</th><th>ต่อเครื่อง</th><th>ครอบคลุม</th>${cols.map(n => `<th class="it">${e(n)}</th>`).join('')}<th class="hide-m">vs ${RK_PREV_LBL[d.range]}${d.prevPartial ? '*' : ''}</th></tr></thead><tbody>`;
+      list.forEach(x => {
+        const b = x.rank && x.rank <= 3 ? ' b' + x.rank : '';
+        const dp = x.prev > 0 ? (x.focus - x.prev) / x.prev * 100 : null;
+        t += `<tr class="${x.rank === 1 ? 'top1' : ''}"><td class="rk-n"><span class="rk-badge${b}">${x.rank || '–'}</span></td>
+          <td class="l br">${e(x.name)}</td><td>${fmtUnit(x.units)}</td><td class="tot">${fmtUnit(x.focus)}</td>
+          <td>${x.units ? (x.focus / x.units).toFixed(2) : '–'}</td><td style="color:${fcHex(x.cover)}">${pctTxt(x.cover)}%</td>
+          ${cols.map(n => `<td class="${x.items[n] ? '' : 'fut'}">${x.items[n] ? fmtUnit(x.items[n]) : '–'}</td>`).join('')}
+          <td class="hide-m ${dp == null ? '' : (dp >= 0 ? 'a-up' : 'a-dn')}">${dp == null ? (x.focus ? 'ใหม่' : '–') : (dp >= 0 ? '+' : '') + dp.toFixed(0) + '%'}</td></tr>`;
+      });
+      const sumC = n => list.reduce((a, x) => a + (x.items[n] || 0), 0);
+      const su = list.reduce((a, x) => a + x.units, 0), sf = list.reduce((a, x) => a + x.focus, 0);
+      t += `<tr class="sum"><td></td><td class="l">TOTAL</td><td>${fmtUnit(su)}</td><td>${fmtUnit(sf)}</td><td>${su ? (sf / su).toFixed(2) : '–'}</td><td></td>${cols.map(n => `<td>${fmtUnit(sumC(n))}</td>`).join('')}<td class="hide-m"></td></tr>`;
+      t += `</tbody></table></div><div class="rk-legend"><span>ครอบคลุม = เครื่องที่ติดงานโฟกัสเป้าหมาย ÷ ช่องเป้าทั้งหมด (เหมือนหน้า Leaderboard)</span>${d.prevPartial ? '<span>* ช่วงนี้ยังไม่จบ เทียบกับจำนวนวันเท่ากันของช่วงก่อน</span>' : ''}<span>อัปเดต ${e(d.updated || '')}</span></div></div>`;
+      return sum + `<div class="rk-qgrid"><div>${pod}${itemsH}</div><div>${t}${seriesH}</div></div>`;
     }
 
     // ===== 📅 รายวัน: แบรนด์ = แถว · วัน = คอลัมน์ (ซ้าย→ขวา) · จิ้มแบรนด์ดูรายตัว · เทียบเดือน =====
