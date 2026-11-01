@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <title>Order 1326</title>
   <script>window.GAS_APP = 'order';</script>
-  <script src="staff-names.js?v=2026.10.09-1"></script>
-  <script src="gas.js?v=2026.11.01-1"></script>
-  <script src="order-alert.js?v=2026.11.01-1"></script>
+  <script src="staff-names.js?v=2026.11.01-3"></script>
+  <script src="gas.js?v=2026.11.01-3"></script>
+  <script src="order-alert.js?v=2026.11.01-3"></script>
   <style>
     :root { --y: #FFD600; --d: #1C1C1E; --d2: #2C2C2E; --g: #8E8E93; --ok: #30D158; --no: #FF453A; --or: #FF9F0A;
       --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); --spring-soft: cubic-bezier(.22,1.18,.36,1); }
@@ -370,6 +370,7 @@
   <div id="scanv"><p>เล็งบาร์โค้ด IMEI / SN ข้างกล่อง</p><div id="reader"></div><div class="bar"><button onclick="stopScan()">ปิด / พิมพ์เอง</button></div></div>
   <div id="zoom" onclick="this.classList.remove('on')"><img alt=""></div>
   <div class="toast" id="toast"></div>
+  <div style="text-align:center;margin:26px 0 0;font:700 10.5px 'Kanit',sans-serif;letter-spacing:1px;color:rgba(28,28,30,.45)">ORDER 1326 · v2026.11.01-3</div>
 
   <script>
     const BRAND_COLORS = { SAMSUNG: '#1E40FF', APPLE: '#1C1C1E', OPPO: '#16A34A', VIVO: '#38BDF8', XIAOMI: '#FF6900', REALME: '#FFC300', HUAWEI: '#DC2626', HONOR: '#8B5CF6',
@@ -629,7 +630,7 @@
       if (btn) btn.disabled = true;
       return run(fn, ...args).then(r => { apply(r, msg); return r; }).catch(e => { if (btn) btn.disabled = false; toast(e.message, 1); throw e; });
     }
-    const H_LABEL = { forfeit: '⌛ สละสิทธิ์ (ไม่รับในเวลา)', sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '🅿️ พักเคส', unpark: '▶️ กลับมาทำต่อ', ready: '✅ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก' };
+    const H_LABEL = { stamp: '📸 ทำรูปส่งงาน', forfeit: '⌛ สละสิทธิ์ (ไม่รับในเวลา)', sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '🅿️ พักเคส', unpark: '▶️ กลับมาทำต่อ', ready: '✅ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก' };
     function histLine(h) {
       let x = '';
       if (h.a === 'work') x = (WORK[h.kind] || '') + (h.text ? ' ' + h.text : '') + (h.mins ? ' · ~' + h.mins + ' นาที' : '');
@@ -1094,14 +1095,20 @@
       const md = MEDIA[no] && MEDIA[no].d;
       if (md && md.stamp) return showStamp(md.stamp, no);
       toast('กำลังเตรียมรูป…');
-      try { const m = await run('getMedia', no); if (m.stamp) return showStamp(m.stamp, no); const s = await makeStamp(CUR); if (s) showStamp(s, no); else toast('ใบนี้ไม่มีรูปเครื่อง', 1); } catch (e) { toast(e.message, 1); }
+      try {
+        const m = await run('getMedia', no); if (m.stamp) return showStamp(m.stamp, no);
+        const s = await makeStamp(CUR); if (!s) return toast('ใบนี้ไม่มีรูปเครื่อง', 1);
+        showStamp(s, no);
+        run('saveStamp', no, s).then(r => { delete MEDIA[no]; toast(r.updated ? '📊 อัปเดตรูปใน Check List แล้ว' : '📸 เก็บรูปส่งงานแล้ว'); }).catch(e => toast('เก็บรูปไม่สำเร็จ: ' + e.message, 1));
+      } catch (e) { toast(e.message, 1); }
     }
     async function doSign() {
       const b = document.getElementById('sgOk'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
-      let stamp = ''; try { stamp = await makeStamp(CUR); } catch (e) {}
+      let stamp = '', stampErr = ''; try { stamp = await makeStamp(CUR); if (!stamp) stampErr = 'ไม่มีรูปเครื่อง'; } catch (e) { stampErr = e.message; }
       run('sign', CUR.no, { sig: sgPng(), stamp, agree: SG.agree, name: document.getElementById('sgName').value.trim(), device: navigator.userAgent.slice(0, 80) }).then(r => {
         closeSign(); apply(r, '✅ ลูกค้าเซ็นแล้ว — ปิดเคสเรียบร้อย'); vib([20, 40, 20, 40, 60]);
         if (stamp) setTimeout(() => showStamp(stamp, r.order.no), 600);
+        else setTimeout(() => toast('📸 ทำรูปส่งงานไม่ได้ (' + stampErr + ') — ถ่ายรูปแล้วกด 📸 ในใบนี้', 1), 900);
       }).catch(e => { b.disabled = false; b.textContent = 'ยืนยันรับเครื่อง'; toast(e.message, 1); });
     }
 
