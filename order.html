@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <title>Order 1326</title>
   <script>window.GAS_APP = 'order';</script>
-  <script src="staff-names.js?v=2026.11.01-3"></script>
-  <script src="gas.js?v=2026.11.01-3"></script>
-  <script src="order-alert.js?v=2026.11.01-3"></script>
+  <script src="staff-names.js?v=2026.11.01-4"></script>
+  <script src="gas.js?v=2026.11.01-4"></script>
+  <script src="order-alert.js?v=2026.11.01-4"></script>
   <style>
     :root { --y: #FFD600; --d: #1C1C1E; --d2: #2C2C2E; --g: #8E8E93; --ok: #30D158; --no: #FF453A; --or: #FF9F0A;
       --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); --spring-soft: cubic-bezier(.22,1.18,.36,1); }
@@ -266,9 +266,21 @@
     .toast { position: fixed; left: 50%; top: calc(70px + env(safe-area-inset-top)); transform: translate(-50%, -20px); opacity: 0; z-index: 400; background: var(--d); color: var(--y); font-weight: 700; font-size: 13.5px; padding: 11px 18px; border-radius: 100px; box-shadow: 0 12px 26px -10px rgba(0,0,0,.6); transition: all .45s var(--spring); pointer-events: none; max-width: 92vw; text-align: center; }
     .toast.on { opacity: 1; transform: translate(-50%, 0); } .toast.err { background: #D70015; color: #fff; }
     #zoom { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,.92); display: none; align-items: center; justify-content: center; padding: 16px; } #zoom.on { display: flex; } #zoom img { max-width: 100%; max-height: 100%; border-radius: 12px; }
-    #scanv { position: fixed; inset: 0; z-index: 450; background: #000; display: none; flex-direction: column; } #scanv.on { display: flex; }
-    #scanv #reader { flex: 1; } #scanv .bar { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); display: flex; gap: 8px; } #scanv .bar button { flex: 1; height: 52px; border-radius: 16px; font-weight: 800; background: #fff; }
-    #scanv p { color: #fff; text-align: center; margin: 0; padding: calc(14px + env(safe-area-inset-top)) 12px 8px; font-weight: 700; }
+    /* 📷 สแกน IMEI (แบบเดียวกับแอป Check List: กรอบแนวนอน + ซูม + ไฟฉาย) */
+    #scanv { position: fixed; inset: 0; z-index: 450; background: #000; display: none; color: #fff; } #scanv.on { display: block; }
+    #reader { position: absolute; inset: 0; } #reader video { width: 100% !important; height: 100% !important; object-fit: cover; }
+    #reader #qr-shaded-region { border-color: rgba(0,0,0,.5) !important; }
+    #scanv .sc-top { position: absolute; z-index: 3; left: 0; right: 0; top: 0; padding: calc(12px + env(safe-area-inset-top)) 14px 14px; display: flex; align-items: center; gap: 10px; background: linear-gradient(180deg, rgba(0,0,0,.8), rgba(0,0,0,0)); }
+    #scanv .sc-top h6 { margin: 0; flex: 1; font: 800 16px 'IBM Plex Sans Thai', sans-serif; } #scanv .sc-top h6 small { display: block; font-weight: 600; font-size: 11.5px; opacity: .75; }
+    #scanv .sc-ic { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,.18); color: #fff; font-size: 18px; font-weight: 800; flex: none; } #scanv .sc-ic.on { background: var(--y); color: var(--d); } #scanv .sc-ic[hidden] { display: none; }
+    #scanv .sc-line { position: absolute; z-index: 2; left: 7%; right: 7%; top: 50%; height: 2px; background: var(--y); box-shadow: 0 0 14px var(--y); animation: scLine 1.8s ease-in-out infinite alternate; pointer-events: none; }
+    @keyframes scLine { from { transform: translateY(-40px); opacity: .5; } to { transform: translateY(40px); opacity: 1; } }
+    #scanv .sc-bot { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; padding: 18px 14px calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(0deg, rgba(0,0,0,.9) 60%, rgba(0,0,0,0)); }
+    #scMsg { text-align: center; font-size: 13.5px; font-weight: 700; min-height: 40px; margin-bottom: 10px; line-height: 1.45; } #scMsg.warn { color: #FFD60A; } #scMsg.bad { color: #FF6961; } #scMsg.ok { color: #30D158; }
+    #scZoom { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; } #scZoom[hidden] { display: none; }
+    #scZoom button { border-radius: 100px; padding: 8px 15px; font-weight: 800; font-size: 13px; background: rgba(255,255,255,.18); color: #fff; } #scZoom button.on { background: var(--y); color: var(--d); }
+    #scanv .sc-man { display: flex; gap: 8px; } #scanv .sc-man input { flex: 1; min-width: 0; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.1); color: #fff; border-radius: 14px; padding: 12px; font: 700 15px ui-monospace, Menlo, monospace; outline: none; }
+    #scanv .sc-man button { border-radius: 14px; padding: 0 18px; background: var(--y); color: var(--d); font-weight: 800; }
     #view-report { display: none; }
     @media (max-width: 420px) { h1 { font-size: 26px; } .tile b { font-size: 21px; } .newb { padding: 13px 18px; font-size: 15px; } .seg button { font-size: 13px; } }
   </style>
@@ -367,10 +379,13 @@
 
   <!-- ✍️ ลูกค้าเซ็น -->
   <div id="signv"><div class="in" id="signIn"></div></div>
-  <div id="scanv"><p>เล็งบาร์โค้ด IMEI / SN ข้างกล่อง</p><div id="reader"></div><div class="bar"><button onclick="stopScan()">ปิด / พิมพ์เอง</button></div></div>
+  <div id="scanv"><div id="reader"></div><div class="sc-line"></div>
+    <div class="sc-top"><button class="sc-ic" onclick="stopScan()" aria-label="ปิด">✕</button><h6>สแกน IMEI / Serial<small>วางกล่องแนวนอน ให้บาร์โค้ดอยู่ตรงเส้นเหลือง</small></h6><button class="sc-ic" id="scTorch" onclick="scTorch()" hidden aria-label="ไฟฉาย">🔦</button></div>
+    <div class="sc-bot"><div id="scMsg">เล็งบาร์โค้ด IMEI หรือ S/N บนกล่อง (ไม่ใช่บาร์โค้ดสินค้า)</div><div id="scZoom" hidden></div>
+      <form class="sc-man" onsubmit="event.preventDefault();scManual()"><input id="scManualI" placeholder="หรือพิมพ์ IMEI / Serial" autocomplete="off" autocapitalize="characters"><button type="submit">ใช้</button></form></div></div>
   <div id="zoom" onclick="this.classList.remove('on')"><img alt=""></div>
   <div class="toast" id="toast"></div>
-  <div style="text-align:center;margin:26px 0 0;font:700 10.5px 'Kanit',sans-serif;letter-spacing:1px;color:rgba(28,28,30,.45)">ORDER 1326 · v2026.11.01-3</div>
+  <div style="text-align:center;margin:26px 0 0;font:700 10.5px 'Kanit',sans-serif;letter-spacing:1px;color:rgba(28,28,30,.45)">ORDER 1326 · v2026.11.01-4</div>
 
   <script>
     const BRAND_COLORS = { SAMSUNG: '#1E40FF', APPLE: '#1C1C1E', OPPO: '#16A34A', VIVO: '#38BDF8', XIAOMI: '#FF6900', REALME: '#FFC300', HUAWEI: '#DC2626', HONOR: '#8B5CF6',
@@ -838,23 +853,59 @@
         img.onerror = () => no(new Error('อ่านรูปไม่ได้')); img.src = url;
       });
     }
-    let SCAN = null, SCAN_T = '';
+    let SCAN = null, SCAN_T = '', SCAN_TORCH = null, SCAN_BAD = '';
+    function scMsg(t, c) { const m = document.getElementById('scMsg'); m.textContent = t; m.className = c || ''; }
+    function scAccept(raw) {
+      const t = String(raw || '').toUpperCase().replace(/\s+/g, '').replace(/^(IMEI|SN|S\/N|SERIAL)[:\-]?/, '');
+      const im = t.match(/\d{15}/);
+      let v = im ? im[0] : t;
+      if (STK && STK.map) { if (STK.map.has(t)) v = t; else if (im && STK.map.has(im[0])) v = im[0]; }
+      // บาร์โค้ดสินค้า (EAN 12–13 หลัก) ไม่ใช่ IMEI → ข้าม ยกเว้นเจอในสต๊อก
+      if (/^\d{12,13}$/.test(v) && !(STK && STK.map && STK.map.has(v))) { if (SCAN_BAD !== v) { SCAN_BAD = v; scMsg('นี่คือบาร์โค้ดสินค้า (' + v + ') — เล็งบาร์โค้ดที่เขียนว่า IMEI หรือ S/N', 'warn'); try { navigator.vibrate && navigator.vibrate(40); } catch (e) {} } return; }
+      if (v.length < 6) return;
+      const el = document.getElementById(SCAN_T); el.value = v; vib([20, 30, 20]); scMsg('✓ ' + v, 'ok');
+      setTimeout(() => { stopScan(); toast('📷 สแกนแล้ว: ' + v); el.dispatchEvent(new Event('input')); }, 250);
+    }
+    function scManual() { const v = document.getElementById('scManualI').value.trim(); if (v) scAccept(v); }
     function startScan(target) {
-      SCAN_T = target; document.getElementById('scanv').classList.add('on');
+      SCAN_T = target; SCAN_BAD = ''; document.getElementById('scManualI').value = '';
+      document.getElementById('scanv').classList.add('on'); scMsg('กำลังเปิดกล้อง…');
+      stockIdx().catch(() => {});
       const go = () => {
-        try {
-          SCAN = new Html5Qrcode('reader');
-          SCAN.start({ facingMode: 'environment' }, { fps: 12, qrbox: (w, h) => ({ width: Math.min(w * .9, 340), height: 120 }) }, txt => {
-            const t = String(txt).toUpperCase().replace(/\s+/g, ''), im = t.match(/\d{15}/);
-            document.getElementById(SCAN_T).value = im ? im[0] : t.replace(/^(IMEI|SN|S\/N)[:\-]?/, ''); vib([20, 30, 20]); stopScan(); toast('📷 สแกนแล้ว: ' + document.getElementById(SCAN_T).value);
-            const el = document.getElementById(SCAN_T); el.dispatchEvent(new Event('input'));
-          }).catch(e => { toast('เปิดกล้องไม่ได้: ' + (e.message || e), 1); stopScan(); });
-        } catch (e) { toast('เปิดกล้องไม่ได้', 1); stopScan(); }
+        if (!document.getElementById('scanv').classList.contains('on')) return;
+        const F = window.Html5QrcodeSupportedFormats || {};
+        const formats = ['CODE_128', 'CODE_39', 'CODE_93', 'ITF', 'QR_CODE', 'DATA_MATRIX', 'EAN_13'].map(k => F[k]).filter(v => v !== undefined);
+        try { SCAN = SCAN || new Html5Qrcode('reader', { verbose: false, formatsToSupport: formats, experimentalFeatures: { useBarCodeDetectorIfSupported: true } }); }
+        catch (e) { scMsg('เปิดตัวสแกนไม่ได้ — พิมพ์ IMEI ด้านล่าง', 'bad'); return; }
+        SCAN.start({ facingMode: 'environment' }, {
+            fps: 15, disableFlip: true,
+            // กรอบแนวนอน กว้างเกือบเต็มจอ (บาร์โค้ด IMEI ยาวและบาง)
+            qrbox: (vw, vh) => ({ width: Math.floor(vw * 0.88), height: Math.max(90, Math.floor(Math.min(vh, vw) * 0.3)) }),
+            videoConstraints: { facingMode: 'environment', width: { ideal: 1920 }, height: { ideal: 1080 }, advanced: [{ focusMode: 'continuous' }] }
+          }, txt => scAccept(txt), () => {})
+          .then(() => { scMsg('เล็งบาร์โค้ด IMEI หรือ S/N ให้อยู่ตรงเส้นเหลือง · ถ้าไม่ติด ลองซูม 2× แล้วถอยออกนิดนึง'); scCaps(); })
+          .catch(err => scMsg('เปิดกล้องไม่ได้: ' + ((err && err.message) || err) + ' — อนุญาตกล้อง หรือพิมพ์ IMEI ด้านล่าง', 'bad'));
       };
       if (window.Html5Qrcode) return go();
-      const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js'; s.onload = go; s.onerror = () => { toast('โหลดตัวสแกนไม่สำเร็จ — พิมพ์ IMEI เอง', 1); stopScan(); }; document.head.appendChild(s);
+      const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js'; sc.onload = go; sc.onerror = () => scMsg('โหลดตัวสแกนไม่สำเร็จ — เช็กเน็ต หรือพิมพ์ IMEI ด้านล่าง', 'bad'); document.head.appendChild(sc);
     }
-    function stopScan() { document.getElementById('scanv').classList.remove('on'); if (SCAN) { const s = SCAN; SCAN = null; s.stop().then(() => s.clear()).catch(() => {}); } }
+    // 🔍 ซูม 1× / 1.5× / 2× / 3× + 🔦 ไฟฉาย (ถ้ากล้องรองรับ)
+    function scCaps() {
+      const tb = document.getElementById('scTorch'), zb = document.getElementById('scZoom');
+      tb.hidden = true; tb.classList.remove('on'); zb.hidden = true; zb.innerHTML = ''; SCAN_TORCH = null;
+      let caps = null; try { caps = SCAN.getRunningTrackCameraCapabilities(); } catch (e) {}
+      if (!caps) return;
+      try { if (caps.torchFeature().isSupported()) { tb.hidden = false; SCAN_TORCH = caps.torchFeature(); } } catch (e) {}
+      try {
+        const z = caps.zoomFeature(); if (!z.isSupported()) return;
+        const opts = [1, 1.5, 2, 3].filter(v => v >= z.min() && v <= z.max()); if (opts.length < 2) return;
+        zb.hidden = false; zb.innerHTML = opts.map(v => `<button type="button" data-z="${v}">${v}×</button>`).join('');
+        zb.querySelectorAll('button').forEach(b => b.onclick = () => { z.apply(+b.dataset.z).catch(() => {}); zb.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); vib(5); });
+        (zb.querySelector('[data-z="2"]') || zb.querySelector('[data-z="1.5"]') || zb.querySelector('button')).click();
+      } catch (e) {}
+    }
+    function scTorch() { const tb = document.getElementById('scTorch'), on = !tb.classList.contains('on'); if (SCAN_TORCH) SCAN_TORCH.apply(on).then(() => tb.classList.toggle('on', on)).catch(() => scMsg('เครื่องนี้เปิดไฟฉายจากแอปไม่ได้', 'warn')); }
+    function stopScan() { document.getElementById('scanv').classList.remove('on'); if (SCAN) { try { SCAN.stop().catch(() => {}); } catch (e) {} } }
 
     // ===================== 📋 Check List =====================
     function openCheck() {
@@ -923,13 +974,16 @@
     }
     function renderPhotos() {
       const thumbs = slot => CK.photos.filter(p => p.slot === slot).map(p => `<div class="im ${p.up ? 'up' : ''}">${CK.local[p.id] ? `<img src="${CK.local[p.id]}" onclick="zoom(this.src)" alt="">` : ''}${p.up ? '' : `<button class="rm" onclick="rmPhoto('${p.id}')">✕</button>`}</div>`).join('');
-      const add = slot => `<label class="add">📷<small>ถ่ายรูป</small><input type="file" accept="image/*" capture="environment" onchange="addPhoto(this,'${esc(slot)}')"></label>`;
+      const add = slot => `<label class="add">📷<small>ถ่ายรูป</small><input type="file" accept="image/*" capture="environment" onchange="addPhoto(this,'${esc(slot)}')"></label><label class="add">🖼️<small>คลังรูป</small><input type="file" accept="image/*" multiple onchange="addPhoto(this,'${esc(slot)}')"></label>`;
       const b = document.getElementById('ckBody'); if (b) b.innerHTML = thumbs('body') + add('body');
       document.querySelectorAll('#ckList .ph[data-slot]').forEach(el => { el.innerHTML = thumbs(el.dataset.slot) + add(el.dataset.slot); });
     }
-    function addPhoto(input, slot) {
-      const f = input.files && input.files[0]; input.value = ''; if (!f) return;
-      shrink(f, 1280, .72).then(du => {
+    async function addPhoto(input, slot) {
+      const files = [...(input.files || [])].slice(0, 6); input.value = '';
+      for (const f of files) await addOne(f, slot);   // ทีละรูป (เลือกจากคลังได้หลายรูป)
+    }
+    function addOne(f, slot) {
+      return shrink(f, 1280, .72).then(du => {
         const tmp = 'tmp' + Date.now(); CK.local[tmp] = du; CK.photos.push({ id: tmp, slot, up: true }); renderPhotos();
         return run('addPhoto', CUR.no, slot, du).then(r => {
           const p = CK.photos.find(x => x.id === tmp); p.id = r.id; p.up = false; CK.local[r.id] = du; delete CK.local[tmp];
