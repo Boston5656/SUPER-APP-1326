@@ -10,7 +10,8 @@ self.addEventListener('push', function (e) {
   var title = d.title || 'SUPER APP 1326';
   var opt = {
     body: d.body || '',
-    tag: d.tag || 'ord',
+    // iPhone ไม่ส่งเสียงซ้ำถ้า tag เดิม → แจ้งเตือนสำคัญใช้ tag ใหม่ทุกครั้ง (มีเสียงทุกครั้ง)
+    tag: (kind === 'new' || kind === 'remind' || kind === 'me' || kind === 'mgr' || kind === 'test') ? (d.tag || 'ord') + '-' + Date.now() : (d.tag || 'ord'),
     renotify: kind !== 'info',
     silent: d.silent === '1',
     icon: 'icon-192.png',

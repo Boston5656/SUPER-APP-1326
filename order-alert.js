@@ -30,31 +30,63 @@
   }
 
   // ---------------- 🔊 เสียง ----------------
-  function ctx() {
-    if (!S.audio) { var A = window.AudioContext || window.webkitAudioContext; if (!A) return null; S.audio = new A(); }
-    return S.audio;
+  // iPhone: เสียงจากเว็บจะ "หลับ" ทุกครั้งที่ล็อกจอ / สลับแอป / ปิดเปิดแอปใหม่ → ต้องแตะจอ 1 ครั้งให้ตื่น
+  //   1) ใช้ <audio> เล่นเสียง (ดังแม้เปิดโหมดเงียบ ต่างจาก Web Audio ที่โดนปิดตามสวิตช์เงียบ)
+  //   2) ทุกครั้งที่แตะจอ = ปลุกเสียงใหม่ (ไม่ใช่แค่ครั้งแรก) · กลับเข้าแอป = ถือว่าเสียงหลับ รอแตะ
+  function wav(seq, dur) {
+    var rate = 22050, n = Math.floor(rate * dur), buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf);
+    var w = function (o, t) { for (var i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); };
+    w(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); w(8, 'WAVEfmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, n * 2, true);
+    for (var k = 0; k < n; k++) {
+      var t = k / rate, x = 0;
+      seq.forEach(function (q) { var a = t - q[1]; if (a >= 0 && a < q[2]) { var env = Math.min(1, a / 0.015) * Math.exp(-a * 5); x += Math.sin(2 * Math.PI * q[0] * a) * env * 0.5 + Math.sin(4 * Math.PI * q[0] * a) * env * 0.12; } });
+      v.setInt16(44 + k * 2, Math.max(-1, Math.min(1, x)) * 30000, true);
+    }
+    return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+  }
+  var SND = null;
+  function snd() {
+    if (SND) return SND;
+    SND = {
+      el: new Audio(),
+      src: {
+        new: wav([[880, 0, .16], [1175, .18, .16], [1568, .36, .35], [880, .8, .16], [1175, .98, .16], [1568, 1.16, .45]], 1.7),
+        warn: wav([[660, 0, .25], [520, .28, .35]], .7),
+        me: wav([[988, 0, .14], [1319, .16, .3]], .5),
+        hush: wav([], .05)
+      }
+    };
+    SND.el.preload = 'auto'; SND.el.setAttribute('playsinline', '');
+    return SND;
   }
   function unlock() {
-    if (S.unlocked) return;
-    try { var c = ctx(); if (c && c.state === 'suspended') c.resume(); var b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); } catch (e) {}
-    try { if (window.speechSynthesis) { var u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); } } catch (e) {}
-    S.unlocked = true; emit();
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}   // iOS 17+: ไม่โดนสวิตช์เงียบ
+    var s = snd();
+    if (S.unlocked && !s.el.paused) return;
+    try {
+      s.el.src = s.src.hush; s.el.volume = 1;
+      var p = s.el.play();
+      if (p && p.then) p.then(function () { if (!S.unlocked) { S.unlocked = true; emit(); } }).catch(function () {});
+      else { S.unlocked = true; emit(); }
+    } catch (e) {}
+    try { if (window.speechSynthesis && !S.ttsWarm) { var u = new SpeechSynthesisUtterance(' '); u.volume = 0.01; speechSynthesis.speak(u); S.ttsWarm = true; } } catch (e) {}
   }
   ['pointerdown', 'touchend', 'keydown'].forEach(function (ev) { window.addEventListener(ev, unlock, { capture: true, passive: true }); });
+  // กลับเข้าแอป / ปลดล็อกจอ → iPhone ปิดเสียงไปแล้ว ต้องแตะใหม่ (ปุ่ม "เข้ากะ" จะกะพริบเตือน)
+  document.addEventListener('visibilitychange', function () { if (document.hidden && /iP(hone|ad|od)|Macintosh/.test(navigator.userAgent)) { S.unlocked = false; S.ttsWarm = false; emit(); } });
   function soundOn() { return LS.get('ord_sound', 'on') !== 'off'; }
   function setSound(on) { LS.set('ord_sound', on ? 'on' : 'off'); emit(); }
   function tone(kind) {
-    var c = ctx(); if (!c) return;
-    try { if (c.state === 'suspended') c.resume(); } catch (e) {}
-    var seq = kind === 'new' ? [[880, 0, .16], [1175, .18, .16], [1568, .36, .32], [880, .8, .16], [1175, .98, .16], [1568, 1.16, .4]]
-      : kind === 'warn' ? [[660, 0, .22], [520, .26, .3]] : [[988, 0, .12], [1319, .14, .22]];
-    var t0 = c.currentTime + .02;
-    seq.forEach(function (n) {
-      var o = c.createOscillator(), g = c.createGain();
-      o.type = 'triangle'; o.frequency.value = n[0];
-      g.gain.setValueAtTime(0.0001, t0 + n[1]); g.gain.exponentialRampToValueAtTime(.35, t0 + n[1] + .02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + n[1] + n[2]);
-      o.connect(g); g.connect(c.destination); o.start(t0 + n[1]); o.stop(t0 + n[1] + n[2] + .05);
-    });
+    var s = snd();
+    try {
+      s.el.src = s.src[kind] || s.src.me; s.el.currentTime = 0;
+      var p = s.el.play();
+      if (p && p.catch) p.catch(function () {
+        S.unlocked = false; emit();
+        var sm = document.querySelector('#oa-ban .t small'); if (sm && sm.textContent.indexOf('🔇') === -1) sm.textContent += ' · 🔇 แตะจอ 1 ครั้งเพื่อเปิดเสียง';
+      });
+    } catch (e) {}
   }
   function say(text) {
     try {

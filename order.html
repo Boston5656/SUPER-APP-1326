@@ -6,7 +6,7 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#FFD600">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <title>Order 1326</title>
   <script>window.GAS_APP = 'order';</script>
   <script src="staff-names.js?v=2026.10.09-1"></script>
@@ -182,6 +182,25 @@
     .qr .qb img, .qr .qb canvas { width: 124px !important; height: 124px !important; }
     .qr p { margin: 0; font-size: 12.5px; font-weight: 600; color: #3A3A3C; line-height: 1.5; } .qr button { margin-top: 8px; border-radius: 100px; padding: 8px 14px; background: var(--d); color: var(--y); font-weight: 800; font-size: 12.5px; }
 
+    /* ขายเสริม */
+    .adl { display: grid; grid-template-columns: minmax(0, 1fr) 96px auto 34px; gap: 6px; align-items: center; background: #fff; border-radius: 16px; padding: 8px 8px 8px 12px; margin-bottom: 6px; }
+    .adl b { font: 700 13.5px 'Kanit', sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .adl input { width: 100%; border: 0; border-radius: 11px; background: #F2F2F7; padding: 9px 8px; font: 800 14px 'Kanit', sans-serif; text-align: right; outline: none; }
+    .adl input:focus { box-shadow: 0 0 0 2px var(--y); }
+    .adl .stp button { width: 32px; height: 34px; border-radius: 10px; font-size: 17px; background: #F2F2F7; } .adl .stp button.p { background: var(--d); }
+    .adl .stp b { min-width: 22px; font-size: 15px; text-align: center; }
+    .adl .rm { width: 34px; height: 34px; border-radius: 11px; background: #FFE5E3; color: #D70015; font-weight: 800; }
+    .addb { width: 100%; border-radius: 16px; padding: 13px; background: #fff; border: 2px dashed #C7C7CC; font: 800 14px 'IBM Plex Sans Thai', sans-serif; color: #3A3A3C; transition: transform .3s var(--spring); }
+    .addb:active { transform: scale(.97); }
+    .gt { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; background: var(--d); color: #fff; border-radius: 18px; padding: 12px 16px; margin-top: 10px; font-weight: 700; font-size: 13px; }
+    .gt b { font: 800 24px 'Kanit', sans-serif; color: var(--y); } .gt small { display: block; color: #AEAEB2; font-weight: 600; font-size: 11.5px; }
+    .bill { background: #fff; border-radius: 20px; padding: 10px 14px; margin-top: 10px; font-size: 13.5px; font-weight: 600; }
+    .bill div { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dashed #E5E5EA; } .bill div:last-child { border: 0; }
+    .bill div span:last-child { font-family: 'Kanit', sans-serif; white-space: nowrap; } .bill .tt { font: 800 16px 'Kanit', sans-serif; padding-top: 8px; }
+    .catg { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+    .catg button { text-align: left; background: #fff; border-radius: 14px; padding: 10px 12px; font-weight: 700; font-size: 13px; box-shadow: 0 1px 2px rgba(0,0,0,.05); transition: transform .25s var(--spring); }
+    .catg button small { display: block; color: #8E8E93; font-family: 'Kanit', sans-serif; font-weight: 600; } .catg button:active { transform: scale(.94); } .catg button.has { box-shadow: inset 0 0 0 2px var(--d); }
+
     /* Check List */
     .ckh { display: flex; align-items: center; gap: 10px; margin: 4px 0 8px; }
     .ckh .bar { flex: 1; height: 8px; border-radius: 100px; background: #E5E5EA; overflow: hidden; } .ckh .bar i { display: block; height: 100%; width: 0; border-radius: 100px; background: var(--ok); transition: width .5s var(--ios-ease); }
@@ -326,7 +345,8 @@
     <div class="lab"><span>ชื่อ-สกุลลูกค้า</span></div><input class="inp" id="nCust" maxlength="60" placeholder="ชื่อ นามสกุล" autocomplete="off">
     <div class="lab"><span>เบอร์ที่สมัคร 7Club+</span><small>10 หลัก</small></div><input class="inp big" id="nPhone" inputmode="tel" maxlength="12" placeholder="08x-xxx-xxxx" autocomplete="off" oninput="fmtPhone(this)">
     <div class="lab"><span>ประเภทชำระ</span></div><div class="chips" id="nPay"></div>
-    <div class="lab"><span>🎯 งานโฟกัสที่ลูกค้าเอา</span><small>ชุดเดียวกับ Check List · แก้ได้ตอนทำ Check List</small></div><div class="chips" id="nExtra"></div>
+    <div class="lab"><span>💵 ราคาเครื่อง (บาท / เครื่อง)</span></div><input class="inp big" id="nPrice" type="number" inputmode="numeric" placeholder="ราคาขาย" oninput="adTotal('nAd')">
+    <div class="lab"><span>➕ ขายเสริม / ประกัน</span><small>ใส่ราคา + จำนวน · งานโฟกัสเข้า Check List ให้เอง</small></div><div id="nAd"></div>
     <div class="lab"><span></span></div>
     <div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>📲 ลูกค้าต้องการย้ายข้อมูล<small>ลูกค้าจะต้องกดยอมรับนโยบายย้ายข้อมูลตอนเซ็น</small></span><span class="sw" id="nTransfer"></span></div>
     <div class="lab"><span>🙋 ผู้รับเคส</span><small id="nAsgHint">จองให้คนที่เลือก · ไม่รับในเวลา = สละสิทธิ์</small></div><div class="chips" id="nAsg"></div>
@@ -338,6 +358,8 @@
   <div class="sheet" id="detS"><div class="bd" onclick="closeDetail()"></div><div class="box" id="detBox"></div></div>
   <!-- แผ่นย่อย (ส่งกลับ / พักเคส / ส่งต่อ / ยกเลิก / เบิกแล้ว) -->
   <div class="sheet lv2" id="miniS"><div class="bd" onclick="closeS('miniS')"></div><div class="box" id="miniBox"></div></div>
+  <!-- ➕ เลือกขายเสริม -->
+  <div class="sheet lv3" id="adS"><div class="bd" onclick="closeS('adS')"></div><div class="box" id="adBox"></div></div>
   <!-- ✅ Check List -->
   <div class="sheet lv2" id="ckS"><div class="bd" onclick="closeS('ckS')"></div><div class="box" id="ckBox"></div></div>
   <!-- ⚙️ ตั้งค่า -->
@@ -401,6 +423,48 @@
       return `<button class="${cls}" onclick="${stop}claim('${o.no}',this)">🙋 รับเคส${o.assign ? ' · ' + esc(o.assign.nick) + ' สละสิทธิ์' : ''}${big ? '<small>คนแรกที่กดได้ไป</small>' : ''}</button>`;
     }
     const baseFocus = f => String(f).replace(/\s+x\d+$/i, '').trim();
+    // ➕ ขายเสริม (เปิดบิล + Check List ใช้ตัวเดียวกัน)
+    const AD = {}, baht = n => '฿' + Math.round(Number(n) || 0).toLocaleString('en-US');
+    function adCatalog() {
+      const c = CFG && CFG.cfg.addons; if (c && c.length) return c;
+      return CHK().focus.map(n => ({ name: n, price: 0 })).concat(['ประกันอุบัติเหตุ', 'เคส', 'หัวชาร์จ / สาย'].map(n => ({ name: n, price: 0 })));
+    }
+    function adRender(id) {
+      const el = document.getElementById(id); if (!el) return; const L = AD[id] || (AD[id] = []);
+      el.innerHTML = L.map((a, i) => `<div class="adl"><b>${esc(a.name)}</b><input type="number" inputmode="numeric" value="${a.price || ''}" placeholder="ราคา" oninput="AD['${id}'][${i}].price=+this.value||0;adTotal('${id}')"><div class="stp"><button onclick="adQ('${id}',${i},-1)">−</button><b>${a.qty}</b><button class="p" onclick="adQ('${id}',${i},1)">＋</button></div><button class="rm" onclick="adRm('${id}',${i})">✕</button></div>`).join('')
+        + `<button class="addb" onclick="adPick('${id}')">＋ เพิ่มขายเสริม / ประกัน</button><div id="${id}T"></div>`;
+      adTotal(id);
+    }
+    function adQ(id, i, d) { const a = AD[id][i]; a.qty = Math.max(1, Math.min(99, a.qty + d)); vib(5); adRender(id); }
+    function adRm(id, i) { AD[id].splice(i, 1); vib(8); adRender(id); }
+    function adAdd(id, name, price) { name = String(name || '').trim(); if (!name) return; const L = AD[id], hit = L.find(a => a.name.toUpperCase() === name.toUpperCase()); if (hit) hit.qty++; else L.push({ name, price: +price || 0, qty: 1 }); vib(6); adRender(id); }
+    function adTotal(id) {
+      const el = document.getElementById(id + 'T'); if (!el) return;
+      const L = AD[id] || [], sub = L.reduce((t, a) => t + (a.price || 0) * a.qty, 0);
+      const pr = id === 'nAd' ? (+document.getElementById('nPrice').value || 0) * (+document.getElementById('nQty').textContent || 1) : id === 'ckAd' ? (+(document.getElementById('ckPrice') || {}).value || 0) * (CUR ? CUR.qty || 1 : 1) : 0;
+      el.innerHTML = (pr || sub) ? `<div class="gt"><span>💰 ยอดรวม<small>เครื่อง ${baht(pr)}${L.length ? ' + ขายเสริม ' + baht(sub) : ''}</small></span><b>${baht(pr + sub)}</b></div>` : '';
+    }
+    function adPick(id) {
+      const cat = adCatalog(), inL = n => (AD[id] || []).some(a => a.name.toUpperCase() === n.toUpperCase());
+      document.getElementById('adBox').innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">➕</span><div><h3>ขายเสริม / ประกัน</h3><small>แตะเพื่อเพิ่ม · แตะซ้ำ = จำนวน +1</small></div><button class="x" onclick="closeS('adS')">✕</button></div>
+        <div class="catg">${cat.map(c => `<button class="${inL(c.name) ? 'has' : ''}" data-n="${esc(c.name)}" data-p="${c.price || 0}">${esc(c.name)}<small>${c.price ? baht(c.price) : 'ใส่ราคาเอง'}</small></button>`).join('')}</div>
+        <div class="lab"><span>หรือพิมพ์เอง</span></div><div class="two"><input class="inp" id="adN" maxlength="40" placeholder="ชื่อรายการ"><input class="inp" id="adP" type="number" inputmode="numeric" placeholder="ราคา"></div>
+        <div class="sfoot"><button class="b-no" onclick="adCustom('${id}')">＋ เพิ่มที่พิมพ์</button><button class="b-yes" onclick="closeS('adS')">เสร็จ</button></div>`;
+      document.querySelector('#adBox .catg').onclick = e => { const b = e.target.closest('button'); if (!b) return; adAdd(id, b.dataset.n, b.dataset.p); b.classList.add('has'); b.querySelector('small').textContent = '✓ ' + ((AD[id].find(a => a.name === b.dataset.n) || {}).qty || 1) + ' ชิ้น'; };
+      openS('adS');
+    }
+    function adCustom(id) { const n = document.getElementById('adN').value, p = document.getElementById('adP').value; if (!n.trim()) return toast('ใส่ชื่อรายการก่อน', 1); adAdd(id, n, p); document.getElementById('adN').value = ''; document.getElementById('adP').value = ''; toast('➕ เพิ่ม ' + n.trim()); }
+    // งานโฟกัส (เข้า Check List) = รายการขายเสริมที่ชื่อตรงกับงานโฟกัสในแอป Check List
+    function focusOf(L) {
+      const K = CHK(), out = [];
+      (L || []).forEach(a => { const f = K.focus.find(x => x.toUpperCase() === String(a.name).toUpperCase()); if (f) out.push(K.focusQty.includes(f.toUpperCase()) && a.qty > 1 ? `${f} x${a.qty}` : f); });
+      return out;
+    }
+    function billHTML(o) {
+      const L = o.addons || [];
+      if (!o.price && !L.length) return '';
+      return `<div class="bill"><div><span>📱 ${esc(o.model)}${o.qty > 1 ? ' ×' + o.qty : ''}</span><span>${o.price ? baht(o.price * (o.qty || 1)) : '—'}</span></div>${L.map(a => `<div><span>➕ ${esc(a.name)}${a.qty > 1 ? ' ×' + a.qty : ''}</span><span>${a.price ? baht(a.price * a.qty) : '—'}</span></div>`).join('')}<div class="tt"><span>รวม</span><span>${baht(o.total)}</span></div></div>`;
+    }
     const qtyOf = f => { const m = String(f).match(/\sx(\d+)$/i); return m ? +m[1] : 1; };
 
     // ===================== เริ่ม =====================
@@ -459,7 +523,7 @@
       return `<div class="oc ${o.status}${mine ? ' mine' : ''}" onclick="showOrder('${o.no}')">
         <div class="t1"><span class="bd" style="background:${bc(o.brand)}"></span>${esc(o.brand)}<span class="no">#${esc(o.no)}</span><span class="st">${LABEL[o.status] || o.status}</span></div>
         <div class="md">${esc(o.model)}<small>${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' ×' + o.qty : ''}</small></div>
-        <div class="mt">👤 ${esc(o.owner)}${o.pay ? ' · 💳 ' + esc(o.pay) : ''}${o.extras ? ' · ➕ ' + esc(o.extras) : ''}</div>
+        <div class="mt">👤 ${esc(o.owner)}${o.total ? ' · 💰 ' + baht(o.total) : ''}${o.pay ? ' · 💳 ' + esc(o.pay) : ''}${o.extras ? ' · ➕ ' + esc(o.extras) : ''}</div>
         <div class="ln">${tags.filter(Boolean).join('')}</div>${claimBtn}</div>`;
     }
     function renderQueue() {
@@ -511,8 +575,9 @@
       const c = CFG.cfg, b = me().role === 'PC' ? me().brand : '';
       const K = CHK(), myB = K.brands.find(x => x.toUpperCase().split(/[\s\/]+/).includes(String(b).toUpperCase())) || '';
       chipSet('nBrand', K.brands, myB, false, true);
-      chipSet('nColor', c.colors, ''); chipSet('nCap', c.caps, ''); chipSet('nPay', c.pays, ''); chipSet('nExtra', K.focus, [], true);
-      ['nModel', 'nColorX', 'nCust', 'nPhone', 'nNote'].forEach(i => document.getElementById(i).value = '');
+      chipSet('nColor', c.colors, ''); chipSet('nCap', c.caps, ''); chipSet('nPay', c.pays, '');
+      ['nModel', 'nColorX', 'nCust', 'nPhone', 'nNote', 'nPrice'].forEach(i => document.getElementById(i).value = '');
+      AD.nAd = []; adRender('nAd');
       document.getElementById('nQty').textContent = '1'; document.getElementById('nTransfer').classList.remove('on');
       const tm = (CFG.team || []).filter(t => t.level !== 'off');
       document.getElementById('nAsg').innerHTML = `<button data-v="" class="on">⚡ ใครว่างก็ได้</button>` + tm.map(t => `<button data-v="${esc(t.acct)}">${lvIcon(t)} ${esc(t.nick)}</button>`).join('');
@@ -523,12 +588,12 @@
       document.getElementById('nSend').disabled = false;
       openS('newS');
     }
-    function qty(d) { const el = document.getElementById('nQty'); el.textContent = Math.max(1, Math.min(20, (+el.textContent || 1) + d)); vib(5); }
+    function qty(d) { const el = document.getElementById('nQty'); el.textContent = Math.max(1, Math.min(20, (+el.textContent || 1) + d)); vib(5); adTotal('nAd'); }
     function fmtPhone(el) { const d = el.value.replace(/\D/g, '').slice(0, 10); el.value = d.length > 6 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}` : d.length > 3 ? `${d.slice(0, 3)}-${d.slice(3)}` : d; }
     function sendNew() {
       const f = { brand: chipVal('nBrand'), model: document.getElementById('nModel').value.trim(), color: document.getElementById('nColorX').value.trim() || chipVal('nColor'), cap: chipVal('nCap'),
         qty: +document.getElementById('nQty').textContent, cust: document.getElementById('nCust').value.trim(), phone: document.getElementById('nPhone').value.replace(/\D/g, ''),
-        pay: chipVal('nPay'), extras: chipVals('nExtra'), assign: chipVal('nAsg'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim() };
+        pay: chipVal('nPay'), price: +document.getElementById('nPrice').value || 0, addons: AD.nAd || [], focus: focusOf(AD.nAd), assign: chipVal('nAsg'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim() };
       if (!f.brand) return toast('เลือกแบรนด์ก่อน', 1);
       if (!f.model) { document.getElementById('nModel').focus(); return toast('ใส่รุ่นก่อน', 1); }
       if (f.phone && !/^0\d{9}$/.test(f.phone)) return toast('เบอร์ 7Club+ ต้องเป็นเลข 10 หลัก', 1);
@@ -591,9 +656,10 @@
         <div class="kv"><div><small>ลูกค้า</small><b>${esc(o.cust || '-')}</b></div><div><small>เบอร์ 7Club+</small><b>${esc(phoneTxt(o.phone) || '-')}</b></div>
         <div><small>ประเภทชำระ</small><b>${esc(o.pay || '-')}</b></div><div><small>พนักงานผู้รับ</small><b>${esc(o.staff || '—')}</b></div>
         <div class="w"><small>IMEI / SN</small><b>${esc(o.imei || '— ยังไม่ได้ใส่')}</b></div>
-        ${o.extras ? `<div class="w"><small>🎯 งานโฟกัส</small><b>${esc(o.extras)}</b></div>` : ''}</div></div>`;
+        </div></div>${billHTML(o)}`;
       if (o.sale) h += `<div class="note ${o.sale.saved ? (o.sale.saved.ok ? 'gr' : 'rd') : 'wh'}">💰 <b>ข้อมูลขาย</b> · ${esc(o.sale.emp || 'ยังไม่เลือกพนักงานขาย')} · ${o.sale.price ? '฿' + Number(o.sale.price).toLocaleString('en-US') : 'ยังไม่ใส่ราคา'} · ผู้รับเคส ${esc(o.sale.receiver || o.staff || '-')}<br><small>${esc(o.sale.model)}${o.sale.type ? ', ' + esc(o.sale.type) : ''}</small>
         ${o.sale.saved ? (o.sale.saved.ok ? '<br>📊 <b>บันทึกเข้า Check List แล้ว</b> ' + hm(o.sale.saved.at) + ' — ไม่ต้องบันทึกซ้ำ' : '<br>⚠️ บันทึกเข้า Check List ไม่สำเร็จ: ' + esc(o.sale.saved.err)) : '<br>📊 ลูกค้าเซ็นแล้วจะเข้า Check List ให้เอง'}</div>`;
+      if (o.status === 'done' && (o.photos || o.stamp)) h += `<div class="acts"><button class="d full" onclick="openStamp('${o.no}')">📸 รูปพร้อมส่งงาน<small>รุ่น + งานโฟกัส · แชร์ / บันทึกรูป</small></button></div>`;
       if (o.status === 'done' && (!o.sale || !o.sale.saved || !o.sale.saved.ok) && (ownerish || mine)) h += `<div class="acts"><button class="y full" onclick="act('pushSale',['${o.no}'],'📊 บันทึกเข้า Check List แล้ว',this)">📊 บันทึกเข้า Check List อีกครั้ง</button></div>`;
       if (o.transfer) h += `<div class="note or">📲 <b>ลูกค้าต้องการย้ายข้อมูล</b> — ตอนเซ็นต้องกดยอมรับนโยบายย้ายข้อมูลด้วย</div>`;
       if (o.note) h += `<div class="note wh">📝 ${esc(o.note)}</div>`;
@@ -699,12 +765,13 @@
         <div class="lab"><span>เบอร์ 7Club+</span></div><input class="inp big" id="fxPhone" inputmode="tel" maxlength="12" value="${esc(phoneTxt(o.phone))}" oninput="fmtPhone(this)">
         <div class="two" style="margin-top:8px"><input class="inp" id="fxCust" placeholder="ชื่อลูกค้า" value="${esc(o.cust)}"><input class="inp" id="fxPay" placeholder="ประเภทชำระ" value="${esc(o.pay)}"></div>
         <div class="two" style="margin-top:8px"><input class="inp" id="fxColor" placeholder="สี" value="${esc(o.color)}"><input class="inp" id="fxCap" placeholder="ความจุ" value="${esc(o.cap)}"></div>
+        <input class="inp" id="fxPrice" type="number" inputmode="numeric" placeholder="ราคาเครื่อง" value="${o.price || ''}" style="margin-top:8px">
         <input class="inp" id="fxText" maxlength="160" placeholder="บอกพนักงาน เช่น ลูกค้าสมัครใหม่แล้ว / ใช้เบอร์ภรรยา" style="margin-top:8px">
         <div class="acts" style="margin-top:8px"><button class="y full" onclick="sendFix(this)">✍️ แก้แล้ว ส่งกลับให้ ${esc(o.staff)}</button></div></div>`;
     }
     function sendFix(btn) {
       const v = id => document.getElementById(id).value.trim();
-      act('fixBack', [CUR.no, { phone: v('fxPhone').replace(/\D/g, ''), cust: v('fxCust'), pay: v('fxPay'), color: v('fxColor'), cap: v('fxCap') }, v('fxText')], '✍️ ส่งกลับให้พนักงานแล้ว', btn);
+      act('fixBack', [CUR.no, { phone: v('fxPhone').replace(/\D/g, ''), price: v('fxPrice'), cust: v('fxCust'), pay: v('fxPay'), color: v('fxColor'), cap: v('fxCap') }, v('fxText')], '✍️ ส่งกลับให้พนักงานแล้ว', btn);
     }
 
     // ===================== แผ่นย่อย =====================
@@ -796,7 +863,9 @@
       CK = { items: JSON.parse(JSON.stringify((o.check && o.check.items) || {})), imei: o.imei || '', verified7: !!(o.check && o.check.verified7), photos: (o.photoList || []).slice(), local: {},
         focus: (sx.focus || (o.extras || '').split(',')).map(x => String(x).trim()).filter(Boolean),
         sale: { emp: sx.emp || inList(K.sales, nick(o.owner)), receiver: sx.receiver || inList(K.receivers, o.staff) || o.staff || '', model: sx.model || [o.model, o.cap, o.color].filter(Boolean).join(' '),
-          price: sx.price || '', type: sx.type || autoType(o.model), stockCode: sx.stockCode || '' } };
+          price: sx.price || o.price || '', type: sx.type || autoType(o.model), stockCode: sx.stockCode || '' } };
+      // รายการขายเสริม (ใบเก่าที่มีแต่งานโฟกัส → แปลงเป็นรายการ ราคา 0)
+      AD.ckAd = (o.addons && o.addons.length ? o.addons : (sx.focus || o.focus || []).map(f => ({ name: baseFocus(f), price: 0, qty: qtyOf(f) }))).map(a => Object.assign({}, a));
       renderCheck(); openS('ckS');
       if (CK.photos.length) run('getMedia', o.no).then(md => { md.photos.forEach(p => CK.local[p.id] = p.src); renderPhotos(); }).catch(() => {});
     }
@@ -808,7 +877,7 @@
         <div class="irow"><input class="inp big" id="ckI" maxlength="40" value="${esc(CK.imei)}" placeholder="สแกนหรือพิมพ์" autocomplete="off" oninput="CK.imei=this.value.trim().toUpperCase()"><button class="sq" onclick="startScan('ckI')">📷</button></div>
         <div class="lab"><span>ทดสอบเครื่องทีละข้อ <span class="req">*</span></span><small>✅ ผ่าน · ❌ มีปัญหา (ต้องใส่อาการ + รูป)</small></div>
         <div id="ckList">${c.items.map((n, i) => ckRow(n, i)).join('')}</div>
-        <div class="lab"><span>📷 รูปรอบตัวเครื่อง</span><small>กันเรื่อง "รอยมาตั้งแต่แรก" · แนะนำ 2 รูป</small></div>
+        <div class="lab"><span>📷 รูปเครื่อง + ของที่ขายเสริม</span><small>รูปแรก = รูปส่งงาน (สแตมป์ให้เอง)</small></div>
         <div class="ph" id="ckBody"></div>
         <div class="lab" style="margin-top:20px"><span style="font-size:15px">💰 ข้อมูลขาย</span><small>ลูกค้าเซ็นแล้วเข้า Check List ให้เอง</small></div>
         <div class="note wh" id="ckStock" style="margin-top:0">📦 ใส่ IMEI ด้านบน → ดึงรุ่น + ราคาจาก STOCK ให้เอง</div>
@@ -817,18 +886,16 @@
         <div class="lab"><span>📦 ประเภทสินค้า</span><small>ไม่เลือก = Smartphone / iPhone</small></div><div class="chips" id="ckType">${CHK().types.map(t => `<button data-v="${esc(t)}" class="${CK.sale.type === t ? 'on' : ''}">${esc(t)}</button>`).join('')}</div>
         <div class="lab"><span>👤 พนักงานขาย <span class="req">*</span></span></div><div class="chips" id="ckEmp">${CHK().sales.map(t => `<button data-v="${esc(t)}" class="${CK.sale.emp === t ? 'on' : ''}">${esc(t)}</button>`).join('')}</div>
         <div class="lab"><span>🙋 พนักงานผู้รับเคส</span></div><div class="chips" id="ckRcv">${[...new Set(CHK().receivers.concat(CK.sale.receiver && !CHK().receivers.includes(CK.sale.receiver) ? [CK.sale.receiver] : []))].map(t => `<button data-v="${esc(t)}" class="${CK.sale.receiver === t ? 'on' : ''}">${esc(t)}</button>`).join('')}</div>
-        <div class="lab"><span>🎯 งานโฟกัสที่ขายได้</span><small>เลือกได้หลายรายการ</small></div><div class="chips" id="ckX">${CHK().focus.map(x => `<button data-v="${esc(x)}" class="${CK.focus.some(f => baseFocus(f).toUpperCase() === x.toUpperCase()) ? 'on' : ''}">${esc(x)}</button>`).join('')}</div>
-        <div id="ckQty"></div>
+        <div class="lab"><span>➕ ขายเสริม / ประกัน</span><small>🎯 งานโฟกัสเข้า Check List ให้เอง</small></div><div id="ckAd"></div>
         <div class="lab"><span></span></div>
         <div class="tgl" onclick="CK.verified7=!CK.verified7;this.querySelector('.sw').classList.toggle('on',CK.verified7)"><span>✅ ตรวจข้อมูล 7Club+ และใบกำกับภาษีกับลูกค้าแล้ว<small>${esc(c.notice).slice(0, 90)}…</small></span><span class="sw ${CK.verified7 ? 'on' : ''}"></span></div>
         <div class="sfoot"><button class="b-no" onclick="closeS('ckS')">ปิด</button><button class="b-yes" id="ckSave" onclick="saveCheck()">💾 บันทึก Check List</button></div>`;
       chipBind('ckType'); chipBind('ckEmp'); chipBind('ckRcv');
       // แตะ = เลือก / แตะซ้ำ = เอาออก (ประเภทสินค้า)
       document.getElementById('ckType').onclick = e => { const b = e.target.closest('button'); if (!b) return; const was = b.classList.contains('on'); b.parentNode.querySelectorAll('button').forEach(x => x.classList.remove('on')); if (!was) b.classList.add('on'); vib(5); };
-      document.getElementById('ckX').onclick = e => { const b = e.target.closest('button'); if (!b) return; b.classList.toggle('on'); vib(5); const v = b.dataset.v;
-        if (b.classList.contains('on')) { if (!CK.focus.some(f => baseFocus(f) === v)) CK.focus.push(v); } else CK.focus = CK.focus.filter(f => baseFocus(f) !== v); paintQty(); };
       document.getElementById('ckI').addEventListener('input', () => { clearTimeout(CK._t); CK._t = setTimeout(stockLookup, 450); });
-      paintQty(); if (CK.imei) stockLookup(true);
+      document.getElementById('ckPrice').addEventListener('input', () => adTotal('ckAd'));
+      adRender('ckAd'); if (CK.imei) stockLookup(true);
       document.getElementById('ckList').onclick = e => {
         const b = e.target.closest('.pf button'); if (!b) return;
         const n = b.closest('.ck').dataset.n; vib(6);
@@ -895,7 +962,8 @@
         CK.sale.stockCode = code;
         const mEl = document.getElementById('ckModel'), pEl = document.getElementById('ckPrice'), n = Math.round(Number(String(p[2]).replace(/[^\d.]/g, '')) || 0);
         if (!quiet || !CUR.sale || !CUR.sale.model) { if (p[0]) mEl.value = p[0]; }
-        if (n && (!pEl.value || !quiet)) pEl.value = n;
+        if (n && !pEl.value) pEl.value = n;
+        adTotal('ckAd');
         if (!chipVal('ckType')) { const at = autoType(p[0]); if (at) document.querySelectorAll('#ckType button').forEach(b => b.classList.toggle('on', b.dataset.v === at)); }
         el.className = sold ? 'note rd' : 'note gr';
         el.innerHTML = sold ? `⚠️ IMEI …${esc(sn.slice(-6))} <b>บันทึกขายไปแล้ว</b> เมื่อ ${esc(sold.at)}${sold.emp ? ' โดย ' + esc(sold.emp) : ''} — เช็กว่าไม่ใช่เครื่องเดียวกัน`
@@ -907,9 +975,9 @@
       const c = CFG.cfg, miss = c.items.filter(n => !CK.items[n] || (CK.items[n].ok !== true && CK.items[n].ok !== false));
       const noNote = c.items.filter(n => CK.items[n] && CK.items[n].ok === false && !String(CK.items[n].note || '').trim());
       const sale = { model: document.getElementById('ckModel').value.trim(), price: document.getElementById('ckPrice').value, type: chipVal('ckType'), emp: chipVal('ckEmp'), receiver: chipVal('ckRcv'),
-        focus: CK.focus, stockCode: CK.sale.stockCode };
+        focus: focusOf(AD.ckAd), stockCode: CK.sale.stockCode };
       const b = document.getElementById('ckSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
-      run('saveCheck', CUR.no, { items: CK.items, imei: CK.imei || document.getElementById('ckI').value.trim(), verified7: CK.verified7, sale }).then(r => {
+      run('saveCheck', CUR.no, { items: CK.items, imei: CK.imei || document.getElementById('ckI').value.trim(), verified7: CK.verified7, sale, addons: AD.ckAd || [] }).then(r => {
         apply(r); b.disabled = false; b.textContent = '💾 บันทึก Check List';
         if (miss.length) { toast(`บันทึกแล้ว — ยังเหลือ ${miss.length} ข้อ`, 1); const i = c.items.indexOf(miss[0]); document.getElementById('ck' + i).scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
         if (noNote.length) { toast('ข้อที่ ❌ ต้องใส่อาการก่อน', 1); return; }
@@ -928,7 +996,7 @@
       document.getElementById('signIn').innerHTML = `
         <span class="eyebrow"><span class="ic">✍️</span>BaNANA FUTURE PARK RANGSIT · ID1326</span>
         <h2>ตรวจสอบและยืนยันรับเครื่อง</h2><div class="lead">กรุณาอ่านและกดยอมรับทีละข้อ แล้วเซ็นชื่อด้านล่าง</div>
-        <div class="sgc"><h4>📱 ${esc(o.brand)} ${esc(o.model)}</h4><div style="font-weight:600;font-size:14px;color:#3A3A3C;line-height:1.7">${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' · ' + o.qty + ' เครื่อง' : ''}<br>IMEI / SN: <b>${esc(o.imei)}</b><br>ลูกค้า: ${esc(o.cust || '-')} · 7Club+ ${esc(phoneTxt(o.phone) || '-')}${o.extras ? '<br>ซื้อเพิ่ม: ' + esc(o.extras) : ''}${o.sale && o.sale.price ? '<br>ราคา: <b>฿' + Number(o.sale.price).toLocaleString('en-US') + '</b>' : ''}</div></div>
+        <div class="sgc"><h4>📱 ${esc(o.brand)} ${esc(o.model)}</h4><div style="font-weight:600;font-size:14px;color:#3A3A3C;line-height:1.7">${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' · ' + o.qty + ' เครื่อง' : ''}<br>IMEI / SN: <b>${esc(o.imei)}</b><br>ลูกค้า: ${esc(o.cust || '-')} · 7Club+ ${esc(phoneTxt(o.phone) || '-')}</div>${billHTML(o).replace('class="bill"', 'class="bill" style="background:#FAFAFA"')}</div>
         <div class="sgc"><h4>📋 ผลตรวจสภาพเครื่อง (${items.length - fails.length}/${items.length} ผ่าน)</h4><div class="ckmini">${items.map(n => { const v = o.check.items[n] || {}; return `<div class="${v.ok === false ? 'bad' : ''}">${v.ok === false ? '❌' : '✅'} ${esc(n)}${v.ok === false && v.note ? ' — ' + esc(v.note) : ''}</div>`; }).join('')}</div></div>
         <div class="sgc"><h4>🛡️ เงื่อนไขการรับประกัน</h4><div class="terms">${esc(c.notice)}\n\n${esc(c.warranty)}</div>
           <div class="agree" data-k="warranty"><span class="bx">✓</span><span>ข้าพเจ้าได้ตรวจสอบสภาพเครื่องตามรายการข้างต้น และยอมรับเงื่อนไขการรับประกันสินค้า 7 วัน</span></div></div>
@@ -976,10 +1044,64 @@
       SG.strokes.forEach(st => { if (st.length === 1) { g.beginPath(); g.arc((st[0].x - minX) * s, (st[0].y - minY) * s, 1.4 * s, 0, 7); g.fill(); return; } for (let i = 1; i < st.length; i++) { g.lineWidth = (st[i].w || 2.2) * s; g.beginPath(); g.moveTo((st[i - 1].x - minX) * s, (st[i - 1].y - minY) * s); g.lineTo((st[i].x - minX) * s, (st[i].y - minY) * s); g.stroke(); } });
       return c.toDataURL('image/png');
     }
-    function doSign() {
+    // 📸 สแตมป์รูปส่งงาน (หน้าตาเดียวกับแอป Check List)
+    function stampDataUrl(src, modelName, focusList) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = async () => {
+          try { await document.fonts.load("700 20px 'Space Grotesk'"); await document.fonts.ready; } catch (e) {}
+          const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+          let width = img.naturalWidth, height = img.naturalHeight; const MAX = 1200;
+          if (width > MAX) { height = Math.round(height * MAX / width); width = MAX; }
+          canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
+          const bf = Math.max(14, Math.floor(width * 0.018)), px = bf * 2.2, py = bf * 2.2, ls = bf * 1.5, ff = "'Space Grotesk', 'IBM Plex Sans Thai', sans-serif";
+          const T = [{ t: 'ID1326 BN FUTURE PARK RANGSIT 2.2', f: `700 ${bf * 1.1}px ${ff}`, c: '#FFD600' }, { t: 'แนะนำบริการเสริม และ สิทธิ์แลกซื้อให้แก่ลูกค้าแล้วครับ', f: `600 ${bf * .85}px ${ff}`, c: '#CCCCCC' }, { t: 'รุ่น: ' + modelName, f: `700 ${bf}px ${ff}`, c: '#FFFFFF' }];
+          if (focusList.length) { T.push({ sp: 1 }); T.push({ t: 'งานโฟกัสที่ได้:', f: `700 ${bf}px ${ff}`, c: '#FFFFFF' }); focusList.forEach(x => T.push({ t: '  ✅ ' + x, f: `600 ${bf}px ${ff}`, c: '#FFFFFF' })); }
+          let mw = 0; T.forEach(x => { if (x.sp) return; ctx.font = x.f; mw = Math.max(mw, ctx.measureText(x.t).width); });
+          const bw = Math.min(width - px * 2, mw + px * 2); let bh = T.length * ls + py * 1.8; T.forEach(x => { if (x.sp) bh -= ls * .5; });
+          const sx = px, sy = height - bh - py;
+          ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 10; ctx.fillStyle = 'rgba(28,28,30,.9)'; ctx.beginPath();
+          if (ctx.roundRect) ctx.roundRect(sx, sy, bw, bh, bf * 1.8); else ctx.rect(sx, sy, bw, bh); ctx.fill(); ctx.shadowColor = 'transparent';
+          ctx.textBaseline = 'top'; let cy = sy + py;
+          T.forEach(x => { if (x.sp) { cy += ls * .5; return; } ctx.font = x.f; ctx.fillStyle = x.c; ctx.fillText(x.t, sx + px, cy); cy += ls; });
+          resolve(canvas.toDataURL('image/jpeg', .85));
+        };
+        img.onerror = () => reject(new Error('อ่านรูปไม่ได้')); img.src = src;
+      });
+    }
+    async function makeStamp(o) {
+      const ph = (o.photoList || []).find(p => p.slot === 'body') || (o.photoList || [])[0]; if (!ph) return '';
+      let src = (CK && CK.local && CK.local[ph.id]) || '';
+      if (!src) { try { const md = await run('getMedia', o.no); const hit = md.photos.find(p => p.id === ph.id) || md.photos[0]; src = hit ? hit.src : ''; } catch (e) {} }
+      if (!src) return '';
+      const sx = o.sale || {};
+      return stampDataUrl(src, (sx.model || o.model) + (sx.type ? ', ' + sx.type : ''), sx.focus || o.focus || []);
+    }
+    function showStamp(src, no) {
+      mini(miniHead('📸', 'รูปพร้อมส่งงาน', 'แตะค้างที่รูปเพื่อบันทึก หรือกดปุ่มแชร์') + `<img src="${src}" alt="รูปส่งงาน" style="width:100%;border-radius:18px;display:block">
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ปิด</button><button class="b-dk" onclick="shareStamp('${no}')">📤 แชร์ / บันทึกรูป</button></div>`);
+      window._stamp = src;
+    }
+    async function shareStamp(no) {
+      const src = window._stamp; if (!src) return;
+      try {
+        const blob = await (await fetch(src)).blob(), file = new File([blob], `Sale_${no}.jpg`, { type: 'image/jpeg' });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }); return; }
+      } catch (e) { if (e && e.name === 'AbortError') return; }
+      const a = document.createElement('a'); a.href = src; a.download = `Sale_${no}.jpg`; document.body.appendChild(a); a.click(); a.remove();
+    }
+    async function openStamp(no) {
+      const md = MEDIA[no] && MEDIA[no].d;
+      if (md && md.stamp) return showStamp(md.stamp, no);
+      toast('กำลังเตรียมรูป…');
+      try { const m = await run('getMedia', no); if (m.stamp) return showStamp(m.stamp, no); const s = await makeStamp(CUR); if (s) showStamp(s, no); else toast('ใบนี้ไม่มีรูปเครื่อง', 1); } catch (e) { toast(e.message, 1); }
+    }
+    async function doSign() {
       const b = document.getElementById('sgOk'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
-      run('sign', CUR.no, { sig: sgPng(), agree: SG.agree, name: document.getElementById('sgName').value.trim(), device: navigator.userAgent.slice(0, 80) }).then(r => {
+      let stamp = ''; try { stamp = await makeStamp(CUR); } catch (e) {}
+      run('sign', CUR.no, { sig: sgPng(), stamp, agree: SG.agree, name: document.getElementById('sgName').value.trim(), device: navigator.userAgent.slice(0, 80) }).then(r => {
         closeSign(); apply(r, '✅ ลูกค้าเซ็นแล้ว — ปิดเคสเรียบร้อย'); vib([20, 40, 20, 40, 60]);
+        if (stamp) setTimeout(() => showStamp(stamp, r.order.no), 600);
       }).catch(e => { b.disabled = false; b.textContent = 'ยืนยันรับเครื่อง'; toast(e.message, 1); });
     }
 
@@ -1030,6 +1152,10 @@
           <div class="hb"><span>🅿️ พักเคส${pm.length ? ` · เฉลี่ย ${Math.round(pm.reduce((a, b) => a + b, 0) / pm.length)} นาที` : ''}</span><em><s style="width:${L.length ? parked.length / L.length * 100 : 0}%"></s></em><b>${parked.length}</b></div>
           <div class="hb"><span>📲 ย้ายข้อมูล</span><em><s style="width:${L.length ? L.filter(o => o.transfer).length / L.length * 100 : 0}%"></s></em><b>${L.filter(o => o.transfer).length}</b></div>
           ${Object.keys(branchM).length ? `<div class="ch" style="margin-top:10px"><b style="font-size:14px">รุ่นที่ต้องไปเบิกต่างสาขา</b><small>ใช้คุยเรื่องขอสต๊อก</small></div>${bars(branchM)}` : ''}</div>
+        <div class="lc" style="margin-top:14px"><div class="ch"><b>💰 ยอดขาย (ปิดเคสแล้ว)</b><small>${baht(done.reduce((t, o) => t + (o.total || 0), 0))}</small></div>
+          <div class="hb"><span>📱 ค่าเครื่อง</span><em><s style="width:100%"></s></em><b style="width:auto">${baht(done.reduce((t, o) => t + (o.price || 0) * (o.qty || 1), 0))}</b></div>
+          <div class="hb"><span>➕ ขายเสริม</span><em><s style="width:100%"></s></em><b>${baht(done.reduce((t, o) => t + (o.addons || []).reduce((x, a) => x + a.price * a.qty, 0), 0))}</b></div>
+          <div class="ch" style="margin-top:10px"><b style="font-size:14px">ขายเสริมยอดนิยม (ชิ้น)</b></div>${bars(done.reduce((m, o) => { (o.addons || []).forEach(a => m[a.name] = (m[a.name] || 0) + a.qty); return m; }, {}))}</div>
         <div class="lc" style="margin-top:14px"><div class="ch"><b>❌ ข้อที่ตรวจไม่ผ่าน</b></div>${bars(fails)}</div>`;
       renderReportList();
     }
@@ -1060,7 +1186,8 @@
         <div class="lab"><span>🔊 เสียงเรียก (พูดในแอป)</span></div><div class="chips" id="sMode"><button data-v="fun" class="${c.sound.mode !== 'polite' ? 'on' : ''}">😆 โหมดฮา</button><button data-v="polite" class="${c.sound.mode === 'polite' ? 'on' : ''}">🙂 โหมดสุภาพ</button></div>
         <input class="inp" id="sFun" maxlength="80" value="${esc(c.sound.fun)}" placeholder="ประโยคโหมดฮา" style="margin-top:8px"><input class="inp" id="sPol" maxlength="80" value="${esc(c.sound.polite)}" placeholder="ประโยคโหมดสุภาพ" style="margin-top:6px">
         <div class="lab"><span></span></div><div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>พูดชื่อแบรนด์ + รุ่นต่อท้าย<small>เช่น "…มาเด้อสู SAMSUNG Galaxy A56"</small></span><span class="sw ${c.sound.sayModel !== false ? 'on' : ''}" id="sSay"></span></div>`;
-      if (STAB === 'list') body = `<div class="note bl">🏷️ แบรนด์ · 🎯 งานโฟกัส · 👤 รายชื่อพนักงานขาย / ผู้รับเคส ใช้ชุดเดียวกับแอป <b>Check List</b> — แก้ที่ Check List › ⚙️ ตั้งค่า</div>` + ['colors:สี', 'caps:ความจุ', 'pays:ประเภทชำระ', 'backReasons:เหตุผลส่งกลับ PC'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span><small>1 บรรทัด = 1 ตัวเลือก</small></div><textarea id="s_${k}" rows="4">${lines(k)}</textarea>`; }).join('');
+      if (STAB === 'list') body = `<div class="note bl">🏷️ แบรนด์ · 🎯 งานโฟกัส · 👤 รายชื่อพนักงานขาย / ผู้รับเคส ใช้ชุดเดียวกับแอป <b>Check List</b> — แก้ที่ Check List › ⚙️ ตั้งค่า</div>` + `<div class="lab"><span>➕ รายการขายเสริม / ประกัน</span><small>1 บรรทัด = ชื่อ | ราคา · ว่าง = ใช้งานโฟกัสจาก Check List</small></div><textarea id="s_addons" rows="8" placeholder="ฟิล์ม BRIGHT | 590&#10;SANDISK | 399&#10;ประกันอุบัติเหตุ | 1290">${esc((c.addons || []).map(a => a.name + (a.price ? ' | ' + a.price : '')).join('\n'))}</textarea><div class="note wh">💡 ตั้งชื่อให้ตรงกับงานโฟกัสใน Check List (เช่น FILM BRIGHT, SANDISK) แล้วจะนับเป็นงานโฟกัสให้เอง</div>`
+        + ['colors:สี', 'caps:ความจุ', 'pays:ประเภทชำระ', 'backReasons:เหตุผลส่งกลับ PC'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span><small>1 บรรทัด = 1 ตัวเลือก</small></div><textarea id="s_${k}" rows="4">${lines(k)}</textarea>`; }).join('');
       if (STAB === 'items') body = `<div class="lab"><span>รายการตรวจเครื่อง</span><small>1 บรรทัด = 1 ข้อ · เรียงตามลำดับที่ทดสอบจริง</small></div><textarea id="s_items" rows="15">${lines('items')}</textarea><div class="note or">แก้รายการ = ขึ้นเงื่อนไขฉบับใหม่ · ใบที่ลูกค้าเซ็นไปแล้วยังจำฉบับเดิม</div>`;
       if (STAB === 'terms') body = `<div class="note wh">ฉบับปัจจุบัน: <b>${esc(c.termsVer)}</b> · แก้ข้อความ = ขึ้นฉบับใหม่อัตโนมัติ</div>` + ['notice:ข้อความ 7Club+ / ใบกำกับภาษี', 'warranty:เงื่อนไขรับประกัน 7 วัน', 'transfer:นโยบายย้ายข้อมูล', 'pdpa:การเก็บข้อมูล (PDPA)'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span></div><textarea id="s_${k}" rows="${k === 'pdpa' || k === 'notice' ? 3 : 8}">${esc(c[k])}</textarea>`; }).join('');
       if (STAB === 'push') body = `<div class="note ${CFG.push.ready ? 'gr' : 'or'}">${CFG.push.ready ? '✅ ตั้งค่าแจ้งเตือนมือถือแล้ว (โปรเจกต์ ' + esc(CFG.push.web.projectId) + ')' : '⚠️ ยังไม่ได้ตั้งค่า — ตอนนี้แจ้งเตือนได้เฉพาะตอนเปิดแอปค้างไว้'}</div>
@@ -1080,7 +1207,8 @@
       const s = {}, v = id => document.getElementById(id);
       if (STAB === 'gen') Object.assign(s, { claimMin: +v('sClaim').value, mgrMin: +v('sMgr').value, closeTime: v('sClose').value, onlyOnShift: v('sShift').classList.contains('on'),
         sound: { mode: chipVal('sMode') || 'fun', fun: v('sFun').value, polite: v('sPol').value, sayModel: v('sSay').classList.contains('on') } });
-      if (STAB === 'list') ['colors', 'caps', 'pays', 'backReasons'].forEach(k => s[k] = v('s_' + k).value.split('\n').map(x => x.trim()).filter(Boolean));
+      if (STAB === 'list') { ['colors', 'caps', 'pays', 'backReasons'].forEach(k => s[k] = v('s_' + k).value.split('\n').map(x => x.trim()).filter(Boolean));
+        s.addons = v('s_addons').value.split('\n').map(x => x.split('|')).filter(x => x[0].trim()).map(x => ({ name: x[0].trim(), price: +(String(x[1] || '').replace(/[^\d.]/g, '')) || 0 })); }
       if (STAB === 'items') s.items = v('s_items').value.split('\n').map(x => x.trim()).filter(Boolean);
       if (STAB === 'terms') ['notice', 'warranty', 'transfer', 'pdpa'].forEach(k => s[k] = v('s_' + k).value.trim());
       btn.disabled = true;

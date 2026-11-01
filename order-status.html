@@ -33,6 +33,21 @@
     .terms { white-space: pre-wrap; font-size: 13.5px; line-height: 1.65; color: #3A3A3C; font-weight: 500; }
     .ok { color: #1E7B34; } .muted { color: #8A8270; font-size: 12px; font-weight: 600; }
     .loading { text-align: center; padding: 40px 0; font-weight: 700; color: #8A8270; }
+    .now { display: flex; gap: 12px; align-items: flex-start; margin-top: 14px; padding: 14px; border-radius: 18px; background: #2A2A2D; }
+    .now .d { width: 12px; height: 12px; border-radius: 50%; background: var(--y); flex-shrink: 0; margin-top: 6px; animation: pulse 1.4s ease-in-out infinite; } .now.ok .d { background: var(--ok); }
+    .now b { display: block; font: 800 18px 'Kanit', sans-serif; color: var(--y); } .now.ok b { color: #7CE495; }
+    .now p { margin: 4px 0 0; font-size: 14px; line-height: 1.55; color: #E5E5EA; font-weight: 600; } .now p b { display: inline; font-size: 14px; color: #fff; }
+    .steps2 { list-style: none; margin: 0; padding: 0; position: relative; }
+    .steps2 li { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; position: relative; font-weight: 700; font-size: 14.5px; color: #A39A7D; }
+    .steps2 li::before { content: ''; position: absolute; left: 15px; top: 40px; bottom: -8px; width: 2px; background: #E9E2C6; } .steps2 li:last-child::before { display: none; }
+    .steps2 li i { width: 32px; height: 32px; border-radius: 50%; background: #F2EBD0; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 15px; flex-shrink: 0; position: relative; z-index: 1; }
+    .steps2 li small { display: block; font-weight: 600; font-size: 12px; color: #8A8270; margin-top: 1px; }
+    .steps2 li.ok { color: var(--d); } .steps2 li.ok i { background: var(--ok); color: #fff; font-weight: 800; } .steps2 li.ok::before { background: var(--ok); }
+    .steps2 li.cur { color: var(--d); } .steps2 li.cur i { background: var(--y); box-shadow: 0 0 0 5px rgba(255,214,0,.35); animation: pulse2 1.6s ease-in-out infinite; }
+    @keyframes pulse2 { 50% { box-shadow: 0 0 0 9px rgba(255,214,0,.12); } }
+    .bill div { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px dashed rgba(0,0,0,.1); font-size: 14px; font-weight: 600; } .bill div:last-child { border: 0; }
+    .bill div span:last-child { font-family: 'Kanit', sans-serif; white-space: nowrap; } .bill .tt { font: 800 17px 'Kanit', sans-serif; padding-top: 8px; }
+    .kv2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13.5px; font-weight: 700; } .kv2 small { display: block; color: #8A8270; font-size: 11px; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -53,26 +68,44 @@
       fetch(SYS1326.API_URL, { method: 'POST', body: JSON.stringify({ app: 'order', fn: 'orderStatus', args: [NO, KEY] }), headers: { 'Content-Type': 'text/plain;charset=utf-8' } })
         .then(r => r.json()).then(j => paint(j.data || { error: j.error })).catch(() => { if (!document.querySelector('.c')) document.getElementById('out').innerHTML = '<div class="c">เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง</div>'; });
     }
+    const baht = n => '฿' + Math.round(Number(n) || 0).toLocaleString('en-US');
     function paint(x) {
       if (!x || x.error) { document.getElementById('out').innerHTML = `<div class="c">${esc((x && x.error) || 'ไม่พบข้อมูล')}</div>`; return; }
-      const STEP = { new: 1, claimed: 2, back: 2, picked: 3, parked: 3, done: 4, cancel: 0 };
-      let st = '', ok = false;
-      if (x.status === 'done') { st = 'รับเครื่องเรียบร้อยแล้ว'; ok = true; }
-      else if (x.status === 'cancel') st = 'รายการนี้ถูกยกเลิก';
-      else if (x.status === 'parked') { ok = x.park && x.park.ready; st = ok ? 'เครื่องพร้อมแล้ว — มารับได้เลย 🎉' : x.park && x.park.readyAt ? 'กำลังดำเนินการ · คาดว่าเสร็จ <b>' + hm(x.park.readyAt) + ' น.</b>' : 'กำลังดำเนินการ'; }
-      else if (x.status === 'new') st = 'รับรายการแล้ว · กำลังส่งให้พนักงาน';
-      else if (x.status === 'claimed') st = x.work && x.work.kind === 'branch' ? 'กำลังนำเครื่องมาจากสาขาใกล้เคียง' + (x.work.eta ? ' · ประมาณ <b>' + hm(x.work.eta) + ' น.</b>' : '') : 'พนักงานกำลังเตรียมเครื่อง';
-      else if (x.status === 'back') st = 'พนักงานกำลังตรวจสอบข้อมูล';
-      else if (x.status === 'picked') st = 'กำลังตรวจสภาพเครื่องกับคุณ';
-      document.getElementById('h').textContent = x.status === 'done' ? 'สำเนาใบรับเครื่อง' : 'สถานะเครื่องของคุณ';
-      document.getElementById('sub').textContent = x.status === 'done' ? 'เก็บลิงก์นี้ไว้ใช้ตอนเคลม / ติดต่อร้าน' : 'อัปเดตอัตโนมัติทุก 30 วินาที';
-      const n = STEP[x.status] || 0;
+      const t = x.t || {}, st = x.status, w = x.work || {}, pk = x.park || {};
+      const longCase = x.transfer || !!t.park || st === 'parked';
+      // ขั้นตอน
+      const S = [
+        { k: 'new', ic: '🧾', name: 'รับรายการของคุณแล้ว', at: t.created },
+        { k: 'claimed', ic: '🙋', name: w.kind === 'branch' ? 'กำลังนำเครื่องมาจากสาขาใกล้เคียง' : 'พนักงานกำลังเตรียมเครื่องให้คุณ', at: t.claimed },
+        { k: 'picked', ic: '🔍', name: 'ตรวจสภาพเครื่องร่วมกับคุณ', at: t.picked }
+      ];
+      if (longCase) S.push({ k: 'parked', ic: '📲', name: x.transfer ? 'ย้ายข้อมูลจากเครื่องเก่า' : 'กำลังดำเนินการ', at: t.park });
+      S.push({ k: 'done', ic: '✅', name: 'รับเครื่องเรียบร้อย', at: t.done });
+      const order = S.map(z => z.k);
+      let cur = { new: 'new', claimed: 'claimed', back: 'claimed', picked: 'picked', parked: 'parked', done: 'done', cancel: '' }[st];
+      if (cur === 'parked' && !order.includes('parked')) cur = 'picked';
+      const ci = order.indexOf(cur);
+      // ตอนนี้ต้องทำอะไร
+      let head = '', tip = '', ok = false;
+      if (st === 'new') { head = 'รอพนักงานรับรายการ'; tip = 'กรุณารอสักครู่ที่หน้าร้าน พนักงานกำลังรับเรื่อง'; }
+      else if (st === 'claimed' && w.kind === 'branch') { head = 'กำลังนำเครื่องมาจากสาขาใกล้เคียง'; tip = (w.eta ? `คาดว่าเครื่องมาถึงประมาณ <b>${hm(w.eta)} น.</b> ` : '') + 'ระหว่างนี้ไปเดินเล่นก่อนได้ หน้านี้จะอัปเดตเอง'; }
+      else if (st === 'claimed' && w.kind === 'wait') { head = 'รอเอกสาร / การอนุมัติ'; tip = 'พนักงานกำลังดำเนินการ อาจขอข้อมูลเพิ่มจากคุณ'; }
+      else if (st === 'claimed') { head = 'พนักงานกำลังเบิกเครื่อง'; tip = (w.eta ? `ประมาณ <b>${hm(w.eta)} น.</b> · ` : 'ใช้เวลาไม่นาน · ') + 'กรุณารอที่หน้าร้าน'; }
+      else if (st === 'back') { head = 'กำลังตรวจสอบข้อมูล'; tip = 'พนักงานกำลังตรวจสอบข้อมูลสมาชิก 7Club+ / การชำระเงิน อาจสอบถามข้อมูลเพิ่มจากคุณ'; }
+      else if (st === 'picked') { head = 'เครื่องมาแล้ว! 🎉'; tip = 'เชิญที่เคาน์เตอร์ ตรวจสภาพเครื่องร่วมกับพนักงาน แล้วเซ็นรับเครื่อง'; ok = true; }
+      else if (st === 'parked' && pk.ready) { head = 'เครื่องพร้อมแล้ว — มารับได้เลย 🎉'; tip = 'กลับมาที่ร้านเพื่อตรวจเครื่องและเซ็นรับได้เลย'; ok = true; }
+      else if (st === 'parked') { head = x.transfer ? 'กำลังย้ายข้อมูล' : 'กำลังดำเนินการ'; tip = (pk.readyAt ? `คาดว่าเสร็จประมาณ <b>${hm(pk.readyAt)} น.</b> · ` : '') + 'ไปทานข้าว / เดินเล่นได้เลย เครื่องอยู่กับพนักงานอย่างปลอดภัย' + (pk.backAt ? ` · นัดรับ <b>${hm(pk.backAt)} น.</b>` : ''); }
+      else if (st === 'done') { head = 'รับเครื่องเรียบร้อยแล้ว'; tip = 'ขอบคุณที่ใช้บริการ · เก็บลิงก์นี้ไว้ใช้ตอนเคลม'; ok = true; }
+      else if (st === 'cancel') { head = 'รายการนี้ถูกยกเลิก'; tip = 'ติดต่อพนักงานที่ร้านหากมีข้อสงสัย'; }
+      document.getElementById('h').textContent = st === 'done' ? 'สำเนาใบรับเครื่อง' : 'สถานะเครื่องของคุณ';
+      document.getElementById('sub').textContent = st === 'done' ? 'เก็บลิงก์นี้ไว้ใช้ตอนเคลม / ติดต่อร้าน' : 'อัปเดตอัตโนมัติทุก 30 วินาที · อัปเดตล่าสุด ' + hm(Date.now()) + ' น.';
       let h = `<div class="c dk"><div class="big">${esc(x.brand)} ${esc(x.model)}<small>${esc([x.color, x.cap].filter(Boolean).join(' · '))}${x.qty > 1 ? ' · ' + x.qty + ' เครื่อง' : ''}</small></div>
-        <div class="stt ${ok ? 'ok' : ''}"><span class="d"></span><span>${st}</span></div>
-        ${x.status !== 'cancel' ? `<div class="steps">${[1, 2, 3, 4].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</div>` : ''}
-        <div class="kv"><div><small>เลขที่</small>#${esc(x.no)}</div><div><small>ลูกค้า</small>${esc(x.cust)} ${esc(x.phone)}</div>
-        ${x.imei ? `<div><small>IMEI / SN</small>${esc(x.imei)}</div>` : ''}${x.signedAt ? `<div><small>รับเครื่อง</small>${dt(x.signedAt)} ${hm(x.signedAt)}</div>` : ''}</div></div>`;
-      if (x.status === 'done') {
+        <div class="now ${ok ? 'ok' : ''}"><span class="d"></span><div><b>${head}</b><p>${tip}</p></div></div></div>`;
+      if (st !== 'cancel') h += `<div class="c"><h3>ขั้นตอน</h3><ol class="steps2">${S.map((z, i) => { const cls = st === 'done' || i < ci ? 'ok' : i === ci ? 'cur' : ''; return `<li class="${cls}"><i>${cls === 'ok' ? '✓' : z.ic}</i><span>${z.name}${z.at && cls ? `<small>${hm(z.at)} น.</small>` : cls === 'cur' ? '<small>กำลังดำเนินการ…</small>' : ''}</span></li>`; }).join('')}</ol></div>`;
+      const it = x.items || {};
+      if (it.price || (it.addons || []).length) h += `<div class="c"><h3>🧾 รายการของคุณ</h3><div class="bill"><div><span>📱 ${esc(x.model)}${it.qty > 1 ? ' ×' + it.qty : ''}</span><span>${it.price ? baht(it.price * (it.qty || 1)) : '—'}</span></div>${(it.addons || []).map(a => `<div><span>➕ ${esc(a.name)}${a.qty > 1 ? ' ×' + a.qty : ''}</span><span>${a.price ? baht(a.price * a.qty) : '—'}</span></div>`).join('')}<div class="tt"><span>รวม${it.pay ? ' · ' + esc(it.pay) : ''}</span><span>${baht(it.total)}</span></div></div></div>`;
+      h += `<div class="c"><div class="kv2"><div><small>เลขที่</small>#${esc(x.no)}</div><div><small>ลูกค้า</small>${esc(x.cust)} ${esc(x.phone)}</div>${x.imei ? `<div><small>IMEI / SN</small>${esc(x.imei)}</div>` : ''}${x.signedAt ? `<div><small>รับเครื่อง</small>${dt(x.signedAt)} ${hm(x.signedAt)}</div>` : ''}</div></div>`;
+      if (st === 'done') {
         h += `<div class="c"><h3>🛡️ รับประกันเปลี่ยนเครื่อง 7 วัน</h3><div class="ok" style="font-weight:800;font-size:15px">ถึงวันที่ ${dt(x.until)}</div><div class="muted">เงื่อนไขฉบับ ${esc(x.ver)}</div></div>`;
         h += `<div class="c"><h3>📋 ผลตรวจสภาพเครื่องตอนรับ</h3>${x.check.map(c => `<div class="ci"><span>${c.ok ? '✅' : '❌'}</span><span>${esc(c.name)}${!c.ok && c.note ? `<small>${esc(c.note)}</small>` : ''}</span></div>`).join('')}</div>`;
         h += `<div class="c"><h3>เงื่อนไขที่คุณยอมรับ</h3><div class="terms">${esc(x.notice)}\n\n${esc(x.warranty)}</div></div>`;
