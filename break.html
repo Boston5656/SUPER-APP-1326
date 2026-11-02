@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD600">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <title>พักทานข้าว 1326</title>
+  <script>window.GAS_APP = 'meal';</script>
+  <script src="gas.js?v=2026.11.02-1"></script>
+  <style>
+    :root { --y: #FFD600; --d: #1C1C1E; --ok: #30D158; --no: #FF453A; --or: #FF9F0A;
+      --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); --spring-soft: cubic-bezier(.22,1.18,.36,1); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; border: 0; cursor: pointer; color: inherit; }
+    html, body { overflow-x: hidden; }
+    body { margin: 0; min-height: 100vh; color: var(--d); font-family: 'IBM Plex Sans Thai', -apple-system, sans-serif; -webkit-font-smoothing: antialiased;
+      background: radial-gradient(120% 55% at 50% -12%, #FFF3A6 0%, rgba(255,243,166,0) 60%), radial-gradient(90% 60% at 110% 110%, #FFC400 0%, rgba(255,196,0,0) 60%), #FFD600;
+      background-attachment: fixed; padding: calc(8px + env(safe-area-inset-top)) 14px calc(40px + env(safe-area-inset-bottom)); }
+    @keyframes riseIn { 0% { opacity: 0; transform: translateY(14px) scale(.985); filter: blur(3px); } 100% { opacity: 1; transform: none; filter: none; } }
+    @keyframes blink { 50% { opacity: .25; } }
+    @keyframes pulseR { 50% { box-shadow: 0 0 0 6px rgba(255,69,58,.25); } }
+    .rise { animation: riseIn .6s var(--ios-ease) both; }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+    .navrow { position: sticky; top: calc(8px + env(safe-area-inset-top)); z-index: 50; display: flex; gap: 8px; align-items: stretch; max-width: 1180px; margin: 0 auto 16px; }
+    [data-sys-back-slot] { display: flex; } [data-sys-back-slot]:empty { display: none; }
+    .homeb { width: 48px; border-radius: 18px; background: rgba(28,28,30,.86); color: var(--y); font-size: 20px; font-weight: 800; display: none; align-items: center; justify-content: center; text-decoration: none; }
+    .seg { position: relative; flex: 1; display: flex; gap: 2px; padding: 5px; border-radius: 100px; background: rgba(255,255,255,.72); -webkit-backdrop-filter: saturate(180%) blur(22px); backdrop-filter: saturate(180%) blur(22px); border: 1px solid rgba(255,255,255,.7); box-shadow: 0 8px 28px -10px rgba(60,48,0,.35); min-width: 0; }
+    .seg .glider { position: absolute; top: 5px; bottom: 5px; left: 0; width: 0; border-radius: 100px; background: var(--d); transition: transform .55s var(--spring-soft), width .55s var(--spring-soft); }
+    .seg button { position: relative; z-index: 1; flex: 1; background: none; border-radius: 100px; padding: 11px 4px; font-weight: 700; font-size: 14px; color: #6E6E73; transition: color .35s; white-space: nowrap; }
+    .seg button.on { color: #fff; } .seg button:active { transform: scale(.94); }
+    .rb { width: 50px; border-radius: 50%; background: var(--d); color: var(--y); font-size: 19px; box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); transition: transform .35s var(--spring); flex-shrink: 0; }
+    .rb:active { transform: scale(.88); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px; border-radius: 100px; background: rgba(28,28,30,.08); font: 700 11.5px 'Kanit', sans-serif; letter-spacing: 1.2px; color: rgba(28,28,30,.75); }
+    .eyebrow .ic { width: 24px; height: 24px; border-radius: 8px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+    .eyebrow .live { width: 7px; height: 7px; border-radius: 50%; background: var(--d); animation: blink 1.6s infinite; }
+    h1 { margin: 10px 0 4px; font: 800 30px/1.1 'Kanit', sans-serif; }
+    .sub { font-weight: 600; font-size: 13px; color: rgba(28,28,30,.62); margin-bottom: 14px; line-height: 1.5; }
+    .grid { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); } .grid > * { min-width: 0; }
+    @media (min-width: 960px) { .grid.two { grid-template-columns: 400px minmax(0, 1fr); align-items: start; } .grid.two > .lft { position: sticky; top: 80px; } }
+    .dk { background: var(--d); color: #fff; border-radius: 30px; padding: 20px; box-shadow: 0 22px 44px -22px rgba(0,0,0,.75); position: relative; overflow: hidden; animation: riseIn .55s var(--ios-ease) both; }
+    .dk::before { content: ''; position: absolute; inset: 0; background: radial-gradient(70% 60% at 15% 0%, rgba(255,214,0,.14), transparent 70%); pointer-events: none; }
+    .lc { background: rgba(255,251,234,.94); border-radius: 28px; padding: 16px 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); animation: riseIn .55s var(--ios-ease) both; margin-bottom: 14px; }
+    .ch { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 0 4px 12px; } .ch b { font: 700 17px 'Kanit', sans-serif; } .ch small { color: #6E6E73; font-weight: 600; font-size: 12px; text-align: right; }
+    .empty { text-align: center; color: #8A8270; font-weight: 600; padding: 14px 0 8px; font-size: 13px; }
+    .loading { text-align: center; padding: 30px 0; color: #8A8270; font-weight: 600; }
+
+    /* การ์ดของฉัน */
+    .meh { position: relative; display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+    .meh b { font: 800 18px 'Kanit', sans-serif; } .meh small { color: #AEAEB2; font-weight: 600; font-size: 12px; display: block; }
+    .ring { position: relative; width: 210px; height: 210px; margin: 14px auto 6px; }
+    .ring svg { transform: rotate(-90deg); width: 210px; height: 210px; }
+    .ring .trk { stroke: #2C2C2E; } .ring .bar { stroke: var(--y); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke .3s; }
+    .ring.over .bar { stroke: var(--no); } .ring.buy .bar { stroke: var(--or); } .ring.buy .c b { color: #FFC266; } .ring.buy.over .c b { color: #FF8A80; }
+    .btn2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; } .btn2 .big { margin-top: 10px; }
+    .big.o { background: #3A2A10; color: #FFC266; box-shadow: inset 0 0 0 2px rgba(255,159,10,.5); }
+    .pr.buy { background: #2A2214; color: #fff; } .pr.buy .t small, .pr.buy .v small { color: #C9B48A; } .pr.buy .v b { color: #FFC266; } .pr.buy .av { background: var(--or); color: var(--d); }
+    .tg.or { background: #FFF1D6; color: #8A5300; }
+    .help li { margin-bottom: 10px; } .help li b { font-family: 'Kanit', sans-serif; } .help ol { padding-left: 22px; margin: 0; }
+    .ring .c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .ring .c b { font: 800 46px 'Kanit', sans-serif; color: var(--y); line-height: 1; font-variant-numeric: tabular-nums; } .ring.over .c b { color: #FF8A80; }
+    .ring .c small { color: #AEAEB2; font-weight: 700; font-size: 13px; margin-top: 6px; } .ring .c span { color: #fff; font-weight: 700; font-size: 13px; margin-top: 2px; }
+    .big { position: relative; width: 100%; height: 62px; border-radius: 20px; font: 800 18px 'Kanit', sans-serif; margin-top: 10px; transition: transform .3s var(--spring); }
+    .big:active { transform: scale(.96); } .big:disabled { opacity: .45; }
+    .big.y { background: linear-gradient(180deg, #FFE033, #FFD600); color: var(--d); box-shadow: 0 14px 26px -12px rgba(255,214,0,.9); }
+    .big.g { background: var(--ok); color: #fff; box-shadow: 0 14px 26px -12px rgba(48,209,88,.8); }
+    .big.gr { background: #2C2C2E; color: #fff; height: 50px; font-size: 15px; }
+    .rule { position: relative; margin-top: 12px; font-size: 12.5px; font-weight: 600; color: #AEAEB2; line-height: 1.55; text-align: center; }
+    .doneb { position: relative; text-align: center; padding: 18px 0 6px; } .doneb .e { font-size: 46px; } .doneb b { display: block; font: 800 20px 'Kanit', sans-serif; color: #7CE495; margin-top: 4px; } .doneb small { color: #AEAEB2; font-weight: 600; }
+
+    /* กระดาน */
+    .pr { display: flex; align-items: center; gap: 10px; background: #FFFDF5; border-radius: 18px; padding: 10px 12px; margin-bottom: 7px; animation: riseIn .45s var(--ios-ease) both; }
+    .pr .av { width: 40px; height: 40px; border-radius: 14px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font: 800 16px 'Kanit', sans-serif; flex-shrink: 0; }
+    .pr .av.pc { background: #E1EEFF; color: #0A58CA; } .pr .t { flex: 1; min-width: 0; } .pr .t b { display: block; font: 700 15px 'Kanit', sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .pr .t small { color: #8A8270; font-weight: 600; font-size: 12px; }
+    .pr .v { text-align: right; white-space: nowrap; } .pr .v b { display: block; font: 800 20px 'Kanit', sans-serif; font-variant-numeric: tabular-nums; } .pr .v small { font-weight: 700; font-size: 11px; color: #8A8270; }
+    .pr.on { background: var(--d); color: #fff; } .pr.on .t small, .pr.on .v small { color: #AEAEB2; } .pr.on .v b { color: var(--y); }
+    .pr.late { box-shadow: inset 0 0 0 2px var(--no); animation: riseIn .45s var(--ios-ease) both, pulseR 1.6s ease-in-out infinite; } .pr.late .v b { color: #FF8A80; }
+    .pr .mini { border-radius: 12px; padding: 8px 11px; background: #F2EBD0; font-weight: 800; font-size: 12px; } .pr.on .mini { background: #2C2C2E; color: #fff; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips button, .chips span { border-radius: 100px; padding: 8px 13px; background: #fff; font-weight: 700; font-size: 13px; box-shadow: 0 1px 2px rgba(0,0,0,.06); display: inline-flex; align-items: center; gap: 5px; transition: transform .3s var(--spring); }
+    .chips button:active { transform: scale(.9); } .chips .pc { background: #E1EEFF; color: #0A58CA; } .chips .q { background: var(--d); color: var(--y); }
+    .tg { display: inline-flex; border-radius: 100px; padding: 2px 8px; font-size: 11px; font-weight: 800; background: #FFE5E3; color: #D70015; margin-left: 4px; } .tg.ok { background: #E3F9E9; color: #1E7B34; }
+
+    /* แผ่นล่าง */
+    .sheet { position: fixed; inset: 0; z-index: 100; display: flex; align-items: flex-end; justify-content: center; visibility: hidden; pointer-events: none; transition: visibility 0s linear .45s; }
+    .sheet.open { visibility: visible; pointer-events: auto; transition: none; }
+    .sheet .bd { position: absolute; inset: 0; background: rgba(0,0,0,.42); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); opacity: 0; transition: opacity .42s var(--ios-ease); } .sheet.open .bd { opacity: 1; }
+    .sheet .box { position: relative; width: min(600px, 100%); max-height: 92vh; overflow-y: auto; background: #F7F7F9; border-radius: 30px 30px 0 0; padding: 10px 16px 0; transform: translateY(100%); transition: transform .55s var(--ios-ease); }
+    .sheet.open .box { transform: none; }
+    @media (min-width: 700px) { .sheet { align-items: center; padding: 16px; } .sheet .box { border-radius: 30px; transform: translateY(24px) scale(.97); opacity: 0; transition: transform .5s var(--spring), opacity .3s; } .sheet.open .box { transform: none; opacity: 1; } }
+    .sheet.lv2 { z-index: 120; }
+    .grab { width: 40px; height: 5px; border-radius: 3px; background: #D1D1D6; margin: 0 auto 10px; }
+    .shd { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; } .shd .ic { width: 44px; height: 44px; border-radius: 14px; background: var(--d); color: var(--y); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .shd > div { flex: 1; min-width: 0; } .shd h3 { margin: 0; font: 800 18px 'Kanit', sans-serif; } .shd small { font-size: 12px; color: #6E6E73; font-weight: 600; }
+    .x { width: 34px; height: 34px; border-radius: 50%; background: #E9E9EE; color: #6E6E73; font-weight: 800; flex-shrink: 0; }
+    .lab { margin: 14px 4px 6px; font: 800 12.5px 'IBM Plex Sans Thai', sans-serif; display: flex; justify-content: space-between; gap: 8px; } .lab small { color: #8E8E93; font-weight: 600; }
+    .inp { width: 100%; border: 0; border-radius: 16px; padding: 13px 14px; font: 700 16px 'IBM Plex Sans Thai', sans-serif; background: #fff; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,.05); } .inp:focus { box-shadow: 0 0 0 2px var(--y); }
+    .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .tgl { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #fff; border-radius: 18px; padding: 12px 14px; font-weight: 700; font-size: 14px; margin-bottom: 6px; cursor: pointer; }
+    .tgl small { display: block; font-weight: 600; font-size: 11.5px; color: #8E8E93; }
+    .sw { width: 52px; height: 32px; border-radius: 100px; background: #E5E5EA; position: relative; flex-shrink: 0; transition: background .25s; }
+    .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.25); transition: transform .35s var(--spring); } .sw.on { background: var(--ok); } .sw.on::after { transform: translateX(20px); }
+    .rmb { width: 34px; height: 34px; border-radius: 11px; background: #FFE5E3; color: #D70015; font-weight: 800; flex-shrink: 0; }
+    .pill { display: flex; background: #F2F2F7; border-radius: 12px; padding: 3px; gap: 2px; } .pill button { border-radius: 9px; padding: 7px 12px; background: none; font-weight: 700; font-size: 12.5px; color: #6E6E73; } .pill button.on { background: var(--d); color: var(--y); }
+    .sfoot { position: sticky; bottom: 0; display: flex; gap: 8px; padding: 14px 0 calc(16px + env(safe-area-inset-bottom)); background: linear-gradient(rgba(247,247,249,0), #F7F7F9 30%); }
+    .sfoot button { flex: 1; height: 54px; border-radius: 17px; font: 800 15px 'IBM Plex Sans Thai', sans-serif; transition: transform .3s var(--spring); } .sfoot button:active { transform: scale(.95); }
+    .b-no { background: #E9E9EE; } .b-yes { flex: 1.7 !important; background: linear-gradient(180deg, #FFE033, #FFD600); box-shadow: 0 10px 22px -12px rgba(242,194,0,1); } .b-red { flex: 1.7 !important; background: #FFE5E3; color: #D70015; } .b-g { flex: 1.7 !important; background: var(--ok); color: #fff; }
+    .msg { font-size: 14.5px; font-weight: 600; line-height: 1.6; color: #3A3A3C; background: #fff; border-radius: 18px; padding: 14px; }
+    .msg b { font-family: 'Kanit', sans-serif; }
+
+    /* ประวัติ */
+    .rnav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; } .rnav button { border-radius: 100px; padding: 10px 15px; background: rgba(255,255,255,.7); font-weight: 800; font-size: 13px; } .rnav button.on { background: var(--d); color: var(--y); }
+    table.lg { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 13px; font-variant-numeric: tabular-nums; }
+    table.lg th { font: 700 11px 'Kanit', sans-serif; color: #6E6E73; text-align: center; padding: 0 6px; } table.lg th:first-child { text-align: left; }
+    table.lg td { background: #FFFDF5; padding: 10px 8px; text-align: center; font-weight: 700; } table.lg td:first-child { text-align: left; border-radius: 14px 0 0 14px; font-family: 'Kanit', sans-serif; } table.lg td:last-child { border-radius: 0 14px 14px 0; }
+    table.lg td.r { color: #D70015; }
+    .toast { position: fixed; left: 50%; top: calc(70px + env(safe-area-inset-top)); transform: translate(-50%, -20px); opacity: 0; z-index: 400; background: var(--d); color: var(--y); font-weight: 700; font-size: 13.5px; padding: 11px 18px; border-radius: 100px; box-shadow: 0 12px 26px -10px rgba(0,0,0,.6); transition: all .45s var(--spring); pointer-events: none; max-width: 92vw; text-align: center; }
+    .toast.on { opacity: 1; transform: translate(-50%, 0); } .toast.err { background: #D70015; color: #fff; }
+    #view-log { display: none; }
+    @media (max-width: 400px) { h1 { font-size: 26px; } .ring, .ring svg { width: 188px; height: 188px; } .ring .c b { font-size: 40px; } }
+  </style>
+</head>
+<body>
+  <div class="navrow rise">
+    <span data-sys-back-slot></span><a class="homeb" id="homeb" href="index.html" aria-label="เมนูหลัก">‹</a>
+    <div class="seg" id="tabSeg"><div class="glider" id="glider"></div>
+      <button class="on" id="t-today" onclick="setView('today')">🍱 วันนี้</button>
+      <button id="t-log" onclick="setView('log')">📊 ประวัติ</button>
+    </div>
+    <button class="rb" onclick="openHelp()" aria-label="วิธีใช้" style="font:800 20px Kanit,serif">i</button>
+    <button class="rb" id="gearBtn" onclick="openSet()" aria-label="ตั้งค่า" style="display:none">⚙️</button>
+  </div>
+
+  <div class="wrap">
+    <div class="rise">
+      <span class="eyebrow"><span class="ic">🍱</span>BREAK 1326 · <i class="live"></i> LIVE</span>
+      <h1>พักทานข้าว</h1>
+      <div class="sub" id="sub">กดออกพัก <b>ตอนก้าวออกจากหน้าร้าน</b> · กลับก่อนเวลา = เวลาที่เหลือตัดทิ้ง ไม่ทบ</div>
+    </div>
+    <div id="view-today">
+      <div class="grid two">
+        <div class="lft"><div class="dk" id="meCard"><div class="loading" style="color:#AEAEB2">กำลังโหลด…</div></div></div>
+        <div>
+          <div class="lc" id="onBox"></div>
+          <div class="lc" id="qBox" style="display:none"></div>
+          <div class="lc" id="restBox"></div>
+        </div>
+      </div>
+    </div>
+    <div id="view-log">
+      <div class="rnav" id="rNav"><button class="on" data-r="today">วันนี้</button><button data-r="7">7 วัน</button><button data-r="month">เดือนนี้</button><button data-r="prev">เดือนก่อน</button></div>
+      <div id="logBody"><div class="loading">กำลังโหลด…</div></div>
+    </div>
+  </div>
+
+  <div class="sheet lv2" id="cfS"><div class="bd" onclick="closeS('cfS')"></div><div class="box" id="cfBox"></div></div>
+  <div class="sheet" id="setS"><div class="bd" onclick="closeS('setS')"></div><div class="box" id="setBox"></div></div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const pad = n => String(n).padStart(2, '0');
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const hm = t => t ? `${pad(new Date(t).getHours())}:${pad(new Date(t).getMinutes())}` : '';
+    const TH_MS = ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const dmy = iso => { const d = new Date(iso + 'T00:00:00'); return `${d.getDate()} ${TH_MS[d.getMonth()]}`; };
+    const isoOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    if (window.parent === window) document.getElementById('homeb').style.display = 'flex';
+    const run = (fn, ...a) => new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(no)[fn](...a));
+    let B = null, SKEW = 0, VIEW = 'today', LOGR = 'today', SETP = null;
+    const now = () => Date.now() + SKEW;
+    function vib(ms) { try { navigator.vibrate && navigator.vibrate(ms || 8); } catch (e) {} }
+    function toast(m, err) { const t = document.getElementById('toast'); t.textContent = m; t.classList.toggle('err', !!err); t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), err ? 4200 : 2200); }
+    function openS(id) { document.getElementById(id).classList.add('open'); vib(6); }
+    function closeS(id) { document.getElementById(id).classList.remove('open'); }
+    function glide() { const on = document.querySelector('#tabSeg button.on'), g = document.getElementById('glider'); if (on) { g.style.width = on.offsetWidth + 'px'; g.style.transform = `translateX(${on.offsetLeft - 5}px)`; } }
+    window.addEventListener('resize', glide); if (document.fonts) document.fonts.ready.then(glide);
+    function setView(v) { VIEW = v; vib(6); ['today', 'log'].forEach(k => { document.getElementById('t-' + k).classList.toggle('on', k === v); document.getElementById('view-' + k).style.display = k === v ? 'block' : 'none'; }); glide(); if (v === 'log') loadLog(); }
+    const mmss = ms => { const s = Math.max(0, Math.round(Math.abs(ms) / 1000)); return `${Math.floor(s / 60)}:${pad(s % 60)}`; };
+    const ini = n => String(n || '?').trim().slice(0, 1);
+
+    // ===================== โหลด =====================
+    function load(quiet) {
+      run('getBoard').then(b => { B = b; SKEW = (b.now || Date.now()) - Date.now(); render(); })
+        .catch(e => { if (!quiet) document.getElementById('meCard').innerHTML = `<div class="empty" style="color:#AEAEB2">โหลดไม่สำเร็จ: ${esc(e.message)}${/ไม่พบคำสั่ง|ยังไม่ได้ใส่/.test(e.message) ? '<br>— วาง Break.gs + API.gs แล้ว Deploy เป็น New version' : ''}</div>`; });
+    }
+    load();
+    setInterval(() => { if (!document.hidden) load(true); }, 20000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) load(true); });
+    setInterval(tick, 1000);
+
+    function poolCount(role) { const sep = B.cfg.pcSeparate, pool = sep && role === 'PC' ? 'PC' : 'ALL'; return B.list.filter(x => x.status === 'on' && (sep ? (x.role === 'PC' ? 'PC' : 'ALL') === pool : true)).length; }
+    function myTurn(p) {
+      if (p.status !== 'none') return false;
+      const free = B.cfg.max - poolCount(p.role); if (free <= 0) return false;
+      const sep = B.cfg.pcSeparate, pool = r => sep && r === 'PC' ? 'PC' : 'ALL';
+      const ordered = B.queue.filter(id => { const x = B.list.find(y => y.id === id); return x && x.status === 'none' && pool(x.role) === pool(p.role); });
+      const pos = ordered.indexOf(p.id);
+      return !ordered.length || (pos !== -1 ? pos < free : ordered.length < free);
+    }
+    function render() {
+      const c = B.cfg, me = B.list.find(x => x.id === B.me.id);
+      document.getElementById('gearBtn').style.display = B.me.mgr ? '' : 'none';
+      document.getElementById('sub').innerHTML = `พัก <b>${c.mins} นาที</b> วันละครั้ง · พร้อมกันได้ <b>${c.max} คน</b>${c.pcSeparate ? ' (PC นับแยก)' : ''} · กดตอน<b>ก้าวออกจากหน้าร้าน</b> · กลับก่อน = เวลาที่เหลือตัดทิ้ง`;
+      // การ์ดของฉัน
+      let h = '';
+      if (!me) h = `<div class="meh"><div><b>${esc(B.me.nick)}</b><small>ยังไม่อยู่ในรายชื่อพักทานข้าว — แจ้งผู้จัดการ</small></div></div>`;
+      else {
+        h = `<div class="meh"><div><b>${esc(me.name)}</b><small>${me.role === 'PC' ? 'PC' + (me.brand ? ' ' + esc(me.brand) : '') : me.role === 'MANAGER' ? 'ผู้จัดการ' : 'พนักงาน'}</small></div></div>`;
+        if (me.status === 'buy') {
+          h += `<div class="ring buy" id="myRing"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="bar" id="myBar" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg>
+            <div class="c"><b id="myLeft">0:00</b><small id="myLbl">🛍️ กำลังไปซื้อข้าว</small><span>ออก ${hm(me.buy)}</span></div></div>
+            <button class="big y" onclick="askStart('${esc(me.id)}')">🍱 ได้ข้าวแล้ว — เริ่มทานข้าว</button>
+            <div class="rule">${c.countBuy ? 'เวลาพักนับตั้งแต่ออกไปซื้อข้าวแล้ว' : 'เวลาพัก ' + c.mins + ' นาที เริ่มนับตอนกดปุ่มนี้'} · ซื้อเกิน ${c.buyMax} นาทีจะเด้งเตือน</div>`;
+        } else if (me.status === 'on') {
+          h += `<div class="ring" id="myRing"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="bar" id="myBar" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg>
+            <div class="c"><b id="myLeft">--:--</b><small id="myLbl">เหลือเวลาพัก</small><span>กลับภายใน ${hm(me.due)}</span></div></div>
+            <button class="big g" onclick="askFinish('${esc(me.id)}')">✅ กลับถึงร้านแล้ว</button>
+            <div class="rule">${me.buy ? '🛍️ ซื้อข้าว ' + hm(me.buy) + ' (' + (me.buyMins || 0) + ' นาที) · ' : ''}เริ่มทาน ${hm(me.start)} · ก่อนหมดเวลา 5 นาทีจะเด้งเตือน</div>`;
+        } else if (me.status === 'done') {
+          h += `<div class="doneb"><div class="e">😋</div><b>วันนี้พักทานข้าวแล้ว</b><small>${me.buy ? '🛍️ ' + hm(me.buy) + ' · ' : ''}${hm(me.start)}–${hm(me.end)} · ใช้ไป ${me.used} นาที${me.buy ? ' · ซื้อข้าว ' + (me.buyMins || 0) + ' นาที' : ''}</small>${me.over ? `<div style="margin-top:8px"><span class="tg">เกิน ${me.over} นาที</span></div>` : ''}</div>`;
+        } else {
+          const turn = myTurn(me), cnt = poolCount(me.role);
+          h += `<div class="ring"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="10"/></svg><div class="c"><b>${c.mins}:00</b><small>เวลาพักของคุณ</small><span>ตอนนี้พักอยู่ ${cnt}/${c.max} คน</span></div></div>`;
+          if (turn) h += `${me.queued ? '<div class="rule" style="color:#FFD600;font-weight:800">🔔 ถึงคิวคุณแล้ว</div>' : ''}<div class="btn2"><button class="big o" onclick="askBuy('${esc(me.id)}')">🛍️ ไปซื้อข้าว</button><button class="big y" onclick="askStart('${esc(me.id)}')">🍱 ออกพักทานข้าว</button></div>`;
+          else if (me.queued) h += `<button class="big gr" disabled>⏳ รอคิวที่ ${me.queued} — ระบบจะเด้งเรียกเมื่อมีคนกลับ</button><button class="big gr" onclick="act('leaveQueue',[],'ออกจากคิวแล้ว')">ออกจากคิว</button>`;
+          else h += `<button class="big y" onclick="act('joinQueue',[],'📝 ต่อคิวแล้ว — มีคนกลับจะเด้งเรียก')">📝 พักเต็ม — ต่อคิว</button>`;
+          h += `<div class="rule">ต้องไปซื้อข้าวก่อน → กด 🛍️ · มีข้าวแล้ว / กินที่ร้าน → กด 🍱<br>กดตอนก้าวออกจากหน้าร้าน 🙏 · งง? กดปุ่ม <b>i</b> ด้านบน</div>`;
+        }
+      }
+      document.getElementById('meCard').innerHTML = h;
+      // กำลังพัก
+      const on = B.list.filter(x => x.status === 'on' || x.status === 'buy').sort((a, b) => (a.buy || a.start) - (b.buy || b.start));
+      document.getElementById('onBox').innerHTML = `<div class="ch"><b>🍱 ออกจากหน้าร้านอยู่</b><small>${on.length}/${c.max} คน${c.pcSeparate ? ' (ไม่รวม PC)' : ''}</small></div>` +
+        (on.length ? on.map(p => p.status === 'buy' ? `<div class="pr buy" data-buy="${p.buy}" data-bmax="${p.buyDue}"><span class="av">🛍️</span><span class="t"><b>${esc(p.name)}</b><small>ไปซื้อข้าว ${hm(p.buy)}${p.by && p.by !== p.name ? ' · กดโดย ' + esc(p.by) : ''}</small></span>
+          <span class="v"><b class="cd">0:00</b><small class="cdl">ซื้อข้าวมา</small></span>${(B.me.mgr || p.id.startsWith('M:')) && p.id !== B.me.id ? `<button class="mini" onclick="askStart('${esc(p.id)}')">เริ่มทาน</button>` : ''}</div>` : `<div class="pr on" data-due="${p.due}"><span class="av ${p.role === 'PC' ? 'pc' : ''}">${esc(ini(p.name))}</span><span class="t"><b>${esc(p.name)}</b><small>${p.buy ? '🛍️ ' + (p.buyMins || 0) + ' น. · ' : ''}ทาน ${hm(p.start)} · กลับ ${hm(p.due)}${p.by && p.by !== p.name ? ' · กดโดย ' + esc(p.by) : ''}</small></span>
+          <span class="v"><b class="cd">--:--</b><small class="cdl">เหลือ</small></span>${(B.me.mgr || p.id.startsWith('M:')) && p.id !== B.me.id ? `<button class="mini" onclick="askFinish('${esc(p.id)}')">กลับแล้ว</button>` : ''}</div>`).join('') : '<div class="empty">ยังไม่มีใครพัก — หน้าร้านครบ 💪</div>');
+      // คิว
+      const q = B.queue.map(id => B.list.find(x => x.id === id)).filter(Boolean);
+      const qb = document.getElementById('qBox'); qb.style.display = q.length ? '' : 'none';
+      qb.innerHTML = `<div class="ch"><b>📝 คิวรอพัก</b><small>มีคนกลับ → เด้งเรียกคนแรก</small></div><div class="chips">${q.map((p, i) => `<span class="q">${i + 1}. ${esc(p.name)}</span>`).join('')}</div>`;
+      // ยังไม่พัก / พักแล้ว
+      const notyet = B.list.filter(x => x.status === 'none'), done = B.list.filter(x => x.status === 'done').sort((a, b) => a.start - b.start);
+      const canFor = p => p.id !== B.me.id && (B.me.mgr || p.id.startsWith('M:'));
+      document.getElementById('restBox').innerHTML = `<div class="ch"><b>⏳ ยังไม่ได้พัก</b><small>${notyet.length} คน${notyet.some(canFor) ? ' · แตะชื่อเพื่อกดแทน' : ''}</small></div>
+        <div class="chips">${notyet.length ? notyet.map(p => canFor(p) ? `<button class="${p.role === 'PC' ? 'pc' : ''}" onclick="forWho('${esc(p.id)}')">${esc(p.name)}${p.queued ? ' · คิว ' + p.queued : ''}</button>` : `<span class="${p.role === 'PC' ? 'pc' : ''}">${esc(p.name)}${p.queued ? ' · คิว ' + p.queued : ''}</span>`).join('') : '<span>ครบทุกคนแล้ว 🎉</span>'}</div>
+        <div class="ch" style="margin-top:16px"><b>😋 พักแล้ววันนี้</b><small>${done.length} คน</small></div>
+        ${done.length ? done.map(p => `<div class="pr"><span class="av ${p.role === 'PC' ? 'pc' : ''}">${esc(ini(p.name))}</span><span class="t"><b>${esc(p.name)}${p.over ? `<span class="tg">เกิน ${p.over} น.</span>` : ''}${p.buyMins ? `<span class="tg or">🛍️ ${p.buyMins} น.</span>` : ''}</b><small>${p.buy ? '🛍️ ' + hm(p.buy) + ' · ' : ''}${hm(p.start)}–${hm(p.end)}</small></span><span class="v"><b>${p.used}</b><small>นาที</small></span>${B.me.mgr ? `<button class="mini" onclick="askUndo('${esc(p.id)}','${esc(p.name)}')">↩️</button>` : ''}</div>`).join('') : '<div class="empty">ยังไม่มี</div>'}`;
+      tick();
+    }
+    function tick() {
+      if (!B) return;
+      const me = B.list.find(x => x.id === B.me.id);
+      if (me && me.status === 'buy') {
+        const el = now() - me.buy, ring = document.getElementById('myRing');
+        if (ring) { const over = now() > me.buyDue; ring.classList.toggle('over', over); document.getElementById('myLeft').textContent = mmss(el); document.getElementById('myLbl').textContent = over ? '🛍️ ซื้อข้าวนานแล้ว!' : '🛍️ กำลังไปซื้อข้าว';
+          document.getElementById('myBar').style.strokeDashoffset = 326.7 * (1 - Math.min(1, el / (me.buyDue - me.buy))); }
+      }
+      if (me && me.status === 'on') {
+        const left = me.due - now(), total = B.cfg.mins * 60000, ring = document.getElementById('myRing');
+        if (ring) {
+          const over = left < 0; ring.classList.toggle('over', over);
+          document.getElementById('myLeft').textContent = (over ? '+' : '') + mmss(left);
+          document.getElementById('myLbl').textContent = over ? 'เกินเวลาแล้ว!' : 'เหลือเวลาพัก';
+          document.getElementById('myBar').style.strokeDashoffset = over ? 0 : 326.7 * (1 - Math.max(0, left) / total);
+        }
+      }
+      document.querySelectorAll('.pr[data-buy]').forEach(el => { const late = now() > +el.dataset.bmax; el.classList.toggle('late', late); el.querySelector('.cd').textContent = mmss(now() - +el.dataset.buy); });
+      document.querySelectorAll('.pr[data-due]').forEach(el => { const l = +el.dataset.due - now(), late = l < 0; el.classList.toggle('late', late); el.querySelector('.cd').textContent = (late ? '+' : '') + mmss(l); el.querySelector('.cdl').textContent = late ? 'เกินเวลา' : 'เหลือ'; });
+    }
+
+    // ===================== ปุ่ม =====================
+    function act(fn, args, msg) { return run(fn, ...args).then(b => { B = b; SKEW = (b.now || Date.now()) - Date.now(); render(); if (msg) toast(msg); vib([15, 30, 15]); closeS('cfS'); }).catch(e => { toast(e.message, 1); load(true); }); }
+    function cf(ic, title, body, btn, cls, onyes) {
+      document.getElementById('cfBox').innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">${ic}</span><div><h3>${title}</h3></div><button class="x" onclick="closeS('cfS')">✕</button></div><div class="msg">${body}</div><div class="sfoot"><button class="b-no" onclick="closeS('cfS')">ยกเลิก</button><button class="${cls}" id="cfYes">${btn}</button></div>`;
+      document.getElementById('cfYes').onclick = () => { document.getElementById('cfYes').disabled = true; onyes(); };
+      openS('cfS');
+    }
+    function nameOf(id) { const p = B.list.find(x => x.id === id); return p ? p.name : id; }
+    function askStart(id) {
+      const self = id === B.me.id, p = B.list.find(x => x.id === id) || {}, fromBuy = p.status === 'buy';
+      const due = new Date((B.cfg.countBuy && fromBuy ? p.buy : now()) + B.cfg.mins * 60000);
+      cf('🍱', fromBuy ? (self ? 'เริ่มทานข้าว' : 'เริ่มทานแทน ' + esc(nameOf(id))) : self ? 'ออกพักทานข้าว' : 'ออกพักแทน ' + esc(nameOf(id)),
+        `${fromBuy ? 'ซื้อข้าวใช้ไป <b>' + Math.round((now() - p.buy) / 60000) + ' นาที</b><br>' : ''}${B.cfg.countBuy && fromBuy ? 'เวลาพักนับตั้งแต่ไปซื้อข้าว' : 'เริ่มนับ <b>' + B.cfg.mins + ' นาที</b> ทันที'} → ต้องกลับภายใน <b>${hm(due)}</b><br>กลับก่อนเวลา = เวลาที่เหลือตัดทิ้ง ใช้ต่อไม่ได้`,
+        '🍱 เริ่มทานเลย', 'b-yes', () => act('start', self ? [] : [id], '🍱 ทานให้อร่อย กลับ ' + hm(due)));
+    }
+    function askBuy(id) {
+      const self = id === B.me.id;
+      cf('🛍️', self ? 'ไปซื้อข้าว' : 'ไปซื้อข้าวแทน ' + esc(nameOf(id)), `เริ่มจับเวลาซื้อข้าวตอนนี้<br>ได้ข้าวแล้ว ถึงที่กิน → กด <b>"เริ่มทานข้าว"</b> ${B.cfg.countBuy ? '(เวลาพักนับรวมตั้งแต่ตอนนี้)' : 'แล้วเวลาพัก ' + B.cfg.mins + ' นาทีจะเริ่มนับ'}<br>ซื้อเกิน ${B.cfg.buyMax} นาทีจะเด้งเตือน`, '🛍️ ไปซื้อข้าว', 'b-yes', () => act('goBuy', self ? [] : [id], '🛍️ ไปซื้อข้าว — ได้ข้าวแล้วกด "เริ่มทานข้าว"'));
+    }
+    function openHelp() {
+      const c = B ? B.cfg : { mins: 60, max: 2, buyMax: 15, countBuy: false };
+      document.getElementById('cfBox').innerHTML = `<div class="grab"></div><div class="shd"><span class="ic" style="font:800 22px Kanit,serif">i</span><div><h3>วิธีใช้ พักทานข้าว</h3><small>อ่าน 1 นาทีจบ</small></div><button class="x" onclick="closeS('cfS')">✕</button></div>
+        <div class="msg help"><ol>
+          <li><b>ต้องไปซื้อข้าวก่อน</b> → กด <b>🛍️ ไปซื้อข้าว</b> ตอนก้าวออกจากหน้าร้าน ได้ข้าวแล้วถึงที่กิน → กด <b>🍱 เริ่มทานข้าว</b> ${c.countBuy ? '(เวลาพักนับรวมตั้งแต่ไปซื้อข้าว)' : 'เวลาพัก ' + c.mins + ' นาทีเริ่มนับตอนนี้'}</li>
+          <li><b>มีข้าวแล้ว / กินที่ร้าน</b> → กด <b>🍱 ออกพักทานข้าว</b> ได้เลย</li>
+          <li><b>กลับถึงร้าน</b> → กด <b>✅ กลับถึงร้านแล้ว</b> · กลับก่อนเวลา = เวลาที่เหลือตัดทิ้ง ใช้ต่อทีหลังไม่ได้</li>
+          <li>พักได้ <b>วันละครั้ง ${c.mins} นาที</b> · ออกจากหน้าร้านพร้อมกันได้ <b>${c.max} คน</b> (รวมคนที่ไปซื้อข้าว)</li>
+          <li><b>เต็มแล้ว</b> → กด <b>📝 ต่อคิว</b> มีคนกลับเมื่อไหร่ แอปเด้งเรียกคนแรกในคิว</li>
+          <li><b>แจ้งเตือน</b>: ซื้อข้าวเกิน ${c.buyMax} นาที · ก่อนหมดเวลาพัก 5 นาที · หมดเวลา</li>
+          <li>ระหว่างพัก <b>ไม่โดนเด้ง Order</b> และ PC เลือกเป็นผู้รับเคสไม่ได้</li>
+          <li>ลืมกด / กดผิด → บอกผู้จัดการ กดแทนหรือลบให้ได้</li>
+        </ol></div><div class="sfoot"><button class="b-yes" onclick="closeS('cfS')">เข้าใจแล้ว 👍</button></div>`;
+      openS('cfS');
+    }
+    function askFinish(id) {
+      const p = B.list.find(x => x.id === id); const left = p ? p.due - now() : 0, self = id === B.me.id;
+      cf('✅', self ? 'กลับถึงร้านแล้ว' : esc(nameOf(id)) + ' กลับแล้ว', left > 60000 ? `ยังเหลือเวลาพัก <b>${Math.floor(left / 60000)} นาที</b><br>กดกลับตอนนี้ = เวลาที่เหลือตัดทิ้ง พักต่อไม่ได้` : left < 0 ? `เกินเวลามา <b>${Math.ceil(-left / 60000)} นาที</b>` : 'ตรงเวลาพอดี 👍', '✅ กลับแล้ว', 'b-g', () => act('finish', self ? [] : [id], '✅ ยินดีต้อนรับกลับ'));
+    }
+    function askUndo(id, name) { cf('↩️', 'ลบรายการพักของ ' + esc(name), 'ใช้กรณีกดผิด · ลบแล้ว ' + esc(name) + ' กดพักใหม่ได้', '↩️ ลบรายการ', 'b-red', () => act('undoToday', [id], 'ลบแล้ว')); }
+    function forWho(id) {
+      const p = B.list.find(x => x.id === id); if (!p) return;
+      if (myTurn(p)) return askStart(id);
+      cf('📝', 'ต่อคิวให้ ' + esc(p.name), `ตอนนี้พักเต็ม (${poolCount(p.role)}/${B.cfg.max})`, '📝 ต่อคิว', 'b-yes', () => act('joinQueue', [id], 'ต่อคิวให้ ' + p.name + ' แล้ว'));
+    }
+
+    // ===================== 📊 ประวัติ =====================
+    document.getElementById('rNav').onclick = e => { const b = e.target.closest('button'); if (!b) return; LOGR = b.dataset.r; document.querySelectorAll('#rNav button').forEach(x => x.classList.toggle('on', x === b)); loadLog(); };
+    function loadLog() {
+      const d = new Date(), t = isoOf(d);
+      const [f, to] = LOGR === 'today' ? [t, t] : LOGR === '7' ? [isoOf(new Date(Date.now() - 6 * 864e5)), t] : LOGR === 'month' ? [t.slice(0, 8) + '01', t] : [isoOf(new Date(d.getFullYear(), d.getMonth() - 1, 1)), isoOf(new Date(d.getFullYear(), d.getMonth(), 0))];
+      document.getElementById('logBody').innerHTML = '<div class="loading">กำลังโหลด…</div>';
+      run('log', f, to).then(r => {
+        const by = {};
+        r.list.forEach(x => { if (!x.end) return; const o = by[x.id] = by[x.id] || { name: x.name, n: 0, used: 0, over: 0, overN: 0, buyN: 0, buy: 0 }; o.n++; o.used += x.used || 0; if (x.buy) { o.buyN++; o.buy += x.buyMins || 0; } if (x.over) { o.overN++; o.over += x.over; } });
+        const ks = Object.keys(by).sort((a, b) => by[b].overN - by[a].overN || by[a].name.localeCompare(by[b].name, 'th'));
+        const mgr = B && B.me.mgr;
+        document.getElementById('logBody').innerHTML = `<div class="lc"><div class="ch"><b>${mgr ? '👥 สรุปรายคน' : '🙋 ของฉัน'}</b><small>${dmy(r.from)}${r.from !== r.to ? ' – ' + dmy(r.to) : ''} · พัก ${r.mins} นาที</small></div>
+          ${ks.length ? `<table class="lg"><tr><th>ชื่อ</th><th>พัก (วัน)</th><th>เฉลี่ย (นาที)</th><th>เกินเวลา</th><th>เกินรวม</th><th>ซื้อข้าวเฉลี่ย</th></tr>${ks.map(k => { const o = by[k]; return `<tr><td>${esc(o.name)}</td><td>${o.n}</td><td>${o.n ? Math.round(o.used / o.n) : '-'}</td><td class="${o.overN ? 'r' : ''}">${o.overN ? o.overN + ' ครั้ง' : '—'}</td><td class="${o.over ? 'r' : ''}">${o.over ? o.over + ' น.' : '—'}</td><td>${o.buyN ? Math.round(o.buy / o.buyN) + ' น. (' + o.buyN + ')' : '—'}</td></tr>`; }).join('')}</table>` : '<div class="empty">ไม่มีข้อมูล</div>'}</div>
+          <div class="lc"><div class="ch"><b>🕒 รายการ</b><small>${r.list.length} รายการ</small></div>${r.list.slice().reverse().map(x => `<div class="pr"><span class="av">${esc(ini(x.name))}</span><span class="t"><b>${esc(x.name)}${x.over ? `<span class="tg">เกิน ${x.over} น.</span>` : ''}${x.buy ? `<span class="tg or">🛍️ ${x.buyMins || 0} น.</span>` : ''}</b><small>${dmy(x.date)} · ${x.buy ? '🛍️ ' + hm(x.buy) + ' · ' : ''}${hm(x.start)}–${x.end ? hm(x.end) : 'ยังไม่กลับ'}${x.by && x.by !== x.name ? ' · กดโดย ' + esc(x.by) : ''}</small></span><span class="v"><b>${x.end ? x.used : '…'}</b><small>นาที</small></span></div>`).join('') || '<div class="empty">ไม่มีข้อมูล</div>'}</div>`;
+      }).catch(e => document.getElementById('logBody').innerHTML = `<div class="lc"><div class="empty">${esc(e.message)}</div></div>`);
+    }
+
+    // ===================== ⚙️ ตั้งค่า (ผู้จัดการ) =====================
+    function openSet() {
+      const c = B.cfg, pp = B.people || { accounts: [], manual: [] };
+      SETP = { hidden: {}, manual: pp.manual.map(m => Object.assign({}, m)), pc: !!c.pcSeparate, cb: !!c.countBuy };
+      pp.accounts.forEach(a => { if (a.hidden) SETP.hidden[a.id] = 1; });
+      paintSet(c, pp); openS('setS');
+    }
+    function paintSet(c, pp) {
+      pp = pp || B.people;
+      const g = id => document.getElementById(id);
+      c = c || (g('sMins') ? { mins: g('sMins').value, max: g('sMax').value, grace: g('sGrace').value, buyMax: g('sBuy').value } : B.cfg);   // พิมพ์ค้างไว้ไม่หาย
+      document.getElementById('setBox').innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">⚙️</span><div><h3>ตั้งค่าพักทานข้าว</h3><small>เฉพาะผู้จัดการ</small></div><button class="x" onclick="closeS('setS')">✕</button></div>
+        <div class="three"><div><div class="lab"><span>พักกี่นาที</span></div><input class="inp" id="sMins" type="number" value="${c.mins}"></div><div><div class="lab"><span>พร้อมกันได้</span></div><input class="inp" id="sMax" type="number" value="${c.max}"></div><div><div class="lab"><span>ผ่อนผัน (นาที)</span></div><input class="inp" id="sGrace" type="number" value="${c.grace}"></div></div>
+        <div class="lab"><span></span><small>เกินเวลา + ผ่อนผันแล้ว = แจ้งผู้จัดการ</small></div>
+        <div class="lab"><span>🛍️ ซื้อข้าวเกินกี่นาทีเตือน</span></div><input class="inp" id="sBuy" type="number" value="${c.buyMax || 15}">
+        <div class="tgl" style="margin-top:8px" onclick="SETP.cb=!SETP.cb;this.querySelector('.sw').classList.toggle('on',SETP.cb)"><span>นับเวลาซื้อข้าวรวมในเวลาพัก<small>ปิด = เวลาพักเริ่มนับตอนกด "เริ่มทานข้าว" (เวลาซื้อข้าวจดแยกไว้ใน Log)</small></span><span class="sw ${SETP.cb ? 'on' : ''}"></span></div>
+        <div class="tgl" onclick="SETP.pc=!SETP.pc;this.querySelector('.sw').classList.toggle('on',SETP.pc)"><span>PC นับโควตาแยกจากพนักงานร้าน<small>ปิด = PC กับพนักงานรวมกันไม่เกิน ${c.max} คน</small></span><span class="sw ${SETP.pc ? 'on' : ''}"></span></div>
+        <div class="lab"><span>👥 บัญชีในระบบ</span><small>ปิด = ไม่อยู่ในรายชื่อพัก (เช่น ลาออก / ย้ายสาขา)</small></div>
+        ${pp.accounts.map(a => `<div class="tgl" onclick="tgHide('${esc(a.id)}',this)"><span>${esc(a.name)}<small>${a.role === 'PC' ? 'PC ' + esc(a.brand) : a.role === 'MANAGER' ? 'ผู้จัดการ' : 'พนักงาน'} · User ${esc(a.id)}</small></span><span class="sw ${SETP.hidden[a.id] ? '' : 'on'}"></span></div>`).join('')}
+        <div class="lab"><span>➕ คนที่ยังไม่มีบัญชี</span><small>น้องใหม่ / PC ใหม่ · ใครก็กดพักแทนได้</small></div>
+        <div id="manL">${SETP.manual.map((m, i) => `<div class="tgl"><span>${esc(m.name)}<small>${m.role === 'PC' ? 'PC' : 'พนักงาน'}</small></span><button class="rmb" onclick="SETP.manual.splice(${i},1);paintSet()">✕</button></div>`).join('')}</div>
+        <div style="display:flex;gap:6px;align-items:center"><input class="inp" id="nName" placeholder="ชื่อเล่น" maxlength="30" style="flex:1"><div class="pill" id="nRole"><button class="on" data-v="STAFF">พนักงาน</button><button data-v="PC">PC</button></div><button class="rb" style="height:48px;width:48px;border-radius:16px" onclick="addMan()">＋</button></div>
+        <div class="msg" style="margin-top:10px;font-size:12.5px">💡 พอน้องใหม่สมัครบัญชีแล้ว จะขึ้นในรายการบัญชีเอง แล้วลบชื่อที่เพิ่มเองออกได้</div>
+        <div class="sfoot"><button class="b-no" onclick="closeS('setS')">ปิด</button><button class="b-yes" onclick="saveSet(this)">💾 บันทึก</button></div>`;
+      document.getElementById('nRole').onclick = e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#nRole button').forEach(x => x.classList.toggle('on', x === b)); };
+    }
+    function tgHide(id, el) { if (SETP.hidden[id]) delete SETP.hidden[id]; else SETP.hidden[id] = 1; el.querySelector('.sw').classList.toggle('on', !SETP.hidden[id]); vib(5); }
+    function addMan() { const n = document.getElementById('nName').value.trim(); if (!n) return toast('ใส่ชื่อก่อน', 1); SETP.manual.push({ name: n, role: document.querySelector('#nRole button.on').dataset.v }); paintSet(); }
+    async function saveSet(btn) {
+      btn.disabled = true;
+      try {
+        await run('saveCfg', { mins: +document.getElementById('sMins').value, max: +document.getElementById('sMax').value, grace: +document.getElementById('sGrace').value, pcSeparate: SETP.pc, buyMax: +document.getElementById('sBuy').value, countBuy: SETP.cb });
+        B = await run('savePeople', { hidden: SETP.hidden, manual: SETP.manual }); render(); closeS('setS'); toast('💾 บันทึกแล้ว');
+      } catch (e) { btn.disabled = false; toast(e.message, 1); }
+    }
+  </script>
+</body>
+</html>
