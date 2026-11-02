@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <title>Order 1326</title>
   <script>window.GAS_APP = 'order';</script>
-  <script src="staff-names.js?v=2026.11.01-4"></script>
-  <script src="gas.js?v=2026.11.01-4"></script>
-  <script src="order-alert.js?v=2026.11.01-4"></script>
+  <script src="staff-names.js?v=2026.11.02-1"></script>
+  <script src="gas.js?v=2026.11.02-1"></script>
+  <script src="order-alert.js?v=2026.11.02-1"></script>
   <style>
     :root { --y: #FFD600; --d: #1C1C1E; --d2: #2C2C2E; --g: #8E8E93; --ok: #30D158; --no: #FF453A; --or: #FF9F0A;
       --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); --spring-soft: cubic-bezier(.22,1.18,.36,1); }
@@ -385,7 +385,7 @@
       <form class="sc-man" onsubmit="event.preventDefault();scManual()"><input id="scManualI" placeholder="หรือพิมพ์ IMEI / Serial" autocomplete="off" autocapitalize="characters"><button type="submit">ใช้</button></form></div></div>
   <div id="zoom" onclick="this.classList.remove('on')"><img alt=""></div>
   <div class="toast" id="toast"></div>
-  <div style="text-align:center;margin:26px 0 0;font:700 10.5px 'Kanit',sans-serif;letter-spacing:1px;color:rgba(28,28,30,.45)">ORDER 1326 · v2026.11.01-4</div>
+  <div style="text-align:center;margin:26px 0 0;font:700 10.5px 'Kanit',sans-serif;letter-spacing:1px;color:rgba(28,28,30,.45)">ORDER 1326 · v2026.11.02-5</div>
 
   <script>
     const BRAND_COLORS = { SAMSUNG: '#1E40FF', APPLE: '#1C1C1E', OPPO: '#16A34A', VIVO: '#38BDF8', XIAOMI: '#FF6900', REALME: '#FFC300', HUAWEI: '#DC2626', HONOR: '#8B5CF6',
@@ -471,15 +471,21 @@
     }
     function adCustom(id) { const n = document.getElementById('adN').value, p = document.getElementById('adP').value; if (!n.trim()) return toast('ใส่ชื่อรายการก่อน', 1); adAdd(id, n, p); document.getElementById('adN').value = ''; document.getElementById('adP').value = ''; toast('➕ เพิ่ม ' + n.trim()); }
     // งานโฟกัส (เข้า Check List) = รายการขายเสริมที่ชื่อตรงกับงานโฟกัสในแอป Check List
+    // ชื่อขายเสริมตรงกับงานโฟกัส หรือขึ้นต้นด้วยชื่องานโฟกัส (เช่น "ULTRA CARE+ 2 ปี", "SANDISK 128GB") → นับงานโฟกัสนั้น
+    function focusName(n, K) {
+      const u = String(n || '').toUpperCase().trim(); let best = '';
+      (K || CHK()).focus.forEach(x => { const X = x.toUpperCase(); if ((u === X || u.startsWith(X + ' ')) && X.length > best.length) best = x; });
+      return best;
+    }
     function focusOf(L) {
       const K = CHK(), out = [];
-      (L || []).forEach(a => { const f = K.focus.find(x => x.toUpperCase() === String(a.name).toUpperCase()); if (f) out.push(K.focusQty.includes(f.toUpperCase()) && a.qty > 1 ? `${f} x${a.qty}` : f); });
+      (L || []).forEach(a => { const f = focusName(a.name, K); if (f) out.push(K.focusQty.includes(f.toUpperCase()) && a.qty > 1 ? `${f} x${a.qty}` : f); });
       return out;
     }
     function billHTML(o) {
       const L = o.addons || [];
       if (!o.price && !L.length) return '';
-      return `<div class="bill"><div><span>📱 ${esc(o.model)}${o.qty > 1 ? ' ×' + o.qty : ''}</span><span>${o.price ? baht(o.price * (o.qty || 1)) : '—'}</span></div>${L.map(a => `<div><span>➕ ${esc(a.name)}${a.qty > 1 ? ' ×' + a.qty : ''}</span><span>${a.price ? baht(a.price * a.qty) : '—'}</span></div>`).join('')}<div class="tt"><span>รวม</span><span>${baht(o.total)}</span></div></div>`;
+      return `<div class="bill">${o.pkg ? `<div style="color:#B45309;font-weight:800"><span>📦 ${esc(o.pkg)}</span><span></span></div>` : ''}<div><span>📱 ${esc(o.model)}${o.qty > 1 ? ' ×' + o.qty : ''}</span><span>${o.price ? baht(o.price * (o.qty || 1)) : '—'}</span></div>${L.map(a => `<div><span>➕ ${esc(a.name)}${a.qty > 1 ? ' ×' + a.qty : ''}</span><span>${a.price ? baht(a.price * a.qty) : '—'}</span></div>`).join('')}<div class="tt"><span>รวม</span><span>${baht(o.total)}</span></div></div>`;
     }
     const qtyOf = f => { const m = String(f).match(/\sx(\d+)$/i); return m ? +m[1] : 1; };
 
@@ -494,7 +500,7 @@
       OA.subscribe(st => { if (st.list) { Q = st.list; renderQueue(); } paintSound(); });
       run('getQueue').then(q => { SKEW = (q.now || Date.now()) - Date.now(); OA.setQueue(q, true); }).catch(() => {});
       const p = (OA.takePending && OA.takePending()) || new URLSearchParams(location.search).get('id');
-      if (p) setTimeout(() => showOrder(p), 300);
+      if (p) setTimeout(() => showOrder(p), 300); else setTimeout(takePrefill, 200);
     }
     window.showOrder = showOrder;
     window.addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.type === 'open-order' && e.data.oid) { setView('queue'); showOrder(e.data.oid); } });
@@ -586,8 +592,28 @@
     }
     const chipVal = id => { const b = document.querySelector(`#${id} button.on`); return b ? b.dataset.v : ''; };
     const chipVals = id => [...document.querySelectorAll(`#${id} button.on`)].map(b => b.dataset.v);
+    // 📦 รับเซ็ตจากแอป Stock (เครื่อง + ราคา + ขายเสริม) → เปิดบิลพร้อมกรอกให้
+    let PKG = '';
+    function takePrefill() {
+      let p = null; try { p = JSON.parse(localStorage.getItem('ord_prefill') || 'null'); localStorage.removeItem('ord_prefill'); } catch (e) {}
+      if (!p || !p.at || Date.now() - p.at > 15 * 60000) return false;
+      if (!CFG) { try { localStorage.setItem('ord_prefill', JSON.stringify(p)); } catch (e) {} return false; }
+      setView('queue'); openNew();
+      const K = CHK(), B = String(p.brand || '').toUpperCase();
+      const hit = K.brands.find(x => x.toUpperCase() === B) || K.brands.find(x => x.toUpperCase().split(/[\s\/]+/).includes(B)) || (/IPHONE|IPAD|APPLE/i.test(p.model) ? K.brands.find(x => /APPLE/i.test(x)) : '');
+      if (hit) document.querySelectorAll('#nBrand button').forEach(b => b.classList.toggle('on', b.dataset.v === hit));
+      document.getElementById('nModel').value = String(p.model || '').slice(0, 60);
+      document.getElementById('nPrice').value = p.price || '';
+      AD.nAd = (p.addons || []).map(a => ({ name: String(a.name).slice(0, 40), price: +a.price || 0, qty: Math.max(1, +a.qty || 1) })); adRender('nAd');
+      PKG = String(p.pkg || '').slice(0, 40);
+      if (p.note) document.getElementById('nNote').value = String(p.note).slice(0, 200);
+      toast('📦 รับเซ็ตจาก Stock แล้ว — เช็กแบรนด์ / สี / ความจุ แล้วกดส่ง');
+      return true;
+    }
+    window.addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.type === 'order-prefill') takePrefill(); });
     function openNew() {
       if (!CFG) { toast('รอโหลดตั้งค่าแป๊บนึง'); return; }
+      PKG = '';
       const c = CFG.cfg, b = me().role === 'PC' ? me().brand : '';
       const K = CHK(), myB = K.brands.find(x => x.toUpperCase().split(/[\s\/]+/).includes(String(b).toUpperCase())) || '';
       chipSet('nBrand', K.brands, myB, false, true);
@@ -596,7 +622,8 @@
       AD.nAd = []; adRender('nAd');
       document.getElementById('nQty').textContent = '1'; document.getElementById('nTransfer').classList.remove('on');
       const tm = (CFG.team || []).filter(t => t.level !== 'off');
-      document.getElementById('nAsg').innerHTML = `<button data-v="" class="on">⚡ ใครว่างก็ได้</button>` + tm.map(t => `<button data-v="${esc(t.acct)}">${lvIcon(t)} ${esc(t.nick)}</button>`).join('');
+      paintAsg('');
+      run('getConfig').then(cf => { CFG = cf; try { OA.setCfg(cf); } catch (e) {} paintAsg(chipVal('nAsg')); }).catch(() => {});   // รายชื่อ / คนพักทานข้าว ล่าสุด
       document.getElementById('nAsgHint').textContent = `จองให้คนที่เลือก ${c.claimMin} นาที · ไม่รับ = สละสิทธิ์ ให้คนอื่นรับ`;
       chipBind('nAsg');
       const models = [...new Set(Q.map(o => o.model))].slice(0, 30);
@@ -604,12 +631,16 @@
       document.getElementById('nSend').disabled = false;
       openS('newS');
     }
+    function paintAsg(sel) {
+      const brk = CFG.onBreak || {}, tm = (CFG.team || []).filter(t => t.level !== 'off');   // 🍱 พักทานข้าวอยู่ = เลือกไม่ได้
+      document.getElementById('nAsg').innerHTML = `<button data-v="" class="${sel ? '' : 'on'}">⚡ ใครว่างก็ได้</button>` + tm.map(t => brk[t.acct] ? `<button disabled style="opacity:.45">🍱 ${esc(t.nick)} · พักอยู่</button>` : `<button data-v="${esc(t.acct)}" class="${sel === t.acct ? 'on' : ''}">${lvIcon(t)} ${esc(t.nick)}</button>`).join('');
+    }
     function qty(d) { const el = document.getElementById('nQty'); el.textContent = Math.max(1, Math.min(20, (+el.textContent || 1) + d)); vib(5); adTotal('nAd'); }
     function fmtPhone(el) { const d = el.value.replace(/\D/g, '').slice(0, 10); el.value = d.length > 6 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}` : d.length > 3 ? `${d.slice(0, 3)}-${d.slice(3)}` : d; }
     function sendNew() {
       const f = { brand: chipVal('nBrand'), model: document.getElementById('nModel').value.trim(), color: document.getElementById('nColorX').value.trim() || chipVal('nColor'), cap: chipVal('nCap'),
         qty: +document.getElementById('nQty').textContent, cust: document.getElementById('nCust').value.trim(), phone: document.getElementById('nPhone').value.replace(/\D/g, ''),
-        pay: chipVal('nPay'), price: +document.getElementById('nPrice').value || 0, addons: AD.nAd || [], focus: focusOf(AD.nAd), assign: chipVal('nAsg'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim() };
+        pay: chipVal('nPay'), price: +document.getElementById('nPrice').value || 0, addons: AD.nAd || [], focus: focusOf(AD.nAd), assign: chipVal('nAsg'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim(), pkg: PKG };
       if (!f.brand) return toast('เลือกแบรนด์ก่อน', 1);
       if (!f.model) { document.getElementById('nModel').focus(); return toast('ใส่รุ่นก่อน', 1); }
       if (f.phone && !/^0\d{9}$/.test(f.phone)) return toast('เบอร์ 7Club+ ต้องเป็นเลข 10 หลัก', 1);
@@ -1217,8 +1248,24 @@
           <div class="hb"><span>📱 ค่าเครื่อง</span><em><s style="width:100%"></s></em><b style="width:auto">${baht(done.reduce((t, o) => t + (o.price || 0) * (o.qty || 1), 0))}</b></div>
           <div class="hb"><span>➕ ขายเสริม</span><em><s style="width:100%"></s></em><b>${baht(done.reduce((t, o) => t + (o.addons || []).reduce((x, a) => x + a.price * a.qty, 0), 0))}</b></div>
           <div class="ch" style="margin-top:10px"><b style="font-size:14px">ขายเสริมยอดนิยม (ชิ้น)</b></div>${bars(done.reduce((m, o) => { (o.addons || []).forEach(a => m[a.name] = (m[a.name] || 0) + a.qty); return m; }, {}))}</div>
+        ${insBlock(done)}
         <div class="lc" style="margin-top:14px"><div class="ch"><b>❌ ข้อที่ตรวจไม่ผ่าน</b></div>${bars(fails)}</div>`;
       renderReportList();
+    }
+    // 🛡️ ลูกค้าแบบไหนรับประกัน — นับจากใบที่ปิดแล้ว (ไม่มีข้อมูลส่วนตัวลูกค้า)
+    function insBlock(done) {
+      if (!done.length) return '';
+      const isIns = o => (o.addons || []).some(a => /^(ULTRA CARE\+|7CARE\+)/i.test(a.name)) || (o.focus || []).some(f => /^(ULTRA CARE\+|7CARE\+)/i.test(f));
+      const band = p => !p ? 'ไม่ระบุราคา' : p <= 10000 ? '≤ 10,000' : p <= 20000 ? '10,001–20,000' : p <= 30000 ? '20,001–30,000' : '> 30,000';
+      const grp = (key) => { const m = {}; done.forEach(o => { const k = key(o); (m[k] = m[k] || [0, 0])[1]++; if (isIns(o)) m[k][0]++; }); return m; };
+      const rows = m => Object.keys(m).sort((a, b) => m[b][1] - m[a][1]).map(k => { const [y, n] = m[k], pc = Math.round(y / n * 100); return `<div class="hb"><span>${esc(k)}</span><em><s style="width:${pc}%"></s></em><b style="width:auto">${pc}% <small style="opacity:.6">${y}/${n}</small></b></div>`; }).join('');
+      const nIns = done.filter(isIns).length, pk = done.filter(o => o.pkg);
+      const pkm = {}; pk.forEach(o => pkm[o.pkg] = (pkm[o.pkg] || 0) + 1);
+      return `<div class="lc" style="margin-top:14px"><div class="ch"><b>🛡️ ปิดพร้อมประกัน</b><small>${nIns}/${done.length} เครื่อง · ${Math.round(nIns / done.length * 100)}%</small></div>
+        <div class="ch" style="margin-top:6px"><b style="font-size:14px">ตามช่วงราคาเครื่อง</b></div>${rows(grp(o => band(o.price)))}
+        <div class="ch" style="margin-top:10px"><b style="font-size:14px">ตามแบรนด์</b></div>${rows(grp(o => o.brand || '-'))}
+        <div class="ch" style="margin-top:10px"><b style="font-size:14px">ตามประเภทชำระ</b></div>${rows(grp(o => o.pay || 'ไม่ระบุ'))}
+        ${pk.length ? `<div class="ch" style="margin-top:10px"><b style="font-size:14px">📦 เซ็ตที่ส่งมาจาก Stock</b><small>${pk.length} ใบ</small></div>${bars(pkm)}` : ''}</div>`;
     }
     function renderReportList() {
       if (!REP) return;

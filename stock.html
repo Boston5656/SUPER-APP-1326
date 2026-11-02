@@ -6,7 +6,7 @@
   <link rel="icon" type="image/png" href="favicon-64.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <script>window.GAS_APP = 'stock';</script>
-  <script src="gas.js?v=2026.10.31-1"></script>
+  <script src="gas.js?v=2026.11.02-5"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ระบบค้นหา STOCK 1326</title>
@@ -195,6 +195,79 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
     }
+    /* ===== 📦 เซ็ตแนะนำ ===== */
+    .pk-btn { margin-top: 6px; margin-left: auto; display: inline-flex; align-items: center; gap: 4px; border: 0; border-radius: 10px; padding: 6px 10px; cursor: pointer;
+      background: linear-gradient(135deg, #FFE45C, #FFC400); color: #1C1C1E; font: 900 10.5px 'IBM Plex Sans Thai', sans-serif; letter-spacing: .3px; box-shadow: 0 6px 14px -8px rgba(255,196,0,.9); white-space: nowrap; }
+    .pk-btn:active { transform: scale(.94); }
+    .pk-gear { margin: 10px auto 0; display: inline-flex; gap: 6px; align-items: center; border: 0; border-radius: 100px; padding: 8px 14px; background: rgba(28,28,30,.08); color: #1C1C1E; font: 800 12px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .pk-panel { background: #F2F2F7; }
+    .pk-head { background: #1C1C1E; color: #fff; padding: 14px 18px 16px; }
+    .pk-head .nm { font-weight: 800; font-size: 15px; line-height: 1.35; }
+    .pk-head .sub { font-size: 11px; color: #8E8E93; font-weight: 700; margin-top: 3px; }
+    .pk-body { padding: 14px 16px 18px; overflow-y: auto; }
+    .pk-card { background: #fff; border-radius: 18px; padding: 13px 14px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+    .pk-lab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 900; color: #1C1C1E; margin-bottom: 8px; }
+    .pk-lab small { font-size: 10.5px; color: #8E8E93; font-weight: 700; }
+    .pk-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pk-chip { border: 1.5px solid #E5E5EA; background: #fff; border-radius: 12px; padding: 7px 11px; font: 800 12px 'IBM Plex Sans Thai', sans-serif; color: #1C1C1E; cursor: pointer; text-align: left; line-height: 1.25; }
+    .pk-chip small { display: block; font: 700 11px 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; color: #8E8E93; }
+    .pk-chip.on { background: #1C1C1E; border-color: #1C1C1E; color: #FFD600; }
+    .pk-chip.on small { color: rgba(255,255,255,.65); }
+    .pk-chip.soft { border-style: dashed; color: #6E6E73; }
+    .pk-sets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+    .pk-set { border: 0; border-radius: 18px; padding: 12px 8px; cursor: pointer; text-align: center; background: #fff; color: #1C1C1E; box-shadow: 0 1px 2px rgba(0,0,0,.05); transition: transform .3s var(--spring); }
+    .pk-set:active { transform: scale(.95); }
+    .pk-set b { display: block; font-size: 13px; font-weight: 900; }
+    .pk-set span { display: block; font: 700 15px 'Space Grotesk', sans-serif; margin-top: 3px; }
+    .pk-set i { display: block; font-style: normal; font-size: 10px; font-weight: 700; color: #8E8E93; margin-top: 2px; }
+    .pk-set.on { background: linear-gradient(150deg, #2C2C2E, #000); color: #FFD600; box-shadow: 0 10px 22px -10px rgba(0,0,0,.6); }
+    .pk-set.on i { color: rgba(255,255,255,.6); }
+    .pk-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #F2F2F7; font-size: 13px; font-weight: 700; }
+    .pk-row:last-child { border-bottom: 0; }
+    .pk-row .n { flex: 1; min-width: 0; }
+    .pk-row .n small { display: block; font-size: 10.5px; color: #8E8E93; font-weight: 700; }
+    .pk-row .p { font-family: 'Space Grotesk', sans-serif; font-weight: 700; white-space: nowrap; }
+    .pk-row .q { display: flex; align-items: center; gap: 2px; }
+    .pk-row .q button, .pk-row .rm { width: 26px; height: 26px; border-radius: 9px; border: 0; background: #F2F2F7; font-weight: 900; cursor: pointer; }
+    .pk-row .rm { color: #FF3B30; }
+    .pk-row .q b { min-width: 18px; text-align: center; font-family: 'Space Grotesk', sans-serif; }
+    .pk-total { background: #1C1C1E; color: #fff; border-radius: 20px; padding: 14px 16px; margin-bottom: 10px; }
+    .pk-total .t { display: flex; justify-content: space-between; align-items: baseline; }
+    .pk-total .t b { font: 700 28px 'Space Grotesk', sans-serif; color: #FFD600; letter-spacing: -.5px; }
+    .pk-mo { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .pk-mo span { flex: 1; min-width: 90px; background: rgba(255,255,255,.08); border-radius: 12px; padding: 7px 9px; font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,.65); }
+    .pk-mo span b { display: block; font: 700 16px 'Space Grotesk', sans-serif; color: #fff; }
+    .pk-ins { border-radius: 14px; background: #FFF8D6; padding: 10px 12px; font-size: 11.5px; font-weight: 600; color: #5C4A00; line-height: 1.55; margin-top: 8px; }
+    .pk-foot { display: flex; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: #fff; border-top: 1px solid #E5E5EA; }
+    .pk-foot button { flex: 1; border: 0; border-radius: 16px; padding: 14px 10px; font: 900 14px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .pk-foot .a { background: #F2F2F7; color: #1C1C1E; }
+    .pk-foot .b { flex: 1.4; background: #FFD600; color: #1C1C1E; box-shadow: 0 8px 18px -10px rgba(242,194,0,1); }
+    .pk-note { font-size: 11px; color: #8E8E93; font-weight: 700; text-align: center; margin-top: 4px; }
+    .pk-in { width: 100%; border: 1.5px solid #E5E5EA; border-radius: 12px; padding: 9px 11px; font: 600 13px 'IBM Plex Sans Thai', sans-serif; background: #fff; color: #1C1C1E; }
+    textarea.pk-in { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-size: 12.5px; line-height: 1.55; }
+    .pk-in:focus { outline: 2px solid #FFD600; border-color: transparent; }
+    .pk-sw { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; cursor: pointer; }
+    .pk-sw input { width: 18px; height: 18px; accent-color: #1C1C1E; }
+    .pk-det summary { cursor: pointer; font-weight: 900; font-size: 13px; padding: 4px 0; }
+    /* โหมดโชว์ลูกค้า */
+    #pkCust { position: fixed; inset: 0; z-index: 200; display: none; overflow-y: auto; background: radial-gradient(120% 60% at 50% -10%, #FFF3A6, rgba(255,243,166,0) 60%), #FFD600; padding: calc(18px + env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom)); }
+    #pkCust.on { display: block; animation: popIn .4s var(--spring) both; }
+    .pc-wrap { max-width: 520px; margin: 0 auto; }
+    .pc-x { position: sticky; top: 0; margin-left: auto; display: block; width: 44px; height: 44px; border-radius: 15px; border: 0; background: #1C1C1E; color: #FFD600; font-size: 18px; font-weight: 900; cursor: pointer; z-index: 2; }
+    .pc-card { background: #fff; border-radius: 28px; padding: 22px 20px; box-shadow: 0 24px 50px -24px rgba(60,48,0,.55); margin-top: 10px; }
+    .pc-set { display: inline-block; background: #1C1C1E; color: #FFD600; font-weight: 900; font-size: 13px; border-radius: 100px; padding: 6px 14px; }
+    .pc-name { font-size: 22px; font-weight: 800; line-height: 1.3; margin: 12px 0 14px; }
+    .pc-line { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed #E5E5EA; font-size: 15.5px; font-weight: 700; }
+    .pc-line span:last-child { font-family: 'Space Grotesk', sans-serif; white-space: nowrap; }
+    .pc-tot { display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; }
+    .pc-tot b { font: 700 38px 'Space Grotesk', sans-serif; letter-spacing: -1px; }
+    .pc-mo { margin-top: 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+    .pc-mo div { background: #1C1C1E; color: #fff; border-radius: 18px; padding: 12px; text-align: center; font-size: 12px; font-weight: 700; }
+    .pc-mo div b { display: block; font: 700 26px 'Space Grotesk', sans-serif; color: #FFD600; margin-top: 2px; }
+    .pc-ins { margin-top: 14px; background: #FFF8D6; border-radius: 20px; padding: 14px 16px; }
+    .pc-ins h4 { font-weight: 900; font-size: 15px; margin-bottom: 6px; }
+    .pc-ins li { font-size: 14px; font-weight: 600; line-height: 1.6; margin-left: 18px; list-style: disc; }
+    .pc-ins .day { margin-top: 8px; font-weight: 900; color: #B45309; font-size: 14px; }
   </style>
 </head>
 <body class="min-h-screen p-4 sm:p-6 flex flex-col items-center">
@@ -229,6 +302,7 @@
         <button id="stockNotifyBtn" onclick="notifyStockUpdated()" class="stock-notify press" style="display:none">
           <span class="sn-ic">📣</span><span class="sn-tx"><b>แจ้งทีม: STOCK อัปเดตแล้ว</b><small>ส่งแจ้งเตือนเข้ากลุ่ม LINE ร้าน</small></span>
         </button>
+        <br><button id="pkGear" class="pk-gear press" style="display:none" onclick="openPkgSet()">⚙️ ตั้งค่าเซ็ตแนะนำ · ราคาขายเสริม · ผ่อน</button>
       </div>
 
       <div class="glass-card rounded-[1.75rem] p-5 sm:p-7 space-y-4 shadow-sm">
@@ -502,6 +576,33 @@
       <p id="scanMsg" class="text-center text-gray-400 text-xs font-bold mt-3"></p>
     </div>
   </div>
+
+  <!-- 📦 เซ็ตแนะนำ -->
+  <div id="pkModal" class="sheet fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="sheet-backdrop absolute inset-0 bg-black/40 backdrop-blur-md" onclick="closeSheet('pkModal')"></div>
+    <div class="sheet-panel pk-panel relative w-full max-w-lg rounded-[2rem] shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      <div class="pk-head"><div class="grabber"></div>
+        <div class="flex justify-between items-start gap-3"><div class="min-w-0"><div class="nm" id="pkName"></div><div class="sub" id="pkSub"></div></div>
+        <button onclick="closeSheet('pkModal')" class="text-gray-400 bg-white/10 rounded-full w-9 h-9 font-bold shrink-0">✕</button></div>
+      </div>
+      <div class="pk-body" id="pkBody"></div>
+      <div class="pk-foot"><button class="a" onclick="pkShow()">👀 โชว์ลูกค้า</button><button class="b" id="pkSend" onclick="pkToOrder()">🧾 ส่งเข้า Order</button></div>
+    </div>
+  </div>
+  <!-- ⚙️ ตั้งค่าเซ็ต (ผู้จัดการ) -->
+  <div id="pkSetModal" class="sheet fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="sheet-backdrop absolute inset-0 bg-black/40 backdrop-blur-md" onclick="closeSheet('pkSetModal')"></div>
+    <div class="sheet-panel pk-panel relative w-full max-w-lg rounded-[2rem] shadow-2xl flex flex-col max-h-[92vh] overflow-hidden">
+      <div class="pk-head"><div class="grabber"></div>
+        <div class="flex justify-between items-start gap-3"><div><div class="nm">⚙️ ตั้งค่าเซ็ตแนะนำ</div><div class="sub" id="psSub">ราคาขายเสริม · ผ่อน · เซ็ต · ตารางประกัน</div></div>
+        <button onclick="closeSheet('pkSetModal')" class="text-gray-400 bg-white/10 rounded-full w-9 h-9 font-bold shrink-0">✕</button></div>
+      </div>
+      <div class="pk-body" id="psBody"></div>
+      <div class="pk-foot"><button class="a" id="psUndo" onclick="pkUndo()">↩️ ย้อนเวอร์ชันก่อน</button><button class="b" id="psSave" onclick="pkSave()">💾 บันทึก</button></div>
+    </div>
+  </div>
+  <!-- 👀 โหมดโชว์ลูกค้า -->
+  <div id="pkCust"><div class="pc-wrap"><button class="pc-x" onclick="document.getElementById('pkCust').classList.remove('on')">✕</button><div id="pcBody"></div></div></div>
 
   <!-- Script ควบคุมระบบทั้งหมด -->
   <script>
@@ -938,6 +1039,7 @@
             <td class="py-4 px-5 text-right align-top">
               <div class="font-bold font-num text-theme-yellow text-base mb-1 whitespace-nowrap">${priceFormatted}</div>
               ${promoBtnHtml}
+              ${item.sn && typeof item.price === 'number' && item.price > 0 ? `<button class="pk-btn" onclick="openPkg(this.dataset.code)" data-code="${esc(item.code)}">📦 เซ็ต</button>` : ''}
             </td>
             <td class="py-4 px-4 text-center align-top">
               <span class="inline-block px-3 py-1.5 rounded-full border text-xs font-black whitespace-nowrap ${qtyColor}">${qtyDisplay}</span>
@@ -980,6 +1082,226 @@
         document.getElementById('barcodeInput').focus();
       }).searchProduct(barcode);
     }
+
+    // =====================================================================
+    // 📦 เซ็ตแนะนำ: เครื่อง + ประกัน (ตามตาราง) + งานโฟกัส → โชว์ลูกค้า / ส่งเข้า Order
+    // =====================================================================
+    let PK = null, PKS = null;   // PK = ตั้งค่าจากเซิร์ฟเวอร์ · PKS = เซ็ตที่กำลังจัดอยู่
+    const bt = n => '฿' + Math.round(Number(n) || 0).toLocaleString('en-US');
+    const FOCUS_T = { APPLE: ['SIM', 'FILM BRIGHT', 'FILM PVL', 'SANDISK', '7CARE+', 'SOCIAL CARE', 'U-FUND'],
+                      DEFAULT: ['SIM', 'FILM BRIGHT', 'FILM PVL', 'ULTRA CARE+', 'SOCIAL CARE', 'SANDISK', 'U-FUND'] };
+    function pkLoad() {
+      if (PK) return Promise.resolve(PK);
+      return new Promise((ok, no) => google.script.run.withSuccessHandler(r => { PK = r; ok(r); }).withFailureHandler(no).getPkg());
+    }
+    const nk = s => String(s || '').toUpperCase().replace(/\s+/g, '');
+    // เครื่องนี้ใช้ประกันตัวไหน + ราคาเท่าไหร่
+    function pkIns(item, srp) {
+      const U = String(item.name || '').toUpperCase(), B = String(item.brand || '').toUpperCase();
+      const I = id => (PK.cfg.ins || []).find(x => x.id === id && x.on !== false);
+      if (/IPHONE/.test(U)) {
+        const d = I('iphone'); if (!d) return { none: 'ปิดประกัน iPhone ไว้ในตั้งค่า' };
+        const m = U.match(/IPHONE\s*(SE|AIR|\d{1,2})\s*(E\b)?\s*(PRO\s*MAX|PRO|PLUS|MINI|E\b)?/);
+        const key = m ? nk(m[1] + (m[2] || '') + (m[3] || '')) : '';
+        const g = key && (d.groups || []).find(g => g[1].split(',').map(nk).includes(key));
+        if (!g) return { none: 'ไม่พบรุ่น iPhone ' + (key || '') + ' ในตาราง SE7EN CARE+' };
+        return { d, p1: 0, p2: g[0], fee: d.fee };
+      }
+      if (/APPLE/.test(B) || /\b(IPAD|APPLE|AIRPODS|MACBOOK|IMAC)\b/.test(U)) return { none: 'Apple รุ่นนี้ไม่มีแพ็กเกจในตาราง' };
+      const d = /SMARTPHONE|\bMOBILE\b|TABLET|\bTAB\b|PAD\b/.test(U) ? I('android') : I('gadget');
+      if (!d) return { none: 'ปิดประกันประเภทนี้ไว้ในตั้งค่า' };
+      const r = (d.rows || []).find(r => srp >= r[0] && srp <= r[1]);
+      if (!r) return { none: `ราคา ${bt(srp)} ไม่อยู่ในตาราง ${d.name}` };
+      return { d, p1: r[2], p2: r[3], fee: r[4] ? `ค่าบริการต่อครั้ง: ซ่อม ${bt(r[4])} · เปลี่ยนเครื่อง ${bt(r[5])}` : d.fee };
+    }
+    // รายการขายเสริม (จากตั้งค่า · ยังไม่ตั้ง = ชื่องานโฟกัสอย่างเดียว ใส่ราคาเอง)
+    function pkCat() {
+      const insF = (PK.cfg.ins || []).map(i => i.focus);
+      if (PK.cfg.items && PK.cfg.items.length) return PK.cfg.items;
+      return (PK.focus || []).filter(f => !insF.includes(f)).map(f => ({ f, n: f, p: 0 }));
+    }
+    const pkOrderName = it => it.n.toUpperCase().startsWith(it.f.toUpperCase()) ? it.n : `${it.f} · ${it.n}`;
+    function pkInsLine(y) {
+      const s = PKS, p = y === 1 ? s.ins.p1 : s.ins.p2; if (!p) return null;
+      return { ins: y, f: s.ins.d.focus, n: `${s.ins.d.focus} ${y} ปี`, label: `🛡️ ${s.ins.d.name} ${y} ปี`, p, q: 1 };
+    }
+    function pkTokens(tokens) {
+      const L = [], cat = pkCat();
+      (tokens || []).forEach(t => {
+        if (t === 'INS1' || t === 'INS2') { if (PKS.ins.d) { const y = t === 'INS1' && PKS.ins.p1 ? 1 : 2, ln = pkInsLine(y); if (ln && !L.some(x => x.ins)) L.push(ln); } return; }
+        const it = cat.find(c => c.f.toUpperCase() === t) ; if (it && !L.some(x => x.n === pkOrderName(it))) L.push({ f: it.f, n: pkOrderName(it), label: it.n, p: it.p, q: 1 });
+      });
+      return L;
+    }
+    const pkSetTotal = (L, price) => price + L.reduce((t, a) => t + a.p * a.q, 0);
+    function pkMonths(brand) { const B = String(brand || '').toUpperCase(), by = PK.cfg.monthsBy || {}; const k = Object.keys(by).find(x => B.includes(x)); return k ? by[k] : (PK.cfg.months || []); }
+
+    function openPkg(code) {
+      const item = globalStockData.find(d => d.code === code); if (!item) return;
+      document.getElementById('pkName').textContent = item.name;
+      document.getElementById('pkSub').textContent = 'กำลังโหลดเซ็ต…';
+      document.getElementById('pkBody').innerHTML = '<div class="py-10 text-center"><span class="loading-pill light"><span class="spin"></span>กำลังโหลด</span></div>';
+      openSheet('pkModal'); tapFeedback();
+      pkLoad().then(() => {
+        const pr = item.promo || {}, normal = typeof item.price === 'number' ? item.price : (pr.normalPrice || 0);
+        const srp = pr.normalPrice || normal, promo = pr.promoPrice && pr.promoPrice < normal ? pr.promoPrice : 0;
+        PKS = { item, srp, normal, promo, price: promo || normal, ins: pkIns(item, srp), set: -1, list: [] };
+        document.getElementById('pkSub').textContent = `${item.code}${item.brand ? ' · ' + item.brand : ''} · SRP ${bt(srp)}${PK.cfg.at ? ' · ราคาอัปเดต ' + PK.cfg.at.split(' ')[0] : ''}`;
+        pkPick(Math.min(1, (PK.cfg.sets || []).length - 1));
+      }).catch(e => { document.getElementById('pkBody').innerHTML = `<div class="py-8 text-center text-red-500 font-bold text-sm">โหลดไม่สำเร็จ: ${esc(e.message || e)}<br><small>— วาง Stock.gs + API.gs ใหม่แล้ว Deploy</small></div>`; });
+    }
+    function pkPick(i) { PKS.set = i; PKS.list = i >= 0 ? pkTokens(PK.cfg.sets[i].i) : []; PKS.dirty = false; tapFeedback(); pkRender(); }
+    function pkPrice(mode) { PKS.price = mode === 'promo' ? PKS.promo : PKS.normal; tapFeedback(); pkRender(); }
+    function pkSetIns(y) {
+      PKS.list = PKS.list.filter(x => !x.ins); if (y) { const ln = pkInsLine(y); if (ln) PKS.list.unshift(ln); }
+      PKS.dirty = true; tapFeedback(); pkRender();
+    }
+    function pkAdd(idx) {
+      const it = pkCat()[idx]; if (!it) return; const n = pkOrderName(it), hit = PKS.list.find(x => x.n === n);
+      if (hit) hit.q++; else PKS.list.push({ f: it.f, n, label: it.n, p: it.p, q: 1 });
+      PKS.dirty = true; tapFeedback(); pkRender();
+    }
+    function pkQ(i, d) { const a = PKS.list[i]; if (!a) return; if (a.ins) return; a.q = Math.max(1, Math.min(9, a.q + d)); PKS.dirty = true; tapFeedback(); pkRender(); }
+    function pkRm(i) { PKS.list.splice(i, 1); PKS.dirty = true; tapFeedback(); pkRender(); }
+    function pkSetP(i, v) { const a = PKS.list[i]; if (a) { a.p = Math.max(0, +v || 0); PKS.dirty = true; pkTotals(); } }
+    function pkTotals() {
+      const s = PKS, tot = pkSetTotal(s.list, s.price), mo = pkMonths(s.item.brand);
+      const el = document.getElementById('pkTot'); if (!el) return;
+      el.innerHTML = `<div class="t"><span class="text-xs font-bold text-gray-400">ยอดรวมเซ็ต<br><span class="text-[10.5px]">เครื่อง ${bt(s.price)}${s.list.length ? ' + เสริม ' + bt(tot - s.price) : ''}</span></span><b>${bt(tot)}</b></div>
+        ${mo.length ? `<div class="pk-mo">${mo.map(m => `<span>ผ่อน 0% ${m} ด.<b>${bt(Math.ceil(tot / m))}</b></span>`).join('')}</div>` : '<div class="pk-note" style="color:rgba(255,255,255,.5)">ยังไม่ได้ตั้งเดือนผ่อน 0%</div>'}`;
+      const sets = document.querySelectorAll('.pk-set'); (PK.cfg.sets || []).forEach((st, i) => { const b = sets[i] && sets[i].querySelector('span'); if (b) b.textContent = bt(pkSetTotal(i === s.set && !s.dirty ? s.list : pkTokens(st.i), s.price)); });
+    }
+    function pkRender() {
+      const s = PKS, cat = pkCat(), ins = s.ins, inIns = (s.list.find(x => x.ins) || {}).ins || 0;
+      const apple = /IPHONE|IPAD|APPLE/i.test(s.item.name + ' ' + s.item.brand);
+      const T = apple ? FOCUS_T.APPLE : FOCUS_T.DEFAULT;
+      const have = new Set(s.list.map(x => x.f.toUpperCase())), miss = T.filter(f => !have.has(f)), gadget = s.ins.d && s.ins.d.id === 'gadget';
+      const tokSave = PKS.list; // ราคาเซ็ตอื่นคิดจาก token
+      let h = `<div class="pk-sets">${(PK.cfg.sets || []).map((st, i) => { const L = i === s.set && !s.dirty ? tokSave : pkTokens(st.i); return `<button class="pk-set ${i === s.set ? 'on' : ''}" onclick="pkPick(${i})"><b>${esc(st.n)}</b><span>${bt(pkSetTotal(L, s.price))}</span><i>${L.length ? L.length + ' รายการเสริม' : 'เครื่องเปล่า'}</i></button>`; }).join('')}</div>`;
+      h += `<div class="pk-card"><div class="pk-lab"><span>📱 ราคาเครื่อง</span><small>ประกันคิดจาก SRP ${bt(s.srp)}</small></div><div class="pk-chips">
+        <button class="pk-chip ${s.price === s.normal ? 'on' : ''}" onclick="pkPrice('normal')">ราคาปกติ<small>${bt(s.normal)}</small></button>
+        ${s.promo ? `<button class="pk-chip ${s.price === s.promo ? 'on' : ''}" onclick="pkPrice('promo')">ราคาโปร<small>${bt(s.promo)}</small></button>` : ''}</div></div>`;
+      if (ins.none) h += `<div class="pk-card"><div class="pk-lab"><span>🛡️ ประกัน</span></div><div class="text-xs font-bold text-gray-400">${esc(ins.none)}</div></div>`;
+      else {
+        const perDay = y => ((y === 1 ? ins.p1 : ins.p2) / (365 * y)).toFixed(1);
+        h += `<div class="pk-card"><div class="pk-lab"><span>🛡️ ${esc(ins.d.name)}</span><small>${inIns ? 'วันละ ' + perDay(inIns) + ' บาท' : 'แตะเพื่อเพิ่ม'}</small></div><div class="pk-chips">
+          <button class="pk-chip ${!inIns ? 'on' : ''}" onclick="pkSetIns(0)">ไม่รับ<small>—</small></button>
+          ${ins.p1 ? `<button class="pk-chip ${inIns === 1 ? 'on' : ''}" onclick="pkSetIns(1)">1 ปี<small>${bt(ins.p1)}</small></button>` : ''}
+          ${ins.p2 ? `<button class="pk-chip ${inIns === 2 ? 'on' : ''}" onclick="pkSetIns(2)">2 ปี<small>${bt(ins.p2)}${ins.p1 ? ' · +' + bt(ins.p2 - ins.p1) : ''}</small></button>` : ''}</div>
+          <div class="pk-ins">${(ins.d.pts || []).map(p => '• ' + esc(p)).join('<br>')}${ins.fee ? `<br><b>${esc(ins.fee)}</b>` : ''}</div></div>`;
+      }
+      h += `<div class="pk-card"><div class="pk-lab"><span>➕ ขายเสริม (งานโฟกัส)</span><small>แตะเพิ่ม · แตะซ้ำ = +1</small></div><div class="pk-chips">${cat.map((c, i) => `<button class="pk-chip ${s.list.some(x => x.n === pkOrderName(c)) ? 'on' : ''}" onclick="pkAdd(${i})">${esc(c.n)}<small>${c.p ? bt(c.p) : 'ใส่ราคาเอง'}</small></button>`).join('')}</div>
+        ${gadget ? '' : miss.length ? `<div class="pk-note" style="text-align:left;margin-top:9px">🎯 งานโฟกัสในเซ็ตนี้ ${T.length - miss.length}/${T.length} · ยังเสนอได้อีก: ${miss.map(esc).join(' · ')}</div>` : `<div class="pk-note" style="text-align:left;margin-top:9px;color:#16A34A">🎯 งานโฟกัสครบ ${T.length}/${T.length} 👏</div>`}</div>`;
+      h += `<div class="pk-card"><div class="pk-lab"><span>🧾 ในเซ็ตนี้</span><small>${s.set >= 0 ? esc(PK.cfg.sets[s.set].n) + (s.dirty ? ' (ปรับ)' : '') : 'จัดเอง'}</small></div>
+        <div class="pk-row"><div class="n">📱 เครื่อง</div><div class="p">${bt(s.price)}</div></div>
+        ${s.list.map((a, i) => `<div class="pk-row"><div class="n">${a.ins ? esc(a.label) : esc(a.label)}${a.label !== a.n ? `<small>${esc(a.n)}</small>` : ''}</div>
+          ${a.p || a.ins ? `<div class="p">${bt(a.p * a.q)}</div>` : `<input type="number" inputmode="numeric" placeholder="ราคา" class="pk-in" style="width:84px;padding:5px 8px" oninput="pkSetP(${i},this.value)">`}
+          ${a.ins ? '' : `<div class="q"><button onclick="pkQ(${i},-1)">−</button><b>${a.q}</b><button onclick="pkQ(${i},1)">＋</button></div>`}<button class="rm" onclick="pkRm(${i})">✕</button></div>`).join('')}</div>
+        <div class="pk-total" id="pkTot"></div>
+        <div class="pk-note">ราคาประกันตามตารางบริษัท · ราคาขายเสริม / เดือนผ่อน ตั้งโดยผู้จัดการ</div>`;
+      document.getElementById('pkBody').innerHTML = h;
+      pkTotals();
+    }
+    function pkSetName() { const s = PKS; return s.set >= 0 ? PK.cfg.sets[s.set].n + (s.dirty ? ' (ปรับ)' : '') : 'จัดเอง'; }
+    // 👀 หันจอให้ลูกค้าดู (ไม่มีรหัส / สต๊อก / ต้นทุน)
+    function pkShow() {
+      const s = PKS; if (!s) return; const tot = pkSetTotal(s.list, s.price), mo = pkMonths(s.item.brand), ins = s.list.find(x => x.ins);
+      const nm = String(s.item.name).replace(/^(SMARTPHONE|MOBILE PHONE|TABLET)\s+/i, '');
+      document.getElementById('pcBody').innerHTML = `<div class="pc-card"><span class="pc-set">📦 ${esc(s.set >= 0 ? PK.cfg.sets[s.set].n : 'เซ็ตของคุณ')}</span>
+        <div class="pc-name">${esc(nm)}</div>
+        <div class="pc-line"><span>📱 ตัวเครื่อง</span><span>${bt(s.price)}</span></div>
+        ${s.list.map(a => `<div class="pc-line"><span>${esc(a.label)}${a.q > 1 ? ' ×' + a.q : ''}</span><span>${a.p ? bt(a.p * a.q) : '—'}</span></div>`).join('')}
+        <div class="pc-tot"><span class="font-bold text-gray-500">รวมทั้งเซ็ต</span><b>${bt(tot)}</b></div>
+        ${mo.length ? `<div class="pc-mo">${mo.map(m => `<div>ผ่อน 0% ${m} เดือน<b>${bt(Math.ceil(tot / m))}</b>ต่อเดือน</div>`).join('')}</div>` : ''}
+        ${ins ? `<div class="pc-ins"><h4>🛡️ ${esc(s.ins.d.name)} ${ins.ins} ปี คุ้มครองอะไรบ้าง</h4><ul>${(s.ins.d.pts || []).map(p => `<li>${esc(p)}</li>`).join('')}</ul>${s.ins.fee ? `<div class="text-xs font-bold mt-2 text-amber-900">${esc(s.ins.fee)}</div>` : ''}<div class="day">เฉลี่ยวันละ ${(ins.p / (365 * ins.ins)).toFixed(1)} บาท</div></div>` : ''}
+        <div class="text-center text-[11px] text-gray-400 font-bold mt-4">ราคาและเงื่อนไขเป็นไปตามที่บริษัทกำหนด · BaNANA ID1326</div></div>`;
+      document.getElementById('pkCust').classList.add('on'); tapFeedback();
+    }
+    // 🧾 ส่งเข้า Order (กรอกให้ในหน้าเปิดบิล — ยังไม่ส่งจนกว่าจะกด)
+    function pkToOrder() {
+      const s = PKS; if (!s) return;
+      const nm = String(s.item.name).replace(/^(SMARTPHONE|MOBILE PHONE|TABLET)\s+/i, '').trim();
+      const p = { at: Date.now(), brand: s.item.brand || '', model: nm, price: s.price, pkg: pkSetName(),
+                  addons: s.list.map(a => ({ name: a.n, price: a.p, qty: a.q })), note: '📦 ' + pkSetName() + ' จากแอป Stock' };
+      try { localStorage.setItem('ord_prefill', JSON.stringify(p)); } catch (e) { return snToast('⚠️ เครื่องนี้บันทึกชั่วคราวไม่ได้'); }
+      closeSheet('pkModal');
+      if (window.parent && window.parent !== window) window.parent.postMessage({ type: 'sys1326-order-new' }, location.origin);
+      else location.href = 'order.html';
+    }
+
+    // ---------- ⚙️ ตั้งค่า (ผู้จัดการ) ----------
+    let PSET = null;
+    function openPkgSet() {
+      document.getElementById('psBody').innerHTML = '<div class="py-10 text-center"><span class="loading-pill light"><span class="spin"></span>กำลังโหลด</span></div>';
+      openSheet('pkSetModal');
+      PK = null; pkLoad().then(psRender).catch(e => { document.getElementById('psBody').innerHTML = `<div class="py-8 text-center text-red-500 font-bold text-sm">${esc(e.message || e)}</div>`; });
+    }
+    function psRender() {
+      const c = PK.cfg; PSET = JSON.parse(JSON.stringify(c.sets || []));
+      while (PSET.length < 3) PSET.push({ n: '', i: [] });
+      document.getElementById('psSub').textContent = c.at ? `อัปเดตล่าสุด ${c.at}${c.by ? ' · ' + c.by : ''}` : 'ยังไม่เคยบันทึก (ใช้ค่าเริ่มต้น)';
+      document.getElementById('psUndo').style.display = PK.hasPrev ? '' : 'none';
+      const insF = (c.ins || []).map(i => i.focus), foc = (PK.focus || []).filter(f => !insF.includes(f));
+      const itemsTxt = (c.items && c.items.length ? c.items : foc.map(f => ({ f, n: f, p: 0 }))).map(x => `${x.f} | ${x.n} | ${x.p || ''}`).join('\n');
+      const by = Object.keys(c.monthsBy || {}).map(k => `${k} = ${c.monthsBy[k].join(', ')}`).join('\n');
+      let h = `<div class="pk-card"><div class="pk-lab"><span>➕ ราคาขายเสริม</span><small>1 บรรทัด = งานโฟกัส | ชื่อที่โชว์ | ราคา</small></div>
+        <textarea id="psItems" class="pk-in" rows="9" placeholder="SANDISK | SanDisk 128GB | 590">${esc(itemsTxt)}</textarea>
+        <div class="pk-note" style="text-align:left;margin-top:6px">งานโฟกัสที่ใช้ได้ (จาก Check List): ${foc.map(esc).join(' · ')}<br>มีหลายแบบให้เพิ่มหลายบรรทัด เช่น SANDISK 64GB / 128GB · ไม่ใส่ราคา = ให้น้องกรอกเอง</div></div>
+        <div class="pk-card"><div class="pk-lab"><span>🧮 ผ่อน 0%</span><small>คั่นด้วย ,</small></div>
+        <input id="psMonths" class="pk-in" value="${esc((c.months || []).join(', '))}" placeholder="เช่น 6, 10">
+        <div class="pk-lab" style="margin-top:10px"><span style="font-size:11.5px">แยกตามแบรนด์ (ถ้าไม่เหมือนกัน)</span><small>แบรนด์ = เดือน</small></div>
+        <textarea id="psMonthsBy" class="pk-in" rows="3" placeholder="SAMSUNG = 6, 10&#10;APPLE = 10">${esc(by)}</textarea></div>
+        <div class="pk-card"><div class="pk-lab"><span>📦 เซ็ตแนะนำ</span><small>แตะชิปเพื่อใส่ / เอาออก</small></div><div id="psSets"></div></div>`;
+      h += (c.ins || []).map((x, k) => `<div class="pk-card"><details class="pk-det"><summary>🛡️ ${esc(x.name)} ${x.on === false ? '<span class="text-red-500">(ปิด)</span>' : ''}</summary>
+        <div class="flex gap-3 items-center my-2"><label class="pk-sw"><input type="checkbox" id="psOn${k}" ${x.on !== false ? 'checked' : ''}> เปิดใช้</label><input id="psNm${k}" class="pk-in" style="flex:1" value="${esc(x.name)}"></div>
+        <div class="pk-lab"><span style="font-size:11.5px">งานโฟกัสที่นับ</span></div><input id="psFo${k}" class="pk-in" value="${esc(x.focus)}">
+        ${x.groups ? `<div class="pk-lab" style="margin-top:8px"><span style="font-size:11.5px">ราคา 2 ปี | รุ่น (คั่นด้วย ,)</span></div><textarea id="psTb${k}" class="pk-in" rows="5">${esc(x.groups.map(g => g[0] + ' | ' + g[1]).join('\n'))}</textarea>`
+          : `<div class="pk-lab" style="margin-top:8px"><span style="font-size:11.5px">ราคาเครื่อง จาก-ถึง | 1 ปี | 2 ปี${x.id === 'android' ? ' | ค่าซ่อม | ค่าเปลี่ยนเครื่อง' : ''}</span></div><textarea id="psTb${k}" class="pk-in" rows="9">${esc(x.rows.map(r => `${r[0]}-${r[1]} | ${r[2]} | ${r[3]}${r[4] ? ' | ' + r[4] + ' | ' + r[5] : ''}`).join('\n'))}</textarea>`}
+        <div class="pk-lab" style="margin-top:8px"><span style="font-size:11.5px">ค่าบริการ (ข้อความ)</span></div><input id="psFe${k}" class="pk-in" value="${esc(x.fee || '')}">
+        <div class="pk-lab" style="margin-top:8px"><span style="font-size:11.5px">จุดเด่นโชว์ลูกค้า (1 บรรทัด = 1 ข้อ)</span></div><textarea id="psPt${k}" class="pk-in" rows="3">${esc((x.pts || []).join('\n'))}</textarea>
+        </details></div>`).join('');
+      document.getElementById('psBody').innerHTML = h;
+      document.getElementById('psItems').addEventListener('input', psSets);
+      psSets();
+    }
+    function psItems() {
+      return document.getElementById('psItems').value.split('\n').map(l => l.split('|').map(x => x.trim())).filter(a => a[0])
+        .map(a => ({ f: a[0].toUpperCase(), n: a[1] || a[0], p: +String(a[2] || '').replace(/[^\d.]/g, '') || 0 }));
+    }
+    function psSets() {
+      const toks = [['INS1', '🛡️ ประกัน 1 ปี'], ['INS2', '🛡️ ประกัน 2 ปี']].concat([...new Set(psItems().map(x => x.f))].map(f => [f, f]));
+      document.getElementById('psSets').innerHTML = PSET.map((s, i) => `<div style="margin-bottom:12px"><input class="pk-in" style="margin-bottom:6px" placeholder="ชื่อเซ็ต ${i + 1} (ว่าง = ไม่ใช้)" value="${esc(s.n)}" oninput="PSET[${i}].n=this.value">
+        <div class="pk-chips">${toks.map(t => `<button class="pk-chip ${s.i.includes(t[0]) ? 'on' : ''}" onclick="psTog(${i},'${esc(t[0])}')">${esc(t[1])}</button>`).join('')}</div></div>`).join('')
+        + '<div class="pk-note" style="text-align:left">iPhone ไม่มีแบบ 1 ปี → เซ็ตที่ใส่ "ประกัน 1 ปี" จะใช้ 2 ปีให้เอง</div>';
+    }
+    function psTog(i, t) {
+      const L = PSET[i].i, k = L.indexOf(t);
+      if (k >= 0) L.splice(k, 1); else { if (t === 'INS1' || t === 'INS2') PSET[i].i = L.filter(x => x !== 'INS1' && x !== 'INS2'); PSET[i].i.push(t); }
+      tapFeedback(); psSets();
+    }
+    function pkSave() {
+      const c = PK.cfg, bad = [];
+      const items = psItems(), foc = (PK.focus || []).map(f => f.toUpperCase());
+      items.forEach(x => { if (!foc.includes(x.f)) bad.push(x.f); });
+      if (bad.length && !confirm('ชื่องานโฟกัสนี้ไม่มีใน Check List: ' + [...new Set(bad)].join(', ') + '\nจะไม่ถูกนับเป็นงานโฟกัส — บันทึกต่อไหม?')) return;
+      const monthsBy = {}; document.getElementById('psMonthsBy').value.split('\n').forEach(l => { const m = l.split('='); if (m.length === 2 && m[0].trim()) monthsBy[m[0].trim().toUpperCase()] = m[1].split(/[,\s]+/).filter(Boolean); });
+      const ins = (c.ins || []).map((x, k) => {
+        const v = id => document.getElementById(id + k).value, lines = v('psTb').split('\n').map(l => l.split('|').map(t => t.trim())).filter(a => a[0]);
+        const o = { id: x.id, name: v('psNm'), focus: v('psFo').toUpperCase(), on: document.getElementById('psOn' + k).checked, fee: v('psFe'), pts: v('psPt').split('\n').map(t => t.trim()).filter(Boolean) };
+        if (x.groups) o.groups = lines.map(a => [a[0], a.slice(1).join(',')]);
+        else o.rows = lines.map(a => { const r = a[0].split('-'); return [r[0], r[1], a[1], a[2], a[3] || 0, a[4] || 0]; });
+        return o;
+      });
+      const data = { ins, items, months: document.getElementById('psMonths').value, monthsBy, sets: PSET.filter(s => s.n.trim()) };
+      const b = document.getElementById('psSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+      google.script.run.withSuccessHandler(r => { PK = r; b.disabled = false; b.textContent = '💾 บันทึก'; snToast('✅ บันทึกแล้ว · ทุกเครื่องเห็นราคาใหม่'); closeSheet('pkSetModal'); })
+        .withFailureHandler(e => { b.disabled = false; b.textContent = '💾 บันทึก'; snToast('⚠️ ' + e.message); }).savePkg(data);
+    }
+    function pkUndo() {
+      if (!confirm('ย้อนกลับไปใช้ตั้งค่าเวอร์ชันก่อนหน้า?')) return;
+      google.script.run.withSuccessHandler(r => { PK = r; psRender(); snToast('↩️ ย้อนแล้ว'); }).withFailureHandler(e => snToast('⚠️ ' + e.message)).undoPkg();
+    }
+    if (isMgr) { const g = document.getElementById('pkGear'); if (g) g.style.display = 'inline-flex'; }
 
     moveTabGlider(null, true);
     document.getElementById('stockSection').classList.add('section-enter');

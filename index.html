@@ -1381,7 +1381,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.02-4';
+    const APP_VER = '2026.11.02-5';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2005,6 +2005,11 @@
       if (e.origin !== location.origin || !e.data) return;
       if (e.data.type === 'sys1326-activity') updateActivity();
       if (e.data.type === 'sys1326-auth') { forceLogout(); }
+      if (e.data.type === 'sys1326-order-new' && currentUser) {   // 📦 Stock → เปิดบิล Order พร้อมเซ็ต
+        const loaded = !!frameCache[13];
+        openFrameApp(13);
+        if (loaded) { try { frameCache[13].contentWindow.postMessage({ type: 'order-prefill' }, location.origin); } catch (x) {} }
+      }
     });
     // ล้างแอปที่เปิดค้างไว้เมื่อออกจากระบบ
     function dropFrames() { Object.keys(frameCache).forEach(k => { frameCache[k].remove(); delete frameCache[k]; }); }
