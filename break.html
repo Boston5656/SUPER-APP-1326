@@ -54,8 +54,21 @@
     .ring svg { transform: rotate(-90deg); width: 210px; height: 210px; }
     .ring .trk { stroke: #2C2C2E; } .ring .bar { stroke: var(--y); stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke .3s; }
     .ring.over .bar { stroke: var(--no); } .ring.buy .bar { stroke: var(--or); } .ring.buy .c b { color: #FFC266; } .ring.buy.over .c b { color: #FF8A80; }
-    .btn2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 8px; } .btn2 .big { margin-top: 10px; }
-    .big.o { background: #3A2A10; color: #FFC266; box-shadow: inset 0 0 0 2px rgba(255,159,10,.5); }
+    /* 2 ทางเลือก: การ์ดปุ่มใหญ่ ไอคอนในวงกลม + คำอธิบายสั้น */
+    .pick { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .pk { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; text-align: left; border-radius: 24px; padding: 16px 14px 14px; min-height: 148px;
+      transition: transform .45s var(--spring), box-shadow .3s; -webkit-user-select: none; user-select: none; }
+    .pk:active { transform: scale(.94); }
+    .pk::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(160deg, rgba(255,255,255,.38), rgba(255,255,255,0) 45%); pointer-events: none; }
+    .pk .ico { width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; background: rgba(255,255,255,.28); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 6px 14px -8px rgba(0,0,0,.4); }
+    .pk b { display: block; font: 800 18px/1.15 'Kanit', sans-serif; } .pk small { display: block; font-weight: 600; font-size: 12px; line-height: 1.4; opacity: .82; margin-top: 3px; }
+    .pk .go { position: absolute; right: 12px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,.12); display: flex; align-items: center; justify-content: center; font: 800 15px 'Kanit', sans-serif; }
+    .pk.buy { background: linear-gradient(150deg, #FFB547 0%, #FF8A00 55%, #F26B00 100%); color: #2B1500; box-shadow: 0 16px 30px -14px rgba(255,138,0,.85), inset 0 -2px 0 rgba(0,0,0,.08); }
+    .pk.eat { background: linear-gradient(150deg, #FFF07A 0%, #FFD600 55%, #F5C400 100%); color: var(--d); box-shadow: 0 16px 30px -14px rgba(255,214,0,.9), inset 0 -2px 0 rgba(0,0,0,.06); }
+    .pk.eat .ico { background: rgba(28,28,30,.9); box-shadow: 0 6px 14px -8px rgba(0,0,0,.6); }
+    .pk.buy .ico { background: rgba(43,21,0,.88); }
+    .qturn { position: relative; margin-top: 12px; text-align: center; font: 800 14px 'Kanit', sans-serif; color: var(--y); }
+    @media (max-width: 360px) { .pk { min-height: 136px; padding: 14px 12px 12px; } .pk b { font-size: 16px; } }
     .pr.buy { background: #2A2214; color: #fff; } .pr.buy .t small, .pr.buy .v small { color: #C9B48A; } .pr.buy .v b { color: #FFC266; } .pr.buy .av { background: var(--or); color: var(--d); }
     .tg.or { background: #FFF1D6; color: #8A5300; }
     .help li { margin-bottom: 10px; } .help li b { font-family: 'Kanit', sans-serif; } .help ol { padding-left: 22px; margin: 0; }
@@ -223,10 +236,12 @@
         } else {
           const turn = myTurn(me), cnt = poolCount(me.role);
           h += `<div class="ring"><svg viewBox="0 0 120 120"><circle class="trk" cx="60" cy="60" r="52" fill="none" stroke-width="10"/></svg><div class="c"><b>${c.mins}:00</b><small>เวลาพักของคุณ</small><span>ตอนนี้พักอยู่ ${cnt}/${c.max} คน</span></div></div>`;
-          if (turn) h += `${me.queued ? '<div class="rule" style="color:#FFD600;font-weight:800">🔔 ถึงคิวคุณแล้ว</div>' : ''}<div class="btn2"><button class="big o" onclick="askBuy('${esc(me.id)}')">🛍️ ไปซื้อข้าว</button><button class="big y" onclick="askStart('${esc(me.id)}')">🍱 ออกพักทานข้าว</button></div>`;
+          if (turn) h += `${me.queued ? '<div class="qturn">🔔 ถึงคิวคุณแล้ว เลือกได้เลย</div>' : ''}<div class="pick">
+            <button class="pk buy" onclick="askBuy('${esc(me.id)}')"><span class="go">›</span><span class="ico">🛍️</span><span><b>ไปซื้อข้าว</b><small>จับเวลาซื้อก่อน<br>ได้ข้าวแล้วค่อยเริ่มทาน</small></span></button>
+            <button class="pk eat" onclick="askStart('${esc(me.id)}')"><span class="go">›</span><span class="ico">🍜</span><span><b>ออกพักทานข้าว</b><small>มีข้าวแล้ว / กินที่ร้าน<br>เริ่มนับ ${c.mins} นาทีเลย</small></span></button></div>`;
           else if (me.queued) h += `<button class="big gr" disabled>⏳ รอคิวที่ ${me.queued} — ระบบจะเด้งเรียกเมื่อมีคนกลับ</button><button class="big gr" onclick="act('leaveQueue',[],'ออกจากคิวแล้ว')">ออกจากคิว</button>`;
           else h += `<button class="big y" onclick="act('joinQueue',[],'📝 ต่อคิวแล้ว — มีคนกลับจะเด้งเรียก')">📝 พักเต็ม — ต่อคิว</button>`;
-          h += `<div class="rule">ต้องไปซื้อข้าวก่อน → กด 🛍️ · มีข้าวแล้ว / กินที่ร้าน → กด 🍱<br>กดตอนก้าวออกจากหน้าร้าน 🙏 · งง? กดปุ่ม <b>i</b> ด้านบน</div>`;
+          h += `<div class="rule">กดตอนก้าวออกจากหน้าร้าน 🙏 · งงตรงไหน แตะ <b style="color:#fff">i</b> มุมขวาบน</div>`;
         }
       }
       document.getElementById('meCard').innerHTML = h;
