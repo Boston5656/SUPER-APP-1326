@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ย่อรูป 1326</title>
+<meta name="theme-color" content="#FFD600">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+/* =========================================================
+   🗜️ ย่อรูป 1326 — ย่อ / แปลงเป็น JPG ในเครื่องล้วนๆ ไม่อัปโหลดรูปไปไหน
+   ========================================================= */
+:root{ --y:#FFD600; --d:#1C1C1E; --d2:#2C2C2E; --g:#8E8E93; --ok:#16A34A;
+  --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); --spring-soft:cubic-bezier(.22,1.18,.36,1); }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{min-height:100vh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),radial-gradient(90% 60% at 110% 110%,#FFC400 0%,rgba(255,196,0,0) 60%),var(--y);
+  background-attachment:fixed;padding:calc(8px + env(safe-area-inset-top)) 12px calc(40px + env(safe-area-inset-bottom))}
+button{font-family:inherit;cursor:pointer;color:inherit}
+.num{font-family:'Space Grotesk','IBM Plex Sans Thai',sans-serif;font-variant-numeric:tabular-nums}
+@keyframes riseIn{0%{opacity:0;transform:translateY(18px) scale(.985);filter:blur(4px)}100%{opacity:1;transform:none;filter:none}}
+@keyframes popIn{0%{opacity:0;transform:scale(.85)}100%{opacity:1;transform:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shim{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.rise{animation:riseIn .6s var(--ios-ease) both}.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+
+.wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:900px){.wrap{grid-template-columns:minmax(0,1fr) 380px;align-items:start}.navrow{grid-column:1/-1}.side{position:sticky;top:calc(64px + env(safe-area-inset-top))}}
+.navrow{position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:40;display:flex;gap:8px;align-items:stretch}
+[data-sys-back-slot]{display:flex}[data-sys-back-slot]:empty{display:none}
+.titlebar{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 8px 8px 16px;border-radius:18px;
+  background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35)}
+.titlebar h1{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.cnt{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:12px;padding:5px 11px;border-radius:100px;background:var(--d);color:var(--y);transition:transform .4s var(--spring)}
+.cnt.bump{transform:scale(1.18)}
+.tb-btn{border:0;border-radius:12px;padding:8px 12px;font-weight:700;font-size:12.5px;background:rgba(28,28,30,.08)}
+.tb-btn:active{transform:scale(.92)}
+
+.card{background:rgba(255,255,255,.94);border:1px solid rgba(255,255,255,.9);border-radius:26px;padding:16px;box-shadow:0 1px 2px rgba(60,48,0,.05),0 18px 40px -16px rgba(60,48,0,.28)}
+.lab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;font-weight:800;margin:14px 0 8px}
+.lab:first-child{margin-top:0}
+.lab small{font-size:11px;color:var(--g);font-weight:700}
+
+/* เลือกรูป */
+.pick{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;width:100%;min-height:150px;border:2px dashed rgba(28,28,30,.22);border-radius:22px;background:rgba(255,255,255,.55);
+  font-weight:800;font-size:16px;transition:transform .35s var(--spring),background .2s,border-color .2s}
+.pick:active{transform:scale(.97)}
+.pick.drag{background:#FFF8C4;border-color:var(--d)}
+.pick .ic{width:58px;height:58px;border-radius:18px;background:var(--d);color:var(--y);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 10px 22px -10px rgba(0,0,0,.6)}
+.pick small{font-size:12px;color:var(--g);font-weight:700}
+.addmore{width:100%;margin-top:10px;border:0;border-radius:16px;padding:12px;background:rgba(28,28,30,.07);font-weight:800;font-size:13.5px}
+
+/* ตาราง thumbnail */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-top:2px}
+.tile{position:relative;border-radius:16px;overflow:hidden;background:var(--d);aspect-ratio:1;color:#fff;animation:popIn .35s var(--spring) both}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px;text-align:center;font-size:10.5px;font-weight:700;color:rgba(255,255,255,.6);word-break:break-all}
+.tile .ph b{font-size:22px}
+.tile .meta{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 5px;background:linear-gradient(transparent,rgba(0,0,0,.78));font:700 10.5px 'Space Grotesk',sans-serif;line-height:1.25}
+.tile .meta s{opacity:.6}
+.tile .meta b{color:var(--y)}
+.tile .no{position:absolute;top:5px;left:5px;min-width:22px;height:22px;padding:0 6px;border-radius:100px;background:rgba(0,0,0,.6);font:700 11px 'Space Grotesk',sans-serif;display:flex;align-items:center;justify-content:center}
+.tile .rm{position:absolute;top:5px;right:5px;width:24px;height:24px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#fff;font-weight:900;font-size:12px}
+.tile.busy::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,214,0,.25),transparent);background-size:200% 100%;animation:shim 1s linear infinite}
+.tile.err{outline:2px solid #FF3B30;outline-offset:-2px}
+.tile.done .no{background:var(--ok)}
+
+/* ตั้งค่า */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1.5px solid #E5E5EA;background:#fff;border-radius:13px;padding:8px 11px;font-weight:800;font-size:12.5px;text-align:left;line-height:1.25;transition:transform .3s var(--spring)}
+.chip small{display:block;font:700 10.5px 'Space Grotesk','IBM Plex Sans Thai',sans-serif;color:var(--g)}
+.chip.on{background:var(--d);border-color:var(--d);color:var(--y)}
+.chip.on small{color:rgba(255,255,255,.6)}
+.chip:active{transform:scale(.94)}
+.rng{display:flex;align-items:center;gap:10px}
+.rng input{flex:1;accent-color:var(--d)}
+.rng b{font:700 15px 'Space Grotesk',sans-serif;min-width:38px;text-align:right}
+.inp{width:100%;border:1.5px solid #E5E5EA;border-radius:13px;padding:10px 12px;font:600 14px 'IBM Plex Sans Thai',sans-serif;background:#fff;color:var(--d)}
+.inp:focus{outline:2px solid var(--y);border-color:transparent}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:14px;background:#F2F2F7;font-size:13px;font-weight:700;margin-top:8px;cursor:pointer;user-select:none}
+.sw small{display:block;font-size:11px;color:var(--g);font-weight:600}
+.sw i{flex-shrink:0;width:44px;height:26px;border-radius:100px;background:#D1D1D6;position:relative;transition:background .25s}
+.sw i::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.2);transition:transform .35s var(--spring)}
+.sw.on i{background:var(--ok)}.sw.on i::after{transform:translateX(18px)}
+.go{width:100%;margin-top:14px;border:0;border-radius:18px;padding:16px;font-weight:900;font-size:16px;background:var(--d);color:var(--y);box-shadow:0 12px 24px -12px rgba(0,0,0,.7);transition:transform .35s var(--spring),opacity .2s}
+.go:active{transform:scale(.96)}
+.go:disabled{opacity:.45}
+.bar{height:8px;border-radius:100px;background:rgba(28,28,30,.1);overflow:hidden;margin-top:12px;display:none}
+.bar.on{display:block}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1C1C1E,#3A3A3C);border-radius:100px;transition:width .3s var(--ios-ease)}
+.prog{text-align:center;font-size:12px;font-weight:700;color:var(--g);margin-top:6px;min-height:16px}
+
+/* ผลลัพธ์ */
+.res{background:var(--d);color:#fff;border-radius:26px;padding:16px;box-shadow:0 18px 40px -16px rgba(0,0,0,.6);display:none}
+.res.on{display:block;animation:popIn .45s var(--spring) both}
+.res h3{margin:0;font-size:15px;color:var(--y);font-weight:900}
+.sum{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:10px 0 2px}
+.sum b{font:700 30px 'Space Grotesk',sans-serif;letter-spacing:-.5px;color:var(--y)}
+.sum span{font-size:12px;color:rgba(255,255,255,.6);font-weight:700;text-align:right}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:16px;background:rgba(255,255,255,.08);margin-top:12px}
+.seg button{position:relative;z-index:1;border:0;background:none;border-radius:12px;padding:10px 6px;font-weight:800;font-size:13.5px;color:rgba(255,255,255,.65);transition:color .3s}
+.seg button.on{color:var(--d)}
+.seg .gl{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 6px);border-radius:12px;background:var(--y);transition:transform .5s var(--spring-soft)}
+.seg.r .gl{transform:translateX(calc(100% + 4px))}
+.dl{width:100%;border:0;border-radius:16px;padding:14px 12px;margin-top:8px;font-weight:900;font-size:14.5px;background:var(--y);color:var(--d);display:flex;align-items:center;justify-content:space-between;gap:8px;transition:transform .35s var(--spring),background .2s}
+.dl:active{transform:scale(.97)}
+.dl small{font:700 12px 'Space Grotesk','IBM Plex Sans Thai',sans-serif;opacity:.7}
+.dl.done{background:rgba(255,255,255,.1);color:#fff}
+.dl.done small{opacity:.6}
+.dl:disabled{opacity:.5}
+.note{font-size:11.5px;color:rgba(255,255,255,.55);font-weight:600;line-height:1.55;margin-top:10px}
+.bsz{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;font-weight:700;color:rgba(255,255,255,.6)}
+.bsz button{border:0;border-radius:10px;padding:6px 10px;background:rgba(255,255,255,.08);color:#fff;font-weight:800;font-size:12px}
+.bsz button.on{background:#fff;color:var(--d)}
+.empty{text-align:center;color:var(--g);font-size:12.5px;font-weight:700;padding:6px 0 0}
+#toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));z-index:300;transform:translate(-50%,-160%);padding:11px 18px;border-radius:100px;background:rgba(28,28,30,.94);color:#fff;font-weight:700;font-size:13.5px;box-shadow:0 14px 30px -10px rgba(0,0,0,.5);transition:transform .55s var(--spring-soft);max-width:92vw;text-align:center}
+#toast.in{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="navrow rise">
+    <span data-sys-back-slot></span>
+    <div class="titlebar">
+      <h1>🗜️ ย่อรูป <span class="cnt" id="cnt">0/60</span></h1>
+      <button class="tb-btn" id="clearBtn" type="button">ล้าง</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="card rise d1">
+      <input type="file" id="file" accept="image/*,.heic,.heif" multiple hidden>
+      <button class="pick" id="pick" type="button"><span class="ic">🖼️</span>เลือกรูป<small>สูงสุดครั้งละ 60 รูป · ทำในเครื่อง ไม่อัปโหลด</small></button>
+      <div id="grid" class="grid"></div>
+      <button class="addmore" id="more" type="button" style="display:none">＋ เพิ่มรูป</button>
+    </div>
+  </div>
+
+  <div class="side">
+    <div class="card rise d2">
+      <div class="lab"><span>📐 ขนาดรูป</span><small>ด้านยาวสุด</small></div>
+      <div class="chips" id="cSize">
+        <button class="chip" data-v="800">เล็ก<small>800px</small></button>
+        <button class="chip on" data-v="1280">LINE / ทั่วไป<small>1280px</small></button>
+        <button class="chip" data-v="1920">คมชัด<small>1920px</small></button>
+        <button class="chip" data-v="0">ขนาดเดิม<small>แค่แปลง JPG</small></button>
+      </div>
+      <div class="lab"><span>📦 จำกัดขนาดไฟล์</span><small>ต่อรูป</small></div>
+      <div class="chips" id="cMax">
+        <button class="chip on" data-v="0">ไม่จำกัด</button>
+        <button class="chip" data-v="300">≤ 300KB</button>
+        <button class="chip" data-v="500">≤ 500KB</button>
+        <button class="chip" data-v="1024">≤ 1MB</button>
+        <button class="chip" data-v="2048">≤ 2MB</button>
+      </div>
+      <div class="lab"><span>✨ คุณภาพ</span><small id="qHint">82 = ชัดและไฟล์เล็ก</small></div>
+      <div class="rng"><input type="range" id="q" min="50" max="95" step="1" value="82"><b id="qv">82</b></div>
+      <div class="lab"><span>🏷️ ชื่อไฟล์</span><small id="nameEx"></small></div>
+      <input class="inp" id="prefix" maxlength="40" autocomplete="off">
+      <div class="sw" id="keepName"><span>ใช้ชื่อไฟล์เดิม<small>เปลี่ยนแค่นามสกุลเป็น .jpg</small></span><i></i></div>
+      <button class="go" id="go" type="button" disabled>⚡ เริ่มย่อรูป</button>
+      <div class="bar" id="bar"><i></i></div>
+      <div class="prog" id="prog"></div>
+    </div>
+
+    <div class="res" id="res" style="margin-top:12px">
+      <h3>✅ ย่อเสร็จแล้ว</h3>
+      <div class="sum"><b class="num" id="sumNew"></b><span id="sumTxt"></span></div>
+      <div class="seg" id="seg"><i class="gl"></i><button class="on" data-m="zip">📦 ZIP ไฟล์เดียว</button><button data-m="img">🖼️ โหลดเป็นรูป</button></div>
+      <div id="dlBox"></div>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+  const MAX = 60, $ = id => document.getElementById(id);
+  const S = { items: [], size: 1280, maxKB: 0, q: 82, keep: false, mode: 'zip', batch: 10, busy: false, zipUrl: '' };
+  const ST_KEY = 'rsz1326';
+  try { Object.assign(S, JSON.parse(localStorage.getItem(ST_KEY) || '{}'), { items: [], busy: false, zipUrl: '' }); } catch (e) {}
+  const save = () => { try { localStorage.setItem(ST_KEY, JSON.stringify({ size: S.size, maxKB: S.maxKB, q: S.q, keep: S.keep, mode: S.mode, batch: S.batch })); } catch (e) {} };
+  const vib = n => { try { navigator.vibrate && navigator.vibrate(n); } catch (e) {} };
+  const kb = b => b >= 1048576 ? (b / 1048576).toFixed(b >= 10485760 ? 0 : 1) + 'MB' : Math.max(1, Math.round(b / 1024)) + 'KB';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('in'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('in'), 2800); }
+  const ping = () => { try { parent !== window && parent.postMessage({ type: 'sys1326-activity' }, location.origin); } catch (e) {} };
+
+  // ---------- ตั้งค่า ----------
+  const dd = new Date(), defPrefix = '1326_' + String(dd.getDate()).padStart(2, '0') + String(dd.getMonth() + 1).padStart(2, '0') + '_';
+  $('prefix').value = defPrefix;
+  function bindChips(id, key) {
+    const box = $(id);
+    box.querySelectorAll('.chip').forEach(b => b.classList.toggle('on', +b.dataset.v === S[key]));
+    box.onclick = e => { const b = e.target.closest('.chip'); if (!b) return; S[key] = +b.dataset.v; box.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); vib(6); save(); markDirty(); };
+  }
+  bindChips('cSize', 'size'); bindChips('cMax', 'maxKB');
+  const qHint = v => v >= 90 ? 'ชัดมาก ไฟล์ใหญ่ขึ้น' : v >= 78 ? 'ชัดและไฟล์เล็ก' : v >= 65 ? 'ไฟล์เล็ก ชัดพอใช้' : 'เล็กสุด อาจเห็นแตก';
+  function paintQ() { $('q').value = S.q; $('qv').textContent = S.q; $('qHint').textContent = S.q + ' = ' + qHint(S.q); }
+  $('q').oninput = e => { S.q = +e.target.value; paintQ(); save(); markDirty(); };
+  paintQ();
+  $('keepName').classList.toggle('on', S.keep);
+  $('keepName').onclick = () => { S.keep = !S.keep; $('keepName').classList.toggle('on', S.keep); $('prefix').disabled = S.keep; vib(6); save(); paintName(); markDirty(); };
+  $('prefix').disabled = S.keep;
+  $('prefix').oninput = () => { paintName(); markDirty(); };
+  function cleanName(s) { return String(s || '').replace(/[\\/:*?"<>|]+/g, '_').replace(/\s+/g, '_').slice(0, 60); }
+  function paintName() { $('nameEx').textContent = 'เช่น ' + (S.keep ? 'IMG_1234.jpg' : cleanName($('prefix').value) + '001.jpg'); }
+  paintName();
+
+  // ---------- เลือกรูป ----------
+  $('pick').onclick = () => $('file').click();
+  $('more').onclick = () => $('file').click();
+  $('file').onchange = e => { add([...e.target.files]); e.target.value = ''; };
+  ['dragenter', 'dragover'].forEach(t => document.addEventListener(t, e => { e.preventDefault(); $('pick').classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(t => document.addEventListener(t, e => { e.preventDefault(); $('pick').classList.remove('drag'); }));
+  document.addEventListener('drop', e => { const f = [...(e.dataTransfer && e.dataTransfer.files || [])]; if (f.length) add(f); });
+  const isImg = f => /^image\//.test(f.type) || /\.(heic|heif|jpe?g|png|webp|gif|bmp|avif)$/i.test(f.name);
+  let uid = 0;
+  function add(files) {
+    if (S.busy) return toast('รอให้ย่อชุดนี้เสร็จก่อน');
+    files = files.filter(isImg);
+    const room = MAX - S.items.length;
+    if (!files.length) return toast('ไม่พบไฟล์รูป');
+    if (room <= 0) return toast(`ครบ ${MAX} รูปแล้ว — โหลดชุดนี้ก่อน แล้วกดล้าง`);
+    if (files.length > room) toast(`เลือกได้อีก ${room} รูป · ตัดส่วนเกินออก ${files.length - room} รูป`);
+    files.slice(0, room).forEach(f => S.items.push({ id: ++uid, file: f, name: f.name, size: f.size, out: null, outName: '', thumb: '', err: '' }));
+    vib(10); ping(); markDirty(); render();
+  }
+  function rm(id) { if (S.busy) return; const it = S.items.find(x => x.id === id); if (it && it.thumb) URL.revokeObjectURL(it.thumb); S.items = S.items.filter(x => x.id !== id); vib(6); markDirty(); render(); }
+  $('clearBtn').onclick = () => { if (S.busy || !S.items.length) return; if (!confirm('ล้างรูปทั้งหมด?')) return; S.items.forEach(x => x.thumb && URL.revokeObjectURL(x.thumb)); S.items = []; markDirty(); render(); };
+
+  function render() {
+    const n = S.items.length, c = $('cnt');
+    c.textContent = n + '/' + MAX; c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump');
+    $('pick').style.display = n ? 'none' : ''; $('more').style.display = n && n < MAX && !S.busy ? '' : 'none';
+    $('grid').innerHTML = S.items.map((it, i) => tileHTML(it, i)).join('');
+    $('go').disabled = !n || S.busy;
+    $('go').textContent = S.busy ? 'กำลังย่อ…' : n ? `⚡ เริ่มย่อ ${n} รูป` : '⚡ เริ่มย่อรูป';
+  }
+  function tileHTML(it, i) {
+    const ext = (it.name.split('.').pop() || '').toUpperCase().slice(0, 5);
+    return `<div class="tile ${it.out ? 'done' : ''} ${it.err ? 'err' : ''}" id="t${it.id}">
+      ${it.thumb ? `<img src="${it.thumb}" alt="">` : `<div class="ph"><b>${it.err ? '⚠️' : '🖼️'}</b>${esc(it.err || ext)}</div>`}
+      <span class="no">${i + 1}</span>${S.busy || it.out ? '' : `<button class="rm" data-rm="${it.id}">✕</button>`}
+      <div class="meta">${it.out ? `<s>${kb(it.size)}</s> → <b>${kb(it.out.size)}</b>` : kb(it.size)}</div></div>`;
+  }
+  $('grid').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) rm(+b.dataset.rm); };
+  function paintTile(it) { const el = $('t' + it.id); if (!el) return; const i = S.items.indexOf(it); el.outerHTML = tileHTML(it, i); }
+
+  // เปลี่ยนตั้งค่าหลังย่อแล้ว = ต้องย่อใหม่
+  function markDirty() {
+    if (S.busy) return;
+    let had = false;
+    S.items.forEach(it => { if (it.out || it.err) { had = true; it.out = null; it.err = ''; if (it.thumb) { URL.revokeObjectURL(it.thumb); it.thumb = ''; } } });
+    if (S.zipUrl) { URL.revokeObjectURL(S.zipUrl); S.zipUrl = ''; }
+    Object.keys(DONE).forEach(k => delete DONE[k]);
+    $('res').classList.remove('on'); $('bar').classList.remove('on'); $('prog').textContent = '';
+    if (had) render();
+  }
+
+  // ---------- อ่านรูป (รองรับ HEIC) ----------
+  let heicLib = null;
+  function loadHeic() {
+    if (heicLib) return heicLib;
+    heicLib = new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js'; s.onload = () => ok(window.heic2any); s.onerror = () => { heicLib = null; no(new Error('โหลดตัวแปลง HEIC ไม่ได้')); }; document.head.appendChild(s); });
+    return heicLib;
+  }
+  function viaImg(blob) {
+    return new Promise((ok, no) => { const u = URL.createObjectURL(blob), im = new Image(); im.onload = () => ok({ src: im, w: im.naturalWidth, h: im.naturalHeight, done: () => URL.revokeObjectURL(u) }); im.onerror = () => { URL.revokeObjectURL(u); no(new Error('เปิดรูปไม่ได้')); }; im.src = u; });
+  }
+  async function decode(file) {
+    try { const b = await createImageBitmap(file, { imageOrientation: 'from-image' }); return { src: b, w: b.width, h: b.height, done: () => b.close && b.close() }; } catch (e) {}
+    try { return await viaImg(file); } catch (e) {}
+    if (/heic|heif/i.test(file.type) || /\.(heic|heif)$/i.test(file.name)) {
+      const lib = await loadHeic(); let out = await lib({ blob: file, toType: 'image/jpeg', quality: 0.92 }); if (Array.isArray(out)) out = out[0];
+      return viaImg(out);
+    }
+    throw new Error('ไฟล์นี้เปิดไม่ได้');
+  }
+  const toBlob = (cv, q) => new Promise(ok => cv.toBlob(b => ok(b), 'image/jpeg', q));
+  const LIMIT = 4096;   // iPhone วาด canvas ใหญ่กว่านี้ไม่ได้
+  async function encode(img) {
+    let long = Math.max(img.w, img.h), target = Math.min(S.size || long, LIMIT);
+    let scale = Math.min(1, target / long), q = S.q / 100, best = null;
+    const cv = document.createElement('canvas'), cx = cv.getContext('2d');
+    for (let round = 0; round < 10; round++) {
+      const w = Math.max(1, Math.round(img.w * scale)), h = Math.max(1, Math.round(img.h * scale));
+      if (cv.width !== w || cv.height !== h) {
+        cv.width = w; cv.height = h;
+        cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h);   // PNG ใส → พื้นขาว (ไม่ดำ)
+        cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
+        cx.drawImage(img.src, 0, 0, w, h);
+      }
+      const b = await toBlob(cv, q);
+      if (!b) throw new Error('แปลงไม่สำเร็จ');
+      best = { blob: b, w, h };
+      if (!S.maxKB || b.size <= S.maxKB * 1024) break;
+      if (q > 0.5) q = Math.max(0.5, q - 0.1); else { scale *= 0.85; q = Math.max(0.6, S.q / 100 - 0.15); }
+    }
+    // ภาพเล็กไว้โชว์ในตาราง
+    const t = document.createElement('canvas'), ts = 220 / Math.max(cv.width, cv.height);
+    t.width = Math.round(cv.width * ts); t.height = Math.round(cv.height * ts); t.getContext('2d').drawImage(cv, 0, 0, t.width, t.height);
+    const tb = await toBlob(t, 0.7);
+    cv.width = cv.height = 1; t.width = t.height = 1;   // คืนแรมให้ iPhone
+    return { blob: best.blob, w: best.w, h: best.h, thumb: tb ? URL.createObjectURL(tb) : '' };
+  }
+
+  // ---------- เริ่มย่อ ----------
+  function outNames() {
+    const used = {}, pre = cleanName($('prefix').value) || defPrefix;
+    S.items.filter(it => it.out).forEach((it, i) => {   // นับเลขเฉพาะรูปที่ย่อสำเร็จ (ไม่มีเลขขาด)
+      let base = S.keep ? cleanName(it.name.replace(/\.[^.]+$/, '')) || 'IMG' : pre + String(i + 1).padStart(3, '0');
+      let n = base, k = 2; while (used[n.toLowerCase()]) n = base + '_' + k++;
+      used[n.toLowerCase()] = 1; it.outName = n + '.jpg';
+    });
+  }
+  $('go').onclick = async () => {
+    if (S.busy || !S.items.length) return;
+    markDirty(); S.busy = true; render(); vib(12); ping();
+    $('bar').classList.add('on'); const bar = $('bar').firstElementChild; bar.style.width = '0';
+    const t0 = Date.now();
+    for (let i = 0; i < S.items.length; i++) {
+      const it = S.items[i], el = $('t' + it.id); if (el) el.classList.add('busy');
+      $('prog').textContent = `กำลังย่อรูปที่ ${i + 1}/${S.items.length}`;
+      try { const img = await decode(it.file); try { const r = await encode(img); it.out = r.blob; it.thumb = r.thumb; it.dim = r.w + '×' + r.h; } finally { img.done(); } }
+      catch (e) { it.err = e.message || 'ผิดพลาด'; }
+      paintTile(it); bar.style.width = ((i + 1) / S.items.length * 100) + '%';
+      await new Promise(r => setTimeout(r, 0));
+    }
+    S.busy = false; outNames(); render();
+    const ok = S.items.filter(x => x.out), bad = S.items.length - ok.length;
+    $('prog').textContent = `เสร็จใน ${((Date.now() - t0) / 1000).toFixed(1)} วินาที${bad ? ` · ไม่สำเร็จ ${bad} รูป (กรอบแดง)` : ''}`;
+    vib([20, 40, 20]); showResult();
+  };
+
+  // ---------- ผลลัพธ์ + โหลด ----------
+  function showResult() {
+    const ok = S.items.filter(x => x.out); if (!ok.length) return toast('ย่อไม่สำเร็จเลย ลองเลือกรูปใหม่');
+    const a = ok.reduce((t, x) => t + x.size, 0), b = ok.reduce((t, x) => t + x.out.size, 0);
+    $('sumNew').textContent = kb(b);
+    $('sumTxt').innerHTML = `${ok.length} รูป · เดิม ${kb(a)}<br>เล็กลง ${Math.max(0, Math.round((1 - b / a) * 100))}%`;
+    $('res').classList.add('on'); paintSeg(); paintDl();
+    if (window.innerWidth < 900) setTimeout(() => $('res').scrollIntoView({ behavior: 'smooth', block: 'start' }), 150);
+  }
+  function paintSeg() { const sg = $('seg'); sg.classList.toggle('r', S.mode === 'img'); sg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.m === S.mode)); }
+  $('seg').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.mode = b.dataset.m; vib(6); save(); paintSeg(); paintDl(); };
+  const canShareFiles = () => { try { return !!(navigator.canShare && navigator.canShare({ files: [new File([new Blob(['x'], { type: 'image/jpeg' })], 'a.jpg', { type: 'image/jpeg' })] })); } catch (e) { return false; } };
+  const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Mac/.test(navigator.platform));
+  const DONE = {};
+  function paintDl() {
+    const ok = S.items.filter(x => x.out), box = $('dlBox');
+    if (S.mode === 'zip') {
+      const tot = ok.reduce((t, x) => t + x.out.size, 0);
+      box.innerHTML = `<button class="dl ${DONE.zip ? 'done' : ''}" id="zipBtn">📦 ${DONE.zip ? 'โหลด ZIP อีกครั้ง' : 'โหลด ZIP'} <small>${ok.length} รูป · ${kb(tot)}</small></button>
+        ${mobile && canShareFiles() ? `<button class="dl done" id="zipShare">↗️ แชร์ ZIP (ส่ง LINE / อีเมล / ไฟล์) <small></small></button>` : ''}
+        <div class="note">ZIP = รวมทุกรูปเป็นไฟล์เดียว เหมาะส่งเข้าคอม / อีเมล / อัปโหลดระบบ${mobile ? ' · iPhone: เปิดในแอปไฟล์แล้วแตะ ZIP เพื่อแตกไฟล์' : ''}</div>`;
+      $('zipBtn').onclick = () => zipGo(false); if ($('zipShare')) $('zipShare').onclick = () => zipGo(true);
+      return;
+    }
+    const n = S.batch, groups = []; for (let i = 0; i < ok.length; i += n) groups.push(ok.slice(i, i + n));
+    const share = mobile && canShareFiles();
+    box.innerHTML = `<div class="bsz">รูปต่อชุด ${[5, 10, 20].map(v => `<button data-b="${v}" class="${v === n ? 'on' : ''}">${v}</button>`).join('')}</div>`
+      + groups.map((g, k) => { const key = 'g' + n + '_' + k, a = k * n + 1, z = k * n + g.length;
+        return `<button class="dl ${DONE[key] ? 'done' : ''}" data-g="${k}">${DONE[key] ? '✓' : '⬇️'} ชุดที่ ${k + 1} · รูป ${a}–${z} <small>${g.length} รูป · ${kb(g.reduce((t, x) => t + x.out.size, 0))}</small></button>`; }).join('')
+      + `<div class="note">${share ? 'กดทีละชุด → เมนูแชร์จะขึ้น → เลือก <b>"บันทึกภาพ"</b> (iPhone) หรือ "บันทึก/ดาวน์โหลด" รูปจะเข้าคลังรูปเลย · ทำทีละชุดจะไม่ค้าง' : 'กดทีละชุด เบราว์เซอร์จะโหลดหลายไฟล์ — ถ้าถาม "อนุญาตให้โหลดหลายไฟล์" ให้กดอนุญาต'}</div>`;
+    box.querySelector('.bsz').onclick = e => { const b = e.target.closest('button'); if (!b) return; S.batch = +b.dataset.b; save(); vib(6); paintDl(); };
+    box.querySelectorAll('[data-g]').forEach(b => b.onclick = () => imgGo(groups[+b.dataset.g], 'g' + n + '_' + b.dataset.g, b));
+  }
+  function saveBlob(blob, name) {
+    const u = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = u; a.download = name; a.rel = 'noopener'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 60000);
+  }
+  async function zipGo(share) {
+    if (typeof JSZip === 'undefined') return toast('โหลดตัวทำ ZIP ไม่สำเร็จ ลองรีเฟรช');
+    const btn = share ? $('zipShare') : $('zipBtn'), t = btn.innerHTML; btn.disabled = true; btn.innerHTML = '⏳ กำลังรวมไฟล์… <small></small>';
+    try {
+      const z = new JSZip(), ok = S.items.filter(x => x.out);
+      ok.forEach(x => z.file(x.outName, x.out, { binary: true }));
+      const blob = await z.generateAsync({ type: 'blob', compression: 'STORE' }, m => { btn.innerHTML = `⏳ กำลังรวมไฟล์ ${Math.round(m.percent)}% <small></small>`; });
+      const name = (S.keep ? 'resize_' : (cleanName($('prefix').value) || defPrefix)) + ok.length + 'pics.zip';
+      if (share) { const f = new File([blob], name, { type: 'application/zip' }); await navigator.share({ files: [f], title: name }); }
+      else saveBlob(blob, name);
+      DONE.zip = 1; vib([15, 30, 15]); toast(share ? '✅ ส่งแล้ว' : '✅ โหลด ZIP แล้ว');
+    } catch (e) { if (e && e.name !== 'AbortError') toast('⚠️ ' + (e.message || e)); }
+    btn.disabled = false; btn.innerHTML = t; paintDl();
+  }
+  async function imgGo(g, key, btn) {
+    btn.disabled = true; ping();
+    try {
+      const files = g.map(x => new File([x.out], x.outName, { type: 'image/jpeg' }));
+      if (mobile && canShareFiles() && navigator.canShare({ files })) await navigator.share({ files });
+      else { for (const f of files) { saveBlob(f, f.name); await new Promise(r => setTimeout(r, 350)); } }
+      DONE[key] = 1; vib([15, 30, 15]);
+      const left = btn.parentNode.querySelectorAll('[data-g]').length - Object.keys(DONE).filter(k => k.startsWith('g' + S.batch + '_')).length;
+      toast(left > 0 ? `✅ ชุดนี้เรียบร้อย · เหลืออีก ${left} ชุด` : '✅ ครบทุกชุดแล้ว');
+    } catch (e) { if (e && e.name !== 'AbortError') toast('⚠️ ' + (e.message || e)); }
+    btn.disabled = false; paintDl();
+  }
+  render();
+})();
+</script>
+</body>
+</html>
