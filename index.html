@@ -226,74 +226,29 @@
     .dx-top .r span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #3A3A3C; }
     .dx-top .r b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; white-space: nowrap; }
 
-    /* ===== 🔠 พนักงาน / แบรนด์ แนวนอน — ตัวใหญ่อ่านง่าย (ไม่ย่อให้พอดีจอ · เลื่อนลงได้) ===== */
-    #page-dashboard.hmode .staff-card { padding: 20px 22px !important; column-gap: 18px; row-gap: 14px; border-radius: 26px !important; }
-    #page-dashboard.hmode .staff-card .sc-head { align-items: baseline; padding-bottom: 10px !important; }
-    #page-dashboard.hmode .staff-card .sc-head > span:first-child { font-size: 20px !important; letter-spacing: -.2px; }
-    #page-dashboard.hmode .staff-card .sc-head > span:first-child .text-xs { font-size: 14px !important; }
-    #page-dashboard.hmode .staff-card .sc-head > span:last-child { font-size: 13px !important; padding-top: 0 !important; }
-    #page-dashboard.hmode .staff-card .sc-head > span:last-child .text-\[9px\] { font-size: 11.5px !important; }
-    #page-dashboard.hmode .staff-card .sc-kpi { gap: 10px !important; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important; }
-    #page-dashboard.hmode .brand-card .sc-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    #page-dashboard.hmode .staff-card .sc-kpi > div { padding: 12px 10px !important; border-radius: 18px; }
-    #page-dashboard.hmode .staff-card .sc-kpi .text-\[10px\] { font-size: 12.5px !important; font-weight: 700; }
-    #page-dashboard.hmode .staff-card .sc-kpi .text-sm { font-size: 24px !important; line-height: 1.15; letter-spacing: -.3px; }
-    #page-dashboard.hmode .staff-card .sc-kpi .text-\[9px\] { font-size: 12.5px !important; color: #AEAEB2; }
-    #page-dashboard.hmode .staff-card .sc-kpi .text-\[10px\].font-bold { font-size: 14px !important; }
-    #page-dashboard.hmode .brand-card .bk-tag { font-size: 10.5px; margin-bottom: 1px; }
-    #page-dashboard.hmode .brand-card .bk-pair { gap: 8px; margin-top: 6px; }
-    #page-dashboard.hmode .brand-card .bk-pair .text-sm { font-size: 22px !important; }
-    #page-dashboard.hmode .brand-card .bk-pair .bk-sm { font-size: 17px !important; }
-    #page-dashboard.hmode .brand-card .bk-pair .text-\[10px\] { font-size: 13px !important; line-height: 1.5; }
-    #page-dashboard.hmode .staff-card .sc-att { padding: 14px 14px !important; border-radius: 22px; }
-    #page-dashboard.hmode .staff-card .sc-att > div:first-child .text-xs { font-size: 15px !important; }
-    #page-dashboard.hmode .staff-card .sc-att > div:first-child .text-\[10px\] { font-size: 12.5px !important; }
-    #page-dashboard.hmode .staff-card .sc-att .grid-att { gap: 8px !important; }
-    #page-dashboard.hmode .staff-card .sc-att .att-tile { padding: 12px 4px !important; border-radius: 16px; }
-    #page-dashboard.hmode .staff-card .sc-att .att-tile .lbl { font-size: 11.5px; }
-    #page-dashboard.hmode .staff-card .sc-att .att-tile .val { font-size: 21px !important; margin-top: 3px; }
-    #page-dashboard.hmode .staff-card .inc-btn { transform: scale(1.15); transform-origin: top right; }
-    #page-dashboard.hmode .sc-cat > div > div { padding: 14px 18px 10px !important; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important; column-gap: 24px !important; border-radius: 22px !important; }
-    #page-dashboard.hmode .sc-cat .cm-sum { font-size: 13px !important; }
-    #page-dashboard.hmode .sc-cat .cm-mini .cm-name { font-size: 14px !important; }
-    #page-dashboard.hmode .sc-cat .cm-mini .cm-chip { font-size: 11.5px !important; }
-    #page-dashboard.hmode .sc-cat .cm-line { font-size: 14px !important; }
-    #page-dashboard.hmode .sc-cat .cm-line.sub { font-size: 12px !important; }
-    #page-dashboard.hmode .sc-cat .cm-mini .text-\[10px\] { font-size: 12px !important; }
-    #page-dashboard.hmode .sc-cat .focus-bar.cm-bar { height: 8px; }
-    #page-dashboard.hmode #col-brand .hlabel { font-size: 13px !important; letter-spacing: 1.5px; }
 
-    /* ===== 🧩 รีดีไซน์การ์ดพนักงาน (จอแนวนอน) =====
-       [ชื่อ ·························· Target] [IN+]
-       [Achieve | Forecast | Diff | MOM/YOY] [Att Rate 9 ช่อง]
-       [สรุปเป้า][แคท 1][แคท 2][แคท 3]…  ← แถวเดียว เลื่อนข้างได้ ไม่ตกบรรทัด */
-    #page-dashboard.hmode .staff-card:not(.brand-card) {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) auto !important;
-      grid-template-areas: "head head act" "kpi att att" "cat cat cat" !important;
-      grid-template-rows: auto auto auto !important;
-    }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-head { border-bottom: 0 !important; padding-bottom: 0 !important; align-items: center; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-act { align-items: center; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .inc-btn { transform: none; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; align-content: stretch; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .grid-att { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; flex: 1 1 auto; }
-    @container (min-width: 860px) { #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .grid-att { grid-template-columns: repeat(9, minmax(0, 1fr)) !important; } }
-    #page-dashboard.hmode .sc-cat > div > div {
-      display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 12px 22px !important; align-items: start; }
-    #page-dashboard.hmode .sc-cat .cm-sum { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; border: 0 !important; background: #F2F2F7; border-radius: 14px; padding: 9px 14px !important; }
-    #page-dashboard.hmode .sc-cat .cm-mini { padding: 4px 2px !important; }
-    #page-dashboard.hmode .sc-cat .cm-line.sub { white-space: normal !important; flex-wrap: wrap; row-gap: 2px; }
-    #page-dashboard.hmode .staff-card .sc-att .att-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    /* การ์ดแบรนด์: หัวการ์ดเต็มแถว · KPI ซ้าย · Att Rate ขวา */
-    #page-dashboard.hmode .brand-card {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important;
-      grid-template-areas: "head head" "kpi att" !important;
-      grid-template-rows: auto 1fr !important;
-    }
-    #page-dashboard.hmode .brand-card .sc-head { border-bottom: 0 !important; padding-bottom: 0 !important; align-items: center; }
-    #page-dashboard.hmode .brand-card .sc-head > span:first-child { font-size: 22px !important; color: #FFD600; }
-    #page-dashboard.hmode .brand-card .sc-att .grid-att { height: calc(100% - 30px); }
+    /* การ์ดแบรนด์ (ฐาน) */
+    .bk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 3px; }
+    .bk-pair > div { min-width: 0; padding: 0 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bk-pair > div + div { border-left: 1px solid rgba(255,255,255,0.10); }
+    .bk-tag { display: block; font-size: 8px; font-weight: 800; color: #8E8E93; letter-spacing: .04em; }
+    .bk-sm { font-size: 11px !important; }
+    .brand-card .att-tile.sp3 { grid-column: span 3; }
+    .brand-card .att-tile.sp2 { grid-column: span 2; }
 
+    /* ===== 🗂️ จอแนวนอน: การ์ดพนักงาน / แบรนด์ = การ์ดแนวตั้ง (แบบมือถือ) เรียงเป็นตาราง พอดีกรอบ =====
+       คนเพิ่ม = ระบบเพิ่มคอลัมน์ / ย่อให้พอดีเอง · เกินจอ = หน้าถัดไปทางขวา · เป้ารายแคท = แตะเปิดการ์ด */
+    #page-dashboard.hmode .staff-card { padding: 16px !important; border-radius: 26px !important; display: block !important; }
+    #page-dashboard.hmode .staff-card .sc-head { align-items: center; gap: 8px; }
+    #page-dashboard.hmode .staff-card .sc-head > span:first-child { font-size: 16px !important; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #page-dashboard.hmode .staff-card .sc-head > span:last-child { white-space: nowrap; }
+    #page-dashboard.hmode .brand-card .sc-head > span:first-child { font-size: 19px !important; color: #FFD600; }
+    #page-dashboard.hmode .staff-card .sc-kpi > div { padding: 10px 6px; }
+    #page-dashboard.hmode .staff-card .sc-kpi .text-sm { font-size: 18px !important; }
+    #page-dashboard.hmode .brand-card .bk-pair .text-sm { font-size: 16px !important; }
+    #page-dashboard.hmode .staff-card .att-tile .val { font-size: 16px; }
+    #page-dashboard.hmode .staff-card .sc-cat { display: none !important; }
+    #page-dashboard.hmode .staff-card .cat-toggle .chev { transform: rotate(-90deg); }
     /* 📱 มือถือ: การ์ดพนักงาน / แบรนด์ / Category เรียง 1 คอลัมน์ · กันหน้ากว้างเกินจอ (iPhone จะย่อทั้งหน้า) */
     html, body { overflow-x: hidden; }
     .page-dashboard { overflow-x: clip; }
@@ -309,43 +264,6 @@
     #page-dashboard.hmode .hpage { flex: 0 0 auto; overflow: visible; }
     #page-dashboard.hmode .hpage + .hpage { scroll-snap-align: start; }
 
-    /* ===== 🧩 พอดีกรอบ: การ์ดพนักงานแบบกะทัดรัด (จอแนวนอน) =====
-       [ชื่อ ··· Target · IN+]
-       [Achieve|Forecast|Diff|MOM/YOY] [Att Rate 9 ช่องแถวเดียว]
-       [แคท 1][แคท 2]…[แคท n]  ← แถวเดียว */
-    #page-dashboard.hmode .staff-card:not(.brand-card) {
-      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr) auto !important;
-      grid-template-areas: "head head act" "kpi att att" "cat cat cat" !important;
-      grid-template-rows: auto minmax(0, 1fr) auto !important; row-gap: 12px !important; padding: 16px 20px !important;
-    }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 8px !important; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi > div { padding: 10px 6px !important; justify-content: center; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi .text-sm { font-size: 22px !important; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att { padding: 10px 12px !important; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .grid-att { grid-template-columns: repeat(9, minmax(0, 1fr)) !important; gap: 6px !important; flex: 1 1 auto; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .att-tile { padding: 8px 2px !important; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .att-tile .lbl { font-size: 10.5px; }
-    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .att-tile .val { font-size: 19px !important; }
-    #page-dashboard.hmode .sc-cat > div > div {
-      display: grid !important; grid-template-columns: none !important; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr) !important;
-      gap: 0 16px !important; padding: 10px 16px 8px !important; align-items: start; }
-    #page-dashboard.hmode .sc-cat .cm-sum { display: none !important; }
-    #page-dashboard.hmode .sc-cat .cm-mini { padding: 2px 0 !important; min-width: 0; }
-    #page-dashboard.hmode .sc-cat .cm-mini .cm-name { font-size: 12.5px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    #page-dashboard.hmode .sc-cat .cm-mini .cm-chip { font-size: 10px !important; padding: 2px 6px !important; }
-    #page-dashboard.hmode .sc-cat .cm-line { font-size: 12.5px !important; white-space: nowrap; }
-    #page-dashboard.hmode .sc-cat .cm-line > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-    #page-dashboard.hmode .sc-cat .cm-line.sub { font-size: 10.5px !important; white-space: nowrap !important; flex-wrap: nowrap !important; }
-    #page-dashboard.hmode .sc-cat .cm-line.sub > span:last-child { display: none; }
-    #page-dashboard.hmode .sc-cat .focus-bar.cm-bar { margin-top: 5px; }
-    #page-dashboard.hmode .hgrid.stretch > .staff-card { display: grid !important; }
-    /* การ์ดแบรนด์กะทัดรัด */
-    #page-dashboard.hmode .brand-card { padding: 16px 18px !important; row-gap: 10px !important; }
-    #page-dashboard.hmode .brand-card .sc-kpi > div { padding: 8px 6px !important; }
-    #page-dashboard.hmode .brand-card .sc-att { padding: 10px 12px !important; }
-    #page-dashboard.hmode .brand-card .sc-att .att-tile { padding: 7px 2px !important; }
-    #page-dashboard.hmode .brand-card .sc-att .grid-att { height: auto !important; }
-    #page-dashboard.hmode .hgrid.stretch > .brand-card { display: grid !important; }
     .sec-tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 99px; background: rgba(255,214,0,.15); color: #FFD600; font-size: 11px; font-weight: 800; vertical-align: middle; }
     /* ===== Market Share — แนวนอน ===== */
     .modal-sheet.ms-wide { max-width: 980px; max-height: 92vh; padding: 16px; }
@@ -477,57 +395,6 @@
     .hgrid > .hrow:first-child { margin-top: 0 !important; }
     #page-dashboard.hmode .hbody.fit { overflow: hidden; }
 
-    /* การ์ดพนักงานแนวนอน (1 คน = 1 แถว อ่านจบในจอเดียว)
-       [ชื่อ + KPI 4 ช่อง] [Att Rate 9 ช่องเรียงแถวเดียว] [IN+]
-       [เป้ารายแคท เรียงแนวนอน กางตลอด                          ] */
-    #page-dashboard.hmode .staff-card {
-      display: grid; padding: 14px 16px !important; column-gap: 14px; row-gap: 10px; align-items: stretch;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr) auto;
-      grid-template-areas: "head att act" "kpi att act" "cat cat cat";
-      grid-template-rows: auto 1fr auto;
-    }
-    #page-dashboard.hmode .sc-head { grid-area: head; flex-wrap: wrap; gap: 2px 8px; margin: 0 !important; padding-bottom: 6px !important; }
-    #page-dashboard.hmode .sc-kpi { grid-area: kpi; margin-top: 0; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 6px; }
-    #page-dashboard.hmode .sc-kpi > div { padding: 6px 4px; display: flex; flex-direction: column; justify-content: center; }
-    #page-dashboard.hmode .sc-kpi > .col-span-2 { grid-column: auto; }
-    #page-dashboard.hmode .sc-att { grid-area: att; margin-top: 0 !important; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
-    #page-dashboard.hmode .sc-att { container-type: inline-size; }
-    #page-dashboard.hmode .sc-att .grid-att { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
-    @container (min-width: 640px) { #page-dashboard.hmode .sc-att .grid-att { grid-template-columns: repeat(9, minmax(0, 1fr)); } }
-    #page-dashboard.hmode .sc-att .att-tile { padding: 6px 2px; }
-    #page-dashboard.hmode .sc-att .att-tile .val { font-size: 14px; }
-    #page-dashboard.hmode .sc-act { grid-area: act; margin: 0 !important; align-items: flex-start; }
-    #page-dashboard.hmode .sc-act .cat-toggle { display: none; }
-    #page-dashboard.hmode .sc-cat { grid-area: cat; grid-template-rows: 1fr !important; transition: none !important; }
-    #page-dashboard.hmode .sc-cat > div > div {
-      margin-top: 0 !important; padding: 8px 14px 6px !important;
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); column-gap: 18px; align-content: start;
-    }
-    /* การ์ดแบรนด์ = หน้าตาเดียวกับการ์ดพนักงาน (KPI 4 ช่อง ฿ | Unit + Att Rate) */
-    .bk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 3px; }
-    .bk-pair > div { min-width: 0; padding: 0 2px; white-space: nowrap; }
-    .bk-pair > div + div { border-left: 1px solid rgba(255,255,255,0.10); }
-    .bk-tag { display: block; font-size: 8px; font-weight: 800; color: #8E8E93; letter-spacing: .04em; }
-    .bk-sm { font-size: 11px !important; }
-    .brand-card .att-tile.sp3 { grid-column: span 3; }
-    .brand-card .att-tile.sp2 { grid-column: span 2; }
-    #page-dashboard.hmode .brand-card {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-      grid-template-areas: "head att" "kpi att";
-      grid-template-rows: auto 1fr;
-    }
-    #page-dashboard.hmode .brand-card .sc-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    @container (min-width: 640px) {
-      #page-dashboard.hmode .brand-card .sc-att .grid-att { grid-template-columns: repeat(var(--n, 9), minmax(0, 1fr)); }
-      #page-dashboard.hmode .brand-card .sc-att .att-tile.sp3, #page-dashboard.hmode .brand-card .sc-att .att-tile.sp2 { grid-column: auto; }
-    }
-    #page-dashboard.hmode .sc-cat .cm-sum {
-      grid-column: 1 / -1; flex-direction: row; justify-content: space-between; gap: 4px;
-      background: #F2F2F7; border: 0; border-radius: 12px; padding: 9px 14px; margin: 0;
-    }
-    #page-dashboard.hmode .sc-cat .cm-mini { border-bottom: 0; padding: 4px 2px; }
-    #page-dashboard.hmode .sc-cat .cat-row { animation: none; }
-    #page-dashboard.hmode .sc-cat .cm-line.sub { white-space: normal; flex-wrap: wrap; }
     .hcol { width: var(--colw, 320px); flex-shrink: 0; display: flex; flex-direction: column; gap: 12px;
       overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
     .hcol::-webkit-scrollbar { display: none; }
@@ -1541,7 +1408,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-9';
+    const APP_VER = '2026.11.03-10';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2688,6 +2555,11 @@
     }
 
     function toggleStaffCat(idx, btn) {
+      if (dashPage().classList.contains('hmode')) {   // จอแนวนอน: เปิดเป็นการ์ดแทนการกางในการ์ด (การ์ดไม่ยืด ตารางไม่เละ)
+        const s = lastDashboardData && lastDashboardData.staffs[idx]; if (!s) return;
+        haptic(6); openModal(`${s.nickname} · 🎯 เป้าหมายรายแคท`, `<div class="bg-white rounded-2xl text-black">${staffCatHTML(s.categories)}</div>`);
+        return;
+      }
       const box = document.getElementById('cat-box-' + idx);
       const open = box.classList.toggle('open');
       btn.classList.toggle('open', open);
@@ -2716,8 +2588,8 @@
     const H_PANELS = [
       { id: 'col-focus', minw: 230, maxCols: 5, stretch: true, srcs: [{ id: 'db-focus' }] },
       { id: 'col-category', minw: 290, maxCols: 5, stretch: true, srcs: [{ id: 'db-category' }] },
-      { id: 'staff-section', minw: 900, maxCols: 1, minCols: 1, fill: true, srcs: [{ id: 'db-staff' }] },
-      { id: 'col-brand', minw: 560, maxCols: 4, minCols: 1, fill: true, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
+      { id: 'staff-section', minw: 330, maxCols: 6, minCols: 1, fill: true, srcs: [{ id: 'db-staff' }] },
+      { id: 'col-brand', minw: 340, maxCols: 6, minCols: 1, fill: true, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
     ];
     const NAV_ITEMS = [
       { id: 'dash-top', t: 'สรุป' }, { id: 'col-focus', t: 'งานโฟกัส' }, { id: 'col-category', t: 'Category' },
@@ -2836,7 +2708,7 @@
       grid.style.transformOrigin = '0 0';
       grid.style.width = (W / best.k) + 'px'; grid.style.gridTemplateColumns = `repeat(${best.n}, minmax(0, 1fr))`;
       grid.style.transform = `scale(${best.k})`;
-      if (H - grid.offsetHeight * best.k > 20) { grid.classList.add('stretch'); grid.style.gridAutoRows = 'minmax(0, 1fr)'; grid.style.height = (H / best.k) + 'px'; }
+      grid.style.marginTop = Math.max(0, (H - grid.offsetHeight * best.k) / 2) + 'px';   // จัดกึ่งกลางแนวตั้ง
       return best;
     }
     function hFillPaged(cfg, panel, body, pw) {
@@ -2869,7 +2741,6 @@
         const g = mk(nodes.slice(i, i + per));
         if (!first) { first = hFitOne(cfg, g, Math.min(per, nodes.length - i), W, H); rowH = g.firstElementChild ? g.firstElementChild.offsetHeight : 0; continue; }
         hFitOne(cfg, g, Math.min(per, nodes.length - i), W, H, first);
-        g.classList.remove('stretch'); g.style.height = ''; if (rowH) { g.classList.add('stretch'); g.style.gridAutoRows = rowH + 'px'; }
       }
       panel.style.width = (pw + (pages - 1) * (W + GAP)) + 'px';
       panel.dataset.pages = pages;
