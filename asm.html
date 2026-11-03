@@ -464,11 +464,10 @@
     var unreachableUsers = new Set(); 
     var clickTimer = null; 
     // 🔁 เช็คอิน / เช็คเอาท์ — เก็บในเครื่องนี้ แยกตามวันที่ (รีเฟรชแล้วไม่หาย)
-    var MODE = 'in', ATT = {};   // ATT[ชื่อ] = { st: 'in'|'out'|'lost', in: 'HH:MM', out: 'HH:MM' }
+    var MODE = 'in', ATT = {};   // ATT[ชื่อ] = { st: 'in'|'out'|'lost' }
     var attKey = function () { return 'asm_att_' + (document.getElementById('date-picker').value || ''); };
     function attLoad() { try { ATT = JSON.parse(localStorage.getItem(attKey()) || '{}') || {}; } catch (e) { ATT = {}; } }
     function attSave() { try { localStorage.setItem(attKey(), JSON.stringify(ATT)); } catch (e) {} }
-    function nowHM() { var d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
     function shiftEnd(txt) { var m = String(txt || '').match(/(\d{1,2})[:.](\d{2})\s*[-–]\s*(\d{1,2})[:.](\d{2})/); return m ? (+m[3]) * 60 + (+m[4]) : null; }
     function isToday() { var d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10); return document.getElementById('date-picker').value === d; }
     function setMode(m) {
@@ -531,11 +530,7 @@
         }, true);
       });
     })();
-    function timeHTML(nick) {
-      var a = ATT[nick] || {};
-      if (!a.in && !a.out) return '<div class="sch-time"></div>';
-      return '<div class="sch-time">' + (a.in ? '<span>✓ เข้า ' + esc(a.in) + '</span>' : '') + (a.out ? '<span class="o">⏏ ออก ' + esc(a.out) + '</span>' : '') + '</div>';
-    }
+    function timeHTML() { return ''; }   // ไม่โชว์เวลาเข้า-ออก (แค่สถานะ)
     function recount() {
       if (!SUM) return;
       SUM.in = 0; SUM.outd = 0; SUM.lost = 0; SUM.wait = 0;
@@ -955,27 +950,26 @@
     }
 
     // 🟢 โหมดเช็คอิน: แตะ = เข้างานแล้ว · แตะสองที = ติดต่อไม่ได้ · แตะซ้ำ = ยกเลิก
-    // 🌙 โหมดเช็คเอาท์: แตะ = เลิกงานแล้ว (บันทึกเวลาออก) · แตะซ้ำ = ยกเลิกเช็คเอาท์ · การ์ดหยุด/ลา แตะไม่ได้
+    // 🌙 โหมดเช็คเอาท์: แตะ = เลิกงานแล้ว · แตะซ้ำ = ยกเลิกเช็คเอาท์ · การ์ดหยุด/ลา แตะไม่ได้
     function handleCardClick(el, cat, nickname) {
       if (cat !== 'WORK') return;
       if (navigator.vibrate) navigator.vibrate(12);
       var a = ATT[nickname] || {};
       var apply = function () {
-        if (!a.st && !a.in && !a.out) delete ATT[nickname]; else ATT[nickname] = a;
+        if (!a.st) delete ATT[nickname]; else ATT[nickname] = a;
         attSave();
         el.classList.toggle('checked-in', a.st === 'in'); el.classList.toggle('checked-out', a.st === 'out'); el.classList.toggle('status-unreachable', a.st === 'lost');
         el.querySelector('.shift-badge').textContent = a.st === 'in' ? 'เข้างานแล้ว' : a.st === 'out' ? 'เลิกงานแล้ว' : a.st === 'lost' ? 'ติดต่อไม่ได้' : 'ON DUTY';
-        var t = el.querySelector('.sch-time'); if (t) t.outerHTML = timeHTML(nickname);
         markDue(); renderSchSum();
       };
       if (MODE === 'out') {
-        if (a.st === 'out') { a.st = a.in ? 'in' : ''; delete a.out; toast('ยกเลิกเช็คเอาท์ ' + nickname); }
-        else { if (!a.in && a.st !== 'in') toast(nickname + ' ยังไม่ได้เช็คอิน — บันทึกเวลาออกให้แล้ว'); a.st = 'out'; a.out = nowHM(); }
+        if (a.st === 'out') { a.st = a.was || ''; delete a.was; toast('ยกเลิกเช็คเอาท์ ' + nickname); }
+        else { a.was = a.st === 'in' ? 'in' : ''; a.st = 'out'; }
         apply(); return;
       }
       if (clickTimer == null) {
         if (a.st === 'in' || a.st === 'lost' || a.st === 'out') { a = {}; }
-        else { a = { st: 'in', in: nowHM() }; }
+        else { a = { st: 'in' }; }
         apply();
         clickTimer = setTimeout(function () { clickTimer = null; }, 320);
       } else {
