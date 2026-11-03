@@ -225,6 +225,43 @@
     .dx-top .r:first-of-type { border-top: 0; }
     .dx-top .r span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #3A3A3C; }
     .dx-top .r b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; white-space: nowrap; }
+
+    /* ===== 🔠 พนักงาน / แบรนด์ แนวนอน — ตัวใหญ่อ่านง่าย (ไม่ย่อให้พอดีจอ · เลื่อนลงได้) ===== */
+    #page-dashboard.hmode .staff-card { padding: 20px 22px !important; column-gap: 18px; row-gap: 14px; border-radius: 26px !important; }
+    #page-dashboard.hmode .staff-card .sc-head { align-items: baseline; padding-bottom: 10px !important; }
+    #page-dashboard.hmode .staff-card .sc-head > span:first-child { font-size: 20px !important; letter-spacing: -.2px; }
+    #page-dashboard.hmode .staff-card .sc-head > span:first-child .text-xs { font-size: 14px !important; }
+    #page-dashboard.hmode .staff-card .sc-head > span:last-child { font-size: 13px !important; padding-top: 0 !important; }
+    #page-dashboard.hmode .staff-card .sc-head > span:last-child .text-\[9px\] { font-size: 11.5px !important; }
+    #page-dashboard.hmode .staff-card .sc-kpi { gap: 10px !important; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)) !important; }
+    #page-dashboard.hmode .brand-card .sc-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    #page-dashboard.hmode .staff-card .sc-kpi > div { padding: 12px 10px !important; border-radius: 18px; }
+    #page-dashboard.hmode .staff-card .sc-kpi .text-\[10px\] { font-size: 12.5px !important; font-weight: 700; }
+    #page-dashboard.hmode .staff-card .sc-kpi .text-sm { font-size: 24px !important; line-height: 1.15; letter-spacing: -.3px; }
+    #page-dashboard.hmode .staff-card .sc-kpi .text-\[9px\] { font-size: 12.5px !important; color: #AEAEB2; }
+    #page-dashboard.hmode .staff-card .sc-kpi .text-\[10px\].font-bold { font-size: 14px !important; }
+    #page-dashboard.hmode .brand-card .bk-tag { font-size: 10.5px; margin-bottom: 1px; }
+    #page-dashboard.hmode .brand-card .bk-pair { gap: 8px; margin-top: 6px; }
+    #page-dashboard.hmode .brand-card .bk-pair .text-sm { font-size: 22px !important; }
+    #page-dashboard.hmode .brand-card .bk-pair .bk-sm { font-size: 17px !important; }
+    #page-dashboard.hmode .brand-card .bk-pair .text-\[10px\] { font-size: 13px !important; line-height: 1.5; }
+    #page-dashboard.hmode .staff-card .sc-att { padding: 14px 14px !important; border-radius: 22px; }
+    #page-dashboard.hmode .staff-card .sc-att > div:first-child .text-xs { font-size: 15px !important; }
+    #page-dashboard.hmode .staff-card .sc-att > div:first-child .text-\[10px\] { font-size: 12.5px !important; }
+    #page-dashboard.hmode .staff-card .sc-att .grid-att { gap: 8px !important; }
+    #page-dashboard.hmode .staff-card .sc-att .att-tile { padding: 12px 4px !important; border-radius: 16px; }
+    #page-dashboard.hmode .staff-card .sc-att .att-tile .lbl { font-size: 11.5px; }
+    #page-dashboard.hmode .staff-card .sc-att .att-tile .val { font-size: 21px !important; margin-top: 3px; }
+    #page-dashboard.hmode .staff-card .inc-btn { transform: scale(1.15); transform-origin: top right; }
+    #page-dashboard.hmode .sc-cat > div > div { padding: 14px 18px 10px !important; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important; column-gap: 24px !important; border-radius: 22px !important; }
+    #page-dashboard.hmode .sc-cat .cm-sum { font-size: 13px !important; }
+    #page-dashboard.hmode .sc-cat .cm-mini .cm-name { font-size: 14px !important; }
+    #page-dashboard.hmode .sc-cat .cm-mini .cm-chip { font-size: 11.5px !important; }
+    #page-dashboard.hmode .sc-cat .cm-line { font-size: 14px !important; }
+    #page-dashboard.hmode .sc-cat .cm-line.sub { font-size: 12px !important; }
+    #page-dashboard.hmode .sc-cat .cm-mini .text-\[10px\] { font-size: 12px !important; }
+    #page-dashboard.hmode .sc-cat .focus-bar.cm-bar { height: 8px; }
+    #page-dashboard.hmode #col-brand .hlabel { font-size: 13px !important; letter-spacing: 1.5px; }
     /* ===== Market Share — แนวนอน ===== */
     .modal-sheet.ms-wide { max-width: 980px; max-height: 92vh; padding: 16px; }
     .msx { display: grid; gap: 14px; }
@@ -1419,7 +1456,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-5';
+    const APP_VER = '2026.11.03-6';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2594,8 +2631,8 @@
     const H_PANELS = [
       { id: 'col-focus', minw: 230, maxCols: 5, stretch: true, srcs: [{ id: 'db-focus' }] },
       { id: 'col-category', minw: 290, maxCols: 5, stretch: true, srcs: [{ id: 'db-category' }] },
-      { id: 'staff-section', minw: 860, maxCols: 3, minCols: 1, srcs: [{ id: 'db-staff' }] },
-      { id: 'col-brand', minw: 860, maxCols: 3, minCols: 1, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
+      { id: 'staff-section', minw: 1100, maxCols: 2, minCols: 1, noFit: true, srcs: [{ id: 'db-staff' }] },
+      { id: 'col-brand', minw: 860, maxCols: 3, minCols: 1, noFit: true, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
     ];
     const NAV_ITEMS = [
       { id: 'dash-top', t: 'สรุป' }, { id: 'col-focus', t: 'งานโฟกัส' }, { id: 'col-category', t: 'Category' },
@@ -2675,6 +2712,8 @@
         return Math.max(1, Math.min(nMax, cards || 1));
       };
       grid.style.transformOrigin = '0 0';
+      // พนักงาน / แบรนด์: ไม่ย่อตัวหนังสือ — ขนาดจริงเสมอ แล้วเลื่อนลงในแผงได้
+      if (cfg.noFit) { apply(1, colsAt(1)); body.classList.remove('fit'); return; }
       // เลือกขนาดใหญ่ที่สุดที่พอดีจอ · ถ้าพอดีหลายแบบ เลือกจำนวนคอลัมน์น้อยสุด (การ์ดกว้าง เต็มความสูงสวยกว่า)
       for (const k of H_SCALES) {
         const nMax = colsAt(k);
