@@ -287,11 +287,18 @@
     #page-dashboard .dash-col.box-white, #page-dashboard .hpanel { position: relative; }
     #page-dashboard .dash-col.box-white::before, #page-dashboard .dash-col.box-white::after {
       content: ''; position: absolute; width: 112px; height: 112px; pointer-events: none; z-index: 0;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cpath d='M0 0H90L0 90Z' fill='%231C1C1E' fill-opacity='.05'/%3E%3Cpath d='M90 0L0 90' stroke='%231C1C1E' stroke-opacity='.28' stroke-width='2'/%3E%3Cpath d='M94 2L2 94' stroke='%23fff' stroke-opacity='.85' stroke-width='1'/%3E%3Cg fill='%231C1C1E' fill-opacity='.22'%3E%3Cpath d='M15 10h11l-5 9H10z'/%3E%3Cpath d='M33 10h11l-5 9H28z'/%3E%3Cpath d='M51 10h11l-5 9H46z'/%3E%3Cpath d='M15 24h11l-5 9H10z'/%3E%3Cpath d='M33 24h11l-5 9H28z'/%3E%3Cpath d='M15 38h11l-5 9H10z'/%3E%3C/g%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%; }
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cpath d='M0 0H90L0 90Z' fill='%231C1C1E' fill-opacity='.04'/%3E%3Cpath d='M90 0L0 90' stroke='%231C1C1E' stroke-opacity='.25' stroke-width='2'/%3E%3Cpath d='M94 2L2 94' stroke='%23fff' stroke-opacity='.85' stroke-width='1'/%3E%3Cg fill='%23fff' fill-opacity='.9'%3E%3Cpath d='M17.4 12.4h12.2l-5.6 10.2H12.4z'/%3E%3Cpath d='M36.4 12.4h12.2l-5.6 10.2H31.4z'/%3E%3Cpath d='M55.4 12.4h12.2l-5.6 10.2H50.4z'/%3E%3Cpath d='M17.4 27.4h12.2l-5.6 10.2H12.4z'/%3E%3Cpath d='M36.4 27.4h12.2l-5.6 10.2H31.4z'/%3E%3Cpath d='M17.4 42.4h12.2l-5.6 10.2H12.4z'/%3E%3C/g%3E%3Cg fill='%233A2E00' fill-opacity='.55'%3E%3Cpath d='M14.600000000000001 9.600000000000001h13.4l-6.2 11.4H9.600000000000001z'/%3E%3Cpath d='M33.599999999999994 9.600000000000001h13.4l-6.2 11.4H28.6z'/%3E%3Cpath d='M52.599999999999994 9.600000000000001h13.4l-6.2 11.4H47.599999999999994z'/%3E%3Cpath d='M14.600000000000001 24.6h13.4l-6.2 11.4H9.600000000000001z'/%3E%3Cpath d='M33.599999999999994 24.6h13.4l-6.2 11.4H28.6z'/%3E%3Cpath d='M14.600000000000001 39.599999999999994h13.4l-6.2 11.4H9.600000000000001z'/%3E%3C/g%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%; }
     #page-dashboard .dash-col.box-white::before { top: 0; left: 0; border-top-left-radius: inherit; }
     #page-dashboard .dash-col.box-white::after { bottom: 0; right: 0; transform: rotate(180deg); }
     #page-dashboard .dash-col.box-white > * { position: relative; z-index: 1; }
     #page-dashboard .dash-col.box-white > h3 { padding-left: 62px; }
+    /* 🕳️ รูทะลุกระจกจริง (มองเห็นพื้นหลังผ่านรู) */
+    #page-dashboard .dash-col.box-white {
+      -webkit-mask: linear-gradient(#000 0 0), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cpath d='M17 12h11l-5 9H12z'/%3E%3Cpath d='M36 12h11l-5 9H31z'/%3E%3Cpath d='M55 12h11l-5 9H50z'/%3E%3Cpath d='M17 27h11l-5 9H12z'/%3E%3Cpath d='M36 27h11l-5 9H31z'/%3E%3Cpath d='M17 42h11l-5 9H12z'/%3E%3C/svg%3E") 0 0 / 112px 112px no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cg transform='rotate%28180 56 56%29'%3E%3Cpath d='M17 12h11l-5 9H12z'/%3E%3Cpath d='M36 12h11l-5 9H31z'/%3E%3Cpath d='M55 12h11l-5 9H50z'/%3E%3Cpath d='M17 27h11l-5 9H12z'/%3E%3Cpath d='M36 27h11l-5 9H31z'/%3E%3Cpath d='M17 42h11l-5 9H12z'/%3E%3C/g%3E%3C/svg%3E") 100% 100% / 112px 112px no-repeat;
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cpath d='M17 12h11l-5 9H12z'/%3E%3Cpath d='M36 12h11l-5 9H31z'/%3E%3Cpath d='M55 12h11l-5 9H50z'/%3E%3Cpath d='M17 27h11l-5 9H12z'/%3E%3Cpath d='M36 27h11l-5 9H31z'/%3E%3Cpath d='M17 42h11l-5 9H12z'/%3E%3C/svg%3E") 0 0 / 112px 112px no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cg transform='rotate%28180 56 56%29'%3E%3Cpath d='M17 12h11l-5 9H12z'/%3E%3Cpath d='M36 12h11l-5 9H31z'/%3E%3Cpath d='M55 12h11l-5 9H50z'/%3E%3Cpath d='M17 27h11l-5 9H12z'/%3E%3Cpath d='M36 27h11l-5 9H31z'/%3E%3Cpath d='M17 42h11l-5 9H12z'/%3E%3C/g%3E%3C/svg%3E") 100% 100% / 112px 112px no-repeat;
+      mask-composite: exclude; }
+
     #page-dashboard .dash-col.box-white { padding-top: 36px !important; padding-bottom: 30px !important; }
     #page-dashboard.hmode .hpanel { padding-top: 34px !important; padding-bottom: 26px !important; }
 
@@ -1464,7 +1471,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-16';
+    const APP_VER = '2026.11.03-17';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
