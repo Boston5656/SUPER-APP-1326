@@ -642,7 +642,7 @@
     @keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
 
     /* ===== 💧 Liquid Glass (สไตล์ iOS) — การ์ดป๊อปอัพ ===== */
-    #top5-modal { background: rgba(20,16,0,0.14) !important; -webkit-backdrop-filter: blur(3px) saturate(120%); backdrop-filter: blur(3px) saturate(120%); }
+    #top5-modal { background: rgba(20,16,0,0.16) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
     #top5-modal .modal-sheet {
       --lx: 30%; --ly: 0%;
       background:
@@ -660,8 +660,16 @@
     #top5-modal .modal-sheet::-webkit-scrollbar { display: none; }
 
     /* 💧 ชั้นหยดน้ำตอนเปิด/ปิด + ขอบกระจกแบบหักเหแสง (ขอบสีรุ้งจางๆ) */
-    #lg-stage { position: fixed; inset: 0; z-index: 60; pointer-events: none; display: none; filter: url(#lg-goo); }
-    #lg-stage i { position: absolute; display: block; background: linear-gradient(160deg, rgba(255,255,255,.96), rgba(236,240,255,.86)); }
+    /* กระจกใสแบบ iOS 26: ใสกว่าเดิม เบลอน้อย ให้เห็นของด้านหลัง · Chrome/Brave/Edge = หักเหแสงที่ขอบจริง */
+    #top5-modal .modal-sheet {
+      background:
+        radial-gradient(380px circle at var(--lx) var(--ly), rgba(255,255,255,.4), rgba(255,255,255,0) 60%),
+        linear-gradient(150deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,.14) 50%, rgba(255,255,255,.26) 100%) !important;
+      -webkit-backdrop-filter: blur(14px) saturate(190%) brightness(1.04); backdrop-filter: blur(14px) saturate(190%) brightness(1.04); }
+    #top5-modal .modal-sheet.lg-refract { backdrop-filter: url(#lg-refract) blur(1.2px) saturate(170%) brightness(1.04);
+      background: radial-gradient(380px circle at var(--lx) var(--ly), rgba(255,255,255,.28), rgba(255,255,255,0) 60%), linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.04) 50%, rgba(255,255,255,.12)) !important; }
+    #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row {
+      background: rgba(255,255,255,.62) !important; -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); }
     #top5-modal .modal-sheet { box-shadow:
         inset 0 1.5px 1px rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.45),
         inset 2px 0 2px -1px rgba(255,90,200,.28), inset -2px 0 2px -1px rgba(60,190,255,.32),
@@ -671,6 +679,30 @@
     /* แตะการ์ด = ยุบแบบเจลลี่ แล้วเด้งกลับ */
     #page-dashboard .sl-card, #page-dashboard .staff-card { transition: transform .5s cubic-bezier(.2,1.6,.4,1); }
     #page-dashboard .sl-card:active, #page-dashboard .staff-card:active { transform: scale(.965, .955); transition-duration: .12s; }
+
+    /* ===== 🫧 ทรง Liquid Glass แบบ iOS 26: ลอย · มุมโค้งใหญ่ · ขอบสะท้อนแสงไล่ระดับ (ไม่มีเส้นขอบตรงๆ) ===== */
+    #top5-modal .modal-sheet {
+      border-radius: 42px !important; border: 0 !important; overflow: hidden !important;
+      display: flex; flex-direction: column; position: relative; padding: 22px 22px 18px !important; }
+    #top5-modal #top5-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: none; margin: 0 -6px; padding: 0 6px 4px; }
+    #top5-modal #top5-list::-webkit-scrollbar { display: none; }
+    #top5-modal .modal-sheet::after {
+      content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; padding: 1.6px; z-index: 3;
+      background: linear-gradient(135deg, rgba(255,255,255,.95) 0%, rgba(255,255,255,.35) 18%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 62%, rgba(255,255,255,.3) 82%, rgba(255,255,255,.85) 100%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude; }
+    #top5-modal .modal-sheet > div:first-child { border-bottom: 0 !important; padding-bottom: 6px !important; margin-bottom: 10px !important; }
+    #top5-modal .modal-sheet > div:first-child button {
+      width: 38px !important; height: 38px !important; border-radius: 50% !important; color: #1C1C1E !important;
+      background: rgba(255,255,255,.35) !important; -webkit-backdrop-filter: blur(12px) saturate(180%); backdrop-filter: blur(12px) saturate(180%);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.4), 0 4px 14px -6px rgba(0,0,0,.35) !important; }
+    #top5-modal .dx-hero, #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row, #top5-modal .msx-hero { border-radius: 26px !important; }
+    #top5-modal .dx-stats > div { border-radius: 20px !important; }
+    @media (max-width: 640px) {
+      #top5-modal { align-items: flex-end !important; padding: 0 10px calc(10px + env(safe-area-inset-bottom)) !important; }
+      #top5-modal .modal-sheet { border-radius: 40px !important; max-height: 84vh !important; padding-bottom: 18px !important; }
+      #top5-modal .modal-sheet::before { display: none !important; }
+    }
     #top5-modal.closing { opacity: 1 !important; }
     #top5-modal.closing .modal-sheet { animation: none !important; }
     #top5-modal .modal-sheet > div:first-child { border-color: rgba(255,255,255,.55) !important; }
@@ -726,6 +758,48 @@
       }
     }
     #page-dashboard .dash-col .grid-detail > div { background: rgba(255,255,255,0.06); }
+    /* ===== 🫧 Liquid Glass ทั้งหน้า Dashboard ===== */
+    /* พื้นหลังมีแสงนวลๆ ให้กระจกมีอะไรให้หักเห */
+    #page-dashboard { background:
+        radial-gradient(38vw 38vw at 12% 18%, rgba(255,250,210,.85), rgba(255,250,210,0) 70%),
+        radial-gradient(42vw 42vw at 88% 82%, rgba(255,170,0,.55), rgba(255,170,0,0) 70%),
+        radial-gradient(30vw 30vw at 70% 8%, rgba(255,236,120,.7), rgba(255,236,120,0) 70%),
+        #FFD600 !important; background-attachment: fixed !important; }
+    /* แผงกระจก = ใสจริง (เห็นแสงข้างหลัง) + ขอบสะท้อนแสงไล่ระดับ */
+    #page-dashboard .dash-col.box-white {
+      background: linear-gradient(150deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.08) 45%, rgba(255,255,255,.18) 100%) !important;
+      border: 0 !important;
+      -webkit-backdrop-filter: blur(6px) saturate(170%) brightness(1.04); backdrop-filter: blur(6px) saturate(170%) brightness(1.04);
+      box-shadow: inset 0 1.5px 1px rgba(255,255,255,.95), inset 1.5px 0 1px rgba(255,255,255,.55),
+        inset 0 -1.5px 1px rgba(255,255,255,.45), inset -1.5px 0 1px rgba(255,255,255,.3),
+        inset 0 0 40px rgba(255,255,255,.18) !important; }
+    #page-dashboard .dash-col.box-white.lg-refract { backdrop-filter: url(#lg-refract-panel) blur(4px) saturate(170%) brightness(1.04); }
+    /* ของที่ต้องอ่าน = ทึบชัด */
+    #page-dashboard .dash-col .box-dark, #page-dashboard .dash-col .focus-card, #page-dashboard .sl-card { background: linear-gradient(165deg, #2A2A2E 0%, #141416 70%) !important; }
+    #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row {
+      background: rgba(255,255,255,.9) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    #top5-modal .msx-row:first-child { background: rgba(255,246,200,.95) !important; }
+    #top5-modal .dx-hero, #top5-modal .msx-hero { background: rgba(20,20,22,.94) !important; }
+    #top5-modal .modal-sheet > div:first-child h3 { display: inline-flex; align-self: flex-start; padding: 7px 14px; border-radius: 99px;
+      background: rgba(255,255,255,.85); box-shadow: inset 0 1px 0 #fff, 0 4px 14px -8px rgba(0,0,0,.4); }
+    #top5-modal .dx-legend { display: inline-flex; padding: 5px 12px; border-radius: 99px; background: rgba(255,255,255,.82); align-self: flex-start; }
+    /* แถบเมนูลอย = ฟองกระจก */
+    #page-dashboard.hmode .dash-nav {
+      background: linear-gradient(150deg, rgba(255,255,255,.42), rgba(255,255,255,.16)) !important; border: 0 !important;
+      -webkit-backdrop-filter: blur(10px) saturate(190%); backdrop-filter: blur(10px) saturate(190%);
+      box-shadow: inset 0 1.5px 1px rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.5), 0 14px 34px -14px rgba(60,40,0,.55) !important;
+      border-radius: 26px !important; }
+    .dash-nav button { transition: transform .5s cubic-bezier(.2,1.6,.4,1), background .3s, color .3s !important; }
+    .dash-nav button:active { transform: scale(.88); transition-duration: .1s !important; }
+
+    /* ===== 🤲 สัมผัส: นุ่ม หยุ่น สมูท ===== */
+    #page-dashboard .tap, #page-dashboard .pill-dark, #page-dashboard button { transition: transform .55s cubic-bezier(.2,1.6,.4,1); }
+    #page-dashboard .tap:active, #page-dashboard .pill-dark:active { transform: scale(.95); transition-duration: .12s; }
+    #page-dashboard .sl-card, #page-dashboard .staff-card { transition: transform .6s cubic-bezier(.2,1.5,.35,1), filter .3s !important; }
+    #page-dashboard .sl-card.lg-press, #page-dashboard .staff-card.lg-press { transform: scale(var(--px, .97), var(--py, .96)); transition-duration: .14s !important; filter: brightness(1.08); }
+    @media (hover: hover) { #page-dashboard .sl-card:hover, #page-dashboard .staff-card:hover { transform: translateY(-3px) scale(1.008); } }
+    #page-dashboard .hbody, #page-dashboard .dash-wrap { -webkit-overflow-scrolling: touch; }
+
     #page-dashboard .dash-col .grid-detail > .col-span-2 { background: transparent; }
     #page-dashboard .dash-col .grid-brand > div { background: rgba(255,255,255,0.06) !important; }
     /* เผื่อที่ให้เงาการ์ด ไม่ให้โดนตัดขอบคอลัมน์ */
@@ -1517,7 +1591,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-20';
+    const APP_VER = '2026.11.03-24';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2356,75 +2430,111 @@
     // 💧 Liquid Glass: จำจุดที่แตะล่าสุด → การ์ดป๊อปอัพ "งอก" ออกจากจุดนั้นแบบหยดน้ำ แล้วหดกลับที่เดิมตอนปิด
     let LG_PT = null;
     window.addEventListener('pointerdown', e => { LG_PT = { x: e.clientX, y: e.clientY, t: Date.now() }; }, true);
-    const LG_SPRING = 'cubic-bezier(.2, 1.28, .32, 1)';
-    function lgFrom(sheet) {
+    // ===== 💧 Liquid Glass จริง =====
+    // 1) หักเหแสงที่ขอบ (เลนส์): backdrop-filter + SVG displacement map ที่สร้างตามขนาดการ์ดพอดี · มีแยกสี R/G/B ให้ขอบเป็นรุ้งจางๆ
+    //    ใช้ได้บน Chrome / Brave / Edge (คอม, Legion Go, Android) · iPhone (Safari) ยังไม่รองรับ → เป็นกระจกฝ้าใสแทน
+    // 2) เด้งแบบของเหลว: การ์ดงอกจากจุดที่แตะด้วยสปริงจริง (กว้าง/สูงเด้งไม่พร้อมกัน = เหมือนเจลลี่)
+    const LG_CHROMIUM = /Chrome\/|Chromium\//.test(navigator.userAgent) && !/iPhone|iPad|iPod|CriOS|Firefox/i.test(navigator.userAgent);
+    let LG_MAP_KEY = '';
+    function lgRefractMap(w, h, rad) {
+      const W = Math.max(2, Math.round(w)), H = Math.max(2, Math.round(h)), E = Math.min(42, Math.min(W, H) * .12);
+      const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      const cx = cv.getContext('2d'), img = cx.createImageData(W, H), d = img.data;
+      const hx = W / 2, hy = H / 2, r = Math.min(rad, hx, hy);
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        const px = Math.abs(x + .5 - hx), py = Math.abs(y + .5 - hy), qx = px - (hx - r), qy = py - (hy - r);
+        let dist, nx = 0, ny = 0;
+        if (qx > 0 && qy > 0) { const L = Math.hypot(qx, qy) || 1; dist = r - L; nx = qx / L; ny = qy / L; }
+        else if (qx > qy) { dist = hx - px; nx = 1; } else { dist = hy - py; ny = 1; }
+        const k = (y * W + x) * 4;
+        let mag = 0;
+        if (dist < E) { const t = 1 - Math.max(0, dist) / E; mag = Math.pow(t, 1.7); }   // เข้าใกล้ขอบ = โค้งแรงขึ้น
+        const sx = x + .5 < hx ? -1 : 1, sy = y + .5 < hy ? -1 : 1;
+        d[k] = 128 + Math.round(-nx * sx * mag * 127); d[k + 1] = 128 + Math.round(-ny * sy * mag * 127); d[k + 2] = 128; d[k + 3] = 255;
+      }
+      cx.putImageData(img, 0, 0);
+      return { url: cv.toDataURL(), W, H };
+    }
+    function lgApplyRefraction(sheet) {
+      if (!LG_CHROMIUM) return;
+      const W = sheet.offsetWidth, H = sheet.offsetHeight, rad = parseFloat(getComputedStyle(sheet).borderTopLeftRadius) || 28;
+      const key = W + 'x' + H + 'r' + rad;
+      if (key !== LG_MAP_KEY) {
+        LG_MAP_KEY = key;
+        const m = lgRefractMap(W, H, rad);
+        let svg = document.getElementById('lg-svg');
+        if (!svg) { document.body.insertAdjacentHTML('beforeend', '<svg id="lg-svg" width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true"></svg>'); svg = document.getElementById('lg-svg'); }
+        const ch = (n, sc, mx) => `<feDisplacementMap in="SourceGraphic" in2="map" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="d${n}"/><feColorMatrix in="d${n}" type="matrix" values="${mx}" result="c${n}"/>`;
+        svg.innerHTML = `<filter id="lg-refract" x="0" y="0" width="${m.W}" height="${m.H}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+          <feImage href="${m.url}" x="0" y="0" width="${m.W}" height="${m.H}" result="map" preserveAspectRatio="none"/>
+          ${ch('r', 150, '1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0')}
+          ${ch('g', 140, '0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0')}
+          ${ch('b', 130, '0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0')}
+          <feBlend in="cr" in2="cg" mode="screen" result="rg"/><feBlend in="rg" in2="cb" mode="screen"/></filter>`;
+      }
+      sheet.classList.add('lg-refract');
+    }
+    // สปริงจริง (มวล-สปริง-หน่วง) → คีย์เฟรม
+    function lgSpring(z, w, n) { const out = []; for (let i = 0; i <= n; i++) { const t = i / n * 1.1, wd = w * Math.sqrt(1 - z * z); out.push(1 - Math.exp(-z * w * t) * (Math.cos(wd * t) + z * w / wd * Math.sin(wd * t))); } return out; }
+    function lgOrigin(sheet) {
       const r = sheet.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
       const p = LG_PT && Date.now() - LG_PT.t < 1500 ? LG_PT : { x: cx, y: innerHeight };
-      return { dx: p.x - cx, dy: p.y - cy, sx: Math.min(.35, 90 / Math.max(1, r.width)), sy: Math.min(.35, 70 / Math.max(1, r.height)) };
+      return { dx: p.x - cx, dy: p.y - cy, s0x: Math.min(.3, 70 / r.width), s0y: Math.min(.3, 70 / r.height) };
     }
-    // 💧 หยดน้ำ (Liquid morph): หยดเล็กหลุดออกจากจุดที่แตะ ยืดเป็นคอขวดแล้วขยายเป็นการ์ด — ใช้ฟิลเตอร์ "goo" ให้ขอบหลอมรวมเหมือนของเหลว
-    function lgStage() {
-      let st = document.getElementById('lg-stage');
-      if (st) return st;
-      document.body.insertAdjacentHTML('beforeend', `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lg-goo" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter></svg>
-        <div id="lg-stage"><i class="lg-dot"></i><i class="lg-blob"></i></div>`);
-      return document.getElementById('lg-stage');
-    }
-    function lgRects(sheet) {
-      const r = sheet.getBoundingClientRect();
-      const p = LG_PT && Date.now() - LG_PT.t < 1500 ? LG_PT : { x: r.left + r.width / 2, y: innerHeight - 20 };
-      return { r, p };
-    }
-    const lgBox = (x, y, w, h, rad) => ({ left: (x - w / 2) + 'px', top: (y - h / 2) + 'px', width: w + 'px', height: h + 'px', borderRadius: rad + 'px' });
     function lgOpen(sheet) {
+      lgApplyRefraction(sheet);
       if (REDUCED_MOTION || !sheet.animate) return;
-      const st = lgStage(), dot = st.querySelector('.lg-dot'), blob = st.querySelector('.lg-blob');
-      const { r, p } = lgRects(sheet), cx = r.left + r.width / 2, cy = r.top + r.height / 2; sheet._p = p;
-      const mx = p.x + (cx - p.x) * .45, my = p.y + (cy - p.y) * .45;
-      const ang = Math.atan2(cy - p.y, cx - p.x), dist = Math.hypot(cx - p.x, cy - p.y);
-      const st1 = Math.min(140, 50 + dist * .25);   // ความยาวตอนยืด
-      const along = (w, h) => Math.abs(Math.cos(ang)) > Math.abs(Math.sin(ang)) ? [h, w] : [w, h];
-      const [sw, sh] = along(46, st1);
-      st.style.display = 'block'; sheet.style.opacity = '0';
-      const D = 640;
-      dot.animate([Object.assign(lgBox(p.x, p.y, 54, 54, 27), { opacity: 1 }), Object.assign(lgBox(p.x, p.y, 40, 40, 20), { opacity: 1, offset: .3 }), Object.assign(lgBox(p.x, p.y, 4, 4, 2), { opacity: 0 })],
-        { duration: D * .55, easing: 'cubic-bezier(.5,0,.7,.3)', fill: 'forwards' });
-      const a = blob.animate([
-        Object.assign(lgBox(p.x, p.y, 40, 40, 20), { opacity: 1, easing: 'cubic-bezier(.45,0,.55,1)' }),
-        Object.assign(lgBox(mx, my, sw, sh, 40), { opacity: 1, offset: .38, easing: 'cubic-bezier(.2,.9,.25,1.08)' }),
-        Object.assign(lgBox(cx, cy, r.width * 1.03, r.height * .97, 34), { opacity: 1, offset: .78, easing: 'ease-out' }),
-        Object.assign(lgBox(cx, cy, r.width, r.height, 30), { opacity: 0 })
-      ], { duration: D + 80, easing: 'linear', fill: 'forwards' });
-      sheet.animate([{ opacity: 0, filter: 'blur(10px)', transform: 'scale(.97)', offset: 0 }, { opacity: 0, filter: 'blur(10px)', transform: 'scale(.97)', offset: .62 },
-        { opacity: 1, filter: 'blur(0px)', transform: 'scale(1.012)', offset: .85 }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }],
-        { duration: D + 120, easing: 'ease-out' });
-      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease-out' });
-      a.onfinish = () => { st.style.display = 'none'; sheet.style.opacity = ''; [dot, blob].forEach(x => x.getAnimations().forEach(y => y.cancel())); };
+      const o = lgOrigin(sheet); sheet._o = o;
+      const N = 36, pos = lgSpring(.82, 15, N), sx = lgSpring(.42, 13, N), sy = lgSpring(.5, 11, N);
+      const kf = pos.map((v, i) => {
+        const X = o.s0x + (1 - o.s0x) * sx[i], Y = o.s0y + (1 - o.s0y) * sy[i];
+        return { transform: `translate(${(o.dx * (1 - v)).toFixed(1)}px, ${(o.dy * (1 - v)).toFixed(1)}px) scale(${X.toFixed(4)}, ${Y.toFixed(4)})`,
+                 borderRadius: Math.round(30 + 60 * Math.max(0, 1 - sx[i])) + 'px', opacity: Math.min(1, i / 5), offset: i / N };
+      });
+      sheet.animate(kf, { duration: 820, easing: 'linear' });
+      const kids = sheet.querySelectorAll(':scope > *');
+      kids.forEach(k => k.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 0, offset: .3 }, { opacity: 1, transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)' }));
+      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: 'ease-out' });
     }
     function lgClose(sheet, done) {
       if (REDUCED_MOTION || !sheet.animate) return done();
-      const st = lgStage(), dot = st.querySelector('.lg-dot'), blob = st.querySelector('.lg-blob');
-      const R0 = lgRects(sheet), r = R0.r, p = sheet._p || R0.p, cx = r.left + r.width / 2, cy = r.top + r.height / 2;   // หดกลับไปที่จุดที่เปิดมา
-      const mx = p.x + (cx - p.x) * .5, my = p.y + (cy - p.y) * .5;
-      st.style.display = 'block';
-      const D = 460;
-      sheet.animate([{ opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(8px)', transform: 'scale(.97)' }], { duration: D * .35, fill: 'forwards' });
-      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: D, fill: 'forwards' });
-      dot.animate([Object.assign(lgBox(p.x, p.y, 4, 4, 2), { opacity: 0 }), Object.assign(lgBox(p.x, p.y, 4, 4, 2), { opacity: 0, offset: .5 }), Object.assign(lgBox(p.x, p.y, 46, 46, 23), { opacity: 1, offset: .85 }), Object.assign(lgBox(p.x, p.y, 0, 0, 0), { opacity: 0 })], { duration: D, fill: 'forwards' });
-      const a = blob.animate([
-        Object.assign(lgBox(cx, cy, r.width, r.height, 30), { opacity: 0 }),
-        Object.assign(lgBox(cx, cy, r.width * .92, r.height * .92, 34), { opacity: 1, offset: .2 }),
-        Object.assign(lgBox(mx, my, 60, 90, 40), { opacity: 1, offset: .62 }),
-        Object.assign(lgBox(p.x, p.y, 30, 30, 15), { opacity: 0 })
-      ], { duration: D, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
-      a.onfinish = () => {
-        st.style.display = 'none';
-        [dot, blob].forEach(x => x.getAnimations().forEach(y => y.cancel()));
-        sheet.getAnimations().forEach(y => y.cancel()); sheet.parentElement.getAnimations().forEach(y => y.cancel());
-        done();
-      };
+      const o = sheet._o || lgOrigin(sheet);
+      const a = sheet.animate([
+        { transform: 'none', opacity: 1, borderRadius: '30px' },
+        { transform: 'scale(1.03, .97)', opacity: 1, offset: .25 },
+        { transform: `translate(${o.dx}px, ${o.dy}px) scale(${o.s0x}, ${o.s0y})`, opacity: 0, borderRadius: '90px' }
+      ], { duration: 380, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
+      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, fill: 'forwards' });
+      a.onfinish = () => { a.cancel(); sheet.parentElement.getAnimations().forEach(x => x.cancel()); done(); };
     }
+    window.addEventListener('resize', () => { const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (sh) lgApplyRefraction(sh); setTimeout(lgPanelRefraction, 300); });
+    // 🫧 แผงกระจกหลังการ์ด: หักเหแสงที่ขอบ (Chrome / Brave / Edge)
+    function lgPanelRefraction() {
+      if (!LG_CHROMIUM) return;
+      const panels = [...document.querySelectorAll('#page-dashboard .dash-col.box-white')].filter(p => p.offsetWidth > 0);
+      if (!panels.length) return;
+      const W = Math.max(...panels.map(p => p.offsetWidth)), H = Math.max(...panels.map(p => p.offsetHeight));
+      const key = W + 'x' + H; if (lgPanelRefraction.k === key) { panels.forEach(p => p.classList.add('lg-refract')); return; }
+      lgPanelRefraction.k = key;
+      const m = lgRefractMap(W, H, 28);
+      let svg = document.getElementById('lg-svg2');
+      if (!svg) { document.body.insertAdjacentHTML('beforeend', '<svg id="lg-svg2" width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true"></svg>'); svg = document.getElementById('lg-svg2'); }
+      svg.innerHTML = `<filter id="lg-refract-panel" x="0" y="0" width="${m.W}" height="${m.H}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feImage href="${m.url}" x="0" y="0" width="${m.W}" height="${m.H}" result="map" preserveAspectRatio="none"/>
+        <feDisplacementMap in="SourceGraphic" in2="map" scale="90" xChannelSelector="R" yChannelSelector="G"/></filter>`;
+      panels.forEach(p => p.classList.add('lg-refract'));
+    }
+    // 🤲 กดการ์ด: ยุบแบบเจลลี่ตามจุดที่กด (กดขอบซ้าย = ยุบด้านซ้ายมากกว่า) แล้วเด้งกลับนุ่มๆ
+    document.addEventListener('pointerdown', e => {
+      const c = e.target.closest && e.target.closest('#page-dashboard .sl-card, #page-dashboard .staff-card'); if (!c) return;
+      const r = c.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
+      c.style.transformOrigin = `${(1 - fx) * 100}% ${(1 - fy) * 100}%`;
+      c.style.setProperty('--px', (.975 - Math.abs(fx - .5) * .03).toFixed(3)); c.style.setProperty('--py', (.965 - Math.abs(fy - .5) * .03).toFixed(3));
+      c.classList.add('lg-press');
+      const up = () => { c.classList.remove('lg-press'); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+      window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
+    }, true);
+
     // แสงสะท้อนบนกระจกไหลตามนิ้ว / เมาส์
     document.addEventListener('pointermove', e => {
       const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (!sh) return;
@@ -4341,6 +4451,7 @@
         hAfterRender();
         animateDashboard();
         [1200, 3500].forEach(t => setTimeout(hHeal, t));
+        setTimeout(lgPanelRefraction, 400);
 
       }).getDashboardData(currentUser.role, currentUser.empId);
     }
