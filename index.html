@@ -709,6 +709,22 @@
     #top5-modal .modal-sheet.lg-moving { -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
       background: linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.04) 50%, rgba(255,255,255,.1)) !important; }
     #top5-modal .modal-sheet.lg-moving > * { will-change: transform, opacity; }
+
+    /* ✨ คลื่นน้ำ + แสงวิ่งผ่านกระจก */
+    .lg-ripple { position: fixed; z-index: 70; width: 90px; height: 90px; border-radius: 50%; pointer-events: none;
+      background: radial-gradient(circle, rgba(255,255,255,0) 45%, rgba(255,255,255,.75) 62%, rgba(255,255,255,.15) 70%, rgba(255,255,255,0) 74%); }
+    .lg-shine { position: absolute; top: -10%; bottom: -10%; left: 0; width: 38%; pointer-events: none; z-index: 4;
+      background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.55) 50%, rgba(255,255,255,0)); mix-blend-mode: soft-light; }
+    /* 👉 ตัวเปลี่ยนหน้าในการ์ด */
+    .dx-pager { display: flex; align-items: center; justify-content: center; gap: 12px; padding-top: 12px; position: relative; z-index: 2; }
+    .dx-arr { width: 36px; height: 36px; border-radius: 50%; border: 0; font: 800 20px/1 system-ui; color: #1C1C1E; cursor: pointer;
+      background: rgba(255,255,255,.82); box-shadow: inset 0 1px 0 #fff, 0 4px 12px -6px rgba(0,0,0,.35); transition: transform .45s cubic-bezier(.2,1.6,.4,1); }
+    .dx-arr:active { transform: scale(.85); transition-duration: .1s; }
+    .dx-arr:disabled { opacity: .3; }
+    .dx-dots { display: flex; gap: 6px; padding: 7px 10px; border-radius: 99px; background: rgba(255,255,255,.7); }
+    .dx-dots i { width: 7px; height: 7px; border-radius: 99px; background: rgba(28,28,30,.25); cursor: pointer; transition: width .45s cubic-bezier(.2,1.4,.4,1), background .3s; }
+    .dx-dots i.on { width: 22px; background: #1C1C1E; }
+    #top5-list { touch-action: pan-y; will-change: transform; }
     #top5-modal.closing { opacity: 1 !important; }
     #top5-modal.closing .modal-sheet { animation: none !important; }
     #top5-modal .modal-sheet > div:first-child { border-color: rgba(255,255,255,.55) !important; }
@@ -1600,7 +1616,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-28';
+    const APP_VER = '2026.11.03-29';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2438,7 +2454,7 @@
 
     // 💧 Liquid Glass: จำจุดที่แตะล่าสุด → การ์ดป๊อปอัพ "งอก" ออกจากจุดนั้นแบบหยดน้ำ แล้วหดกลับที่เดิมตอนปิด
     let LG_PT = null;
-    window.addEventListener('pointerdown', e => { LG_PT = { x: e.clientX, y: e.clientY, t: Date.now() }; }, true);
+    window.addEventListener('pointerdown', e => { LG_PT = { x: e.clientX, y: e.clientY, t: Date.now(), el: e.target.closest && e.target.closest('.sl-card, .staff-card, .att-tile, .ds-share, .box-dark, .tile, .dx-stats > div') }; }, true);
     // ===== 💧 Liquid Glass จริง =====
     // 1) หักเหแสงที่ขอบ (เลนส์): backdrop-filter + SVG displacement map ที่สร้างตามขนาดการ์ดพอดี · มีแยกสี R/G/B ให้ขอบเป็นรุ้งจางๆ
     //    ใช้ได้บน Chrome / Brave / Edge (คอม, Legion Go, Android) · iPhone (Safari) ยังไม่รองรับ → เป็นกระจกฝ้าใสแทน
@@ -2488,7 +2504,9 @@
     function lgOrigin(sheet) {
       const r = sheet.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
       const p = LG_PT && Date.now() - LG_PT.t < 1500 ? LG_PT : { x: cx, y: innerHeight };
-      return { dx: p.x - cx, dy: p.y - cy, s0x: Math.min(.3, 70 / r.width), s0y: Math.min(.3, 70 / r.height) };
+      const el = p.el && p.el.isConnected ? p.el.getBoundingClientRect() : null;
+      if (el && el.width > 20) return { dx: el.left + el.width / 2 - cx, dy: el.top + el.height / 2 - cy, s0x: el.width / r.width, s0y: el.height / r.height, card: p.el, px: p.x, py: p.y };
+      return { dx: p.x - cx, dy: p.y - cy, s0x: Math.min(.3, 70 / r.width), s0y: Math.min(.3, 70 / r.height), px: p.x, py: p.y };
     }
     function lgOpen(sheet) {
       sheet.classList.remove('lg-refract');   // ระหว่างเคลื่อนไหวไม่หักเห (หนักเครื่อง) → ใส่ตอนนิ่งแล้ว
@@ -2504,9 +2522,23 @@
                  opacity: Math.min(1, i / 5), offset: i / N };
       });
       sheet.animate(kf, { duration: 1250, easing: 'linear' });
+      lgFx(sheet, o);
       const kids = sheet.querySelectorAll(':scope > *');
       kids.forEach((k, i) => k.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 0, transform: 'translateY(10px)', offset: .35 }, { opacity: 1, transform: 'none' }], { duration: 900 + i * 80, easing: 'cubic-bezier(.25,.8,.25,1)' }));
       sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, easing: 'ease-out' });
+    }
+    // ✨ เอฟเฟกต์ตอนเลือก: คลื่นน้ำกระจายจากจุดที่แตะ + การ์ดต้นทางยุบลงเหมือนถูกดูดเข้าแก้ว + แสงวิ่งผ่านกระจก
+    function lgFx(sheet, o) {
+      if (o.px != null) {
+        const rp = document.createElement('i'); rp.className = 'lg-ripple'; rp.style.left = o.px + 'px'; rp.style.top = o.py + 'px';
+        document.body.appendChild(rp);
+        rp.animate([{ transform: 'translate(-50%,-50%) scale(.2)', opacity: .95 }, { transform: 'translate(-50%,-50%) scale(5)', opacity: 0 }], { duration: 900, easing: 'cubic-bezier(.2,.7,.3,1)' }).onfinish = () => rp.remove();
+      }
+      if (o.card && o.card.animate) {
+        o.card.animate([{ transform: 'none', opacity: 1 }, { transform: 'scale(.94)', opacity: .35, offset: .3 }, { transform: 'none', opacity: 1 }], { duration: 1100, easing: 'cubic-bezier(.3,.7,.3,1)' });
+      }
+      const sh = document.createElement('i'); sh.className = 'lg-shine'; sheet.appendChild(sh);
+      sh.animate([{ transform: 'translateX(-120%) skewX(-18deg)', opacity: 0 }, { opacity: .9, offset: .4 }, { transform: 'translateX(260%) skewX(-18deg)', opacity: 0 }], { duration: 1300, delay: 250, easing: 'cubic-bezier(.4,0,.2,1)' }).onfinish = () => sh.remove();
     }
     function lgClose(sheet, done) {
       sheet.classList.remove('lg-refract');
@@ -2571,9 +2603,65 @@
       modal.classList.remove('hidden');
       const sheet = modal.querySelector('.modal-sheet');
       sheet.getAnimations && sheet.getAnimations().forEach(a => a.cancel());
+      if (DX_NAV) { DX_NAV = false; dxPager(); return; }
+      DX_CTX = DX_NEXT; DX_NEXT = null; dxPager();
       sheet.style.setProperty('--lx', '30%'); sheet.style.setProperty('--ly', '0%');
       lgOpen(sheet);
     }
+    // ===== 👉 ปัดซ้าย-ขวาในการ์ดรายละเอียด = ดูงาน / แคทถัดไป (ไม่ต้องปิดแล้วเปิดใหม่) =====
+    let DX_CTX = null, DX_NEXT = null, DX_NAV = false;
+    function dxList(t) { const d = lastDashboardData || {}; return t === 'focus' ? (d.focus || []).map((_, i) => i) : (d.categories || []).map(c => c.name); }
+    function dxPager() {
+      const sheet = document.querySelector('#top5-modal .modal-sheet');
+      let pg = sheet.querySelector('.dx-pager'); if (pg) pg.remove();
+      if (!DX_CTX) return;
+      const L = dxList(DX_CTX.t), i = L.indexOf(DX_CTX.k); if (L.length < 2 || i < 0) return;
+      const names = DX_CTX.t === 'focus' ? (lastDashboardData.focus || []).map(f => f.name) : L;
+      sheet.insertAdjacentHTML('beforeend', `<div class="dx-pager"><button class="dx-arr" onclick="dxGo(-1)" ${i ? '' : 'disabled'} aria-label="ก่อนหน้า">‹</button>
+        <div class="dx-dots">${L.map((_, j) => `<i class="${j === i ? 'on' : ''}" title="${saEsc ? saEsc(names[j]) : ''}" onclick="dxGo(${j - i})"></i>`).join('')}</div>
+        <button class="dx-arr" onclick="dxGo(1)" ${i < L.length - 1 ? '' : 'disabled'} aria-label="ถัดไป">›</button></div>`);
+    }
+    function dxGo(d) {
+      if (!DX_CTX || !d) return;
+      const L = dxList(DX_CTX.t), i = L.indexOf(DX_CTX.k), j = i + d; if (j < 0 || j >= L.length) return dxBump(d);
+      const list = document.getElementById('top5-list'), title = document.getElementById('top5-title'), dir = d > 0 ? 1 : -1;
+      haptic(6);
+      const out = list.animate([{ transform: 'none', opacity: 1, filter: 'blur(0)' }, { transform: `translateX(${-dir * 60}px) scaleX(.96)`, opacity: 0, filter: 'blur(6px)' }], { duration: 200, easing: 'cubic-bezier(.4,0,1,1)' });
+      title.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180 });
+      out.onfinish = () => {
+        DX_NAV = true; DX_CTX = { t: DX_CTX.t, k: L[j] };
+        if (DX_CTX.t === 'focus') openFocusDetail(L[j]); else openCatDetail(L[j]);
+        list.animate([{ transform: `translateX(${dir * 70}px) scaleX(1.04)`, opacity: 0, filter: 'blur(6px)' }, { transform: `translateX(${-dir * 6}px) scaleX(.995)`, opacity: 1, filter: 'blur(0)', offset: .7 }, { transform: 'none', opacity: 1 }], { duration: 520, easing: 'cubic-bezier(.2,.9,.25,1)' });
+        title.animate([{ opacity: 0, transform: `translateX(${dir * 20}px)` }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'ease-out' });
+        const sheet = document.querySelector('#top5-modal .modal-sheet');
+        sheet.animate([{ transform: 'none' }, { transform: `skewX(${-dir * 1.2}deg) scale(1.006, .996)`, offset: .35 }, { transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.3,.9,.3,1)' });
+      };
+    }
+    function dxBump(d) {   // สุดรายการ = ยางยืดเด้งกลับ
+      document.querySelector('#top5-modal .modal-sheet').animate([{ transform: 'none' }, { transform: `translateX(${-d * 18}px) scaleX(.99)` }, { transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.3,1.6,.4,1)' });
+    }
+    (function dxSwipe() {
+      let st = null;
+      document.addEventListener('pointerdown', e => {
+        const sh = e.target.closest && e.target.closest('#top5-modal:not(.hidden) .modal-sheet'); if (!sh || !DX_CTX || e.target.closest('button, canvas')) return;
+        st = { x: e.clientX, y: e.clientY, id: e.pointerId, t: Date.now() };
+      });
+      document.addEventListener('pointermove', e => {
+        if (!st || e.pointerId !== st.id) return;
+        const dx = e.clientX - st.x, dy = e.clientY - st.y;
+        if (Math.abs(dy) > Math.abs(dx) * 1.2 && Math.abs(dy) > 12) { st = null; document.getElementById('top5-list').style.transform = ''; return; }
+        if (Math.abs(dx) > 6) document.getElementById('top5-list').style.transform = `translateX(${dx * .35}px)`;   // ลากตามนิ้วแบบหนืดๆ
+      }, { passive: true });
+      const end = e => {
+        if (!st || e.pointerId !== st.id) return;
+        const dx = e.clientX - st.x, fast = Math.abs(dx) / Math.max(1, Date.now() - st.t) > .5; st = null;
+        const l = document.getElementById('top5-list'); l.style.transform = '';
+        if (Math.abs(dx) > 70 || (fast && Math.abs(dx) > 30)) dxGo(dx < 0 ? 1 : -1);
+        else if (Math.abs(dx) > 6) l.animate([{ transform: `translateX(${dx * .35}px)` }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.3,1.5,.4,1)' });
+      };
+      document.addEventListener('pointerup', end); document.addEventListener('pointercancel', end);
+      document.addEventListener('keydown', e => { if (!DX_CTX || document.getElementById('top5-modal').classList.contains('hidden')) return; if (e.key === 'ArrowRight') dxGo(1); if (e.key === 'ArrowLeft') dxGo(-1); });
+    })()
     function showTop5(title, items) {
       let html = '';
       if(!items || items.length === 0) {
@@ -2667,6 +2755,7 @@
           <div class="dx-chart"><canvas id="dx-canvas"></canvas></div>${dxStatsHTML(fd.c, fmtUnit, 'ยอด')}`;
       } else html += '<div class="dx-top text-center text-xs text-zinc-400 py-6">ยังไม่มีข้อมูลรายวัน — กด 🔄 อัปเดตข้อมูล ใน Google Sheet 1 รอบ</div>';
       html += '</section></div>';
+      if (!DX_NAV) DX_NEXT = { t: 'focus', k: i };
       openModal('🎯 ' + f.name, html, 'ms-wide');
       if (!fd) return;
       let cc = 0, cb = 0;
@@ -2706,6 +2795,7 @@
           <div class="dx-chart"><canvas id="dx-canvas"></canvas></div>${dxStatsHTML(a, fmt, 'ยอด')}`;
       else html += '<div class="dx-top text-center text-xs text-zinc-400 py-6">ยังไม่มีข้อมูลรายวัน — กด 🔄 อัปเดตข้อมูล ใน Google Sheet 1 รอบ</div>';
       html += `<div class="dx-top"><h5>🏆 Top 5 สินค้าขายดี</h5>${top.length ? top.map((t, i) => `<div class="r"><span>${i + 1}. ${t.name}</span><b>${fmt(name === 'SIM CARD' ? t.unit : t.revenue)}${name === 'SIM CARD' ? '' : ' · ' + fmtUnit(t.unit) + ' ชิ้น'}</b></div>`).join('') : '<div class="text-xs text-zinc-400">ยังไม่มีข้อมูล</div>'}</div></section></div>`;
+      if (!DX_NAV) DX_NEXT = { t: 'cat', k: name };
       openModal('📊 ' + name, html, 'ms-wide');
       if (!a) return;
       let s = 0;
@@ -2726,7 +2816,7 @@
       if (m.classList.contains('hidden') || m.classList.contains('closing')) return;
       m.classList.add('closing');
       lgClose(m.querySelector('.modal-sheet'), () => {
-        m.classList.add('hidden'); m.classList.remove('closing');
+        m.classList.add('hidden'); m.classList.remove('closing'); DX_CTX = null;
         if (msChart) { msChart.destroy(); msChart = null; }
         if (dxChart) { dxChart.destroy(); dxChart = null; }
       });
