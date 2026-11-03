@@ -665,7 +665,7 @@
       background:
         radial-gradient(380px circle at var(--lx) var(--ly), rgba(255,255,255,.4), rgba(255,255,255,0) 60%),
         linear-gradient(150deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,.14) 50%, rgba(255,255,255,.26) 100%) !important;
-      -webkit-backdrop-filter: blur(14px) saturate(190%) brightness(1.04); backdrop-filter: blur(14px) saturate(190%) brightness(1.04); }
+      -webkit-backdrop-filter: blur(10px) saturate(170%); backdrop-filter: blur(10px) saturate(170%); }
     #top5-modal .modal-sheet.lg-refract { backdrop-filter: url(#lg-refract) blur(1.2px) saturate(170%) brightness(1.04);
       background: radial-gradient(380px circle at var(--lx) var(--ly), rgba(255,255,255,.28), rgba(255,255,255,0) 60%), linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.04) 50%, rgba(255,255,255,.12)) !important; }
     #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row {
@@ -703,6 +703,11 @@
       #top5-modal .modal-sheet { border-radius: 40px !important; max-height: 84vh !important; padding-bottom: 18px !important; }
       #top5-modal .modal-sheet::before { display: none !important; }
     }
+
+    /* ⚡ ระหว่างเด้งเปิด/ปิด: ปิดเบลอกระจกชั่วคราว (Chrome ต้องวาดเบลอใหม่ทุกเฟรมตอนการ์ดย่อ/ขยาย = กระตุก) แล้วค่อยเฟดเบลอกลับตอนนิ่ง */
+    #top5-modal .modal-sheet.lg-moving { -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+      background: linear-gradient(150deg, rgba(250,250,252,.93), rgba(244,244,248,.9)) !important; }
+    #top5-modal .modal-sheet.lg-moving > * { will-change: transform, opacity; }
     #top5-modal.closing { opacity: 1 !important; }
     #top5-modal.closing .modal-sheet { animation: none !important; }
     #top5-modal .modal-sheet > div:first-child { border-color: rgba(255,255,255,.55) !important; }
@@ -751,7 +756,7 @@
       box-shadow: 0 14px 26px -16px rgba(40,30,0,0.65), inset 0 1px 0 rgba(255,255,255,0.07) !important;
       transition: transform .45s var(--spring), box-shadow .3s;
     }
-    @media (hover: hover) {
+    @media (hover: hover) and (pointer: fine) {
       #page-dashboard .dash-col .box-dark:hover, #page-dashboard .dash-col .focus-card:hover {
         transform: translateY(-2px);
         box-shadow: 0 20px 32px -16px rgba(40,30,0,0.7), inset 0 1px 0 rgba(255,255,255,0.08) !important;
@@ -764,22 +769,23 @@
         radial-gradient(38vw 38vw at 12% 18%, rgba(255,250,210,.85), rgba(255,250,210,0) 70%),
         radial-gradient(42vw 42vw at 88% 82%, rgba(255,170,0,.55), rgba(255,170,0,0) 70%),
         radial-gradient(30vw 30vw at 70% 8%, rgba(255,236,120,.7), rgba(255,236,120,0) 70%),
-        #FFD600 !important; background-attachment: fixed !important; }
+        #FFD600 !important; background-attachment: scroll !important; }
     /* แผงกระจก = ใสจริง (เห็นแสงข้างหลัง) + ขอบสะท้อนแสงไล่ระดับ */
     #page-dashboard .dash-col.box-white {
       background: linear-gradient(150deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.08) 45%, rgba(255,255,255,.18) 100%) !important;
       border: 0 !important;
-      -webkit-backdrop-filter: blur(6px) saturate(170%) brightness(1.04); backdrop-filter: blur(6px) saturate(170%) brightness(1.04);
+      -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
       box-shadow: inset 0 1.5px 1px rgba(255,255,255,.95), inset 1.5px 0 1px rgba(255,255,255,.55),
         inset 0 -1.5px 1px rgba(255,255,255,.45), inset -1.5px 0 1px rgba(255,255,255,.3),
         inset 0 0 40px rgba(255,255,255,.18) !important; }
-    #page-dashboard .dash-col.box-white.lg-refract { backdrop-filter: url(#lg-refract-panel) blur(4px) saturate(170%) brightness(1.04); }
     /* ของที่ต้องอ่าน = ทึบชัด */
     #page-dashboard .dash-col .box-dark, #page-dashboard .dash-col .focus-card, #page-dashboard .sl-card { background: linear-gradient(165deg, #2A2A2E 0%, #141416 70%) !important; }
     #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row {
       background: rgba(255,255,255,.9) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
     #top5-modal .msx-row:first-child { background: rgba(255,246,200,.95) !important; }
     #top5-modal .dx-hero, #top5-modal .msx-hero { background: rgba(20,20,22,.94) !important; }
+    #top5-modal .dx-hero, #top5-modal .msx-hero, #top5-modal .modal-sheet > div:first-child button { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+    #top5-modal .modal-sheet > div:first-child button { background: rgba(255,255,255,.8) !important; }
     #top5-modal .modal-sheet > div:first-child h3 { display: inline-flex; align-self: flex-start; padding: 7px 14px; border-radius: 99px;
       background: rgba(255,255,255,.85); box-shadow: inset 0 1px 0 #fff, 0 4px 14px -8px rgba(0,0,0,.4); }
     #top5-modal .dx-legend { display: inline-flex; padding: 5px 12px; border-radius: 99px; background: rgba(255,255,255,.82); align-self: flex-start; }
@@ -795,9 +801,11 @@
     /* ===== 🤲 สัมผัส: นุ่ม หยุ่น สมูท ===== */
     #page-dashboard .tap, #page-dashboard .pill-dark, #page-dashboard button { transition: transform .55s cubic-bezier(.2,1.6,.4,1); }
     #page-dashboard .tap:active, #page-dashboard .pill-dark:active { transform: scale(.95); transition-duration: .12s; }
-    #page-dashboard .sl-card, #page-dashboard .staff-card { transition: transform .6s cubic-bezier(.2,1.5,.35,1), filter .3s !important; }
-    #page-dashboard .sl-card.lg-press, #page-dashboard .staff-card.lg-press { transform: scale(var(--px, .97), var(--py, .96)); transition-duration: .14s !important; filter: brightness(1.08); }
-    @media (hover: hover) { #page-dashboard .sl-card:hover, #page-dashboard .staff-card:hover { transform: translateY(-3px) scale(1.008); } }
+    #page-dashboard .sl-card, #page-dashboard .staff-card { transition: transform .6s cubic-bezier(.2,1.5,.35,1) !important; }
+    #page-dashboard.hmode .dash-wrap.grabbing .sl-card, #page-dashboard.hmode .dash-wrap.grabbing .staff-card { transform: none !important; transition: none !important; }
+    #page-dashboard .sl-card.lg-press, #page-dashboard .staff-card.lg-press { transform: scale(var(--px, .97), var(--py, .96)); transition-duration: .14s !important; }
+    @media (hover: hover) and (pointer: fine) { #page-dashboard .sl-card:hover, #page-dashboard .staff-card:hover { transform: translateY(-3px); } }
+    #page-dashboard .sl-card, #page-dashboard .staff-card { backface-visibility: hidden; }
     #page-dashboard .hbody, #page-dashboard .dash-wrap { -webkit-overflow-scrolling: touch; }
 
     #page-dashboard .dash-col .grid-detail > .col-span-2 { background: transparent; }
@@ -1591,7 +1599,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-24';
+    const APP_VER = '2026.11.03-27';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2482,14 +2490,17 @@
       return { dx: p.x - cx, dy: p.y - cy, s0x: Math.min(.3, 70 / r.width), s0y: Math.min(.3, 70 / r.height) };
     }
     function lgOpen(sheet) {
-      lgApplyRefraction(sheet);
-      if (REDUCED_MOTION || !sheet.animate) return;
+      sheet.classList.remove('lg-refract');   // ระหว่างเคลื่อนไหวไม่หักเห (หนักเครื่อง) → ใส่ตอนนิ่งแล้ว
+      const settle = () => (window.requestIdleCallback || setTimeout)(() => { if (!document.getElementById('top5-modal').classList.contains('hidden')) lgApplyRefraction(sheet); }, { timeout: 300 });
+      if (REDUCED_MOTION || !sheet.animate) { settle(); return; }
+      sheet.classList.add('lg-moving');
+      setTimeout(() => { sheet.classList.remove('lg-moving'); settle(); }, 840);
       const o = lgOrigin(sheet); sheet._o = o;
       const N = 36, pos = lgSpring(.82, 15, N), sx = lgSpring(.42, 13, N), sy = lgSpring(.5, 11, N);
       const kf = pos.map((v, i) => {
         const X = o.s0x + (1 - o.s0x) * sx[i], Y = o.s0y + (1 - o.s0y) * sy[i];
         return { transform: `translate(${(o.dx * (1 - v)).toFixed(1)}px, ${(o.dy * (1 - v)).toFixed(1)}px) scale(${X.toFixed(4)}, ${Y.toFixed(4)})`,
-                 borderRadius: Math.round(30 + 60 * Math.max(0, 1 - sx[i])) + 'px', opacity: Math.min(1, i / 5), offset: i / N };
+                 opacity: Math.min(1, i / 5), offset: i / N };
       });
       sheet.animate(kf, { duration: 820, easing: 'linear' });
       const kids = sheet.querySelectorAll(':scope > *');
@@ -2497,17 +2508,19 @@
       sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: 'ease-out' });
     }
     function lgClose(sheet, done) {
+      sheet.classList.remove('lg-refract');
       if (REDUCED_MOTION || !sheet.animate) return done();
+      sheet.classList.add('lg-moving');
       const o = sheet._o || lgOrigin(sheet);
       const a = sheet.animate([
-        { transform: 'none', opacity: 1, borderRadius: '30px' },
+        { transform: 'none', opacity: 1 },
         { transform: 'scale(1.03, .97)', opacity: 1, offset: .25 },
-        { transform: `translate(${o.dx}px, ${o.dy}px) scale(${o.s0x}, ${o.s0y})`, opacity: 0, borderRadius: '90px' }
+        { transform: `translate(${o.dx}px, ${o.dy}px) scale(${o.s0x}, ${o.s0y})`, opacity: 0 }
       ], { duration: 380, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
       sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, fill: 'forwards' });
-      a.onfinish = () => { a.cancel(); sheet.parentElement.getAnimations().forEach(x => x.cancel()); done(); };
+      a.onfinish = () => { a.cancel(); sheet.classList.remove('lg-moving'); sheet.parentElement.getAnimations().forEach(x => x.cancel()); done(); };
     }
-    window.addEventListener('resize', () => { const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (sh) lgApplyRefraction(sh); setTimeout(lgPanelRefraction, 300); });
+    window.addEventListener('resize', () => { const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (sh) lgApplyRefraction(sh); });
     // 🫧 แผงกระจกหลังการ์ด: หักเหแสงที่ขอบ (Chrome / Brave / Edge)
     function lgPanelRefraction() {
       if (!LG_CHROMIUM) return;
@@ -2530,14 +2543,19 @@
       const r = c.getBoundingClientRect(), fx = (e.clientX - r.left) / r.width, fy = (e.clientY - r.top) / r.height;
       c.style.transformOrigin = `${(1 - fx) * 100}% ${(1 - fy) * 100}%`;
       c.style.setProperty('--px', (.975 - Math.abs(fx - .5) * .03).toFixed(3)); c.style.setProperty('--py', (.965 - Math.abs(fy - .5) * .03).toFixed(3));
-      c.classList.add('lg-press');
-      const up = () => { c.classList.remove('lg-press'); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
+      const sx0 = e.clientX, sy0 = e.clientY;
+      const tm = setTimeout(() => c.classList.add('lg-press'), 70);   // ปัดหน้า = ไม่ยุบการ์ด (ยุบเฉพาะกดจริง)
+      const mv = ev => { if (Math.abs(ev.clientX - sx0) + Math.abs(ev.clientY - sy0) > 8) { clearTimeout(tm); c.classList.remove('lg-press'); } };
+      window.addEventListener('pointermove', mv, { passive: true });
+      const up = () => { clearTimeout(tm); window.removeEventListener('pointermove', mv); setTimeout(() => c.classList.remove('lg-press'), c.classList.contains('lg-press') ? 90 : 0); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); };
       window.addEventListener('pointerup', up); window.addEventListener('pointercancel', up);
     }, true);
 
     // แสงสะท้อนบนกระจกไหลตามนิ้ว / เมาส์
+    let LG_MV = 0;
     document.addEventListener('pointermove', e => {
-      const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (!sh) return;
+      if (LG_MV) return; LG_MV = requestAnimationFrame(() => { LG_MV = 0; });
+      const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet:not(.lg-moving)'); if (!sh) return;
       const r = sh.getBoundingClientRect();
       sh.style.setProperty('--lx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
       sh.style.setProperty('--ly', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
@@ -3200,6 +3218,7 @@
       haptic(6);
     }
     function buildDashNav() {
+      hMarkNav.pos = null;
       const nav = document.getElementById('dash-nav');
       let html = '';
       NAV_ITEMS.forEach(n => {
@@ -3223,14 +3242,18 @@
       if (!btns.length) return;
       let cur = btns[0];
       const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 4;
-      btns.forEach(b => { if (hX(document.getElementById(b.dataset.go)) - 16 <= wrap.scrollLeft + 60) cur = b; });
+      // ตำแหน่งแผงเก็บไว้ (อ่านครั้งเดียว) — ไม่วัดใหม่ทุกเฟรมตอนปัด (วัดทุกเฟรม = บังคับคำนวณหน้าใหม่ = กระตุก)
+      if (!hMarkNav.pos || hMarkNav.pos.length !== btns.length) hMarkNav.pos = [...btns].map(b => hX(document.getElementById(b.dataset.go)));
+      btns.forEach((b, i) => { if (hMarkNav.pos[i] - 16 <= wrap.scrollLeft + 60) cur = b; });
       if (atEnd) cur = btns[btns.length - 1];
       btns.forEach(b => b.classList.toggle('on', b === cur));
     }
 
     (function initHScroll() {
       const wrap = dashWrap();
-      wrap.addEventListener('scroll', () => { if (dashPage().classList.contains('hmode')) hMarkNav(); }, { passive: true });
+      let navRaf = 0;
+      wrap.addEventListener('scroll', () => { if (navRaf || !dashPage().classList.contains('hmode')) return; navRaf = requestAnimationFrame(() => { navRaf = 0; hMarkNav(); }); }, { passive: true });
+      window.addEventListener('resize', () => { hMarkNav.pos = null; });
       // ลูกกลิ้งเมาส์ขึ้น-ลง = เลื่อนซ้าย-ขวา
       wrap.addEventListener('wheel', e => {
         if (!dashPage().classList.contains('hmode') || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
@@ -4451,7 +4474,6 @@
         hAfterRender();
         animateDashboard();
         [1200, 3500].forEach(t => setTimeout(hHeal, t));
-        setTimeout(lgPanelRefraction, 400);
 
       }).getDashboardData(currentUser.role, currentUser.empId);
     }
