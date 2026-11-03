@@ -187,6 +187,44 @@
     #page-dashboard.hmode .dash-bottom .ds-share { grid-column: span 2; }
     #page-dashboard.hmode .dash-bottom .box-white:not(.ds-share) { justify-content: flex-start; min-height: 112px; }
 
+
+    /* ===== 📈 กราฟรายวันในการ์ด + การ์ดรายละเอียด ===== */
+    .spark { position: relative; height: 46px; margin: 10px 0 2px; display: flex; flex-direction: column; }
+    .spark svg { display: block; width: 100%; flex: 1 1 auto; min-height: 30px; overflow: visible; }
+    .spark .sp-cap { display: flex; justify-content: space-between; font-size: 9px; font-weight: 700; color: #8E8E93; margin-top: 3px; letter-spacing: .2px; }
+    .spark .sp-cap b { color: #E5E5EA; font-family: var(--f-num, 'Space Grotesk'), sans-serif; }
+    .hgrid.stretch > .focus-card .spark, .hgrid.stretch > .cm-card .spark { flex: 1 1 auto; height: auto; min-height: 56px; max-height: 230px; margin-top: auto; }
+    .focus-card.tap, .cm-card { cursor: pointer; }
+    .dx { display: grid; gap: 14px; }
+    @media (min-width: 760px) { .dx { grid-template-columns: 280px minmax(0, 1fr); align-items: stretch; } }
+    .dx-hero { background: #1C1C1E; color: #fff; border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 12px; position: relative; overflow: hidden; }
+    .dx-hero::before { content: ''; position: absolute; inset: -40% -30% auto auto; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255,214,0,.25), transparent 65%); pointer-events: none; }
+    .dx-kick { font-size: 11px; font-weight: 800; letter-spacing: .4px; color: #FFD600; text-transform: uppercase; }
+    .dx-big { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 46px; font-weight: 800; line-height: 1; letter-spacing: -1px; }
+    .dx-big small { font-size: 16px; color: rgba(255,255,255,.55); margin-left: 6px; letter-spacing: 0; }
+    .dx-sub { font-size: 12px; color: rgba(255,255,255,.6); font-weight: 600; }
+    .dx-bar { height: 10px; border-radius: 99px; background: rgba(255,255,255,.1); overflow: hidden; position: relative; }
+    .dx-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; transform-origin: left; animation: msxGrow 1s var(--ios-ease, ease) both; }
+    .dx-bar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #fff; opacity: .8; }
+    .dx-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .dx-kpis > div { background: rgba(255,255,255,.07); border-radius: 14px; padding: 9px 11px; }
+    .dx-kpis small { display: block; font-size: 10px; color: rgba(255,255,255,.5); font-weight: 700; }
+    .dx-kpis b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 17px; }
+    .dx-main { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .dx-chart { position: relative; height: 270px; background: #F7F7F9; border-radius: 20px; padding: 12px 10px 6px; }
+    .dx-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 10.5px; color: #6E6E73; font-weight: 700; }
+    .dx-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .dx-legend i { display: inline-block; width: 12px; height: 8px; border-radius: 3px; }
+    .dx-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+    .dx-stats > div { background: #F7F7F9; border-radius: 16px; padding: 10px 12px; }
+    .dx-stats small { display: block; font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .dx-stats b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 17px; color: #1C1C1E; }
+    .dx-top { background: #F7F7F9; border-radius: 18px; padding: 10px 12px; }
+    .dx-top h5 { margin: 0 0 6px; font-size: 12px; font-weight: 800; color: #1C1C1E; }
+    .dx-top .r { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; padding: 5px 0; border-top: 1px solid #ECECF0; }
+    .dx-top .r:first-of-type { border-top: 0; }
+    .dx-top .r span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #3A3A3C; }
+    .dx-top .r b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; white-space: nowrap; }
     /* ===== Market Share — แนวนอน ===== */
     .modal-sheet.ms-wide { max-width: 980px; max-height: 92vh; padding: 16px; }
     .msx { display: grid; gap: 14px; }
@@ -1381,7 +1419,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-4';
+    const APP_VER = '2026.11.03-5';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2093,6 +2131,7 @@
           el.removeEventListener('animationend', done);
         };
         el.addEventListener('animationend', done);
+        setTimeout(() => { if (el.classList.contains(cls)) { el.classList.remove(cls); el.style.removeProperty('--d'); } }, Math.min(base + i * step, maxDelay) + 1500);   // กันค้างโปร่งใส ถ้า animationend ไม่มา
       });
     }
 
@@ -2148,8 +2187,8 @@
       return `<div class="focus-bar cm-bar"><i data-w="${Math.min(100, Math.max(0, k.ach)).toFixed(1)}" style="background:${k.col}"></i><b style="left:${k.P.pace.toFixed(1)}%" title="ควรถึง ณ วันนี้"></b></div>`;
     }
     function catCardHTML(c) {
-      const click = `showTop5('${c.name} — Top 5 สินค้าขายดี', getTop5('categoryTopProducts','${c.name}'))`;
-      const foot = `<div class="cm-foot"><span>MOM <b class="${gClass(c.mom)}">${c.mom}</b> · YOY <b class="${gClass(c.yoy)}">${c.yoy}</b></span><span class="cm-more">Top 5 ›</span></div>`;
+      const click = `openCatDetail('${String(c.name).replace(/'/g, "\\'")}')`;
+      const foot = catSpark(c) + `<div class="cm-foot"><span>MOM <b class="${gClass(c.mom)}">${c.mom}</b> · YOY <b class="${gClass(c.yoy)}">${c.yoy}</b></span><span class="cm-more">รายละเอียด ›</span></div>`;
       if (!(c.target > 0)) {
         const P = monthPace();
         return `<div class="box-dark cm-card cursor-pointer tap" onclick="${click}">
@@ -2251,6 +2290,133 @@
       }
       openModal(title, html);
     }
+
+    // =========================================================
+    // 📈 กราฟรายวัน (ในการ์ด) + การ์ดรายละเอียดงานโฟกัส / Category
+    // =========================================================
+    let dxChart = null;
+    function dailyOf(d) { return (d || lastDashboardData || {}).daily || null; }
+    function sparkSVG(arr, days, color, opt) {
+      opt = opt || {};
+      const n = Math.max(days || arr.length, arr.length, 1), W = n * 10, H = 40, max = Math.max(1, ...arr), today = arr.length - 1;
+      let h = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">`;
+      for (let i = 0; i < n; i++) {
+        const x = i * 10 + 1.6, w = 6.8;
+        if (i >= arr.length) { h += `<rect x="${x}" y="${H - 2}" width="${w}" height="2" rx="1" fill="rgba(142,142,147,.28)"/>`; continue; }
+        const v = arr[i] || 0, bh = v > 0 ? Math.max(3, v / max * (H - 2)) : 2;
+        h += `<rect x="${x}" y="${H - bh}" width="${w}" height="${bh}" rx="1" fill="${v > 0 ? color : 'rgba(142,142,147,.35)'}" opacity="${i === today ? 1 : .55}"/>`;
+      }
+      if (opt.avgLine != null && opt.avgLine > 0) { const y = H - Math.min(1, opt.avgLine / max) * (H - 2); h += `<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="${opt.lineColor || '#fff'}" stroke-width="1" stroke-dasharray="3 3" vector-effect="non-scaling-stroke" opacity=".7"/>`; }
+      return h + '</svg>';
+    }
+    function focusSpark(data, name, color) {
+      const dl = dailyOf(data), f = dl && dl.focus && dl.focus[name];
+      if (!f) return '';
+      const c = f.c || [], last = c[c.length - 1] || 0, tot = c.reduce((a, b) => a + b, 0);
+      return `<div class="spark">${sparkSVG(c, dl.days, color)}<div class="sp-cap"><span>รายวัน · วันนี้ <b>${fmtUnit(last)}</b></span><span>เฉลี่ย <b>${(tot / Math.max(1, c.length)).toFixed(1)}</b>/วัน</span></div></div>`;
+    }
+    function catSpark(c) {
+      const dl = dailyOf(), a = dl && dl.cat && dl.cat[c.name];
+      if (!a) return '';
+      const need = c.target > 0 ? c.target / (dl.days || 30) : null;
+      const last = a[a.length - 1] || 0;
+      return `<div class="spark">${sparkSVG(a, dl.days, '#FFD600', { avgLine: need })}<div class="sp-cap"><span>รายวัน · วันนี้ <b>${catFmt(c.name, last)}</b></span><span>${need ? '-- ควรได้ <b>' + catFmt(c.name, need) + '</b>/วัน' : 'เฉลี่ย <b>' + catFmt(c.name, a.reduce((x, y) => x + y, 0) / Math.max(1, a.length)) + '</b>/วัน'}</span></div></div>`;
+    }
+    const dxDays = n => Array.from({ length: n }, (_, i) => String(i + 1));
+    function dxStatsHTML(arr, fmt, unitTxt) {
+      const n = arr.length, tot = arr.reduce((a, b) => a + b, 0), best = Math.max(0, ...arr), bi = arr.indexOf(best);
+      const zero = arr.filter(v => !v).length, l7 = arr.slice(-7).reduce((a, b) => a + b, 0), p7 = arr.slice(-14, -7).reduce((a, b) => a + b, 0);
+      const trend = p7 > 0 ? ((l7 - p7) / p7 * 100) : null;
+      return `<div class="dx-stats">
+        <div><small>เฉลี่ยต่อวัน</small><b>${fmt(tot / Math.max(1, n))}</b></div>
+        <div><small>วันที่ดีที่สุด${best ? ' (วันที่ ' + (bi + 1) + ')' : ''}</small><b>${fmt(best)}</b></div>
+        <div><small>7 วันล่าสุด</small><b>${fmt(l7)}</b>${trend !== null ? ` <span class="${trend >= 0 ? 'fc-green' : 'fc-red'} text-[11px] font-bold">${trend >= 0 ? '▲' : '▼'} ${Math.abs(trend).toFixed(0)}%</span>` : ''}</div>
+        <div><small>วันที่ยังไม่มี${unitTxt}</small><b>${zero} วัน</b></div></div>`;
+    }
+    function dxDraw(cfg) {
+      if (dxChart) { dxChart.destroy(); dxChart = null; }
+      const el = document.getElementById('dx-canvas'); if (!el || typeof Chart === 'undefined') return;
+      try { dxChart = new Chart(el, cfg); } catch (e) {}
+    }
+    function openFocusDetail(i) {
+      const d = lastDashboardData, f = d && d.focus[i]; if (!f) return;
+      haptic(8);
+      const dl = dailyOf(), fd = dl && dl.focus && dl.focus[f.name];
+      const cur = Number(f.currentPer) || 0, tgt = Number(f.target) || 0, count = Number(f.count) || 0, base = Number(f.base) || 0;
+      const P = monthPace(), color = tgt > 0 ? fcHex(cur / tgt * 100) : '#8E8E93';
+      const need = tgt > 0 && base > 0 ? Math.max(0, Math.ceil(tgt / 100 * base - count - 1e-9)) : 0;
+      const baseFc = base / Math.max(1, P.day) * P.days, needEnd = tgt > 0 ? Math.max(0, Math.ceil(tgt / 100 * baseFc - count)) : 0;
+      let html = `<div class="dx"><aside class="dx-hero">
+          <div class="dx-kick">🎯 งานโฟกัส · ${(d.header.date || {}).monthYear || ''}</div>
+          <div class="dx-big" style="color:${color}">${pctTxt(cur)}%<small>เป้า ${tgt > 0 ? pctTxt(tgt) + '%' : '–'}</small></div>
+          <div class="dx-bar"><i style="width:${Math.min(100, tgt > 0 ? cur / tgt * 100 : 0)}%;background:${color}"></i></div>
+          <div class="dx-sub">${fmtUnit(count)} ชิ้น จากฐาน ${fmtUnit(base)} เครื่อง</div>
+          <div class="dx-kpis">
+            <div><small>ขาดอีก (ตอนนี้)</small><b class="${need ? 'fc-red' : 'fc-green'}">${tgt > 0 ? (need ? fmtUnit(need) + ' ชิ้น' : 'ครบแล้ว ✓') : '–'}</b></div>
+            <div><small>ต้องทำ/วัน (${P.left} วัน)</small><b>${tgt > 0 ? (needEnd ? (needEnd / P.left).toFixed(1) : '✓') : '–'}</b></div>
+            <div><small>คาดฐานสิ้นเดือน</small><b>${fmtUnit(baseFc)}</b></div>
+            <div><small>คาดชิ้นสิ้นเดือน</small><b>${fmtUnit(count / Math.max(1, P.day) * P.days)}</b></div>
+          </div>
+        </aside><section class="dx-main">`;
+      if (fd) {
+        html += `<div class="dx-legend"><span><i style="background:${color}"></i>ชิ้นที่ขายได้ต่อวัน</span><span><i style="background:#1C1C1E;height:3px"></i>% สะสม</span>${tgt > 0 ? '<span><i style="background:#FF9F0A;height:2px"></i>เส้นเป้า ' + pctTxt(tgt) + '%</span>' : ''}</div>
+          <div class="dx-chart"><canvas id="dx-canvas"></canvas></div>${dxStatsHTML(fd.c, fmtUnit, 'ยอด')}`;
+      } else html += '<div class="dx-top text-center text-xs text-zinc-400 py-6">ยังไม่มีข้อมูลรายวัน — กด 🔄 อัปเดตข้อมูล ใน Google Sheet 1 รอบ</div>';
+      html += '</section></div>';
+      openModal('🎯 ' + f.name, html, 'ms-wide');
+      if (!fd) return;
+      let cc = 0, cb = 0;
+      const cum = fd.c.map((v, k) => { cc += v; cb += fd.b[k] || 0; return cb > 0 ? Math.round(cc / cb * 1000) / 10 : null; });
+      dxDraw({ type: 'bar', data: { labels: dxDays(dl.days), datasets: [
+          { type: 'line', label: '% สะสม', data: cum, yAxisID: 'y1', borderColor: '#1C1C1E', backgroundColor: '#1C1C1E', borderWidth: 2.5, pointRadius: 0, tension: .35, order: 0 },
+          tgt > 0 ? { type: 'line', label: 'เป้า', data: dxDays(dl.days).map(() => tgt), yAxisID: 'y1', borderColor: '#FF9F0A', borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0, order: 1 } : null,
+          { type: 'bar', label: 'ชิ้น/วัน', data: fd.c, yAxisID: 'y', backgroundColor: color + 'CC', borderRadius: 5, maxBarThickness: 18, order: 2 }
+        ].filter(Boolean) },
+        options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false }, tooltip: { callbacks: { title: it => 'วันที่ ' + it[0].label } } },
+          scales: { x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 16 } },
+                    y: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.05)' }, title: { display: true, text: 'ชิ้น', font: { size: 10 } } },
+                    y1: { position: 'right', beginAtZero: true, suggestedMax: Math.max(tgt * 1.3, 10), grid: { display: false }, ticks: { callback: v => v + '%', font: { size: 10 } } } } } });
+    }
+    function openCatDetail(name) {
+      const d = lastDashboardData, c = d && d.categories.find(x => x.name === name); if (!c) return;
+      haptic(8);
+      const dl = dailyOf(), a = dl && dl.cat && dl.cat[name], P = monthPace(), fmt = v => catFmt(name, v);
+      const hasT = c.target > 0, k = hasT ? catCalc(c.name, c.target, c.achieveBaht, c.forecastPer, c.forecastBaht) : null, col = k ? k.col : '#FFD600';
+      const top = getTop5('categoryTopProducts', name) || [];
+      let html = `<div class="dx"><aside class="dx-hero">
+          <div class="dx-kick">📊 Category · ${(d.header.date || {}).monthYear || ''}</div>
+          <div class="dx-big">${fmt(c.achieveBaht)}${hasT ? `<small>/ ${fmt(c.target)}</small>` : ''}</div>
+          ${hasT ? `<div class="dx-bar"><i style="width:${Math.min(100, k.ach)}%;background:${col}"></i><u style="left:${P.pace}%"></u></div>
+          <div class="dx-sub">Achieve <b style="color:#fff">${pctTxt(k.ach)}%</b> · ควรได้ ${P.pace.toFixed(0)}% ณ วันที่ ${P.day}/${P.days} · ${k.onPace ? '<span class="fc-green">นำหน้าเส้นเวลา</span>' : '<span class="fc-red">ตามหลังเส้นเวลา</span>'}</div>` : '<div class="dx-sub">ไม่มีเป้า</div>'}
+          <div class="dx-kpis">
+            <div><small>คาดสิ้นเดือน</small><b style="color:${col}">${fmt(hasT ? k.fcVal : c.forecastBaht)}</b></div>
+            <div><small>Forecast</small><b>${hasT ? pctTxt(k.fc) + '%' : '–'}</b></div>
+            <div><small>${hasT && k.gap <= 0 ? 'เกินเป้า' : 'ขาดอีก'}</small><b class="${hasT ? (k.gap > 0 ? 'fc-red' : 'fc-green') : ''}">${hasT ? fmt(Math.abs(k.gap)) : '–'}</b></div>
+            <div><small>ต้องทำ/วัน (${P.left} วัน)</small><b>${hasT ? (k.gap > 0 ? fmt(k.perDay) : '✓') : '–'}</b></div>
+            <div><small>MOM</small><b class="${gClass(c.mom)}">${c.mom}</b></div>
+            <div><small>YOY</small><b class="${gClass(c.yoy)}">${c.yoy}</b></div>
+          </div>
+        </aside><section class="dx-main">`;
+      if (a) html += `<div class="dx-legend"><span><i style="background:#FFD600"></i>ยอดต่อวัน</span><span><i style="background:#1C1C1E;height:3px"></i>ยอดสะสม</span>${hasT ? '<span><i style="background:#FF9F0A;height:2px"></i>เส้นเป้าสะสม (ควรถึง)</span>' : ''}</div>
+          <div class="dx-chart"><canvas id="dx-canvas"></canvas></div>${dxStatsHTML(a, fmt, 'ยอด')}`;
+      else html += '<div class="dx-top text-center text-xs text-zinc-400 py-6">ยังไม่มีข้อมูลรายวัน — กด 🔄 อัปเดตข้อมูล ใน Google Sheet 1 รอบ</div>';
+      html += `<div class="dx-top"><h5>🏆 Top 5 สินค้าขายดี</h5>${top.length ? top.map((t, i) => `<div class="r"><span>${i + 1}. ${t.name}</span><b>${fmt(name === 'SIM CARD' ? t.unit : t.revenue)}${name === 'SIM CARD' ? '' : ' · ' + fmtUnit(t.unit) + ' ชิ้น'}</b></div>`).join('') : '<div class="text-xs text-zinc-400">ยังไม่มีข้อมูล</div>'}</div></section></div>`;
+      openModal('📊 ' + name, html, 'ms-wide');
+      if (!a) return;
+      let s = 0;
+      const cum = a.map(v => (s += v));
+      dxDraw({ type: 'bar', data: { labels: dxDays(dl.days), datasets: [
+          { type: 'line', label: 'สะสม', data: cum, yAxisID: 'y1', borderColor: '#1C1C1E', borderWidth: 2.5, pointRadius: 0, tension: .35, order: 0 },
+          hasT ? { type: 'line', label: 'ควรถึง', data: dxDays(dl.days).map((_, i) => Math.round(c.target * (i + 1) / dl.days)), yAxisID: 'y1', borderColor: '#FF9F0A', borderDash: [6, 5], borderWidth: 1.5, pointRadius: 0, order: 1 } : null,
+          { type: 'bar', label: 'ต่อวัน', data: a, yAxisID: 'y', backgroundColor: '#FFD600', borderRadius: 5, maxBarThickness: 18, order: 2 }
+        ].filter(Boolean) },
+        options: { responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { display: false }, tooltip: { callbacks: { title: it => 'วันที่ ' + it[0].label, label: it => it.dataset.label + ' ' + fmt(it.raw) } } },
+          scales: { x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 16 } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,.05)' }, ticks: { font: { size: 10 }, callback: v => fmt(v) } },
+                    y1: { position: 'right', beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 }, callback: v => fmt(v) } } } } });
+    }
     function closeTop5Modal() {
       const m = document.getElementById('top5-modal');
       if (m.classList.contains('hidden') || m.classList.contains('closing')) return;
@@ -2258,6 +2424,7 @@
       setTimeout(() => {
         m.classList.add('hidden'); m.classList.remove('closing');
         if (msChart) { msChart.destroy(); msChart = null; }
+        if (dxChart) { dxChart.destroy(); dxChart = null; }
       }, 220);
     }
 
@@ -2446,6 +2613,11 @@
       H_PANELS.forEach(cfg => {
         const panel = document.getElementById(cfg.id);
         const body = panel.querySelector('.hbody');
+        // แผงที่ไม่ได้ render ใหม่ (เช่น วาดเฉพาะการ์ดแบรนด์ใหม่) การ์ดยังอยู่ในคอลัมน์แนวนอน → คืนกลับที่เดิมก่อน ไม่งั้นหายทั้งแผง
+        cfg.srcs.forEach(s => {
+          const src = document.getElementById(s.id);
+          if (!src.children.length) (panel._hitems || []).forEach(it => { if (it.src === src) src.appendChild(it.node); });
+        });
         body.innerHTML = '';
         const items = [];
         cfg.srcs.forEach(s => {
@@ -2559,6 +2731,29 @@
       hCapture();
       if (HMODE_MQ.matches) hEnter(); else hExit();
     }
+    // วาดใหม่เฉพาะแผงเดียว (เช่น การ์ดแบรนด์ได้เป้าจาก Ranking ทีหลัง)
+    function hRecapture(id) {
+      const cfg = H_PANELS.find(c => c.id === id); if (!cfg) return;
+      const panel = document.getElementById(cfg.id), items = [];
+      cfg.srcs.forEach(s => { Array.from(document.getElementById(s.id).children).forEach((node, i) => items.push({ node, src: document.getElementById(s.id), label: i === 0 ? s.label : null })); });
+      if (!items.length) return;
+      panel._hitems = items;
+      if (dashPage().classList.contains('hmode')) { panel.querySelector('.hbody').innerHTML = ''; hLayoutPanel(cfg); }
+    }
+    // 🩹 กันแผงว่าง: ถ้าการ์ดหลุดจากแผง (เช่น จอเปลี่ยนขนาดตอนกำลังโหลด) วาดแผงนั้นใหม่ให้เอง
+    function hHeal() {
+      if (dashPage().classList.contains('hidden') || !dashPage().classList.contains('hmode')) return;
+      H_PANELS.forEach(cfg => {
+        const panel = document.getElementById(cfg.id);
+        if (!panelVisible(panel) || !panel._hitems || !panel._hitems.length) return;
+        const g = panel.querySelector('.hbody .hgrid');
+        const inGrid = g ? panel._hitems.filter(it => it.node.parentNode === g).length : 0;
+        if (inGrid < panel._hitems.length) hLayoutPanel(cfg);
+        panel.querySelectorAll('.hbody .ios-in, .hbody .ios-pop').forEach(el => { if (+getComputedStyle(el).opacity < .05 && el.getAnimations && !el.getAnimations().length) el.classList.remove('ios-in', 'ios-pop'); });
+      });
+    }
+    window.addEventListener('focus', () => setTimeout(hHeal, 150));
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(hHeal, 150); });
     function hApply() {
       if (dashPage().classList.contains('hidden') || !lastDashboardData) return;
       if (HMODE_MQ.matches) { if (dashPage().classList.contains('hmode')) hRestore(); hCapture(); hEnter(); }
@@ -3666,7 +3861,7 @@
 
         // ----- งานโฟกัส: กล่องละงาน มี เป้า / ทำได้ / ชิ้น / ขาดอีกกี่ชิ้น -----
         let focusHtml = '';
-        data.focus.forEach(f => {
+        data.focus.forEach((f, fi) => {
           const cur = Number(f.currentPer) || 0, tgt = Number(f.target) || 0;
           const count = Number(f.count) || 0, base = Number(f.base) || 0;
           const hasTarget = tgt > 0;
@@ -3678,7 +3873,7 @@
                      : isPass ? '<span class="chip pass">✓ ผ่าน</span>' : '<span class="chip miss">ยังไม่ผ่าน</span>';
           const foot = base <= 0 ? 'ยังไม่มีฐานเครื่อง'
                      : !hasTarget ? '' : (need > 0 ? `ขาดอีก <b class="text-white">${fmtUnit(need)}</b> ชิ้น` : '<span class="fc-green font-bold">ครบเป้าแล้ว</span>');
-          focusHtml += `<div class="focus-card tap">
+          focusHtml += `<div class="focus-card tap" onclick="openFocusDetail(${fi})">
               <div class="flex justify-between items-start gap-2">
                 <span class="text-[11px] font-extrabold uppercase leading-tight">${f.name}</span>${chip}
               </div>
@@ -3686,6 +3881,7 @@
                 <div><span class="block text-[9px] text-zinc-400 font-bold">ทำได้</span><span class="text-2xl font-black leading-none" style="color:${color}">${pctTxt(cur)}%</span></div>
                 <div class="text-right"><span class="block text-[9px] text-zinc-400 font-bold">TARGET</span><span class="text-lg font-black leading-none text-zinc-200">${hasTarget ? pctTxt(tgt) + '%' : '–'}</span></div>
               </div>
+              ${focusSpark(data, f.name, color)}
               <div class="focus-bar"><i data-w="${Math.min(100, Math.max(0, ratio)).toFixed(1)}" style="background:${color}"></i></div>
               <div class="flex justify-between text-[10px] mt-2 text-zinc-400 gap-2">
                 <span>${fmtUnit(count)} / ${fmtUnit(base)} เครื่อง</span><span class="text-right">${foot}</span>
@@ -3786,7 +3982,7 @@
         }
         renderBrandZones();
 
-        const brandRelayout = () => { if (!dashPage().classList.contains('hidden')) hAfterRender(); };
+        const brandRelayout = () => { if (!dashPage().classList.contains('hidden')) hRecapture('col-brand'); };   // วาดใหม่เฉพาะแผงแบรนด์ (ไม่แตะแผงงานโฟกัส / Category)
         // เป้าแบรนด์มาจาก Ranking — ดึงข้อมูลมาแล้ววาดการ์ดแบรนด์ใหม่ (ไม่ต้องรอ ไม่บล็อกหน้าอื่น)
         brandRankState = brandRankData ? 'ok' : 'loading';
         google.script.run
@@ -3836,6 +4032,7 @@
 
         hAfterRender();
         animateDashboard();
+        [1200, 3500].forEach(t => setTimeout(hHeal, t));
 
       }).getDashboardData(currentUser.role, currentUser.empId);
     }
