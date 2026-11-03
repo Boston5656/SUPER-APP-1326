@@ -14,7 +14,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
   <title>SUPER APP 1326</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -262,6 +262,91 @@
     #page-dashboard.hmode .sc-cat .cm-mini .text-\[10px\] { font-size: 12px !important; }
     #page-dashboard.hmode .sc-cat .focus-bar.cm-bar { height: 8px; }
     #page-dashboard.hmode #col-brand .hlabel { font-size: 13px !important; letter-spacing: 1.5px; }
+
+    /* ===== 🧩 รีดีไซน์การ์ดพนักงาน (จอแนวนอน) =====
+       [ชื่อ ·························· Target] [IN+]
+       [Achieve | Forecast | Diff | MOM/YOY] [Att Rate 9 ช่อง]
+       [สรุปเป้า][แคท 1][แคท 2][แคท 3]…  ← แถวเดียว เลื่อนข้างได้ ไม่ตกบรรทัด */
+    #page-dashboard.hmode .staff-card:not(.brand-card) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) auto !important;
+      grid-template-areas: "head head act" "kpi att att" "cat cat cat" !important;
+      grid-template-rows: auto auto auto !important;
+    }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-head { border-bottom: 0 !important; padding-bottom: 0 !important; align-items: center; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-act { align-items: center; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .inc-btn { transform: none; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; align-content: stretch; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .grid-att { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; flex: 1 1 auto; }
+    @container (min-width: 860px) { #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .grid-att { grid-template-columns: repeat(9, minmax(0, 1fr)) !important; } }
+    #page-dashboard.hmode .sc-cat > div > div {
+      display: grid !important; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important; gap: 12px 22px !important; align-items: start; }
+    #page-dashboard.hmode .sc-cat .cm-sum { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; border: 0 !important; background: #F2F2F7; border-radius: 14px; padding: 9px 14px !important; }
+    #page-dashboard.hmode .sc-cat .cm-mini { padding: 4px 2px !important; }
+    #page-dashboard.hmode .sc-cat .cm-line.sub { white-space: normal !important; flex-wrap: wrap; row-gap: 2px; }
+    #page-dashboard.hmode .staff-card .sc-att .att-tile { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    /* การ์ดแบรนด์: หัวการ์ดเต็มแถว · KPI ซ้าย · Att Rate ขวา */
+    #page-dashboard.hmode .brand-card {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) !important;
+      grid-template-areas: "head head" "kpi att" !important;
+      grid-template-rows: auto 1fr !important;
+    }
+    #page-dashboard.hmode .brand-card .sc-head { border-bottom: 0 !important; padding-bottom: 0 !important; align-items: center; }
+    #page-dashboard.hmode .brand-card .sc-head > span:first-child { font-size: 22px !important; color: #FFD600; }
+    #page-dashboard.hmode .brand-card .sc-att .grid-att { height: calc(100% - 30px); }
+
+    /* 📱 มือถือ: การ์ดพนักงาน / แบรนด์ / Category เรียง 1 คอลัมน์ · กันหน้ากว้างเกินจอ (iPhone จะย่อทั้งหน้า) */
+    html, body { overflow-x: hidden; }
+    .page-dashboard { overflow-x: clip; }
+    .page-dashboard .box-dark, .page-dashboard .staff-card, .page-dashboard .cm-card { min-width: 0; max-width: 100%; }
+    @media (max-width: 767px) {
+      #db-staff, #db-brand-apple, #db-brand-phone, #db-brand-tablet, #db-category { grid-template-columns: minmax(0, 1fr) !important; }
+      .page-dashboard .cm-line, .page-dashboard .cm-line.sub { flex-wrap: wrap; white-space: normal !important; }
+      .page-dashboard .staff-card .sc-head { flex-wrap: wrap; gap: 2px 8px; }
+    }
+
+    /* 📄 หน้าต่อทางขวา (พนักงาน / แบรนด์) */
+    #page-dashboard.hmode .hpages { display: flex; gap: 16px; align-items: flex-start; }
+    #page-dashboard.hmode .hpage { flex: 0 0 auto; overflow: visible; }
+    #page-dashboard.hmode .hpage + .hpage { scroll-snap-align: start; }
+
+    /* ===== 🧩 พอดีกรอบ: การ์ดพนักงานแบบกะทัดรัด (จอแนวนอน) =====
+       [ชื่อ ··· Target · IN+]
+       [Achieve|Forecast|Diff|MOM/YOY] [Att Rate 9 ช่องแถวเดียว]
+       [แคท 1][แคท 2]…[แคท n]  ← แถวเดียว */
+    #page-dashboard.hmode .staff-card:not(.brand-card) {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr) auto !important;
+      grid-template-areas: "head head act" "kpi att att" "cat cat cat" !important;
+      grid-template-rows: auto minmax(0, 1fr) auto !important; row-gap: 12px !important; padding: 16px 20px !important;
+    }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 8px !important; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi > div { padding: 10px 6px !important; justify-content: center; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-kpi .text-sm { font-size: 22px !important; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att { padding: 10px 12px !important; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .grid-att { grid-template-columns: repeat(9, minmax(0, 1fr)) !important; gap: 6px !important; flex: 1 1 auto; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .att-tile { padding: 8px 2px !important; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .att-tile .lbl { font-size: 10.5px; }
+    #page-dashboard.hmode .staff-card:not(.brand-card) .sc-att .att-tile .val { font-size: 19px !important; }
+    #page-dashboard.hmode .sc-cat > div > div {
+      display: grid !important; grid-template-columns: none !important; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr) !important;
+      gap: 0 16px !important; padding: 10px 16px 8px !important; align-items: start; }
+    #page-dashboard.hmode .sc-cat .cm-sum { display: none !important; }
+    #page-dashboard.hmode .sc-cat .cm-mini { padding: 2px 0 !important; min-width: 0; }
+    #page-dashboard.hmode .sc-cat .cm-mini .cm-name { font-size: 12.5px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #page-dashboard.hmode .sc-cat .cm-mini .cm-chip { font-size: 10px !important; padding: 2px 6px !important; }
+    #page-dashboard.hmode .sc-cat .cm-line { font-size: 12.5px !important; white-space: nowrap; }
+    #page-dashboard.hmode .sc-cat .cm-line > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    #page-dashboard.hmode .sc-cat .cm-line.sub { font-size: 10.5px !important; white-space: nowrap !important; flex-wrap: nowrap !important; }
+    #page-dashboard.hmode .sc-cat .cm-line.sub > span:last-child { display: none; }
+    #page-dashboard.hmode .sc-cat .focus-bar.cm-bar { margin-top: 5px; }
+    #page-dashboard.hmode .hgrid.stretch > .staff-card { display: grid !important; }
+    /* การ์ดแบรนด์กะทัดรัด */
+    #page-dashboard.hmode .brand-card { padding: 16px 18px !important; row-gap: 10px !important; }
+    #page-dashboard.hmode .brand-card .sc-kpi > div { padding: 8px 6px !important; }
+    #page-dashboard.hmode .brand-card .sc-att { padding: 10px 12px !important; }
+    #page-dashboard.hmode .brand-card .sc-att .att-tile { padding: 7px 2px !important; }
+    #page-dashboard.hmode .brand-card .sc-att .grid-att { height: auto !important; }
+    #page-dashboard.hmode .hgrid.stretch > .brand-card { display: grid !important; }
+    .sec-tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 99px; background: rgba(255,214,0,.15); color: #FFD600; font-size: 11px; font-weight: 800; vertical-align: middle; }
     /* ===== Market Share — แนวนอน ===== */
     .modal-sheet.ms-wide { max-width: 980px; max-height: 92vh; padding: 16px; }
     .msx { display: grid; gap: 14px; }
@@ -437,12 +522,12 @@
       #page-dashboard.hmode .brand-card .sc-att .att-tile.sp3, #page-dashboard.hmode .brand-card .sc-att .att-tile.sp2 { grid-column: auto; }
     }
     #page-dashboard.hmode .sc-cat .cm-sum {
-      grid-column: auto; flex-direction: column; justify-content: center; gap: 4px;
-      background: #F2F2F7; border: 0; border-radius: 12px; padding: 8px 12px; margin: 7px 0;
+      grid-column: 1 / -1; flex-direction: row; justify-content: space-between; gap: 4px;
+      background: #F2F2F7; border: 0; border-radius: 12px; padding: 9px 14px; margin: 0;
     }
-    #page-dashboard.hmode .sc-cat .cm-mini { border-bottom: 0; padding: 7px 2px; }
+    #page-dashboard.hmode .sc-cat .cm-mini { border-bottom: 0; padding: 4px 2px; }
     #page-dashboard.hmode .sc-cat .cat-row { animation: none; }
-    #page-dashboard.hmode .sc-cat .cm-line.sub { white-space: nowrap; }
+    #page-dashboard.hmode .sc-cat .cm-line.sub { white-space: normal; flex-wrap: wrap; }
     .hcol { width: var(--colw, 320px); flex-shrink: 0; display: flex; flex-direction: column; gap: 12px;
       overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
     .hcol::-webkit-scrollbar { display: none; }
@@ -1456,7 +1541,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-6';
+    const APP_VER = '2026.11.03-9';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2631,8 +2716,8 @@
     const H_PANELS = [
       { id: 'col-focus', minw: 230, maxCols: 5, stretch: true, srcs: [{ id: 'db-focus' }] },
       { id: 'col-category', minw: 290, maxCols: 5, stretch: true, srcs: [{ id: 'db-category' }] },
-      { id: 'staff-section', minw: 1100, maxCols: 2, minCols: 1, noFit: true, srcs: [{ id: 'db-staff' }] },
-      { id: 'col-brand', minw: 860, maxCols: 3, minCols: 1, noFit: true, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
+      { id: 'staff-section', minw: 900, maxCols: 1, minCols: 1, fill: true, srcs: [{ id: 'db-staff' }] },
+      { id: 'col-brand', minw: 560, maxCols: 4, minCols: 1, fill: true, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
     ];
     const NAV_ITEMS = [
       { id: 'dash-top', t: 'สรุป' }, { id: 'col-focus', t: 'งานโฟกัส' }, { id: 'col-category', t: 'Category' },
@@ -2677,10 +2762,19 @@
       const pw = Math.max(320, cfg.id === firstId ? vw - 32 - topW - 16 : vw - 32);
       panel.style.width = pw + 'px';
       panel.style.scrollSnapAlign = cfg.id === firstId ? 'none' : '';
+      if (cfg.noFit) return hPaginate(cfg, panel, body, pw);
+      if (cfg.fill) return hFillPaged(cfg, panel, body, pw);
       const grid = document.createElement('div');
       grid.className = 'hgrid';
       let cards = 0;
       panel._hitems.forEach(it => {
+        if (cfg.fill) {   // แบรนด์: ไม่ใช้แถวหัวข้อ (กินที่) → ใส่ป้ายเล็กในหัวการ์ดแทน
+          if (!(it.node.classList && it.node.classList.contains('staff-card'))) return;   // ข้อความ "ไม่มียอดขายหมวดนี้" ไม่ต้องโชว์ในตาราง
+          const sec = it.label || (panel._hitems.slice(0, panel._hitems.indexOf(it) + 1).reverse().find(x => x.label) || {}).label;
+          const hd = it.node.querySelector && it.node.querySelector('.sc-head > span:first-child');
+          if (sec && hd && !hd.querySelector('.sec-tag') && /tablet/i.test(sec)) hd.insertAdjacentHTML('beforeend', '<span class="sec-tag">Tablet</span>');
+          grid.appendChild(it.node); cards++; return;
+        }
         if (it.label) {
           const lb = document.createElement('div');
           lb.className = 'hlabel hrow';
@@ -2692,6 +2786,94 @@
       });
       body.appendChild(grid);
       hFit(cfg, body, grid, cards);
+    }
+
+    // 📄 พนักงาน / แบรนด์: ตัวหนังสือขนาดจริง · การ์ดไม่พอในจอเดียว → ต่อเป็น "หน้าถัดไป" ทางขวา (ไม่มีเลื่อนขึ้น-ลง)
+    function hPaginate(cfg, panel, body, pw) {
+      const GAP = 16, W = body.clientWidth - 16, H = body.clientHeight - 24;
+      const nCols = Math.max(1, Math.min(cfg.maxCols || 3, Math.floor((W + 14) / (cfg.minw + 14))));
+      const wrap = document.createElement('div'); wrap.className = 'hpages'; body.appendChild(wrap);
+      const newPage = () => { const g = document.createElement('div'); g.className = 'hgrid hpage'; g.style.width = W + 'px'; g.style.gridTemplateColumns = `repeat(${nCols}, minmax(0, 1fr))`; wrap.appendChild(g); return g; };
+      const mkLabel = t => { const lb = document.createElement('div'); lb.className = 'hlabel hrow'; lb.textContent = t; return lb; };
+      let page = newPage(), n = 0, curLabel = '';
+      panel._hitems.forEach(it => {
+        if (it.label) curLabel = it.label;
+        const add = (it.label ? [mkLabel(it.label)] : []).concat([it.node]);
+        add.forEach(x => page.appendChild(x));
+        if (page.offsetHeight > H && n > 0) {
+          add.forEach(x => x.remove());
+          page = newPage(); n = 0;
+          if (!it.label && curLabel) page.appendChild(mkLabel(curLabel + ' (ต่อ)'));
+          add.forEach(x => page.appendChild(x));
+        }
+        n++;
+      });
+      // การ์ดเดียวยังสูงเกินจอ → ย่อเฉพาะหน้านั้นนิดเดียวให้พอดี
+      Array.from(wrap.children).forEach(pg => {
+        const h = pg.offsetHeight;
+        if (h > H) { const k = Math.max(.7, H / h); pg.style.transformOrigin = '0 0'; pg.style.transform = `scale(${k})`; pg.style.width = (W / k) + 'px'; pg.style.marginRight = (W - W / k) + 'px'; }
+      });
+      const P = wrap.children.length;
+      panel.style.width = (pw + (P - 1) * (W + GAP)) + 'px';
+      body.classList.add('fit');
+      panel.dataset.pages = P;
+    }
+
+    // 🖼️ พอดีกรอบ (พนักงาน / แบรนด์): เลือกจำนวนคอลัมน์ + ขนาดตัวหนังสือที่ใหญ่สุดโดยไม่ต้องเลื่อนลง
+    //    ถ้าต้องย่อจนตัวเล็กเกินไป (< 85%) → แบ่งเป็นหลายหน้า ปัดซ้าย-ขวา (แต่ละหน้าพอดีจอ)
+    function hFitOne(cfg, grid, cards, W, H, fixed) {
+      const GAP = 14; let best = fixed || null;
+      const maxN = Math.max(1, Math.min(cfg.maxCols || 3, cards || 1));
+      for (let n = 1; n <= maxN && !fixed; n++) {
+        for (let k = 1.3; k >= 0.55; k -= 0.025) {
+          if (n > 1 && (W / k - GAP * (n - 1)) / n < cfg.minw * 0.92) continue;
+          grid.style.width = (W / k) + 'px'; grid.style.gridTemplateColumns = `repeat(${n}, minmax(0, 1fr))`; grid.style.transform = '';
+          grid.classList.remove('stretch'); grid.style.height = ''; grid.style.gridAutoRows = '';
+          if (grid.offsetHeight * k <= H + 1) { if (!best || k > best.k + 0.001) best = { n, k }; break; }
+        }
+      }
+      best = best || { n: maxN, k: 0.55 };
+      grid.style.transformOrigin = '0 0';
+      grid.style.width = (W / best.k) + 'px'; grid.style.gridTemplateColumns = `repeat(${best.n}, minmax(0, 1fr))`;
+      grid.style.transform = `scale(${best.k})`;
+      if (H - grid.offsetHeight * best.k > 20) { grid.classList.add('stretch'); grid.style.gridAutoRows = 'minmax(0, 1fr)'; grid.style.height = (H / best.k) + 'px'; }
+      return best;
+    }
+    function hFillPaged(cfg, panel, body, pw) {
+      const GAP = 16, W = body.clientWidth - 16, H = body.clientHeight - 24;
+      const nodes = [];
+      panel._hitems.forEach((it, idx) => {
+        if (!(it.node.classList && it.node.classList.contains('staff-card'))) return;   // ข้อความ "ไม่มียอดขาย…" ไม่ต้องโชว์
+        const sec = it.label || (panel._hitems.slice(0, idx + 1).reverse().find(x => x.label) || {}).label;
+        const hd = it.node.querySelector('.sc-head > span:first-child');
+        if (sec && hd && !hd.querySelector('.sec-tag') && /tablet/i.test(sec)) hd.insertAdjacentHTML('beforeend', '<span class="sec-tag">Tablet</span>');
+        nodes.push(it.node);
+      });
+      const wrap = document.createElement('div'); wrap.className = 'hpages'; body.appendChild(wrap);
+      const mk = list => {   // กล่องหน้า (กว้างเท่าจอ) > ตาราง (ย่อ/ขยายด้วย scale)
+        const box = document.createElement('div'); box.className = 'hpage'; box.style.width = W + 'px'; box.style.height = H + 'px';
+        const g = document.createElement('div'); g.className = 'hgrid'; list.forEach(n => g.appendChild(n)); box.appendChild(g); wrap.appendChild(box); return g; };
+      let pages = 1;
+      for (let p = 1; p <= Math.max(1, nodes.length); p++) {
+        const per = Math.ceil(nodes.length / p);
+        wrap.innerHTML = '';
+        const g = mk(nodes.slice(0, per));
+        const b = hFitOne(cfg, g, per, W, H);
+        pages = p;
+        if (b.k >= 0.85) break;
+      }
+      wrap.innerHTML = '';
+      const per = Math.ceil(nodes.length / pages);
+      let first = null, rowH = 0;   // ทุกหน้าใช้ขนาดตัวหนังสือ / จำนวนคอลัมน์ / ความสูงแถว เดียวกับหน้าแรก
+      for (let i = 0; i < nodes.length; i += per) {
+        const g = mk(nodes.slice(i, i + per));
+        if (!first) { first = hFitOne(cfg, g, Math.min(per, nodes.length - i), W, H); rowH = g.firstElementChild ? g.firstElementChild.offsetHeight : 0; continue; }
+        hFitOne(cfg, g, Math.min(per, nodes.length - i), W, H, first);
+        g.classList.remove('stretch'); g.style.height = ''; if (rowH) { g.classList.add('stretch'); g.style.gridAutoRows = rowH + 'px'; }
+      }
+      panel.style.width = (pw + (pages - 1) * (W + GAP)) + 'px';
+      panel.dataset.pages = pages;
+      body.classList.add('fit');
     }
 
     const H_SCALES = [1, .96, .92, .88, .84, .8, .77, .74, .71, .68, .65, .62, .6];
@@ -2714,6 +2896,26 @@
       grid.style.transformOrigin = '0 0';
       // พนักงาน / แบรนด์: ไม่ย่อตัวหนังสือ — ขนาดจริงเสมอ แล้วเลื่อนลงในแผงได้
       if (cfg.noFit) { apply(1, colsAt(1)); body.classList.remove('fit'); return; }
+      // พนักงาน / แบรนด์: "พอดีกรอบ" — ลองทุกจำนวนคอลัมน์ เลือกแบบที่ตัวหนังสือใหญ่ที่สุดโดยไม่ต้องเลื่อน (ขยายได้ถึง 1.3 เท่า)
+      if (cfg.fill) {
+        let best = null;
+        const maxN = Math.max(1, Math.min(cfg.maxCols || 3, cards || 1));
+        for (let n = 1; n <= maxN; n++) {
+          for (let k = 1.3; k >= 0.55; k -= 0.025) {
+            if ((W / k - GAP * (n - 1)) / n < cfg.minw * 0.92 && n > 1) continue;
+            grid.style.width = (W / k) + 'px'; grid.style.gridTemplateColumns = `repeat(${n}, minmax(0, 1fr))`; grid.style.transform = '';
+            if (grid.offsetHeight * k <= H + 1) { if (!best || k > best.k + 0.001) best = { n, k }; break; }
+          }
+        }
+        best = best || { n: maxN, k: 0.55 };
+        grid.style.width = (W / best.k) + 'px'; grid.style.gridTemplateColumns = `repeat(${best.n}, minmax(0, 1fr))`;
+        grid.style.transform = `scale(${best.k})`; grid.style.marginBottom = ''; grid.style.height = ''; grid.style.gridAutoRows = '';
+        // เหลือที่ว่างแนวตั้ง → ยืดการ์ดให้เต็มกรอบ (ไม่โล่งล่าง)
+        const extra = H - grid.offsetHeight * best.k;
+        if (extra > 20) { grid.classList.add('stretch'); grid.style.gridAutoRows = 'minmax(0, 1fr)'; grid.style.height = (H / best.k) + 'px'; }
+        body.classList.add('fit');
+        return;
+      }
       // เลือกขนาดใหญ่ที่สุดที่พอดีจอ · ถ้าพอดีหลายแบบ เลือกจำนวนคอลัมน์น้อยสุด (การ์ดกว้าง เต็มความสูงสวยกว่า)
       for (const k of H_SCALES) {
         const nMax = colsAt(k);
@@ -2785,8 +2987,8 @@
       H_PANELS.forEach(cfg => {
         const panel = document.getElementById(cfg.id);
         if (!panelVisible(panel) || !panel._hitems || !panel._hitems.length) return;
-        const g = panel.querySelector('.hbody .hgrid');
-        const inGrid = g ? panel._hitems.filter(it => it.node.parentNode === g).length : 0;
+        const hb = panel.querySelector('.hbody');
+        const inGrid = panel._hitems.filter(it => it.node.parentNode && it.node.parentNode.classList && it.node.parentNode.classList.contains('hgrid') && hb.contains(it.node)).length;
         if (inGrid < panel._hitems.length) hLayoutPanel(cfg);
         panel.querySelectorAll('.hbody .ios-in, .hbody .ios-pop').forEach(el => { if (+getComputedStyle(el).opacity < .05 && el.getAnimations && !el.getAnimations().length) el.classList.remove('ios-in', 'ios-pop'); });
       });
@@ -2805,21 +3007,28 @@
       hResizeT = setTimeout(() => { if (dashPage().classList.contains('hmode')) { hApplyScale(); H_PANELS.forEach(hLayoutPanel); } }, 200);
     });
 
+    // ตำแหน่งแนวนอนจริงใน dash-wrap (ใช้ได้ทั้งแผง และหน้าย่อยในแผง)
+    function hX(el) { const w = dashWrap(); return el.getBoundingClientRect().left - w.getBoundingClientRect().left + w.scrollLeft; }
     function hPages() {
-      return ['dash-top'].concat(H_PANELS.map(c => c.id))
-        .map(id => document.getElementById(id))
-        .filter(el => el && panelVisible(el));
+      const out = [];
+      ['dash-top'].concat(H_PANELS.map(c => c.id)).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el || !panelVisible(el)) return;
+        out.push(el);
+        el.querySelectorAll('.hpage').forEach((pg, i) => { if (i > 0) out.push(pg); });   // หน้าถัดไปของแผงเดียวกัน
+      });
+      return out;
     }
     function hGoPage(dir) {
       const wrap = dashWrap(), pages = hPages();
       let cur = 0;
-      pages.forEach((p, i) => { if (p.offsetLeft - 16 <= wrap.scrollLeft + 40) cur = i; });
+      pages.forEach((p, i) => { if (hX(p) - 16 <= wrap.scrollLeft + 40) cur = i; });
       // หน้าแรก = สรุปร้าน + แผงแรก อยู่ในจอเดียวกัน จึงข้ามแผงแรกไป
       let next = cur + dir;
       if (cur === 0 && dir > 0) next = 2;
       if (next === 1) next = dir > 0 ? 2 : 0;
       next = Math.max(0, Math.min(pages.length - 1, next));
-      const left = next === 0 ? 0 : pages[next].offsetLeft - 16;
+      const left = next === 0 ? 0 : hX(pages[next]) - 16;
       wrap.scrollTo({ left: Math.max(0, left), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
       haptic(6);
     }
@@ -2836,7 +3045,7 @@
         haptic(6);
         const t = document.getElementById(b.dataset.go);
         const isFirst = t.style.scrollSnapAlign === 'none';   // แผงแรกอยู่หน้าเดียวกับสรุปร้าน
-        dashWrap().scrollTo({ left: isFirst ? 0 : Math.max(0, t.offsetLeft - 16), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
+        dashWrap().scrollTo({ left: isFirst ? 0 : Math.max(0, hX(t) - 16), behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
       }));
       dashWrap().scrollLeft = 0;
       hMarkNav();
@@ -2847,7 +3056,7 @@
       if (!btns.length) return;
       let cur = btns[0];
       const atEnd = wrap.scrollLeft + wrap.clientWidth >= wrap.scrollWidth - 4;
-      btns.forEach(b => { if (document.getElementById(b.dataset.go).offsetLeft - 16 <= wrap.scrollLeft + 60) cur = b; });
+      btns.forEach(b => { if (hX(document.getElementById(b.dataset.go)) - 16 <= wrap.scrollLeft + 60) cur = b; });
       if (atEnd) cur = btns[btns.length - 1];
       btns.forEach(b => b.classList.toggle('on', b === cur));
     }
