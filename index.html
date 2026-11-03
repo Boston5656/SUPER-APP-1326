@@ -640,6 +640,52 @@
       #top5-modal.closing .modal-sheet { animation: sheetDown .22s ease forwards; }
     }
     @keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
+
+    /* ===== 💧 Liquid Glass (สไตล์ iOS) — การ์ดป๊อปอัพ ===== */
+    #top5-modal { background: rgba(20,16,0,0.14) !important; -webkit-backdrop-filter: blur(3px) saturate(120%); backdrop-filter: blur(3px) saturate(120%); }
+    #top5-modal .modal-sheet {
+      --lx: 30%; --ly: 0%;
+      background:
+        radial-gradient(420px circle at var(--lx) var(--ly), rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
+        linear-gradient(150deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.34) 45%, rgba(255,255,255,.46) 100%) !important;
+      -webkit-backdrop-filter: blur(34px) saturate(200%) brightness(1.06); backdrop-filter: blur(34px) saturate(200%) brightness(1.06);
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow:
+        inset 0 1.5px 1px rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.45),
+        inset 1px 0 1px rgba(255,255,255,.5), inset -1px 0 1px rgba(255,255,255,.35),
+        inset 0 0 24px rgba(255,255,255,.25),
+        0 34px 80px -24px rgba(40,30,0,.55), 0 8px 24px -10px rgba(0,0,0,.25) !important;
+      animation: none !important; will-change: transform, opacity, filter;
+      scrollbar-width: none; }
+    #top5-modal .modal-sheet::-webkit-scrollbar { display: none; }
+
+    /* 💧 ชั้นหยดน้ำตอนเปิด/ปิด + ขอบกระจกแบบหักเหแสง (ขอบสีรุ้งจางๆ) */
+    #lg-stage { position: fixed; inset: 0; z-index: 60; pointer-events: none; display: none; filter: url(#lg-goo); }
+    #lg-stage i { position: absolute; display: block; background: linear-gradient(160deg, rgba(255,255,255,.96), rgba(236,240,255,.86)); }
+    #top5-modal .modal-sheet { box-shadow:
+        inset 0 1.5px 1px rgba(255,255,255,.95), inset 0 -1px 1px rgba(255,255,255,.45),
+        inset 2px 0 2px -1px rgba(255,90,200,.28), inset -2px 0 2px -1px rgba(60,190,255,.32),
+        inset 0 3px 3px -2px rgba(255,220,90,.3), inset 0 -3px 3px -2px rgba(120,120,255,.25),
+        inset 0 0 26px rgba(255,255,255,.28),
+        0 34px 80px -24px rgba(40,30,0,.55), 0 8px 24px -10px rgba(0,0,0,.25) !important; }
+    /* แตะการ์ด = ยุบแบบเจลลี่ แล้วเด้งกลับ */
+    #page-dashboard .sl-card, #page-dashboard .staff-card { transition: transform .5s cubic-bezier(.2,1.6,.4,1); }
+    #page-dashboard .sl-card:active, #page-dashboard .staff-card:active { transform: scale(.965, .955); transition-duration: .12s; }
+    #top5-modal.closing { opacity: 1 !important; }
+    #top5-modal.closing .modal-sheet { animation: none !important; }
+    #top5-modal .modal-sheet > div:first-child { border-color: rgba(255,255,255,.55) !important; }
+    #top5-modal .modal-sheet > div:first-child button { background: rgba(255,255,255,.55) !important; box-shadow: inset 0 1px 1px #fff, 0 2px 8px -2px rgba(0,0,0,.2); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+    #top5-modal .dx-hero { background: rgba(22,22,24,.82) !important; -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 14px 30px -18px rgba(0,0,0,.7); }
+    #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row {
+      background: rgba(255,255,255,.42) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.85), inset 0 0 0 1px rgba(255,255,255,.35); }
+    #top5-modal .msx-row:first-child { background: rgba(255,240,170,.55) !important; }
+    #top5-modal .bg-white { background: rgba(255,255,255,.5) !important; }
+    #top5-modal .border-zinc-100 { border-color: rgba(255,255,255,.6) !important; }
+    @media (max-width: 640px) {
+      #top5-modal .modal-sheet { border-bottom: 0; animation: none !important; }
+      #top5-modal .modal-sheet::before { background: rgba(28,28,30,.25) !important; }
+    }
+
     @keyframes sheetDown { to { transform: translateY(100%); } }
 
     /* จัดการทีม (Admin) ให้เข้าชุดกัน */
@@ -1471,7 +1517,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-17';
+    const APP_VER = '2026.11.03-20';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2306,6 +2352,86 @@
       }), REDUCED_MOTION ? 0 : 250);
     }
 
+
+    // 💧 Liquid Glass: จำจุดที่แตะล่าสุด → การ์ดป๊อปอัพ "งอก" ออกจากจุดนั้นแบบหยดน้ำ แล้วหดกลับที่เดิมตอนปิด
+    let LG_PT = null;
+    window.addEventListener('pointerdown', e => { LG_PT = { x: e.clientX, y: e.clientY, t: Date.now() }; }, true);
+    const LG_SPRING = 'cubic-bezier(.2, 1.28, .32, 1)';
+    function lgFrom(sheet) {
+      const r = sheet.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const p = LG_PT && Date.now() - LG_PT.t < 1500 ? LG_PT : { x: cx, y: innerHeight };
+      return { dx: p.x - cx, dy: p.y - cy, sx: Math.min(.35, 90 / Math.max(1, r.width)), sy: Math.min(.35, 70 / Math.max(1, r.height)) };
+    }
+    // 💧 หยดน้ำ (Liquid morph): หยดเล็กหลุดออกจากจุดที่แตะ ยืดเป็นคอขวดแล้วขยายเป็นการ์ด — ใช้ฟิลเตอร์ "goo" ให้ขอบหลอมรวมเหมือนของเหลว
+    function lgStage() {
+      let st = document.getElementById('lg-stage');
+      if (st) return st;
+      document.body.insertAdjacentHTML('beforeend', `<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lg-goo" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b"/><feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -10" result="g"/><feComposite in="SourceGraphic" in2="g" operator="atop"/></filter></svg>
+        <div id="lg-stage"><i class="lg-dot"></i><i class="lg-blob"></i></div>`);
+      return document.getElementById('lg-stage');
+    }
+    function lgRects(sheet) {
+      const r = sheet.getBoundingClientRect();
+      const p = LG_PT && Date.now() - LG_PT.t < 1500 ? LG_PT : { x: r.left + r.width / 2, y: innerHeight - 20 };
+      return { r, p };
+    }
+    const lgBox = (x, y, w, h, rad) => ({ left: (x - w / 2) + 'px', top: (y - h / 2) + 'px', width: w + 'px', height: h + 'px', borderRadius: rad + 'px' });
+    function lgOpen(sheet) {
+      if (REDUCED_MOTION || !sheet.animate) return;
+      const st = lgStage(), dot = st.querySelector('.lg-dot'), blob = st.querySelector('.lg-blob');
+      const { r, p } = lgRects(sheet), cx = r.left + r.width / 2, cy = r.top + r.height / 2; sheet._p = p;
+      const mx = p.x + (cx - p.x) * .45, my = p.y + (cy - p.y) * .45;
+      const ang = Math.atan2(cy - p.y, cx - p.x), dist = Math.hypot(cx - p.x, cy - p.y);
+      const st1 = Math.min(140, 50 + dist * .25);   // ความยาวตอนยืด
+      const along = (w, h) => Math.abs(Math.cos(ang)) > Math.abs(Math.sin(ang)) ? [h, w] : [w, h];
+      const [sw, sh] = along(46, st1);
+      st.style.display = 'block'; sheet.style.opacity = '0';
+      const D = 640;
+      dot.animate([Object.assign(lgBox(p.x, p.y, 54, 54, 27), { opacity: 1 }), Object.assign(lgBox(p.x, p.y, 40, 40, 20), { opacity: 1, offset: .3 }), Object.assign(lgBox(p.x, p.y, 4, 4, 2), { opacity: 0 })],
+        { duration: D * .55, easing: 'cubic-bezier(.5,0,.7,.3)', fill: 'forwards' });
+      const a = blob.animate([
+        Object.assign(lgBox(p.x, p.y, 40, 40, 20), { opacity: 1, easing: 'cubic-bezier(.45,0,.55,1)' }),
+        Object.assign(lgBox(mx, my, sw, sh, 40), { opacity: 1, offset: .38, easing: 'cubic-bezier(.2,.9,.25,1.08)' }),
+        Object.assign(lgBox(cx, cy, r.width * 1.03, r.height * .97, 34), { opacity: 1, offset: .78, easing: 'ease-out' }),
+        Object.assign(lgBox(cx, cy, r.width, r.height, 30), { opacity: 0 })
+      ], { duration: D + 80, easing: 'linear', fill: 'forwards' });
+      sheet.animate([{ opacity: 0, filter: 'blur(10px)', transform: 'scale(.97)', offset: 0 }, { opacity: 0, filter: 'blur(10px)', transform: 'scale(.97)', offset: .62 },
+        { opacity: 1, filter: 'blur(0px)', transform: 'scale(1.012)', offset: .85 }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }],
+        { duration: D + 120, easing: 'ease-out' });
+      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease-out' });
+      a.onfinish = () => { st.style.display = 'none'; sheet.style.opacity = ''; [dot, blob].forEach(x => x.getAnimations().forEach(y => y.cancel())); };
+    }
+    function lgClose(sheet, done) {
+      if (REDUCED_MOTION || !sheet.animate) return done();
+      const st = lgStage(), dot = st.querySelector('.lg-dot'), blob = st.querySelector('.lg-blob');
+      const R0 = lgRects(sheet), r = R0.r, p = sheet._p || R0.p, cx = r.left + r.width / 2, cy = r.top + r.height / 2;   // หดกลับไปที่จุดที่เปิดมา
+      const mx = p.x + (cx - p.x) * .5, my = p.y + (cy - p.y) * .5;
+      st.style.display = 'block';
+      const D = 460;
+      sheet.animate([{ opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(8px)', transform: 'scale(.97)' }], { duration: D * .35, fill: 'forwards' });
+      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: D, fill: 'forwards' });
+      dot.animate([Object.assign(lgBox(p.x, p.y, 4, 4, 2), { opacity: 0 }), Object.assign(lgBox(p.x, p.y, 4, 4, 2), { opacity: 0, offset: .5 }), Object.assign(lgBox(p.x, p.y, 46, 46, 23), { opacity: 1, offset: .85 }), Object.assign(lgBox(p.x, p.y, 0, 0, 0), { opacity: 0 })], { duration: D, fill: 'forwards' });
+      const a = blob.animate([
+        Object.assign(lgBox(cx, cy, r.width, r.height, 30), { opacity: 0 }),
+        Object.assign(lgBox(cx, cy, r.width * .92, r.height * .92, 34), { opacity: 1, offset: .2 }),
+        Object.assign(lgBox(mx, my, 60, 90, 40), { opacity: 1, offset: .62 }),
+        Object.assign(lgBox(p.x, p.y, 30, 30, 15), { opacity: 0 })
+      ], { duration: D, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' });
+      a.onfinish = () => {
+        st.style.display = 'none';
+        [dot, blob].forEach(x => x.getAnimations().forEach(y => y.cancel()));
+        sheet.getAnimations().forEach(y => y.cancel()); sheet.parentElement.getAnimations().forEach(y => y.cancel());
+        done();
+      };
+    }
+    // แสงสะท้อนบนกระจกไหลตามนิ้ว / เมาส์
+    document.addEventListener('pointermove', e => {
+      const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (!sh) return;
+      const r = sh.getBoundingClientRect();
+      sh.style.setProperty('--lx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+      sh.style.setProperty('--ly', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+    }, { passive: true });
     // ===== MODAL =====
     function openModal(title, html, cls) {
       document.getElementById('top5-title').innerText = title;
@@ -2315,7 +2441,9 @@
       modal.classList.remove('closing');
       modal.classList.remove('hidden');
       const sheet = modal.querySelector('.modal-sheet');
-      sheet.style.animation = 'none'; void sheet.offsetWidth; sheet.style.animation = '';
+      sheet.getAnimations && sheet.getAnimations().forEach(a => a.cancel());
+      sheet.style.setProperty('--lx', '30%'); sheet.style.setProperty('--ly', '0%');
+      lgOpen(sheet);
     }
     function showTop5(title, items) {
       let html = '';
@@ -2468,11 +2596,11 @@
       const m = document.getElementById('top5-modal');
       if (m.classList.contains('hidden') || m.classList.contains('closing')) return;
       m.classList.add('closing');
-      setTimeout(() => {
+      lgClose(m.querySelector('.modal-sheet'), () => {
         m.classList.add('hidden'); m.classList.remove('closing');
         if (msChart) { msChart.destroy(); msChart = null; }
         if (dxChart) { dxChart.destroy(); dxChart = null; }
-      }, 220);
+      });
     }
 
     // ===== 🎯 ต้องทำต่อวัน + คาดการณ์สิ้นเดือน =====
