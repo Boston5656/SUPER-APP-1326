@@ -642,7 +642,7 @@
     @keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
 
     /* ===== 💧 Liquid Glass (สไตล์ iOS) — การ์ดป๊อปอัพ ===== */
-    #top5-modal { background: rgba(20,16,0,0.16) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+    #top5-modal { background: rgba(20,16,0,0.1) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
     #top5-modal .modal-sheet {
       --lx: 30%; --ly: 0%;
       background:
@@ -664,9 +664,10 @@
     #top5-modal .modal-sheet {
       background:
         radial-gradient(380px circle at var(--lx) var(--ly), rgba(255,255,255,.4), rgba(255,255,255,0) 60%),
-        linear-gradient(150deg, rgba(255,255,255,.34) 0%, rgba(255,255,255,.14) 50%, rgba(255,255,255,.26) 100%) !important;
-      -webkit-backdrop-filter: blur(10px) saturate(170%); backdrop-filter: blur(10px) saturate(170%); }
-    #top5-modal .modal-sheet.lg-refract { backdrop-filter: url(#lg-refract) blur(1.2px) saturate(170%) brightness(1.04);
+        linear-gradient(150deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,.04) 50%, rgba(255,255,255,.1) 100%) !important;
+      -webkit-backdrop-filter: blur(2px) saturate(160%); backdrop-filter: blur(2px) saturate(160%);
+      transition: backdrop-filter .6s ease, -webkit-backdrop-filter .6s ease; }
+    #top5-modal .modal-sheet.lg-refract { backdrop-filter: url(#lg-refract) blur(.6px) saturate(160%) brightness(1.03);
       background: radial-gradient(380px circle at var(--lx) var(--ly), rgba(255,255,255,.28), rgba(255,255,255,0) 60%), linear-gradient(150deg, rgba(255,255,255,.16), rgba(255,255,255,.04) 50%, rgba(255,255,255,.12)) !important; }
     #top5-modal .dx-chart, #top5-modal .dx-stats > div, #top5-modal .dx-top, #top5-modal .msx-row {
       background: rgba(255,255,255,.62) !important; -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); }
@@ -706,7 +707,7 @@
 
     /* ⚡ ระหว่างเด้งเปิด/ปิด: ปิดเบลอกระจกชั่วคราว (Chrome ต้องวาดเบลอใหม่ทุกเฟรมตอนการ์ดย่อ/ขยาย = กระตุก) แล้วค่อยเฟดเบลอกลับตอนนิ่ง */
     #top5-modal .modal-sheet.lg-moving { -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
-      background: linear-gradient(150deg, rgba(250,250,252,.93), rgba(244,244,248,.9)) !important; }
+      background: linear-gradient(150deg, rgba(255,255,255,.14), rgba(255,255,255,.04) 50%, rgba(255,255,255,.1)) !important; }
     #top5-modal .modal-sheet.lg-moving > * { will-change: transform, opacity; }
     #top5-modal.closing { opacity: 1 !important; }
     #top5-modal.closing .modal-sheet { animation: none !important; }
@@ -1599,7 +1600,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-27';
+    const APP_VER = '2026.11.03-28';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2494,18 +2495,18 @@
       const settle = () => (window.requestIdleCallback || setTimeout)(() => { if (!document.getElementById('top5-modal').classList.contains('hidden')) lgApplyRefraction(sheet); }, { timeout: 300 });
       if (REDUCED_MOTION || !sheet.animate) { settle(); return; }
       sheet.classList.add('lg-moving');
-      setTimeout(() => { sheet.classList.remove('lg-moving'); settle(); }, 840);
+      setTimeout(() => { sheet.classList.remove('lg-moving'); settle(); }, 1250);
       const o = lgOrigin(sheet); sheet._o = o;
-      const N = 36, pos = lgSpring(.82, 15, N), sx = lgSpring(.42, 13, N), sy = lgSpring(.5, 11, N);
+      const N = 48, pos = lgSpring(.9, 9, N), sx = lgSpring(.72, 8.5, N), sy = lgSpring(.78, 7.5, N);
       const kf = pos.map((v, i) => {
         const X = o.s0x + (1 - o.s0x) * sx[i], Y = o.s0y + (1 - o.s0y) * sy[i];
         return { transform: `translate(${(o.dx * (1 - v)).toFixed(1)}px, ${(o.dy * (1 - v)).toFixed(1)}px) scale(${X.toFixed(4)}, ${Y.toFixed(4)})`,
                  opacity: Math.min(1, i / 5), offset: i / N };
       });
-      sheet.animate(kf, { duration: 820, easing: 'linear' });
+      sheet.animate(kf, { duration: 1250, easing: 'linear' });
       const kids = sheet.querySelectorAll(':scope > *');
-      kids.forEach(k => k.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 0, offset: .3 }, { opacity: 1, transform: 'none' }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)' }));
-      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 320, easing: 'ease-out' });
+      kids.forEach((k, i) => k.animate([{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 0, transform: 'translateY(10px)', offset: .35 }, { opacity: 1, transform: 'none' }], { duration: 900 + i * 80, easing: 'cubic-bezier(.25,.8,.25,1)' }));
+      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 600, easing: 'ease-out' });
     }
     function lgClose(sheet, done) {
       sheet.classList.remove('lg-refract');
@@ -2514,10 +2515,10 @@
       const o = sheet._o || lgOrigin(sheet);
       const a = sheet.animate([
         { transform: 'none', opacity: 1 },
-        { transform: 'scale(1.03, .97)', opacity: 1, offset: .25 },
+        { transform: 'scale(1.02, .985)', opacity: 1, offset: .22 },
         { transform: `translate(${o.dx}px, ${o.dy}px) scale(${o.s0x}, ${o.s0y})`, opacity: 0 }
-      ], { duration: 380, easing: 'cubic-bezier(.5,0,.75,0)', fill: 'forwards' });
-      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 380, fill: 'forwards' });
+      ], { duration: 620, easing: 'cubic-bezier(.45,0,.55,1)', fill: 'forwards' });
+      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 620, easing: 'ease-in-out', fill: 'forwards' });
       a.onfinish = () => { a.cancel(); sheet.classList.remove('lg-moving'); sheet.parentElement.getAnimations().forEach(x => x.cancel()); done(); };
     }
     window.addEventListener('resize', () => { const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (sh) lgApplyRefraction(sh); });
