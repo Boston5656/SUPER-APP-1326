@@ -642,7 +642,7 @@
     @keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
 
     /* ===== 💧 Liquid Glass (สไตล์ iOS) — การ์ดป๊อปอัพ ===== */
-    #top5-modal { background: rgba(20,16,0,0.1) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+    #top5-modal { background: rgba(8,8,10,.52) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
     #top5-modal .modal-sheet {
       --lx: 30%; --ly: 0%;
       background:
@@ -880,24 +880,25 @@
     /* ===== v32 💎 กระจกใสจริงแบบ iOS: ตัวแผ่นใสไม่เบลอ · ขอบเป็นเลนส์หนาหักเหแสง (ตลอด แม้ตอนเคลื่อน) · ข้อมูลอยู่บนกล่องทึบอ่านง่าย ===== */
     html #top5-modal .modal-sheet { -webkit-backdrop-filter: saturate(150%) brightness(1.04) !important; backdrop-filter: saturate(150%) brightness(1.04) !important;
       background: linear-gradient(160deg, rgba(255,255,255,.1), rgba(255,255,255,0) 45%, rgba(255,255,255,.06)) !important; }
-    html #top5-modal .modal-sheet.lg-refract { -webkit-backdrop-filter: url(#lg-refract) saturate(150%) brightness(1.04) !important; backdrop-filter: url(#lg-refract) saturate(150%) brightness(1.04) !important; }
+    html #top5-modal .modal-sheet.lg-refract.lg-fast { -webkit-backdrop-filter: url(#lg-refract-fast) saturate(150%) brightness(1.04) !important; backdrop-filter: url(#lg-refract-fast) saturate(150%) brightness(1.04) !important; }
+    html #top5-modal .modal-sheet.lg-refract:not(.lg-fast) { -webkit-backdrop-filter: url(#lg-refract) saturate(150%) brightness(1.04) !important; backdrop-filter: url(#lg-refract) saturate(150%) brightness(1.04) !important; }
     /* ข้อมูล = ทึบขึ้น (กระจกขาวฝ้าแบบการ์ดแจ้งเตือน iOS) */
-    html #top5-modal .dx-chart, html #top5-modal .dx-stats > div, html #top5-modal .dx-top, html #top5-modal .msx-row, html #top5-modal .msx-hero,
+    html #top5-modal .dx-chart, html #top5-modal .dx-stats > div, html #top5-modal .dx-top, html #top5-modal .msx-row,
     html #top5-modal #top5-list .bg-white, html #top5-modal #top5-list > div:not(.dx) { background: rgba(255,255,255,.93) !important;
       box-shadow: inset 0 1px 0 #fff, 0 6px 18px -10px rgba(0,0,0,.35) !important; }
     html #top5-modal .msx-row:first-child { background: rgba(255,244,190,.92) !important; }
-    html #top5-modal .dx-hero { background: rgba(20,20,22,.9) !important; }
+    html #top5-modal .dx-hero, html #top5-modal .msx-hero { background: rgba(20,20,22,.94) !important; color: #fff; }
     html #top5-modal .dx-legend { background: rgba(255,255,255,.86) !important; }
     html #top5-modal .modal-sheet > div:first-child:not(.lg-glint) { border: 0 !important; }
     #top5-title { display: inline-block; padding: 7px 14px; border-radius: 99px; background: rgba(255,255,255,.86); box-shadow: inset 0 1px 0 #fff, 0 4px 14px -8px rgba(0,0,0,.35); }
     html #top5-modal .modal-sheet > div:first-child button { background: rgba(255,255,255,.86) !important; }
     html #top5-modal .dx-dots { background: rgba(255,255,255,.86); }
     /* Chrome + เลนส์: กล่องข้อมูลต้องทึบ 100% (เลนส์ SVG ของ Chrome จะทะลุขึ้นมาเห็นเป็นเงาซ้อนในกล่องโปร่ง) */
-    html.lg-cr #top5-modal .dx-chart, html.lg-cr #top5-modal .dx-stats > div, html.lg-cr #top5-modal .dx-top, html.lg-cr #top5-modal .msx-row, html.lg-cr #top5-modal .msx-hero,
+    html.lg-cr #top5-modal .dx-chart, html.lg-cr #top5-modal .dx-stats > div, html.lg-cr #top5-modal .dx-top, html.lg-cr #top5-modal .msx-row,
     html.lg-cr #top5-modal #top5-list .bg-white, html.lg-cr #top5-modal #top5-list > div:not(.dx), html.lg-cr #top5-modal .dx-legend, html.lg-cr #top5-title,
     html.lg-cr #top5-modal .modal-sheet > div:first-child button, html.lg-cr #top5-modal .dx-dots, html.lg-cr #top5-modal .dx-arr { background: #FBFBFC !important; }
     html.lg-cr #top5-modal .msx-row:first-child { background: #FFF6CC !important; }
-    html.lg-cr #top5-modal .dx-hero { background: #18181A !important; }
+    html.lg-cr #top5-modal .dx-hero, html.lg-cr #top5-modal .msx-hero { background: #18181A !important; }
     /* iPhone (ไม่มีเลนส์): ขอบกระจกหนาถาวรให้เห็นเป็นแผ่นแก้ว */
     html:not(.lg-cr) #top5-modal .modal-sheet > .lg-rim { opacity: .55; }
 
@@ -1647,7 +1648,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-32';
+    const APP_VER = '2026.11.03-33';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2525,7 +2526,13 @@
         const ch = (n, sc, mx) => `<feDisplacementMap in="SourceGraphic" in2="map" scale="${sc}" xChannelSelector="R" yChannelSelector="G" result="d${n}"/><feColorMatrix in="d${n}" type="matrix" values="${mx}" result="c${n}"/>`;
         svg.innerHTML = `<filter id="lg-refract" x="0" y="0" width="${m.W}" height="${m.H}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
           <feImage href="${m.url}" x="0" y="0" width="${m.W}" height="${m.H}" result="map" preserveAspectRatio="none"/>
-          <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/></filter>`;   // ช่องเดียว = เบาพอให้หักเหได้ตลอดแม้ตอนเคลื่อน (ขอบรุ้งใช้เงาสีแทน)
+          ${ch('r', 185, '1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0')}
+          ${ch('g', 150, '0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0')}
+          ${ch('b', 115, '0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0')}
+          <feBlend in="cr" in2="cg" mode="screen" result="rg"/><feBlend in="rg" in2="cb" mode="screen"/></filter>
+        <filter id="lg-refract-fast" x="0" y="0" width="${m.W}" height="${m.H}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+          <feImage href="${m.url}" x="0" y="0" width="${m.W}" height="${m.H}" result="map" preserveAspectRatio="none"/>
+          <feDisplacementMap in="SourceGraphic" in2="map" scale="150" xChannelSelector="R" yChannelSelector="G"/></filter>`;   // 🌈 นิ่ง = แยกแสง R/G/B (ขอบรุ้ง) · ระหว่างเคลื่อน = ช่องเดียว (เบา)
       }
       sheet.classList.add('lg-refract');
     }
@@ -2546,15 +2553,16 @@
     function lgGlint(sheet, x, y) { lgLayers(sheet).glint.style.transform = `translate3d(${x.toFixed(0)}px, ${y.toFixed(0)}px, 0)`; }
     function lgOpen(sheet) {
       lgApplyRefraction(sheet);   // 🔍 เลนส์ที่ขอบทำงานตั้งแต่เริ่มพุ่ง (แบบม่าน iOS) — แผนที่สร้างจากขนาดจริงตอนนิ่ง
-      const settle = () => { if (!document.getElementById('top5-modal').classList.contains('hidden')) lgApplyRefraction(sheet); };
+      sheet.classList.add('lg-fast');   // ระหว่างพุ่ง = เลนส์ช่องเดียว · ถึงแล้วค่อยแยกแสงเป็นรุ้ง
+      const settle = () => { sheet.classList.remove('lg-fast'); if (!document.getElementById('top5-modal').classList.contains('hidden')) lgApplyRefraction(sheet); };
       if (REDUCED_MOTION || !sheet.animate) { settle(); return; }
-      const D = 560;   // ⚡ เร็วขึ้น (เดิม 1250ms)
+      const D = 820;   // ความเร็วกลางๆ (เดิม 1250 → 560 ไวไป)
       // เบลอคงไว้ตลอด (ไม่ปิด) · ขอบเลนส์เป็นเลเยอร์ซ้อน เฟดออกเองตอนถึง
       lgLayers(sheet).rim.animate([{ opacity: 1 }, { opacity: 1, offset: .7 }, { opacity: 0 }], { duration: D + 220, easing: 'ease-out' });
       setTimeout(settle, D);
       const o = lgOrigin(sheet); sheet._o = o;
       // แรงพุ่ง: ยิ่งเร็วยิ่ง "ยืด" ตามทิศที่วิ่ง แล้วหดกลับเด้งๆ ตอนถึง (แบบหยดน้ำ / ม่านแจ้งเตือน iOS)
-      const N = 40, pos = lgSpring(.8, 10, N), sx = lgSpring(.6, 11, N), sy = lgSpring(.66, 10, N);
+      const N = 52, pos = lgSpring(.8, 10, N), sx = lgSpring(.6, 11, N), sy = lgSpring(.66, 10, N);
       const dist = Math.hypot(o.dx, o.dy), ang = Math.atan2(o.dy, o.dx) * 180 / Math.PI;
       const kf = pos.map((v, i) => {
         const X = o.s0x + (1 - o.s0x) * sx[i], Y = o.s0y + (1 - o.s0y) * sy[i];
@@ -2566,8 +2574,8 @@
       sheet.animate(kf, { duration: D, easing: 'linear' });
       lgFx(sheet, o);
       const kids = sheet.querySelectorAll(':scope > :not(i)');
-      kids.forEach((k, i) => k.animate([{ opacity: 0, transform: 'translateY(8px) scale(.98)' }, { opacity: 0, transform: 'translateY(8px) scale(.98)', offset: .2 }, { opacity: 1, transform: 'none' }], { duration: 420 + i * 50, easing: 'cubic-bezier(.2,.9,.3,1)' }));
-      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 260, easing: 'ease-out' });
+      kids.forEach((k, i) => k.animate([{ opacity: 0, transform: 'translateY(8px) scale(.98)' }, { opacity: 0, transform: 'translateY(8px) scale(.98)', offset: .2 }, { opacity: 1, transform: 'none' }], { duration: 600 + i * 70, easing: 'cubic-bezier(.2,.9,.3,1)' }));
+      sheet.parentElement.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 420, easing: 'ease-out' });
     }
     // ✨ เอฟเฟกต์ตอนเลือก: คลื่นน้ำกระจายจากจุดที่แตะ + การ์ดต้นทางยุบลงเหมือนถูกดูดเข้าแก้ว + แสงวิ่งผ่านกระจก
     function lgFx(sheet, o) {
@@ -2584,6 +2592,7 @@
     }
     function lgClose(sheet, done) {
       if (REDUCED_MOTION || !sheet.animate) return done();
+      sheet.classList.add('lg-fast');
       lgLayers(sheet).rim.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 160, fill: 'forwards' });
       const o = sheet._o || lgOrigin(sheet), ang = Math.atan2(o.dy, o.dx) * 180 / Math.PI;
       const a = sheet.animate([
@@ -2591,9 +2600,9 @@
         { transform: 'scale(1.025, .985)', opacity: 1, offset: .18 },
         { transform: `translate(${(o.dx * .55).toFixed(1)}px, ${(o.dy * .55).toFixed(1)}px) rotate(${ang}deg) scale(1.12, .9) rotate(${-ang}deg) scale(${((1 + o.s0x) / 2).toFixed(3)}, ${((1 + o.s0y) / 2).toFixed(3)})`, opacity: .85, offset: .6 },
         { transform: `translate(${o.dx}px, ${o.dy}px) scale(${o.s0x}, ${o.s0y})`, opacity: 0 }
-      ], { duration: 340, easing: 'cubic-bezier(.5,0,.75,.4)', fill: 'forwards' });
-      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 340, easing: 'ease-in', fill: 'forwards' });
-      a.onfinish = () => { a.cancel(); sheet.getAnimations({ subtree: true }).forEach(x => x.cancel()); sheet.parentElement.getAnimations().forEach(x => x.cancel()); done(); };
+      ], { duration: 440, easing: 'cubic-bezier(.5,0,.75,.4)', fill: 'forwards' });
+      sheet.parentElement.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 440, easing: 'ease-in', fill: 'forwards' });
+      a.onfinish = () => { a.cancel(); sheet.classList.remove('lg-fast'); sheet.getAnimations({ subtree: true }).forEach(x => x.cancel()); sheet.parentElement.getAnimations().forEach(x => x.cancel()); done(); };
     }
     window.addEventListener('resize', () => { const sh = document.querySelector('#top5-modal:not(.hidden) .modal-sheet'); if (sh) lgApplyRefraction(sh); });
     // 🫧 แผงกระจกหลังการ์ด: หักเหแสงที่ขอบ (Chrome / Brave / Edge)
@@ -2668,6 +2677,7 @@
       const L = dxList(DX_CTX.t), i = L.indexOf(DX_CTX.k), j = i + d; if (j < 0 || j >= L.length) return dxBump(d);
       const list = document.getElementById('top5-list'), title = document.getElementById('top5-title'), dir = d > 0 ? 1 : -1;
       haptic(6);
+      const sh0 = document.querySelector('#top5-modal .modal-sheet'); sh0.classList.add('lg-fast'); clearTimeout(dxGo.t); dxGo.t = setTimeout(() => sh0.classList.remove('lg-fast'), 640);
       const out = list.animate([{ transform: 'none', opacity: 1, filter: 'blur(0)' }, { transform: `translateX(${-dir * 60}px) scaleX(.96)`, opacity: 0, filter: 'blur(6px)' }], { duration: 140, easing: 'cubic-bezier(.4,0,1,1)' });
       title.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 180 });
       out.onfinish = () => {
