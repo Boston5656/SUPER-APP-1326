@@ -1381,7 +1381,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.02-7';
+    const APP_VER = '2026.11.03-2';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -4170,9 +4170,13 @@
   }
   function fcLoaded(d) { fcData = d; fcItems = JSON.parse(JSON.stringify(d.items || [])); fcDirty = false; fcIdx = -1; fcRenderList(); }
   function fcRuleText(it) {
-    if (it.source === 'finance') return '💳 ' + ((it.fin && it.fin.codes) || []).map(c => FC_FIN[c]).join(' + ') + ' · ' + ((it.fin && it.fin.lines) || []).map(l => FC_LINE[l]).join('/');
-    if (!it.rules || !it.rules.length) return '⚠️ ยังไม่ได้ตั้งเงื่อนไขนับ';
-    return it.rules.map(r => `${FC_FIELD[r.f]} ${FC_OP[r.op]} ${r.v}`).join(it.mode === 'any' ? ' หรือ ' : ' และ ');
+    const src = fcSrcOf(it), parts = [];
+    if (src.bill || src.sep) {
+      const tag = src.bill && src.sep ? '🛍️🧾 ' : src.bill ? '🛍️ ในบิล · ' : '🧾 แยกบิล · ';
+      parts.push(tag + (!it.rules || !it.rules.length ? '⚠️ ยังไม่ได้ตั้งเงื่อนไขนับ' : it.rules.map(r => `${FC_FIELD[r.f]} ${FC_OP[r.op]} ${r.v}`).join(it.mode === 'any' ? ' หรือ ' : ' และ ')));
+    }
+    if (src.fin) parts.push('💳 ' + ((it.fin && it.fin.codes) || []).map(c => FC_FIN[c]).join(' + ') + ' · ' + ((it.fin && it.fin.lines) || []).map(l => FC_LINE[l]).join('/'));
+    return parts.join(' + ');
   }
   function fcBaseText(it) { return (it.base || []).map(b => FC_BASE[b]).join(' + ') || '⚠️ ยังไม่เลือกฐาน'; }
 
@@ -4202,8 +4206,18 @@
   }
   function fcEdit(i) { fcIdx = i; fcPrev = null; fcRenderEdit(); document.getElementById('sa-body').scrollTop = 0; }
   function fcSet(k, v) { const it = fcItems[fcIdx]; it[k] = v; fcDirty = true; fcPrev = null; }
+  function fcSrcOf(it) { if (!it.src) it.src = it.source === 'finance' ? { bill: false, sep: false, fin: true } : { bill: true, sep: it.sep !== 'off', fin: false }; return it.src; }
+  function fcSrc(k) {
+    const it = fcItems[fcIdx], src = fcSrcOf(it);
+    src[k] = !src[k];
+    if (!src.bill && !src.sep && !src.fin) { src[k] = true; return alert('ต้องเลือกนับจากอย่างน้อย 1 อย่าง'); }
+    if (src.fin && !it.fin) it.fin = { codes: ['UFUND_P'], lines: ['iphone', 'smp'] };
+    if ((src.bill || src.sep) && !(it.rules && it.rules.length)) { it.rules = [{ f: 'BRAND', op: 'eq', v: '' }]; it.mode = it.mode || 'all'; }
+    it.source = src.bill || src.sep ? 'product' : 'finance';
+    fcDirty = true; fcPrev = null; fcRenderEdit();
+  }
   function fcRenderEdit() {
-    const it = fcItems[fcIdx], B = (fcData.snap && fcData.snap.B) || {};
+    const it = fcItems[fcIdx], B = (fcData.snap && fcData.snap.B) || {}, src = fcSrcOf(it);
     const chip = (on, label, fn, extra) => `<button class="fc-chip${on ? ' on' : ''}" onclick="${fn}">${label}${extra != null ? '<small>' + extra + '</small>' : ''}</button>`;
     let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button>
       <label class="sa-label">ชื่องานโฟกัส</label>
@@ -4216,15 +4230,15 @@
       </div>
       <label class="sa-label">ฐาน (ตัวหาร) — เลือกได้หลายอย่าง · ตัวเลข = จำนวนเครื่องเดือนนี้</label>
       <div class="fc-chips">${Object.keys(FC_BASE).map(k => chip((it.base || []).includes(k), FC_BASE[k], `fcToggle('base','${k}')`, B[k] != null ? B[k] : null)).join('')}</div>
-      <label class="sa-label">นับจาก</label>
-      <div class="grid grid-cols-2 gap-2">
-        <button class="sa-pos${it.source !== 'finance' ? ' active' : ''}" onclick="fcSource('product')">🛍️ สินค้าในบิล</button>
-        <button class="sa-pos${it.source === 'finance' ? ' active' : ''}" onclick="fcSource('finance')">💳 ไฟแนนซ์ (ผ่อน)</button></div>`;
-    if (it.source === 'finance') {
+      <label class="sa-label">นับจาก — เลือกได้หลายอย่าง</label>
+      <div class="fc-chips">${chip(src.bill, '🛍️ สินค้าในบิล', `fcSrc('bill')`, 'บิลเดียวกับเครื่อง')}${chip(src.sep, '🧾 สินค้าแยกบิล', `fcSrc('sep')`, 'บิลที่ไม่มีเครื่อง')}${chip(src.fin, '💳 ไฟแนนซ์ (ผ่อน)', `fcSrc('fin')`, 'นับเครื่องที่ผ่อน')}</div>
+      <p class="fc-note mt-2">👤 พนักงาน + ร้าน: นับตามที่เลือก<br>🏷️ แบรนด์ (PC): ได้เครดิตของในบิลเดียวกับเครื่อง + บิลแยกที่ <b>Comment ระบุ SN / IMEI</b> ของเครื่องที่ขาย<b>วันเดียวกัน</b> เท่านั้น</p>`;
+    if (src.fin) {
       const f = it.fin || (it.fin = { codes: [], lines: [] });
-      h += `<label class="sa-label">ไฟแนนซ์</label><div class="fc-chips">${Object.keys(FC_FIN).map(k => chip(f.codes.includes(k), FC_FIN[k], `fcToggleFin('codes','${k}')`)).join('')}</div>
+      h += `<label class="sa-label">💳 ไฟแนนซ์</label><div class="fc-chips">${Object.keys(FC_FIN).map(k => chip(f.codes.includes(k), FC_FIN[k], `fcToggleFin('codes','${k}')`)).join('')}</div>
         <label class="sa-label">นับเครื่องประเภท</label><div class="fc-chips">${Object.keys(FC_LINE).map(k => chip(f.lines.includes(k), FC_LINE[k], `fcToggleFin('lines','${k}')`)).join('')}</div>`;
-    } else {
+    }
+    if (src.bill || src.sep) {
       it.rules = it.rules || [];
       h += `<div class="grid grid-cols-2 gap-2 mt-2">
           <button class="sa-pos${it.mode !== 'any' ? ' active' : ''}" onclick="fcSet('mode','all'); fcRenderEdit()">ต้องตรงทุกข้อ</button>
@@ -4259,7 +4273,9 @@
   }
   function fcPrevHTML(r) {
     if (r.error) return `<div class="fc-res">${saEsc(r.error)}</div>`;
-    return `<div class="fc-res">นับได้ <b class="big">${saFmt(r.count)} ชิ้น ÷ ฐาน ${saFmt(r.base)} = ${r.per.toFixed(1)}%</b>
+    const sp = r.split, spH = (sp ? (r.hasBill ? `<div class="text-[11px] text-zinc-300 mb-2 leading-relaxed">🛍️ ในบิลเดียวกับเครื่อง <b>${saFmt(sp.B)}</b> · 🧾 บิลแยกมี SN/IMEI <b>${saFmt(sp.S)}</b> · บิลแยกไม่ระบุเครื่อง <b>${saFmt(sp.N)}</b>${sp.skip ? ` · <span style="color:#FF9F0A">ไม่ได้เลือกนับ ${saFmt(sp.skip)}</span>` : ''}<br><span class="text-zinc-500">แบรนด์ได้เครดิต ${saFmt(sp.B + sp.S)} ชิ้น · บิลแยกไม่ระบุเครื่องนับให้พนักงาน + ร้าน</span></div>` : '<div class="text-[11px] text-zinc-500 mb-2">กด 🔄 อัปเดตข้อมูล 1 รอบ เพื่อดูแยก ในบิล / บิลแยก</div>') : '')
+      + (r.fin ? `<div class="text-[11px] text-zinc-300 mb-2">💳 ไฟแนนซ์ <b>${saFmt(r.fin)}</b> เครื่อง</div>` : '');
+    return `<div class="fc-res">นับได้ <b class="big">${saFmt(r.count)} ชิ้น ÷ ฐาน ${saFmt(r.base)} = ${r.per.toFixed(1)}%</b>${spH}
       ${r.top.length ? '<div class="text-[11px] text-zinc-400 mb-1">สินค้าที่นับได้ (' + r.products + ' รายการ)</div>' + r.top.map(t => `<div class="tp"><span>${saEsc(t.name)}</span><b>${t.unit}</b></div>`).join('') : '<div class="text-zinc-400">ไม่พบสินค้าที่ตรงเงื่อนไขในข้อมูลเดือนนี้</div>'}
       ${r.overlap ? `<div class="fc-warn">⚠️ ตรงเงื่อนไขอีก ${r.overlap} ชิ้น แต่ถูกนับเข้า ${r.lostTo.map(x => saEsc(x.name) + ' (' + x.unit + ')').join(', ')} — เลื่อนงานนี้ขึ้น หรือเพิ่มเงื่อนไขให้ละเอียดขึ้น</div>` : ''}
       <div class="text-[10px] text-zinc-500 mt-2">ข้อมูลรอบอัปเดต ${saEsc(r.at || '')}</div></div>`;
