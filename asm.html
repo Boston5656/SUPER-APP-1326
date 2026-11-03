@@ -153,28 +153,23 @@
       background: linear-gradient(160deg, #2C2C2E 0%, #161618 70%); border: 0;
       box-shadow: 0 18px 34px -20px rgba(0,0,0,.85);
       transition: transform .55s cubic-bezier(.3,1.5,.5,1), background .35s, color .35s, box-shadow .35s;
-      -webkit-tap-highlight-color: transparent; isolation: isolate; }
+      -webkit-tap-highlight-color: transparent; isolation: isolate; will-change: transform; transform: translateZ(0); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
     /* 💧 Liquid Glass: แสงสะท้อนตามนิ้ว + ฟองแก้วกระจายตอนกด */
     .schedule-card::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 3; opacity: 0;
       background: radial-gradient(160px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.38), rgba(255,255,255,.08) 45%, transparent 70%),
                   linear-gradient(180deg, rgba(255,255,255,.22), transparent 38%);
       box-shadow: inset 0 1px 1px rgba(255,255,255,.55), inset 0 -10px 24px -14px rgba(255,255,255,.35);
-      transition: opacity .45s var(--ios-ease); }
-    .schedule-card.pressing { transform: scale(.955); transition: transform .18s var(--ios-ease), background .35s, color .35s, box-shadow .35s; }
+      transition: opacity .45s var(--ios-ease); will-change: opacity; }
+    .schedule-card.pressing { transform: translateZ(0) scale(.96); transition: transform .18s var(--ios-ease), background .35s, color .35s, box-shadow .35s; }
     .schedule-card.pressing::after { opacity: 1; transition: opacity .12s; }
     .schedule-card.enter { animation: riseIn .5s var(--ios-ease) both; }
-    .lg-drop { position: absolute; z-index: 2; width: 24px; height: 24px; margin: -12px 0 0 -12px; border-radius: 50%; pointer-events: none;
-      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), rgba(255,255,255,.12) 55%, rgba(255,255,255,.04));
-      -webkit-backdrop-filter: blur(6px) saturate(180%) brightness(1.15); backdrop-filter: blur(6px) saturate(180%) brightness(1.15);
-      box-shadow: inset 0 1px 2px rgba(255,255,255,.8), inset 0 -2px 6px rgba(0,0,0,.18), 0 6px 18px -6px rgba(0,0,0,.35);
-      animation: lgDrop .6s cubic-bezier(.2,.8,.2,1) forwards; }
-    @keyframes lgDrop {
-      0% { transform: scale(.4); opacity: .95; }
-      55% { opacity: .6; -webkit-backdrop-filter: blur(3px) saturate(160%) brightness(1.08); backdrop-filter: blur(3px) saturate(160%) brightness(1.08); }
-      100% { transform: scale(11); opacity: 0; -webkit-backdrop-filter: blur(0) saturate(100%) brightness(1); backdrop-filter: blur(0) saturate(100%) brightness(1); } }
+    .lg-drop { position: absolute; z-index: 2; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; pointer-events: none; will-change: transform, opacity;
+      background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0) 52%, rgba(255,255,255,.35) 66%, rgba(255,255,255,.08) 72%, rgba(255,255,255,0) 74%),
+                  radial-gradient(circle at 35% 30%, rgba(255,255,255,.28), rgba(255,255,255,0) 45%);
+      animation: lgDrop .7s cubic-bezier(.22,.9,.25,1) forwards; }
+    @keyframes lgDrop { from { transform: translateZ(0) scale(.3); opacity: 1; } to { transform: translateZ(0) scale(7); opacity: 0; } }
     .shift-badge { position: absolute; top: 14px; right: 14px; padding: 4px 10px; border-radius: 100px; font: 800 9.5px 'Kanit', sans-serif; letter-spacing: .5px; pointer-events: none; z-index: 4;
-      background: rgba(255,255,255,.12); color: #D1D1D6; -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.25); transition: background .35s, color .35s; }
+      background: rgba(255,255,255,.13); color: #D1D1D6; box-shadow: inset 0 1px 0 rgba(255,255,255,.25); transition: background .35s, color .35s; }
     .sch-name, .sch-branch, .sch-shift { position: relative; z-index: 1; }
     .sch-name { font: 800 21px/1.15 'Kanit', sans-serif; margin-top: 18px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -.2px; }
     .sch-branch { font: 600 12px 'IBM Plex Sans Thai', sans-serif; color: #8E8E93; margin-top: 2px; pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -276,6 +271,52 @@
     .ty-chk input { width: 18px; height: 18px; padding: 0; accent-color: #1C1C1E; }
     .set-msg { font-size: 12px; font-weight: 700; color: #15803D; min-height: 16px; margin-top: 6px; }
     .set-msg.err { color: #D70015; }
+
+    /* ===== 🖥️ เต็มจอ + ไม่มีแถบเลื่อน ===== */
+    html { scrollbar-width: none; -ms-overflow-style: none; }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+    body.sch-on .navrow { max-width: none !important; margin-left: 0; margin-right: 0; }
+    #view-schedule { max-width: none !important; }
+    #view-schedule .sch-top { max-width: none; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 24px; }
+    #view-schedule .sch-top .st-l { min-width: 0; }
+    #view-schedule .sch-top .st-r { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+    #view-schedule .sch-top .st-r .date-report-row, #view-schedule .sch-top .st-r .sch-sum { margin: 0; justify-content: flex-end; }
+    @media (max-width: 991px) { #view-schedule .sch-top .st-r { align-items: stretch; width: 100%; } #view-schedule .sch-top .st-r .date-report-row, #view-schedule .sch-top .st-r .sch-sum { justify-content: flex-start; } }
+    @media (min-width: 992px) {
+      .desktop-left-pane { flex: 1 1 auto; min-width: 0; } .desktop-right-pane { flex: 0 0 360px; }
+      .grid-container { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+      .schedule-card { min-height: 150px; padding: 18px; }
+      .sch-name { font-size: 24px; }
+      .main-card-container { padding: 18px; }
+    }
+    @media (min-width: 1500px) { .grid-container { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); } .desktop-right-pane { flex-basis: 400px; } }
+
+    @media (max-width: 600px) {
+      .grid-container { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .schedule-card { min-height: 124px; padding: 14px 13px 12px; border-radius: 22px; }
+      .sch-name { font-size: 19px; margin-top: 20px; }
+      .sch-shift { font-size: 13.5px; }
+      .mode-seg { flex: 1 1 100%; } .mode-seg button { flex: 1; min-width: 0; }
+    }
+    /* ===== 🔁 โหมด เช็คอิน / เช็คเอาท์ ===== */
+    .mode-seg { position: relative; display: inline-flex; padding: 5px; border-radius: 22px; background: var(--d); box-shadow: 0 12px 26px -14px rgba(0,0,0,.7); height: 52px; box-sizing: border-box; }
+    .mode-seg .mg { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc(50% - 5px); border-radius: 17px; background: linear-gradient(180deg, #4CE27A, #30D158); transition: transform .55s var(--spring-soft), background .35s; }
+    .mode-seg.out .mg { transform: translateX(100%); background: linear-gradient(180deg, #FFB347, #FF9F0A); }
+    .mode-seg button { position: relative; z-index: 1; border: 0; background: none; padding: 0 16px; min-width: 116px; border-radius: 17px; font: 800 14px 'Kanit', sans-serif; color: rgba(255,255,255,.6); cursor: pointer; transition: color .3s; }
+    .mode-seg button.on { color: var(--d); }
+    .sch-time { position: relative; z-index: 1; display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; pointer-events: none; }
+    .sch-time span { font: 700 11px 'Kanit', sans-serif; padding: 3px 8px; border-radius: 8px; background: rgba(255,255,255,.12); color: #fff; }
+    .schedule-card.checked-in .sch-time span, .schedule-card.checked-out .sch-time span { background: rgba(28,28,30,.08); color: var(--d); }
+    .sch-time span.o { background: #FF9F0A !important; color: #fff !important; }
+    /* 🌙 เลิกงานแล้ว = การ์ดเขียวอ่อน */
+    .schedule-card.checked-out { background: linear-gradient(160deg, #E9FBEF 0%, #C8F1D6 100%); color: var(--d); box-shadow: 0 20px 36px -18px rgba(0,90,30,.4); }
+    .schedule-card.checked-out .sch-branch { color: #3F6B4E; }
+    .schedule-card.checked-out .sch-shift { color: var(--d); }
+    .schedule-card.checked-out .shift-badge { background: #1C1C1E; color: #4CE27A; }
+    /* โหมดเช็คเอาท์: คนที่ถึงเวลาเลิกแล้วแต่ยังไม่เช็คเอาท์ = ขอบส้มกะพริบเบาๆ */
+    @keyframes dueRing { 0%,100% { box-shadow: 0 0 0 0 rgba(255,159,10,.0), 0 20px 36px -18px rgba(0,0,0,.45); } 50% { box-shadow: 0 0 0 4px rgba(255,159,10,.75), 0 20px 36px -18px rgba(0,0,0,.45); } }
+    body.mode-out .schedule-card.due { animation: dueRing 1.8s ease-in-out infinite; }
+    body.mode-out .schedule-card.checked-in:not(.due) { opacity: .92; }
   </style>
 </head>
 <body ontouchstart="">
@@ -346,16 +387,21 @@
   <!-- หน้าที่ 2: งานตารางงาน -->
   <div id="view-schedule">
     <div class="sch-top rise">
-      <span class="eyebrow"><span class="ic">🗓</span>ASM TRACK · ตารางงานโซน</span>
-      <div class="h-title"><h1>ตารางงานวันนี้</h1></div>
-      <div class="h-sub" id="head-sub2">กำลังโหลดข้อมูล...</div>
-      <div class="date-report-row">
-        <input type="date" id="date-picker" class="date-input" onchange="fetchData()">
-        <button class="btn-report-inline" onclick="openModal()">＋ แจ้ง Report</button>
+      <div class="st-l">
+        <span class="eyebrow"><span class="ic">🗓</span>ASM TRACK · ตารางงานโซน</span>
+        <div class="h-title"><h1>ตารางงานวันนี้</h1></div>
+        <div class="h-sub" id="head-sub2">กำลังโหลดข้อมูล...</div>
       </div>
-      <div class="sch-sum" id="sch-sum"></div>
-      <div class="sch-legend"><span>แตะการ์ด = เข้างานแล้ว (ขาว) · แตะสองที = ติดต่อไม่ได้ (เหลือง) · แตะซ้ำ = ยกเลิก</span></div>
+      <div class="st-r">
+        <div class="date-report-row">
+          <div class="mode-seg" id="modeSeg"><i class="mg"></i><button type="button" class="on" data-m="in" onclick="setMode('in')">🟢 เช็คอิน</button><button type="button" data-m="out" onclick="setMode('out')">🌙 เช็คเอาท์</button></div>
+          <input type="date" id="date-picker" class="date-input" onchange="fetchData()">
+          <button class="btn-report-inline" onclick="openModal()">＋ แจ้ง Report</button>
+        </div>
+        <div class="sch-sum" id="sch-sum"></div>
+      </div>
     </div>
+    <div class="sch-legend" id="sch-legend"></div>
     
     <!-- โครงสร้างแบ่งซ้าย-ขวา สำหรับ Desktop -->
     <div class="desktop-schedule-layout">
@@ -417,6 +463,33 @@
     var checkedInUsers = new Set(); 
     var unreachableUsers = new Set(); 
     var clickTimer = null; 
+    // 🔁 เช็คอิน / เช็คเอาท์ — เก็บในเครื่องนี้ แยกตามวันที่ (รีเฟรชแล้วไม่หาย)
+    var MODE = 'in', ATT = {};   // ATT[ชื่อ] = { st: 'in'|'out'|'lost', in: 'HH:MM', out: 'HH:MM' }
+    var attKey = function () { return 'asm_att_' + (document.getElementById('date-picker').value || ''); };
+    function attLoad() { try { ATT = JSON.parse(localStorage.getItem(attKey()) || '{}') || {}; } catch (e) { ATT = {}; } }
+    function attSave() { try { localStorage.setItem(attKey(), JSON.stringify(ATT)); } catch (e) {} }
+    function nowHM() { var d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+    function shiftEnd(txt) { var m = String(txt || '').match(/(\d{1,2})[:.](\d{2})\s*[-–]\s*(\d{1,2})[:.](\d{2})/); return m ? (+m[3]) * 60 + (+m[4]) : null; }
+    function isToday() { var d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10); return document.getElementById('date-picker').value === d; }
+    function setMode(m) {
+      MODE = m; try { localStorage.setItem('asm_mode', m); } catch (e) {}
+      var sg = document.getElementById('modeSeg'); sg.classList.toggle('out', m === 'out');
+      sg.querySelectorAll('button').forEach(function (b) { b.classList.toggle('on', b.dataset.m === m); });
+      document.body.classList.toggle('mode-out', m === 'out');
+      document.getElementById('sch-legend').innerHTML = '<span>' + (m === 'in'
+        ? '🟢 โหมดเช็คอิน · แตะการ์ด = เข้างานแล้ว (ขาว) · แตะสองที = ติดต่อไม่ได้ (เหลือง) · แตะซ้ำ = ยกเลิก'
+        : '🌙 โหมดเช็คเอาท์ · แตะการ์ด = เลิกงานแล้ว (เขียว) · แตะซ้ำ = ยกเลิกเช็คเอาท์ · ขอบส้มกะพริบ = ถึงเวลาเลิกแล้ว') + '</span>';
+      markDue(); renderSchSum();
+      if (navigator.vibrate) navigator.vibrate(8);
+    }
+    function markDue() {
+      var now = new Date(), mins = now.getHours() * 60 + now.getMinutes(), today = isToday();
+      document.querySelectorAll('#schedule-list .schedule-card[data-cat="WORK"]').forEach(function (c) {
+        var e = +c.dataset.end, a = ATT[c.dataset.nick] || {};
+        c.classList.toggle('due', today && !!c.dataset.end && mins >= e && a.st !== 'out' && a.st !== 'lost');
+      });
+    }
+    setInterval(markDue, 60000);
     // 🗓️ ประเภทวันหยุด/ลา (มาจากหลังบ้าน · แก้ได้ใน ⚙️ ตั้งค่า)
     var DEFAULT_TYPES = [
       { name: 'H', cat: 'H', label: 'หยุดประจำสัปดาห์', report: false }, { name: 'V', cat: 'V', label: 'พักร้อน/ลา', report: false },
@@ -444,7 +517,7 @@
         card.classList.remove('enter'); card.classList.add('pressing');
         if (reduce) return;
         var d = document.createElement('i'); d.className = 'lg-drop'; d.style.left = x + 'px'; d.style.top = y + 'px';
-        card.appendChild(d); setTimeout(function () { d.remove(); }, 620);
+        card.appendChild(d); setTimeout(function () { d.remove(); }, 720);
       });
       list.addEventListener('pointermove', function (e) {
         var card = e.target.closest('.schedule-card.pressing'); if (!card) return;
@@ -458,11 +531,29 @@
         }, true);
       });
     })();
+    function timeHTML(nick) {
+      var a = ATT[nick] || {};
+      if (!a.in && !a.out) return '<div class="sch-time"></div>';
+      return '<div class="sch-time">' + (a.in ? '<span>✓ เข้า ' + esc(a.in) + '</span>' : '') + (a.out ? '<span class="o">⏏ ออก ' + esc(a.out) + '</span>' : '') + '</div>';
+    }
+    function recount() {
+      if (!SUM) return;
+      SUM.in = 0; SUM.outd = 0; SUM.lost = 0; SUM.wait = 0;
+      document.querySelectorAll('#schedule-list .schedule-card[data-cat="WORK"]').forEach(function (c) {
+        var st = (ATT[c.dataset.nick] || {}).st;
+        st === 'out' ? SUM.outd++ : st === 'in' ? SUM.in++ : st === 'lost' ? SUM.lost++ : SUM.wait++;
+      });
+    }
     function renderSchSum() {
-      var c = SUM; if (!c) return;
-      document.getElementById('sch-sum').innerHTML =
-        '<span><i style="background:#30D158"></i>เข้างานแล้ว <b>' + c.in + '</b></span>' +
-        '<span><i style="background:#fff"></i>ยังไม่เข้า <b>' + c.wait + '</b></span>' +
+      var c = SUM; if (!c) return; recount();
+      var due = document.querySelectorAll('#schedule-list .schedule-card.due').length;
+      document.getElementById('sch-sum').innerHTML = (MODE === 'out'
+        ? '<span><i style="background:#4CE27A"></i>เลิกงานแล้ว <b>' + c.outd + '</b></span>' +
+          '<span><i style="background:#fff"></i>ยังทำงานอยู่ <b>' + c.in + '</b></span>' +
+          (due ? '<span><i style="background:#FF9F0A"></i>ถึงเวลาเลิก <b>' + due + '</b></span>' : '') +
+          (c.wait ? '<span><i style="background:#6E6E73"></i>ไม่ได้เช็คอิน <b>' + c.wait + '</b></span>' : '')
+        : '<span><i style="background:#30D158"></i>เข้างานแล้ว <b>' + (c.in + c.outd) + '</b></span>' +
+          '<span><i style="background:#fff"></i>ยังไม่เข้า <b>' + c.wait + '</b></span>') +
         (c.lost ? '<span><i style="background:#FFD600"></i>ติดต่อไม่ได้ <b>' + c.lost + '</b></span>' : '') +
         '<span><i style="background:#FF453A"></i>หยุด/ลา <b>' + c.off + '</b></span>' +
         (c.out ? '<span><i style="background:#0A84FF"></i>ประชุม/ออกงาน <b>' + c.out + '</b></span>' : '');
@@ -472,6 +563,9 @@
       var tzoffset = (new Date()).getTimezoneOffset() * 60000;
       var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0, 10);
       document.getElementById('date-picker').value = localISOTime;
+      var m0 = 'in'; try { m0 = localStorage.getItem('asm_mode') === 'out' ? 'out' : 'in'; } catch (e) {}
+      if (m0 === 'in' && new Date().getHours() >= 18) m0 = 'out';   // ค่ำแล้ว เปิดมาเป็นโหมดเช็คเอาท์ให้เลย
+      setMode(m0);
       fetchData();
       requestAnimationFrame(function () { moveGlider('tabSeg', 'tabGlider'); moveGlider('fSeg', 'fGlider'); });
     }
@@ -522,6 +616,7 @@
       
       TYPES = data.types && data.types.length ? data.types : DEFAULT_TYPES;
       var cnt = { in: 0, wait: 0, off: 0, out: 0, lost: 0 };
+      attLoad();
       data.team.forEach(function(p, index) {
         var shift = String(p.shift || "").trim();
         var rep = data.reports.find(function (r) { return r.name === p.nickname; });
@@ -534,18 +629,22 @@
         if (cat !== 'WORK') {
           checkedInUsers.delete(p.nickname); unreachableUsers.delete(p.nickname);
           cls += ' c-' + cat; cat === 'M' ? cnt.out++ : cnt.off++;
-        } else if (checkedInUsers.has(p.nickname)) { cls += ' checked-in'; badge = 'เข้างานแล้ว'; cnt.in++; }
-        else if (unreachableUsers.has(p.nickname)) { cls += ' status-unreachable'; badge = 'ติดต่อไม่ได้'; cnt.lost++; }
-        else cnt.wait++;
-        schHtml += '<div class="' + cls + '" style="animation-delay:' + Math.min(index * 30, 420) + 'ms" data-nick="' + esc(p.nickname) + '" data-cat="' + cat + '" onclick="handleCardClick(this, this.dataset.cat, this.dataset.nick)">' +
+        } else {
+          var a = ATT[p.nickname] || {};
+          if (a.st === 'out') { cls += ' checked-out'; badge = 'เลิกงานแล้ว'; }
+          else if (a.st === 'in') { cls += ' checked-in'; badge = 'เข้างานแล้ว'; }
+          else if (a.st === 'lost') { cls += ' status-unreachable'; badge = 'ติดต่อไม่ได้'; }
+        }
+        var endM = cat === 'WORK' ? shiftEnd(text) : null;
+        schHtml += '<div class="' + cls + '" style="animation-delay:' + Math.min(index * 30, 420) + 'ms" data-nick="' + esc(p.nickname) + '" data-cat="' + cat + '"' + (endM != null ? ' data-end="' + endM + '"' : '') + ' onclick="handleCardClick(this, this.dataset.cat, this.dataset.nick)">' +
           '<div class="shift-badge">' + esc(badge) + '</div>' +
           '<div class="sch-name">' + esc(p.nickname) + '</div>' +
           '<div class="sch-branch">' + esc(p.id) + (p.role ? ' · ' + esc(p.role) : '') + '</div>' +
-          '<div class="sch-shift">' + esc(text) + '</div></div>';
+          '<div class="sch-shift">' + esc(text) + '</div>' + (cat === 'WORK' ? timeHTML(p.nickname) : '') + '</div>';
         nameOptions += '<option value="' + index + '">' + esc(p.nickname) + ' (' + esc(p.branch) + ')</option>';
       });
       document.getElementById('schedule-list').innerHTML = schHtml || "<div class='loading' style='grid-column:1/-1'>ยังไม่มีทีม — เพิ่มได้ที่ ⚙️ ตั้งค่า</div>";
-      SUM = cnt; renderSchSum();
+      SUM = cnt; markDue(); renderSchSum();
       if (FIRST_SCH) { FIRST_SCH = false; setTimeout(function () { document.querySelectorAll('#schedule-list .enter').forEach(function (c) { c.classList.remove('enter'); }); }, 1000); }
       document.getElementById('rep-type').innerHTML = TYPES.filter(function (t) { return t.report; })
         .map(function (t) { return '<option>' + esc(t.name) + '</option>'; }).join('');
@@ -834,6 +933,7 @@
         document.getElementById('tab-' + k).classList.toggle('on', k === tab);
         document.getElementById('view-' + k).style.display = k === tab ? 'block' : 'none';
       });
+      document.body.classList.toggle('sch-on', tab === 'schedule');
       moveGlider('tabSeg', 'tabGlider');
       if (tab === 'task') setTimeout(function () { moveGlider('fSeg', 'fGlider'); }, 30);
       if (navigator.vibrate) navigator.vibrate(6);
@@ -854,30 +954,33 @@
       }
     }
 
-    // แตะ 1 ที = เข้างานแล้ว (การ์ดขาว) · แตะ 2 ที = ติดต่อไม่ได้ (การ์ดเหลือง) · การ์ดหยุด/ลา แตะไม่ได้
+    // 🟢 โหมดเช็คอิน: แตะ = เข้างานแล้ว · แตะสองที = ติดต่อไม่ได้ · แตะซ้ำ = ยกเลิก
+    // 🌙 โหมดเช็คเอาท์: แตะ = เลิกงานแล้ว (บันทึกเวลาออก) · แตะซ้ำ = ยกเลิกเช็คเอาท์ · การ์ดหยุด/ลา แตะไม่ได้
     function handleCardClick(el, cat, nickname) {
       if (cat !== 'WORK') return;
       if (navigator.vibrate) navigator.vibrate(12);
-      var badge = el.querySelector('.shift-badge');
-      var set = function (mode) {
-        el.classList.toggle('checked-in', mode === 'in'); el.classList.toggle('status-unreachable', mode === 'lost');
-        checkedInUsers.delete(nickname); unreachableUsers.delete(nickname);
-        if (mode === 'in') checkedInUsers.add(nickname); if (mode === 'lost') unreachableUsers.add(nickname);
-        badge.textContent = mode === 'in' ? 'เข้างานแล้ว' : mode === 'lost' ? 'ติดต่อไม่ได้' : 'ON DUTY';
-        if (SUM) {
-          var cards = document.querySelectorAll('#schedule-list .schedule-card[data-cat="WORK"]');
-          SUM.in = 0; SUM.lost = 0; SUM.wait = 0;
-          cards.forEach(function (c) { c.classList.contains('checked-in') ? SUM.in++ : c.classList.contains('status-unreachable') ? SUM.lost++ : SUM.wait++; });
-          renderSchSum();
-        }
+      var a = ATT[nickname] || {};
+      var apply = function () {
+        if (!a.st && !a.in && !a.out) delete ATT[nickname]; else ATT[nickname] = a;
+        attSave();
+        el.classList.toggle('checked-in', a.st === 'in'); el.classList.toggle('checked-out', a.st === 'out'); el.classList.toggle('status-unreachable', a.st === 'lost');
+        el.querySelector('.shift-badge').textContent = a.st === 'in' ? 'เข้างานแล้ว' : a.st === 'out' ? 'เลิกงานแล้ว' : a.st === 'lost' ? 'ติดต่อไม่ได้' : 'ON DUTY';
+        var t = el.querySelector('.sch-time'); if (t) t.outerHTML = timeHTML(nickname);
+        markDue(); renderSchSum();
       };
+      if (MODE === 'out') {
+        if (a.st === 'out') { a.st = a.in ? 'in' : ''; delete a.out; toast('ยกเลิกเช็คเอาท์ ' + nickname); }
+        else { if (!a.in && a.st !== 'in') toast(nickname + ' ยังไม่ได้เช็คอิน — บันทึกเวลาออกให้แล้ว'); a.st = 'out'; a.out = nowHM(); }
+        apply(); return;
+      }
       if (clickTimer == null) {
-        var wasIn = el.classList.contains('checked-in'), wasLost = el.classList.contains('status-unreachable');
-        set(wasIn || wasLost ? 'none' : 'in');
+        if (a.st === 'in' || a.st === 'lost' || a.st === 'out') { a = {}; }
+        else { a = { st: 'in', in: nowHM() }; }
+        apply();
         clickTimer = setTimeout(function () { clickTimer = null; }, 320);
       } else {
         clearTimeout(clickTimer); clickTimer = null;
-        set('lost');
+        a = { st: 'lost' }; apply();
       }
     }
 
