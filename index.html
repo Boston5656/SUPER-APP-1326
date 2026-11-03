@@ -14,7 +14,7 @@
   <link rel="manifest" href="manifest.json">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SUPER APP 1326</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -249,6 +249,62 @@
     #page-dashboard.hmode .staff-card .att-tile .val { font-size: 16px; }
     #page-dashboard.hmode .staff-card .sc-cat { display: none !important; }
     #page-dashboard.hmode .staff-card .cat-toggle .chev { transform: rotate(-90deg); }
+
+    /* ===== ◢◤ การ์ดสี่เหลี่ยมเอียง (ตัดมุมบนซ้าย + ล่างขวา) ===== */
+    .sl-card, .page-dashboard .staff-card { --cut: 22px;
+      clip-path: polygon(var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut));
+      border-radius: 6px !important; border: 0 !important; }
+    #page-dashboard .dash-col .sl-card, #page-dashboard .sl-card { border-radius: 6px !important; }
+    .sl-card { display: flex !important; flex-direction: column; gap: 10px; padding: 16px 18px 16px 18px !important;
+      background: linear-gradient(160deg, #2C2C2F 0%, #161618 65%) !important; color: #fff; position: relative; }
+    .sl-card::before { content: ''; position: absolute; left: 0; top: 0; width: calc(var(--cut) * 1.42); height: 2px; background: #FFD600;
+      transform-origin: 0 0; transform: translate(0, var(--cut)) rotate(-45deg); opacity: .9; }
+    .sl-card::after { content: ''; position: absolute; right: 0; bottom: 0; width: calc(var(--cut) * 1.42); height: 2px; background: rgba(255,255,255,.18);
+      transform-origin: 100% 100%; transform: translate(0, calc(var(--cut) * -1)) rotate(-45deg); }
+    .sl-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-left: 10px; }
+    .sl-name { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 12.5px; font-weight: 800; letter-spacing: .3px; text-transform: uppercase; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sl-card .chip { font-size: 10px; font-weight: 800; border-radius: 4px; padding: 3px 8px; white-space: nowrap; transform: skewX(-12deg); }
+    .sl-card .chip.none { background: rgba(255,255,255,.08); color: #AEAEB2; }
+    .sl-mid { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+    .sl-meta { display: flex; flex-direction: column; gap: 3px; font-size: 11.5px; color: #8E8E93; font-weight: 700; min-width: 0; }
+    .sl-meta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sl-meta b { color: #fff; font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 14px; margin-left: 3px; }
+    .sl-meta i { font-style: normal; color: #6E6E73; margin-left: 3px; }
+    .sl-big { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 40px; font-weight: 800; line-height: .95; letter-spacing: -1.5px; white-space: nowrap; }
+    .sl-big small { font-size: 18px; letter-spacing: 0; margin-left: 2px; opacity: .8; }
+    .sl-foot { display: flex; align-items: stretch; gap: 12px; flex: 1 1 auto; min-height: 54px; padding-right: 8px; }
+    .sl-chart { flex: 1 1 auto; min-width: 0; display: flex; align-items: flex-end; border-bottom: 1px solid rgba(255,255,255,.12); }
+    .sl-chart svg { width: 100%; height: 100%; min-height: 44px; max-height: 200px; display: block; }
+    .sl-side { flex: 0 0 auto; display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; padding-left: 12px; border-left: 2px solid rgba(255,255,255,.14); min-width: 86px; }
+    .sl-side span { display: flex; flex-direction: column; line-height: 1.15; }
+    .sl-side small { font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .sl-side b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 14px; color: #fff; white-space: nowrap; }
+    .hgrid.stretch > .sl-card { justify-content: flex-start !important; }
+    .page-dashboard .staff-card { padding-left: 20px !important; }
+    .page-dashboard .staff-card .sc-head { padding-left: 8px; }
+
+    /* ===== กรอบกระจก: รูเจาะสี่เหลี่ยมเอียง มุมบนซ้าย + ล่างขวา ===== */
+    #page-dashboard .dash-col.box-white, #page-dashboard .hpanel { position: relative; }
+    #page-dashboard .dash-col.box-white::before, #page-dashboard .dash-col.box-white::after {
+      content: ''; position: absolute; width: 112px; height: 112px; pointer-events: none; z-index: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='112' height='112' viewBox='0 0 112 112'%3E%3Cpath d='M0 0H90L0 90Z' fill='%231C1C1E' fill-opacity='.05'/%3E%3Cpath d='M90 0L0 90' stroke='%231C1C1E' stroke-opacity='.28' stroke-width='2'/%3E%3Cpath d='M94 2L2 94' stroke='%23fff' stroke-opacity='.85' stroke-width='1'/%3E%3Cg fill='%231C1C1E' fill-opacity='.22'%3E%3Cpath d='M15 10h11l-5 9H10z'/%3E%3Cpath d='M33 10h11l-5 9H28z'/%3E%3Cpath d='M51 10h11l-5 9H46z'/%3E%3Cpath d='M15 24h11l-5 9H10z'/%3E%3Cpath d='M33 24h11l-5 9H28z'/%3E%3Cpath d='M15 38h11l-5 9H10z'/%3E%3C/g%3E%3C/svg%3E") no-repeat 0 0 / 100% 100%; }
+    #page-dashboard .dash-col.box-white::before { top: 0; left: 0; border-top-left-radius: inherit; }
+    #page-dashboard .dash-col.box-white::after { bottom: 0; right: 0; transform: rotate(180deg); }
+    #page-dashboard .dash-col.box-white > * { position: relative; z-index: 1; }
+    #page-dashboard .dash-col.box-white > h3 { padding-left: 62px; }
+    #page-dashboard .dash-col.box-white { padding-top: 36px !important; padding-bottom: 30px !important; }
+    #page-dashboard.hmode .hpanel { padding-top: 34px !important; padding-bottom: 26px !important; }
+
+    /* การ์ดเอียง: ความสูงพอดีเนื้อหา (กราฟสูงคงที่ ไม่ยืดยาว) */
+    .sl-foot { flex: 0 0 auto !important; height: 78px; min-height: 0 !important; }
+    .sl-chart svg { height: 100% !important; max-height: none !important; }
+    html #page-dashboard.hmode .dash-cols .hpanel { padding-top: 40px !important; }
+    html #page-dashboard.hmode .dash-cols .hpanel > h3 { margin-top: 0 !important; }
+    .cm-card.sl-card .sl-foot { height: 104px; }
+    .sl-side { gap: 4px !important; }
+    .sl-side small { font-size: 9.5px !important; }
+    .sl-side b { font-size: 13px !important; }
+    #page-dashboard .dash-col.box-white { padding-top: 44px !important; }
     /* 📱 มือถือ: การ์ดพนักงาน / แบรนด์ / Category เรียง 1 คอลัมน์ · กันหน้ากว้างเกินจอ (iPhone จะย่อทั้งหน้า) */
     html, body { overflow-x: hidden; }
     .page-dashboard { overflow-x: clip; }
@@ -1201,7 +1257,7 @@
       <main class="dash-cols" id="dash-cols">
         <section class="box-white dash-sec dash-col hpanel" id="col-focus">
           <h3 class="text-sm font-bold mb-4">🎯 งานโฟกัส</h3>
-          <div class="hsrc grid grid-cols-2 gap-3" id="db-focus"></div>
+          <div class="hsrc grid sm:grid-cols-2 gap-3" id="db-focus"></div>
           <div class="hbody"></div>
         </section>
 
@@ -1408,7 +1464,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.03-10';
+    const APP_VER = '2026.11.03-16';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -2177,31 +2233,26 @@
     }
     function catCardHTML(c) {
       const click = `openCatDetail('${String(c.name).replace(/'/g, "\\'")}')`;
-      const foot = catSpark(c) + `<div class="cm-foot"><span>MOM <b class="${gClass(c.mom)}">${c.mom}</b> · YOY <b class="${gClass(c.yoy)}">${c.yoy}</b></span><span class="cm-more">รายละเอียด ›</span></div>`;
-      if (!(c.target > 0)) {
-        const P = monthPace();
-        return `<div class="box-dark cm-card cursor-pointer tap" onclick="${click}">
-          <div class="cm-head"><span class="cm-name">${c.name}</span><span class="cm-chip none">ไม่มีเป้า</span></div>
-          <div class="cm-row"><div><div class="cm-big">${catFmt(c.name, c.achieveBaht)}</div><div class="cm-sub">ยอดขายเดือนนี้</div></div></div>
-          <div class="cm-stats two">
-            <div><small>คาดการณ์สิ้นเดือน</small><b>${catFmt(c.name, c.forecastBaht)}</b></div>
-            <div><small>เฉลี่ยต่อวัน</small><b>${catFmt(c.name, c.achieveBaht / P.day)}</b></div>
-          </div>${foot}</div>`;
-      }
-      const k = catCalc(c.name, c.target, c.achieveBaht, c.forecastPer, c.forecastBaht);
-      return `<div class="box-dark cm-card cursor-pointer tap" onclick="${click}">
-        <div class="cm-head"><span class="cm-name">${c.name}</span><span class="cm-chip" style="color:${k.col};background:${k.col}26">Forecast ${pctTxt(k.fc)}%</span></div>
-        <div class="cm-row">
-          <div style="min-width:0"><div class="cm-big">${catFmt(c.name, c.achieveBaht)}</div><div class="cm-sub">จากเป้า ${catFmt(c.name, c.target)}</div></div>
-          <div class="text-right"><div class="cm-pct">${pctTxt(k.ach)}%</div><div class="cm-sub">Achieve</div></div>
+      const dl = dailyOf(), a = dl && dl.cat && dl.cat[c.name], P = monthPace();
+      const hasT = c.target > 0, k = hasT ? catCalc(c.name, c.target, c.achieveBaht, c.forecastPer, c.forecastBaht) : null;
+      const col = k ? k.col : '#FFD600';
+      const chip = hasT ? `<span class="chip" style="color:${col};background:${col}26">Fc ${pctTxt(k.fc)}%</span>` : '<span class="chip none">ไม่มีเป้า</span>';
+      const per = a ? a.reduce((x, y) => x + y, 0) / Math.max(1, a.length) : c.achieveBaht / Math.max(1, P.day);
+      return `<div class="box-dark cm-card sl-card tap" onclick="${click}">
+        <div class="sl-head"><span class="sl-name">${c.name}</span>${chip}</div>
+        <div class="sl-mid">
+          <div class="sl-meta"><span>ยอด <b>${catFmt(c.name, c.achieveBaht)}</b></span><span>Target <b>${hasT ? catFmt(c.name, c.target) : '–'}</b></span></div>
+          <div class="sl-big" style="color:${hasT ? col : '#fff'}">${hasT ? pctTxt(k.ach) + '<small>%</small>' : '<small style="margin:0">฿</small>' + formatBaht(Math.round(c.achieveBaht / 1000)) + '<small>K</small>'}</div>
         </div>
-        ${catBar(k)}
-        <div class="cm-pace ${k.onPace ? 'ok' : 'bad'}">${k.onPace ? '▲ นำหน้าเส้นเวลา' : '▼ ตามหลังเส้นเวลา'} <span>· ควรได้ ${k.P.pace.toFixed(0)}% ณ วันที่ ${k.P.day}/${k.P.days}</span></div>
-        <div class="cm-stats">
-          <div><small>คาดสิ้นเดือน</small><b>${catFmt(c.name, k.fcVal)}</b></div>
-          <div><small>${k.gap > 0 ? 'ขาดอีก' : 'เกินเป้า'}</small><b class="${k.gap > 0 ? 'fc-red' : 'fc-green'}">${catFmt(c.name, Math.abs(k.gap))}</b></div>
-          <div><small>ต้องทำ/วัน (${k.P.left} วัน)</small><b>${k.gap > 0 ? catFmt(c.name, k.perDay) : '✓ ครบแล้ว'}</b></div>
-        </div>${foot}</div>`;
+        <div class="sl-foot">
+          <div class="sl-chart">${a ? sparkSVG(a, dl.days, '#FFD600', { avgLine: hasT ? c.target / (dl.days || 30) : null }) : ''}</div>
+          <div class="sl-side">
+            <span><small>เฉลี่ย/วัน</small><b>${catFmt(c.name, per)}</b></span>
+            <span><small>${hasT ? (k.gap > 0 ? 'ขาดอีก' : 'เกินเป้า') : 'คาดสิ้นเดือน'}</small><b class="${hasT ? (k.gap > 0 ? 'fc-red' : 'fc-green') : ''}">${hasT ? catFmt(c.name, Math.abs(k.gap)) : catFmt(c.name, c.forecastBaht)}</b></span>
+            ${hasT && k.gap > 0 ? `<span><small>ต้องทำ/วัน</small><b>${catFmt(c.name, k.perDay)}</b></span>` : ''}
+          </div>
+        </div>
+      </div>`;
     }
     function staffCatHTML(list) {
       if (!list || !list.length) return '<p class="cat-row text-[10px] text-zinc-400 text-center py-2">ไม่มีเป้าหมายรายแคทสำหรับพนักงานคนนี้</p>';
@@ -2586,8 +2637,8 @@
     // ===== โหมดแนวนอน: การ์ดเรียงลงจนเต็มจอ แล้วต่อคอลัมน์ใหม่ทางขวา (ปัด / ลากเมาส์ / หมุนลูกกลิ้ง = เลื่อนซ้าย-ขวา) =====
     const HMODE_MQ = window.matchMedia('(orientation: landscape) and (min-width: 900px) and (min-height: 560px)');
     const H_PANELS = [
-      { id: 'col-focus', minw: 230, maxCols: 5, stretch: true, srcs: [{ id: 'db-focus' }] },
-      { id: 'col-category', minw: 290, maxCols: 5, stretch: true, srcs: [{ id: 'db-category' }] },
+      { id: 'col-focus', minw: 300, maxCols: 5, fill: true, srcs: [{ id: 'db-focus' }] },
+      { id: 'col-category', minw: 320, maxCols: 5, fill: true, srcs: [{ id: 'db-category' }] },
       { id: 'staff-section', minw: 330, maxCols: 6, minCols: 1, fill: true, srcs: [{ id: 'db-staff' }] },
       { id: 'col-brand', minw: 340, maxCols: 6, minCols: 1, fill: true, srcs: [{ id: 'db-brand-apple', label: 'Apple' }, { id: 'db-brand-phone', label: 'Smartphone' }, { id: 'db-brand-tablet', label: 'Tablet' }] }
     ];
@@ -2715,7 +2766,7 @@
       const GAP = 16, W = body.clientWidth - 16, H = body.clientHeight - 24;
       const nodes = [];
       panel._hitems.forEach((it, idx) => {
-        if (!(it.node.classList && it.node.classList.contains('staff-card'))) return;   // ข้อความ "ไม่มียอดขาย…" ไม่ต้องโชว์
+        if (!(it.node.classList && (it.node.classList.contains('staff-card') || it.node.classList.contains('sl-card')))) return;   // ข้อความ "ไม่มียอดขาย…" ไม่ต้องโชว์
         const sec = it.label || (panel._hitems.slice(0, idx + 1).reverse().find(x => x.label) || {}).label;
         const hd = it.node.querySelector('.sc-head > span:first-child');
         if (sec && hd && !hd.querySelector('.sec-tag') && /tablet/i.test(sec)) hd.insertAdjacentHTML('beforeend', '<span class="sec-tag">Tablet</span>');
@@ -3992,18 +4043,21 @@
                      : isPass ? '<span class="chip pass">✓ ผ่าน</span>' : '<span class="chip miss">ยังไม่ผ่าน</span>';
           const foot = base <= 0 ? 'ยังไม่มีฐานเครื่อง'
                      : !hasTarget ? '' : (need > 0 ? `ขาดอีก <b class="text-white">${fmtUnit(need)}</b> ชิ้น` : '<span class="fc-green font-bold">ครบเป้าแล้ว</span>');
-          focusHtml += `<div class="focus-card tap" onclick="openFocusDetail(${fi})">
-              <div class="flex justify-between items-start gap-2">
-                <span class="text-[11px] font-extrabold uppercase leading-tight">${f.name}</span>${chip}
+          const fd = (data.daily && data.daily.focus && data.daily.focus[f.name]) || null;
+          const avgPer = fd ? (() => { const c = fd.c.reduce((a, b) => a + b, 0), b = fd.b.reduce((a, b) => a + b, 0); return b > 0 ? c / b * 100 : 0; })() : null;
+          const gapPct = hasTarget ? Math.max(0, tgt - cur) : null;
+          focusHtml += `<div class="focus-card sl-card tap" onclick="openFocusDetail(${fi})">
+              <div class="sl-head"><span class="sl-name">${f.name}</span>${chip}</div>
+              <div class="sl-mid">
+                <div class="sl-meta"><span>Unit <b>${fmtUnit(count)}</b><i>/ ${fmtUnit(base)}</i></span><span>Target <b>${hasTarget ? pctTxt(tgt) + '%' : '–'}</b></span></div>
+                <div class="sl-big" style="color:${color}">${pctTxt(cur)}<small>%</small></div>
               </div>
-              <div class="flex items-end justify-between mt-3">
-                <div><span class="block text-[9px] text-zinc-400 font-bold">ทำได้</span><span class="text-2xl font-black leading-none" style="color:${color}">${pctTxt(cur)}%</span></div>
-                <div class="text-right"><span class="block text-[9px] text-zinc-400 font-bold">TARGET</span><span class="text-lg font-black leading-none text-zinc-200">${hasTarget ? pctTxt(tgt) + '%' : '–'}</span></div>
-              </div>
-              ${focusSpark(data, f.name, color)}
-              <div class="focus-bar"><i data-w="${Math.min(100, Math.max(0, ratio)).toFixed(1)}" style="background:${color}"></i></div>
-              <div class="flex justify-between text-[10px] mt-2 text-zinc-400 gap-2">
-                <span>${fmtUnit(count)} / ${fmtUnit(base)} เครื่อง</span><span class="text-right">${foot}</span>
+              <div class="sl-foot">
+                <div class="sl-chart">${fd ? sparkSVG(fd.c, data.daily.days, color) : ''}</div>
+                <div class="sl-side">
+                  <span><small>เฉลี่ย/วัน</small><b>${fd ? (fd.c.reduce((a, b) => a + b, 0) / Math.max(1, fd.c.length)).toFixed(1) : '–'}</b></span>
+                  <span><small>${hasTarget ? (need > 0 ? 'ขาดอีก' : 'ผ่านแล้ว') : 'ไม่มีเป้า'}</small><b class="${hasTarget ? (need > 0 ? 'fc-red' : 'fc-green') : ''}">${hasTarget ? (need > 0 ? fmtUnit(need) + ' ชิ้น' : '✓') : '–'}</b></span>
+                </div>
               </div>
             </div>`;
         });
