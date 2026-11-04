@@ -234,6 +234,44 @@
     .linkbtn { width: 100%; margin-top: 8px; border: 0; border-radius: 100px; padding: 13px; background: #2C2C2E; color: #fff; font: 700 14.5px 'Kanit', sans-serif; cursor: pointer; transition: transform .3s var(--spring), background .2s; }
     .linkbtn:active { transform: scale(.96); } .linkbtn.done { background: var(--ok); }
 
+    /* 🚀 ชีตเช็คงาน — วางข้อมูลดิบ → แตะเลือกคอลัมน์ → ตรวจสอบ (แบบเดียวกับเมนู 🚀 ในชีต) */
+    #view-sheet { display: none; max-width: 1180px; margin: 0 auto; box-sizing: border-box; }
+    #view-sheet * { box-sizing: border-box; }
+    .zs-card { background: rgba(255,251,234,.92); border-radius: 26px; padding: 16px 14px; box-shadow: 0 22px 44px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); margin-bottom: 12px; }
+    .zs-card h3 { margin: 0 4px 4px; font: 700 17px 'Kanit', sans-serif; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+    .zs-card h3 small { color: #6E6E73; font: 600 12.5px 'IBM Plex Sans Thai', sans-serif; }
+    .zs-card p.h { margin: 0 4px 10px; font-size: 12.5px; color: #6E6E73; font-weight: 600; line-height: 1.55; }
+    .zs-paste { width: 100%; min-height: 84px; border: 2px dashed rgba(28,28,30,.25); border-radius: 18px; background: #fff; padding: 12px; font: 600 14px 'IBM Plex Sans Thai', sans-serif; resize: vertical; color: var(--d); }
+    .zs-paste:focus { outline: none; border-color: var(--d); }
+    .zs-meta { font-size: 12px; color: #6E6E73; font-weight: 700; margin: 8px 4px 0; }
+    .zs-grid { overflow: auto; max-height: 56vh; border-radius: 16px; background: #fff; border: 1px solid #EEE; -webkit-overflow-scrolling: touch; }
+    .zs-grid table { border-collapse: separate; border-spacing: 0; font-size: 12.5px; min-width: 100%; }
+    .zs-grid th, .zs-grid td { padding: 8px 10px; border-bottom: 1px solid #F0F0F0; border-right: 1px solid #F5F5F5; white-space: nowrap; text-align: left; max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
+    .zs-grid thead th { position: sticky; top: 0; z-index: 2; background: #1C1C1E; color: #fff; font-weight: 700; cursor: pointer; transition: background .25s; }
+    .zs-grid thead th small { display: block; font: 700 10px 'Kanit', sans-serif; color: #8E8E93; letter-spacing: .5px; }
+    .zs-grid thead th.rn { cursor: default; }
+    .zs-grid th.sel { background: var(--y); color: var(--d); } .zs-grid th.sel small { color: rgba(28,28,30,.6); }
+    .zs-grid td.sel { background: #FFF7C7; font-weight: 700; }
+    .zs-grid td.rn, .zs-grid th.rn { position: sticky; left: 0; background: #FAFAFA; color: #AEAEB2; z-index: 1; }
+    .zs-grid thead th.rn { background: #1C1C1E; z-index: 3; }
+    .zs-grid tr.zin td.rn { color: var(--d); font-weight: 700; box-shadow: inset 3px 0 0 var(--y); }
+    .zs-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .zs-btn { flex: 1; min-width: 130px; height: 50px; border: 0; border-radius: 16px; font: 700 15px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; background: #fff; color: var(--d); transition: transform .3s var(--spring); }
+    .zs-btn:active { transform: scale(.95); } .zs-btn.go { background: var(--d); color: var(--y); flex: 2; box-shadow: 0 10px 22px -12px rgba(0,0,0,.7); }
+    .zs-btn.go:disabled { opacity: .35; } .zs-btn.save { background: var(--ok); color: #fff; flex: 2; }
+    .zs-pick { display: flex; align-items: center; gap: 10px; background: var(--d); color: #fff; border-radius: 16px; padding: 10px 12px; margin-bottom: 10px; font-size: 13px; font-weight: 700; }
+    .zs-pick b { color: var(--y); font-size: 15px; } .zs-pick .tip { flex: 1; color: #AEAEB2; font-weight: 600; font-size: 12px; text-align: right; }
+    .zs-k { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 12px; }
+    .zs-k div { border-radius: 18px; padding: 12px; background: #fff; } .zs-k small { display: block; font-size: 12px; font-weight: 700; color: #6E6E73; }
+    .zs-k b { font: 800 28px 'Kanit', sans-serif; } .zs-k .ok b { color: #1E9E45; } .zs-k .no b { color: #E5342B; } .zs-k .warn b { color: #C77700; }
+    .zs-r { display: grid; grid-template-columns: auto 1fr auto; gap: 8px 10px; align-items: center; background: #fff; border-radius: 16px; padding: 11px 12px; margin-bottom: 7px; animation: riseIn .45s var(--ios-ease) both; }
+    .zs-r .id { background: var(--d); color: var(--y); font: 700 12px 'Kanit', sans-serif; border-radius: 9px; padding: 5px 8px; }
+    .zs-r .nm { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .zs-r .nm small { display: block; font-size: 11.5px; color: #8E8E93; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .zs-r .st { font-size: 12.5px; font-weight: 800; border-radius: 100px; padding: 5px 11px; white-space: nowrap; }
+    .zs-r .st.ok { background: #E3F9E9; color: #1E7B34; } .zs-r .st.no { background: #FFE5E5; color: #C11A1F; } .zs-r .st.warn { background: #FFF1D6; color: #8A5300; }
+    .zs-empty { text-align: center; padding: 26px 10px; color: #6E6E73; font-weight: 700; font-size: 14px; }
+    @media (min-width: 980px) { #view-sheet .zs-two { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(360px, 1fr); gap: 14px; align-items: start; } }
     /* ⚙️ ตั้งค่า ASM */
     .set-sec { background: #fff; border-radius: 18px; padding: 12px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
     .set-sec h4 { margin: 0 0 4px; font: 700 15px 'Kanit', sans-serif; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -328,6 +366,7 @@
       <div class="glider" id="tabGlider"></div>
       <button type="button" class="on" onclick="switchTab('task')" id="tab-task">📋 ติดตามงาน</button>
       <button type="button" onclick="switchTab('schedule')" id="tab-schedule">งานตารางงาน</button>
+      <button type="button" onclick="switchTab('sheet')" id="tab-sheet">🚀 เช็คงาน</button>
     </div>
   </div>
 
@@ -419,6 +458,24 @@
           <div id="report-list"></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- หน้าที่ 3: 🚀 ชีตเช็คงาน (แทนเมนู 🚀 ในชีต — วางข้อมูล แตะคอลัมน์ แล้วกดตรวจสอบ) -->
+  <div id="view-sheet">
+    <div class="rise" style="margin:0 2px 14px">
+      <span class="eyebrow"><span class="ic">🚀</span>ASM TRACK · ชีตเช็คงาน</span>
+      <div class="h-title"><h1>ตรวจสอบงานจากชีต</h1></div>
+      <div class="h-sub">วางข้อมูลดิบ → แตะหัวคอลัมน์ที่ต้องการเช็ค → กด 🚀 ตรวจสอบ → บันทึกลง Report</div>
+    </div>
+    <div class="zs-two">
+      <div>
+        <div class="zs-card rise" style="animation-delay:.05s"><h3>📋 วางข้อมูลดิบ <small id="zsMeta"></small></h3>
+          <p class="h">ก๊อปทั้งตารางจาก Excel / Google Sheet (กด Ctrl+A แล้ว Ctrl+C) มาวางในช่องนี้ · ข้อมูลอยู่ในเครื่องนี้เท่านั้น ไม่ส่งขึ้นระบบ</p>
+          <textarea class="zs-paste" id="zsIn" placeholder="แตะตรงนี้ แล้ว วาง (Paste) ได้เลย…"></textarea></div>
+        <div class="zs-card rise" style="animation-delay:.1s" id="zsSheetCard"><div id="zsSheet"><div class="zs-empty">ยังไม่มีข้อมูล — วางตารางในช่องด้านบน</div></div></div>
+      </div>
+      <div class="zs-card rise" style="animation-delay:.15s"><h3>📊 ผลตรวจสอบ <small id="zsResMeta"></small></h3><div id="zsRes"><div class="zs-empty">กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้</div></div></div>
     </div>
   </div>
 
@@ -831,6 +888,10 @@
         '<div class="set-row"><input readonly id="set-link" value="' + esc(REPORT_URL || 'กำลังสร้างลิงก์…') + '" onclick="this.select()">' +
         '<button class="sbtn y" onclick="setCopyLink(this)">คัดลอก</button><button class="sbtn g" onclick="if(REPORT_URL)window.open(REPORT_URL,\'_blank\')">เปิดดู</button></div>' +
         '<div class="set-row" style="margin-top:8px;justify-content:flex-end"><button class="sbtn r" onclick="setRenewLink(this)">สร้างลิงก์ใหม่ (ลิงก์เก่าใช้ไม่ได้)</button></div></div>';
+      h += '<div class="set-sec"><h4>🤝 ลิงก์ให้เพื่อนสาขาที่รวมงาน</h4><p>เพื่อนเปิดลิงก์นี้ได้เลย ไม่ต้องล็อกอิน SUPER APP · วางข้อมูลแล้วกด 🚀 เช็ค · แตะเปลี่ยนสถานะ · เปลี่ยนชื่องาน · เริ่มงานใหม่ได้ (เพิ่ม/ลบสาขา ตั้งค่าโซน ยังเป็นของคุณ)</p>' +
+        '<div class="set-row"><input readonly id="set-wlink" value="' + esc(WORK_URL || 'กดปุ่มคัดลอกเพื่อสร้างลิงก์') + '" onclick="this.select()">' +
+        '<button class="sbtn y" onclick="setWorkLink(this,false)">คัดลอก</button><button class="sbtn g" onclick="setWorkLink(this,false,1)">เปิดดู</button></div>' +
+        '<div class="set-row" style="margin-top:8px;justify-content:flex-end"><button class="sbtn r" onclick="setWorkLink(this,true)">สร้างลิงก์ใหม่ (ลิงก์เก่าใช้ไม่ได้)</button></div></div>';
       h += '<div class="set-sec"><h4>🧭 ASM / โซน</h4><p>ชื่อที่โชว์ใต้หัวข้อ เช่น "ZONE ASM ทศพล" — เปลี่ยน ASM แก้ตรงนี้ที่เดียว</p>' +
         '<div class="set-row"><input id="set-am" maxlength="80" value="' + esc(SET.am) + '" placeholder="ชื่อ ASM / โซน"><button class="sbtn" onclick="setCall(\'saveZone\',[document.getElementById(\'set-am\').value],\'บันทึกชื่อ ASM แล้ว\')">บันทึก</button></div></div>';
       h += '<div class="set-sec"><h4>🏬 สาขาที่ติดตามงาน <small>' + b.length + ' สาขา</small></h4><p>ชีต: ' + esc(SET.statusSheet) + ' · แก้ชื่อแล้วกดออกจากช่องจะบันทึกเอง</p><div class="set-list">' +
@@ -924,11 +985,12 @@
     }
 
     function switchTab(tab) {
-      ['task', 'schedule'].forEach(function (k) {
+      ['task', 'schedule', 'sheet'].forEach(function (k) {
         document.getElementById('tab-' + k).classList.toggle('on', k === tab);
-        document.getElementById('view-' + k).style.display = k === tab ? 'block' : 'none';
+        document.getElementById('view-' + k).style.display = k === tab ? (k === 'task' ? '' : 'block') : 'none';   // หน้าติดตามงานใช้เลย์เอาต์จาก CSS (2 คอลัมน์บนจอใหญ่)
       });
       document.body.classList.toggle('sch-on', tab === 'schedule');
+      if (tab === 'sheet') zsRender();
       moveGlider('tabSeg', 'tabGlider');
       if (tab === 'task') setTimeout(function () { moveGlider('fSeg', 'fGlider'); }, 30);
       if (navigator.vibrate) navigator.vibrate(6);
@@ -998,6 +1060,122 @@
         fetchData();
       }).submitReport(payload);
     }
-  </script>
+  
+    // =========================================================
+    // 🚀 ชีตเช็คงาน — ทำงานแบบเดียวกับเมนู "🎯 ตรวจสอบงาน (จากคอลัมน์ที่คลิก)" ในชีต ASM
+    //   แต่ละสาขาในโซน: หา ID ในแถวไหนก็ได้ → ถ้าคอลัมน์ที่เลือกมีค่า = ✅ ส่งแล้ว · ว่าง หรือไม่เจอ ID = ❎ ยังไม่ส่ง
+    // =========================================================
+    var ZS_KEY = 'asm_sheet_v1', ZS = { rows: [], col: -1, at: 0 }, ZS_RES = null;
+    try { ZS = JSON.parse(localStorage.getItem(ZS_KEY)) || ZS; } catch (e) {}
+    function zsSave() { try { localStorage.setItem(ZS_KEY, JSON.stringify(ZS)); } catch (e) { toast('ข้อมูลใหญ่เกิน เครื่องจำไม่ได้ (ยังใช้ได้จนปิดหน้า)'); } }
+    function zsParse(txt) {
+      var rows = [], row = [], cell = '', q = false, sep = txt.indexOf('\t') >= 0 ? '\t' : ',';
+      for (var i = 0; i < txt.length; i++) {
+        var c = txt[i];
+        if (q) { if (c === '"') { if (txt[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+        else if (c === '"' && cell === '') q = true;
+        else if (c === sep) { row.push(cell); cell = ''; }
+        else if (c === '\n' || c === '\r') { if (c === '\r' && txt[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+        else cell += c;
+      }
+      if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+      var w = 0; rows.forEach(function (r) { w = Math.max(w, r.length); });
+      return rows.filter(function (r) { return r.some(function (x) { return String(x).trim() !== ''; }); })
+        .map(function (r) { while (r.length < w) r.push(''); return r.map(function (x) { return String(x).trim(); }); });
+    }
+    function zsColName(c) { var n = '', x = c + 1; while (x > 0) { var m = (x - 1) % 26; n = String.fromCharCode(65 + m) + n; x = Math.floor((x - 1) / 26); } return n; }
+    function zsBranches() { return (TASKS || []).map(function (t) { return { id: String(t.id).replace(/^ID/i, '').trim(), full: t.id, name: t.name }; }).filter(function (b) { return b.id; }); }
+    function zsRx(id) { return new RegExp('(?:^|\\D)' + id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\D|$)', 'i'); }
+    function zsZoneRows() {   // แถวไหนเป็นของสาขาในโซน (ไว้ไฮไลต์ในตาราง)
+      var rx = zsBranches().map(function (b) { return zsRx(b.id); }), set = {};
+      ZS.rows.forEach(function (r, i) { var s = r.join(' ').toUpperCase(); if (rx.some(function (x) { return x.test(s); })) set[i] = 1; });
+      return set;
+    }
+    function zsPaste(txt) {
+      var rows = zsParse(txt);
+      if (!rows.length) return toast('ไม่พบข้อมูลที่วาง');
+      ZS = { rows: rows, col: -1, at: Date.now() }; ZS_RES = null; zsSave(); zsRender();
+      toast('📋 วางแล้ว ' + rows.length + ' แถว — แตะหัวคอลัมน์ที่จะเช็ค');
+      if (navigator.vibrate) navigator.vibrate(10);
+    }
+    function zsPick(c) { ZS.col = c; ZS_RES = null; zsSave(); zsRender(); if (navigator.vibrate) navigator.vibrate(8); }
+    function zsRender() {
+      var inp = document.getElementById('zsIn');
+      if (inp && !inp._b) {
+        inp._b = 1;
+        inp.addEventListener('paste', function (e) { var d = (e.clipboardData || window.clipboardData).getData('text'); if (d) { e.preventDefault(); inp.value = ''; zsPaste(d); } });
+        inp.addEventListener('change', function () { if (inp.value.trim()) { var v = inp.value; inp.value = ''; zsPaste(v); } });
+      }
+      var R = ZS.rows, W = R.length ? R[0].length : 0;
+      document.getElementById('zsMeta').textContent = R.length ? R.length + ' แถว · ' + W + ' คอลัมน์ · วางเมื่อ ' + new Date(ZS.at).toLocaleString('th-TH', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+      if (!R.length) { document.getElementById('zsSheet').innerHTML = '<div class="zs-empty">ยังไม่มีข้อมูล — วางตารางในช่องด้านบน</div>'; zsRenderRes(); return; }
+      var zin = zsZoneRows(), nz = Object.keys(zin).length, show = R.slice(0, 300);
+      var head = R[0];
+      document.getElementById('zsSheet').innerHTML =
+        '<div class="zs-pick">🎯 คอลัมน์ที่เช็ค: <b>' + (ZS.col >= 0 ? zsColName(ZS.col) + ' · ' + esc(head[ZS.col] || '') : 'ยังไม่ได้เลือก') + '</b><span class="tip">แตะหัวคอลัมน์ในตาราง</span></div>' +
+        '<div class="zs-grid"><table><thead><tr><th class="rn">#</th>' + head.map(function (h, c) {
+          return '<th class="' + (c === ZS.col ? 'sel' : '') + '" onclick="zsPick(' + c + ')"><small>' + zsColName(c) + '</small>' + esc(h || '-') + '</th>';
+        }).join('') + '</tr></thead><tbody>' + show.slice(1).map(function (r, i) {
+          return '<tr class="' + (zin[i + 1] ? 'zin' : '') + '"><td class="rn">' + (i + 2) + '</td>' + r.map(function (x, c) { return '<td class="' + (c === ZS.col ? 'sel' : '') + '">' + esc(x) + '</td>'; }).join('') + '</tr>';
+        }).join('') + '</tbody></table></div>' +
+        '<div class="zs-meta">แถวที่มีแถบเหลือง = สาขาในโซน (' + nz + ' แถว)' + (R.length > 300 ? ' · แสดง 300 แถวแรก (คำนวณครบทุกแถว)' : '') + '</div>' +
+        '<div class="zs-bar"><button class="zs-btn" onclick="zsClear()">🗑 ล้าง</button><button class="zs-btn go" ' + (ZS.col < 0 ? 'disabled' : '') + ' onclick="zsCheck()">🚀 ตรวจสอบงาน</button></div>';
+      zsRenderRes();
+    }
+    function zsClear() { ZS = { rows: [], col: -1, at: 0 }; ZS_RES = null; zsSave(); zsRender(); }
+    function zsCheck() {
+      if (ZS.col < 0) return toast('แตะเลือกคอลัมน์ก่อน');
+      var B = zsBranches(); if (!B.length) return toast('ยังไม่มีสาขาในโซน — เพิ่มที่ ⚙️ ตั้งค่า');
+      var rows = ZS.rows.map(function (r) { return r.join(' ').toUpperCase(); }), col = ZS.col;
+      ZS_RES = B.map(function (b) {
+        var rx = zsRx(b.id), found = false, has = false, val = '';
+        for (var r = 0; r < ZS.rows.length; r++) {
+          if (rx.test(rows[r])) { found = true; var v = ZS.rows[r][col]; if (v && String(v).trim() !== '') { has = true; val = String(v).trim(); break; } }
+        }
+        return { id: b.full, name: b.name, k: found && has ? 'ok' : 'no', nf: !found, val: val };   // ไม่เจอ ID = ถือว่ายังไม่ส่ง
+      });
+      zsRenderRes();
+      if (window.innerWidth < 980) document.getElementById('zsRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
+    }
+    function zsRenderRes() {
+      var el = document.getElementById('zsRes'), meta = document.getElementById('zsResMeta');
+      if (!ZS_RES) { el.innerHTML = '<div class="zs-empty">' + (ZS.rows.length ? (ZS.col < 0 ? 'แตะหัวคอลัมน์ที่จะเช็คก่อน แล้วกด 🚀' : 'กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้') : 'วางข้อมูลก่อน') + '</div>'; meta.textContent = ''; return; }
+      var c = { ok: 0, no: 0 }; ZS_RES.forEach(function (x) { c[x.k]++; });
+      var LBL = { ok: '✅ ส่งแล้ว', no: '❎ ยังไม่ส่ง' }, ord = { no: 0, ok: 1 };
+      meta.textContent = 'คอลัมน์ ' + zsColName(ZS.col) + ' · ' + (ZS.rows[0][ZS.col] || '');
+      el.innerHTML = '<div class="zs-k" style="grid-template-columns:1fr 1fr"><div class="ok"><small>ส่งแล้ว</small><b>' + c.ok + '</b></div><div class="no"><small>ยังไม่ส่ง</small><b>' + c.no + '</b></div></div>' +
+        ZS_RES.slice().sort(function (a, b) { return ord[a.k] - ord[b.k]; }).map(function (x, i) {
+          return '<div class="zs-r" style="animation-delay:' + Math.min(i * 30, 400) + 'ms"><span class="id">' + esc(x.id) + '</span><span class="nm">' + esc(x.name) + (x.val ? '<small>' + esc(x.val) + '</small>' : x.nf ? '<small>ไม่มีในข้อมูลที่วาง</small>' : '') + '</span><span class="st ' + x.k + '">' + LBL[x.k] + '</span></div>';
+        }).join('') +
+        '<div class="zs-bar"><button class="zs-btn save" id="zsSaveBtn" onclick="zsApply()">💾 บันทึกลง Report</button></div>' +
+        '<div class="zs-meta">บันทึกแล้ว สถานะในหน้า 📋 ติดตามงาน และลิงก์ Report ของหัวหน้าจะเปลี่ยนตามนี้ (เหมือนกดเมนู 🚀 ในชีต)</div>';
+    }
+    function zsApply() {
+      if (!ZS_RES) return;
+      var b = document.getElementById('zsSaveBtn'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+      google.script.run.withSuccessHandler(function (r) {
+        toast('💾 บันทึกแล้ว ' + ((r && r.updated) || 0) + ' สาขา'); LAST_EDIT = 0;
+        switchTab('task'); fetchData(true);
+      }).withFailureHandler(function (e) { b.disabled = false; b.textContent = '💾 บันทึกลง Report'; toast('บันทึกไม่สำเร็จ: ' + (e && e.message || '')); })
+        .applyCheck(ZS_RES.map(function (x) { return { id: x.id, k: x.k, nf: !!x.nf }; }));
+    }
+
+    // 🤝 ลิงก์ให้เพื่อนสาขาที่รวมงาน (asm-work.html · กุญแจแยกจากลิงก์ Report)
+    var WORK_URL = '';
+    function setWorkLink(btn, renew, open) {
+      if (renew && !sure(btn, 'แตะอีกครั้ง — ลิงก์เก่าจะใช้ไม่ได้')) return;
+      var go = function () {
+        if (open) return window.open(WORK_URL, '_blank');
+        copyText(WORK_URL, function () { var o = btn.textContent; btn.textContent = '✓ แล้ว'; setTimeout(function () { btn.textContent = o; }, 1800); setMsg(renew ? '✓ สร้างลิงก์ใหม่แล้ว อย่าลืมส่งให้เพื่อนใหม่' : '✓ คัดลอกลิงก์แล้ว ส่งให้เพื่อนได้เลย'); },
+          function () { var i = document.getElementById('set-wlink'); if (i) i.select(); toast('กดค้างที่ลิงก์แล้วเลือกคัดลอก'); });
+      };
+      if (WORK_URL && !renew) return go();
+      google.script.run.withSuccessHandler(function (r) {
+        WORK_URL = new URL('asm-work.html?k=' + encodeURIComponent(r.key), location.href).href;
+        var i = document.getElementById('set-wlink'); if (i) i.value = WORK_URL; go();
+      }).withFailureHandler(function (e) { toast('สร้างลิงก์ไม่สำเร็จ: ' + (e && e.message || '')); }).getWorkLink(!!renew);
+    }
+</script>
 </body>
 </html>

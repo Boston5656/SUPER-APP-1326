@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<!-- © 2026 บอสตัน สุดหล่อ (BaNANA ID1326) — ผลงานต้นฉบับ จัดทำเพื่อเพื่อนๆ สาขาในโซน -->
+<meta name="author" content="บอสตัน สุดหล่อ">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>รวมงาน ASM</title>
+<meta name="theme-color" content="#FFD600">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Kanit:wght@600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 🤝 รวมงาน ASM — ลิงก์ให้เพื่อนสาขาที่รวมงาน (ไม่ต้องล็อกอิน SUPER APP) */
+:root{ --y:#FFD600; --d:#1C1C1E; --ok:#16A34A; --no:#E5484D; --warn:#F59E0B; --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;overflow-x:hidden}
+body{min-height:100vh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),var(--y);background-attachment:fixed;padding:calc(10px + env(safe-area-inset-top)) 12px 30px}
+button{font-family:inherit;cursor:pointer;color:inherit;border:0;background:none;padding:0}
+button:focus{outline:none}
+.wrap{max-width:1100px;margin:0 auto}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes abBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.top h1{flex:1;margin:0;font:800 22px/1.15 'Kanit',sans-serif;min-width:0}.top h1 small{display:block;font:600 12px 'IBM Plex Sans Thai',sans-serif;color:rgba(28,28,30,.6)}
+.tb{border-radius:14px;padding:10px 12px;font-weight:700;font-size:13px;background:var(--d);color:var(--y);transition:transform .3s var(--spring)}
+.tb:active{transform:scale(.92)} .tb.w{background:#fff;color:var(--d)} .tb.spin span{display:inline-block;animation:spin .8s linear infinite}
+.ttl{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.ttl input{flex:1;min-width:0;background:var(--d);color:var(--y);border:0;border-radius:16px;padding:13px 16px;font:700 17px 'Kanit',sans-serif;box-shadow:0 10px 22px -12px rgba(0,0,0,.6)}
+.ttl input:focus{outline:2px solid #fff}
+.tabs{display:flex;gap:6px;background:rgba(255,255,255,.6);padding:5px;border-radius:18px;margin-bottom:12px}
+.tabs button{flex:1;height:44px;border-radius:14px;font-weight:700;font-size:14.5px;transition:background .3s,color .3s}
+.tabs button.on{background:var(--d);color:var(--y);box-shadow:0 6px 16px -8px rgba(0,0,0,.5)}
+.card{background:#FFFDF5;border-radius:22px;padding:14px;margin-bottom:10px;box-shadow:0 6px 18px -12px rgba(60,48,0,.55);animation:rise .4s var(--ios-ease) both}
+.card h3{margin:0 2px 4px;font:700 16px 'Kanit',sans-serif;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.card h3 small{font:600 12px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73}
+.card p.h{margin:0 2px 10px;font-size:12.5px;color:#6E6E73;font-weight:600;line-height:1.55}
+.prog{display:flex;align-items:center;gap:14px;background:var(--d);color:#fff;border-radius:22px;padding:14px;margin-bottom:10px}
+.ring{position:relative;width:96px;height:96px;flex-shrink:0}.ring svg{width:96px;height:96px;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:800 22px 'Kanit',sans-serif;color:var(--y)}
+.prog .n{flex:1}.prog .n small{display:block;font-size:12px;color:#AEAEB2;font-weight:700}.prog .n big{font:800 32px 'Kanit',sans-serif}.prog .n big span{font-size:18px;color:#8E8E93}
+.kp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:8px}.kp div{background:rgba(255,255,255,.08);border-radius:12px;padding:7px 9px;font-size:11px;font-weight:700;color:#D1D1D6}
+.kp b{display:block;font:700 19px 'Space Grotesk',sans-serif}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px}.chips::-webkit-scrollbar{display:none}
+.chips button{flex-shrink:0;border-radius:100px;padding:8px 13px;background:rgba(255,255,255,.75);font-weight:700;font-size:13px}
+.chips button.on{background:var(--d);color:var(--y)} .chips i{font-style:normal;opacity:.6;margin-left:4px}
+.list{display:grid;grid-template-columns:1fr;gap:7px}
+@media (min-width:760px){.list{grid-template-columns:1fr 1fr}}
+.br{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;background:#FFFDF5;border-radius:16px;padding:11px 12px;animation:rise .4s var(--ios-ease) both;box-shadow:0 4px 14px -10px rgba(60,48,0,.5)}
+.br .id{background:var(--d);color:var(--y);font:700 12px 'Space Grotesk',sans-serif;border-radius:9px;padding:5px 8px}
+.br .nm{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{font-size:12.5px;font-weight:800;border-radius:100px;padding:7px 12px;white-space:nowrap;transition:transform .3s var(--spring)}
+.st:active{transform:scale(.9)} .st.ok{background:#DCFCE7;color:#15803D} .st.no{background:#FFE4E6;color:#BE123C} .st.warn{background:#FFF1D6;color:#8A5300}
+.st.pop{animation:pop .4s var(--spring)} @keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.1)}100%{transform:scale(1)}}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.bar .tb{flex:1;min-width:140px;height:48px;font-size:14px}
+.tb.go{flex:2;font-size:15px}.tb.go:disabled{opacity:.35}.tb.save{background:var(--ok);color:#fff;flex:2}.tb.ghost{background:#F2F2F7;color:var(--d)}.tb.red{background:#fff;color:#BE123C}
+.hint{text-align:center;font-size:12px;color:rgba(28,28,30,.6);font-weight:600;margin:8px 0}
+.paste{width:100%;min-height:84px;border:2px dashed rgba(28,28,30,.25);border-radius:16px;background:#fff;padding:12px;font:600 14px 'IBM Plex Sans Thai',sans-serif;resize:vertical}
+.paste:focus{outline:none;border-color:var(--d)}
+.meta{font-size:12px;color:#6E6E73;font-weight:700;margin:8px 2px 0}
+.pick{display:flex;align-items:center;gap:10px;background:var(--d);color:#fff;border-radius:14px;padding:10px 12px;margin-bottom:10px;font-size:13px;font-weight:700;flex-wrap:wrap}
+.pick b{color:var(--y);font-size:15px}.pick .tip{flex:1;color:#AEAEB2;font-weight:600;font-size:12px;text-align:right}
+.grid{overflow:auto;max-height:54vh;border-radius:14px;background:#fff;border:1px solid #EEE;-webkit-overflow-scrolling:touch}
+.grid table{border-collapse:separate;border-spacing:0;font-size:12.5px;min-width:100%}
+.grid th,.grid td{padding:8px 10px;border-bottom:1px solid #F0F0F0;border-right:1px solid #F5F5F5;white-space:nowrap;text-align:left;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.grid thead th{position:sticky;top:0;z-index:2;background:#1C1C1E;color:#fff;font-weight:700;cursor:pointer}
+.grid thead th small{display:block;font:700 10px 'Space Grotesk',sans-serif;color:#8E8E93}
+.grid th.sel{background:var(--y);color:var(--d)}.grid th.sel small{color:rgba(28,28,30,.6)}.grid td.sel{background:#FFF7C7;font-weight:700}
+.grid td.rn,.grid th.rn{position:sticky;left:0;background:#FAFAFA;color:#AEAEB2;z-index:1;cursor:default}.grid thead th.rn{background:#1C1C1E;z-index:3}
+.grid tr.zin td.rn{color:var(--d);font-weight:700;box-shadow:inset 3px 0 0 var(--y)}
+.rk{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 10px}.rk div{border-radius:16px;padding:11px;background:#fff}
+.rk small{display:block;font-size:12px;font-weight:700;color:#6E6E73}.rk b{font:800 28px 'Kanit',sans-serif}.rk .ok b{color:#15803D}.rk .no b{color:#BE123C}
+.rr{display:grid;grid-template-columns:auto 1fr auto;gap:8px 10px;align-items:center;background:#fff;border-radius:14px;padding:10px 12px;margin-bottom:6px;animation:rise .4s var(--ios-ease) both}
+.rr .id{background:var(--d);color:var(--y);font:700 12px 'Space Grotesk',sans-serif;border-radius:9px;padding:5px 8px}
+.rr .nm{font-weight:700;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rr .nm small{display:block;font-size:11.5px;color:#8E8E93;font-weight:600}
+.empty{text-align:center;padding:26px 10px;color:#6E6E73;font-weight:700;font-size:14px}
+@media (min-width:980px){.two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(360px,1fr);gap:12px;align-items:start}}
+.sheet{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:10px}
+.sheet.on{display:flex}
+.sheet .box{width:100%;max-width:520px;max-height:90vh;overflow:auto;background:#F2F2F7;border-radius:26px;padding:16px;animation:rise .35s var(--ios-ease) both}
+.ft{display:flex;gap:8px;margin-top:12px}.ft button{flex:1;height:48px;border-radius:15px;font-weight:700;background:#fff}.ft .ok{background:var(--d);color:var(--y)}
+#toast{pointer-events:none;position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,200%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;max-width:90vw;text-align:center;opacity:0;transition:transform .45s var(--spring),opacity .25s}
+#toast.on{transform:translate(-50%,0);opacity:1}
+.about{text-align:center;padding:6px 4px 2px}.about .lg{font-size:46px;animation:abBob 2.4s ease-in-out infinite}
+@keyframes abBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.about h3{font-size:19px!important;margin:4px 0 2px!important}.about .by{display:inline-block;background:var(--d);color:var(--y);border-radius:100px;padding:6px 14px;font-weight:700;font-size:13px;margin:6px 0 12px}
+.about .msg{background:#fff;border-radius:18px;padding:14px;font-size:14px;line-height:1.7;font-weight:600;color:#3A3A3C;text-align:left}
+.about .fight{font-size:16px;font-weight:700;margin-top:12px;color:#1C1C1E}
+.credit{display:flex;align-items:center;gap:10px;width:100%;margin:0 0 12px;padding:11px 14px;border-radius:18px;background:linear-gradient(135deg,#1C1C1E,#3A3A3C);color:#fff;text-align:left;box-shadow:0 8px 22px -12px rgba(0,0,0,.6);position:relative;overflow:hidden}
+.credit::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,214,0,.28) 50%,transparent 65%);transform:translateX(-100%);animation:crShine 3.6s ease-in-out infinite}
+@keyframes crShine{0%,55%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.credit .ic{font-size:26px;animation:abBob 2.4s ease-in-out infinite}.credit .tx{flex:1;min-width:0}
+.credit b{display:block;font-size:15px;color:#FFD600;letter-spacing:.2px}.credit small{display:block;font-size:11px;color:#D1D1D6;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.credit .i{font-size:11px;font-weight:700;background:rgba(255,214,0,.18);color:#FFD600;border-radius:100px;padding:4px 9px;flex-shrink:0}
+.foot-cr{text-align:center;font-size:11.5px;font-weight:700;color:rgba(28,28,30,.55);margin:18px 0 6px}
+.about .cp{font-size:11px;color:#8E8E93;font-weight:600;margin-top:10px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><h1>🤝 รวมงาน ASM<small id="sub">กำลังโหลด…</small></h1>
+    <button class="tb" id="rf" onclick="load(true)"><span>↻</span></button></div>
+  <button class="credit" onclick="openAbout()"><span class="ic">😎</span><span class="tx"><b>จัดทำโดย บอสตัน สุดหล่อ</b><small>เพื่อเพื่อนๆ สาขาในโซน · เบาภาระงานต่อวัน · สู้ๆ ครับ 💪</small></span><span class="i">ℹ️ About</span></button>
+  <div class="ttl"><input id="ttl" placeholder="ชื่องาน เช่น โอนฟิล์มเสีย" onchange="saveTitle(this.value)" onkeydown="if(event.key==='Enter')this.blur()"></div>
+  <div class="tabs"><button id="tb-s" class="on" onclick="tab('s')">📋 สถานะสาขา</button><button id="tb-c" onclick="tab('c')">🚀 เช็คงานจากชีต</button></div>
+
+  <div id="v-s">
+    <div class="prog"><div class="ring"><svg viewBox="0 0 96 96"><circle cx="48" cy="48" r="40" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="10"/><circle id="rc" cx="48" cy="48" r="40" fill="none" stroke="#FFD600" stroke-width="10" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3" style="transition:stroke-dashoffset .8s var(--ios-ease)"/></svg><b id="pct">0%</b></div>
+      <div class="n"><small>สาขาที่ส่งงาน</small><big id="cnt">0 <span>/ 0</span></big><div class="kp"><div>✅ ส่งแล้ว<b id="kO" style="color:#4ADE80">0</b></div><div>❎ ยังไม่ส่ง<b id="kN" style="color:#FB7185">0</b></div><div>⚠️ ไม่พบ<b id="kW" style="color:#FBBF24">0</b></div></div></div></div>
+    <div class="chips" id="flt"></div>
+    <div class="list" id="list"><div class="empty">กำลังโหลด…</div></div>
+    <div class="hint">แตะสถานะ = สลับ ส่งแล้ว ↔ ยังไม่ส่ง</div>
+    <div class="bar"><button class="tb w" onclick="copyLine()">📋 สรุปส่งไลน์</button><button class="tb w" id="repBtn" onclick="copyRep()">🔗 ลิงก์ Report ให้หัวหน้า</button></div>
+    <div class="bar"><button class="tb red" onclick="resetAll(this)">🔄 เริ่มงานใหม่ (ทุกสาขา = ยังไม่ส่ง)</button></div>
+  </div>
+
+  <div id="v-c" style="display:none"><div class="two">
+    <div>
+      <div class="card"><h3>📋 วางข้อมูลดิบ <small id="zMeta"></small></h3>
+        <p class="h">ก๊อปทั้งตารางจาก Excel / Google Sheet มาวางในช่องนี้ → แตะหัวคอลัมน์ที่จะเช็ค → กด 🚀 · ข้อมูลอยู่ในเครื่องนี้ ไม่ส่งขึ้นระบบ (ส่งแค่ผลรายสาขา)</p>
+        <textarea class="paste" id="zIn" placeholder="แตะตรงนี้ แล้ว วาง (Paste) ได้เลย…"></textarea></div>
+      <div class="card" id="zSheet"><div class="empty">ยังไม่มีข้อมูล — วางตารางในช่องด้านบน</div></div>
+    </div>
+    <div class="card"><h3>📊 ผลตรวจสอบ <small id="zResMeta"></small></h3><div id="zRes"><div class="empty">กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้</div></div></div>
+  </div></div>
+  <div class="foot-cr">© 2026 บอสตัน สุดหล่อ · Made with ❤️ for เพื่อนๆ ในโซน</div>
+</div>
+<div class="sheet" id="sh" onclick="if(event.target===this)closeSh()"><div class="box" id="shBox"></div></div>
+<div id="toast"></div>
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmALqdO95c1UTHKNGhNIAvyDSercHbETyzd3aCivS_nmxgd6pZ5-iB50F0oHAlUwoyOg/exec';
+const K = new URLSearchParams(location.search).get('k') || '';
+let D = null, FLT = 'all', LAST_EDIT = 0;
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const vib = n => { try { navigator.vibrate && navigator.vibrate(n || 10); } catch (e) {} };
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2200); }
+function closeSh() { $('sh').classList.remove('on'); }
+function api(op, a) {
+  return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow', body: JSON.stringify({ fn: 'asmWork', args: [K, op, a] }) })
+    .then(r => r.json()).then(r => { if (!r.ok) throw new Error(r.error || 'ผิดพลาด'); if (r.data && r.data.status === 'error') throw new Error(r.data.message); return r.data; });
+}
+function load(manual) {
+  if (!K) { $('list').innerHTML = '<div class="empty">ลิงก์ไม่ครบ — ขอลิงก์ใหม่จากเจ้าของแอป</div>'; $('sub').textContent = '⚠️ ลิงก์ไม่ครบ'; return; }
+  if (manual) $('rf').classList.add('spin');
+  api('get').then(d => { $('rf').classList.remove('spin'); setD(d); if (manual) toast('อัปเดตแล้ว'); })
+    .catch(e => { $('rf').classList.remove('spin'); $('sub').textContent = '⚠️ ' + e.message; if (!D) $('list').innerHTML = `<div class="empty">${esc(e.message)}</div>`; });
+}
+function setD(d) {
+  D = d; $('sub').textContent = (d.am || 'ZONE ASM') + (d.updated ? ' · อัปเดต ' + d.updated : '');
+  if (document.activeElement !== $('ttl')) $('ttl').value = d.title || '';
+  $('repBtn').style.display = d.reportKey ? '' : 'none';
+  render(); if ($('v-c').style.display !== 'none' && !Z.res) zRender();
+}
+const LBL = { ok: '✅ ส่งแล้ว', no: '❎ ยังไม่ส่ง', warn: '⚠️ ไม่พบสาขา' };
+function render() {
+  const T = D.tasks || [], c = { ok: 0, no: 0, warn: 0 }; T.forEach(t => c[t.k]++);
+  const n = T.length, pct = n ? Math.round(c.ok / n * 100) : 0;
+  $('pct').textContent = pct + '%'; $('rc').style.strokeDashoffset = 251.3 * (1 - pct / 100);
+  $('cnt').innerHTML = `${c.ok} <span>/ ${n}</span>`; $('kO').textContent = c.ok; $('kN').textContent = c.no; $('kW').textContent = c.warn;
+  $('flt').innerHTML = [['all', 'ทั้งหมด', n], ['no', 'ยังไม่ส่ง', c.no], ['ok', 'ส่งแล้ว', c.ok]].concat(c.warn ? [['warn', 'ไม่พบสาขา', c.warn]] : [])
+    .map(([k, t, v]) => `<button class="${FLT === k ? 'on' : ''}" onclick="FLT='${k}';render()">${t}<i>${v}</i></button>`).join('');
+  const L = T.filter(t => FLT === 'all' || t.k === FLT);
+  $('list').innerHTML = L.length ? L.map((t, i) => `<div class="br" style="animation-delay:${Math.min(i * 30, 360)}ms"><span class="id">${esc(t.id)}</span><span class="nm">${esc(t.name)}</span><button class="st ${t.k}" onclick="toggle('${esc(t.id)}',this)">${LBL[t.k]}</button></div>`).join('')
+    : `<div class="empty">${n ? 'ไม่มีสาขาในกลุ่มนี้ ✨' : 'ยังไม่มีรายชื่อสาขา — ให้เจ้าของแอปเพิ่มสาขาก่อน'}</div>`;
+}
+const TT = {};
+function toggle(id, el) {
+  const t = D.tasks.find(x => x.id === id); if (!t) return;
+  t.k = t.k === 'ok' ? 'no' : 'ok'; LAST_EDIT = Date.now(); vib(12);
+  el.className = 'st ' + t.k + ' pop'; el.textContent = LBL[t.k];
+  const keep = FLT; FLT = 'all'; const c = { ok: 0, no: 0, warn: 0 }; D.tasks.forEach(x => c[x.k]++); FLT = keep;
+  const n = D.tasks.length, pct = n ? Math.round(c.ok / n * 100) : 0;
+  $('pct').textContent = pct + '%'; $('rc').style.strokeDashoffset = 251.3 * (1 - pct / 100); $('cnt').innerHTML = `${c.ok} <span>/ ${n}</span>`; $('kO').textContent = c.ok; $('kN').textContent = c.no;
+  clearTimeout(TT[id]); TT[id] = setTimeout(() => api('set', { id, k: t.k }).then(d => { if (Date.now() - LAST_EDIT > 1500) setD(d); }).catch(e => toast('⚠️ บันทึกไม่สำเร็จ: ' + e.message)), 600);
+}
+function saveTitle(v) { api('title', v).then(d => { setD(d); toast('✏️ เปลี่ยนชื่องานแล้ว'); }).catch(e => toast('⚠️ ' + e.message)); }
+function resetAll(btn) {
+  if (!btn._arm) { btn._arm = 1; btn.textContent = '⚠️ แตะอีกครั้งเพื่อยืนยัน'; setTimeout(() => { btn._arm = 0; btn.textContent = '🔄 เริ่มงานใหม่ (ทุกสาขา = ยังไม่ส่ง)'; }, 3000); return; }
+  btn._arm = 0; btn.textContent = 'กำลังรีเซ็ต…';
+  api('reset').then(d => { setD(d); btn.textContent = '🔄 เริ่มงานใหม่ (ทุกสาขา = ยังไม่ส่ง)'; toast('🔄 เริ่มงานใหม่แล้ว'); }).catch(e => toast('⚠️ ' + e.message));
+}
+async function clip(t, msg) { try { await navigator.clipboard.writeText(t); toast(msg); } catch (e) { const a = document.createElement('textarea'); a.value = t; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); toast(msg); } catch (x) { toast('คัดลอกไม่ได้'); } a.remove(); } }
+function copyLine() {
+  if (!D) return; const T = D.tasks, ok = T.filter(t => t.k === 'ok'), no = T.filter(t => t.k !== 'ok');
+  const d = new Date(), TH = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+  const L = ['📋 ' + (D.title || 'งาน'), '📅 ' + d.getDate() + ' ' + TH[d.getMonth()] + ' ' + (d.getFullYear() + 543), '✅ ส่งแล้ว ' + ok.length + '/' + T.length + ' สาขา'];
+  if (no.length) { L.push('', '❎ ยังไม่ส่ง (' + no.length + ')'); no.forEach(t => L.push('• ' + t.id + ' ' + t.name)); } else L.push('', 'ครบทุกสาขาแล้ว ขอบคุณทุกคนครับ 🙏');
+  clip(L.join('\n'), '📋 คัดลอกแล้ว — วางในไลน์ได้เลย');
+}
+function copyRep() { if (D && D.reportKey) clip(new URL('asm-report.html?k=' + encodeURIComponent(D.reportKey), location.href).href, '🔗 คัดลอกลิงก์ Report แล้ว — ส่งหัวหน้าได้เลย'); }
+function tab(t) {
+  $('tb-s').classList.toggle('on', t === 's'); $('tb-c').classList.toggle('on', t === 'c');
+  $('v-s').style.display = t === 's' ? '' : 'none'; $('v-c').style.display = t === 'c' ? '' : 'none';
+  if (t === 'c') zRender(); vib(6);
+}
+
+// ===== 🚀 เช็คงานจากชีต (แบบเดียวกับเมนู 🚀 ในชีต ASM) — เจอ ID + คอลัมน์ที่เลือกมีค่า = ส่งแล้ว · ว่าง/ไม่เจอ = ยังไม่ส่ง =====
+const ZK = 'asm_work_sheet_v1';
+let Z = (() => { try { return JSON.parse(localStorage.getItem(ZK)) || {}; } catch (e) { return {}; } })();
+Z.rows = Z.rows || []; Z.col = Z.col == null ? -1 : Z.col; Z.res = null;
+const zSave = () => { try { localStorage.setItem(ZK, JSON.stringify({ rows: Z.rows, col: Z.col, at: Z.at })); } catch (e) { toast('ข้อมูลใหญ่เกิน เครื่องจำไม่ได้ (ยังใช้ได้จนปิดหน้า)'); } };
+function parseTSV(txt) {
+  const rows = []; let row = [], cell = '', q = false; const sep = txt.indexOf('\t') >= 0 ? '\t' : ',';
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (q) { if (c === '"') { if (txt[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"' && cell === '') q = true;
+    else if (c === sep) { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && txt[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += c;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  const w = Math.max(0, ...rows.map(r => r.length));
+  return rows.filter(r => r.some(x => String(x).trim() !== '')).map(r => { while (r.length < w) r.push(''); return r.map(x => String(x).trim()); });
+}
+const colName = c => { let n = '', x = c + 1; while (x > 0) { const m = (x - 1) % 26; n = String.fromCharCode(65 + m) + n; x = Math.floor((x - 1) / 26); } return n; };
+const zBr = () => ((D && D.tasks) || []).map(t => ({ id: String(t.id).replace(/^ID/i, '').trim(), full: t.id, name: t.name })).filter(b => b.id);
+const zRx = id => new RegExp('(?:^|\\D)' + id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\D|$)', 'i');
+function zPaste(txt) {
+  const rows = parseTSV(txt); if (!rows.length) return toast('ไม่พบข้อมูลที่วาง');
+  Z.rows = rows; Z.col = -1; Z.at = Date.now(); Z.res = null; zSave(); zRender(); vib(10);
+  toast('📋 วางแล้ว ' + rows.length + ' แถว — แตะหัวคอลัมน์ที่จะเช็ค');
+}
+function zPick(c) { Z.col = c; Z.res = null; zSave(); zRender(); vib(8); }
+function zRender() {
+  const inp = $('zIn');
+  if (!inp._b) {
+    inp._b = 1;
+    inp.addEventListener('paste', e => { const d = (e.clipboardData || window.clipboardData).getData('text'); if (d) { e.preventDefault(); inp.value = ''; zPaste(d); } });
+    inp.addEventListener('change', () => { if (inp.value.trim()) { const v = inp.value; inp.value = ''; zPaste(v); } });
+  }
+  const R = Z.rows;
+  $('zMeta').textContent = R.length ? `${R.length} แถว · ${R[0].length} คอลัมน์` : '';
+  if (!R.length) { $('zSheet').innerHTML = '<div class="empty">ยังไม่มีข้อมูล — วางตารางในช่องด้านบน</div>'; zRes(); return; }
+  const rx = zBr().map(b => zRx(b.id)), zin = {};
+  R.forEach((r, i) => { const s = r.join(' ').toUpperCase(); if (rx.some(x => x.test(s))) zin[i] = 1; });
+  const H = R[0];
+  $('zSheet').innerHTML = `<div class="pick">🎯 คอลัมน์ที่เช็ค: <b>${Z.col >= 0 ? colName(Z.col) + ' · ' + esc(H[Z.col] || '') : 'ยังไม่ได้เลือก'}</b><span class="tip">แตะหัวคอลัมน์ในตาราง</span></div>
+    <div class="grid"><table><thead><tr><th class="rn">#</th>${H.map((h, c) => `<th class="${c === Z.col ? 'sel' : ''}" onclick="zPick(${c})"><small>${colName(c)}</small>${esc(h || '-')}</th>`).join('')}</tr></thead>
+    <tbody>${R.slice(1, 300).map((r, i) => `<tr class="${zin[i + 1] ? 'zin' : ''}"><td class="rn">${i + 2}</td>${r.map((x, c) => `<td class="${c === Z.col ? 'sel' : ''}">${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    <div class="meta">แถวที่มีแถบเหลือง = สาขาในโซน (${Object.keys(zin).length} แถว)${R.length > 300 ? ' · แสดง 300 แถวแรก (คำนวณครบทุกแถว)' : ''}</div>
+    <div class="bar"><button class="tb ghost" onclick="zClear()">🗑 ล้าง</button><button class="tb go" ${Z.col < 0 ? 'disabled' : ''} onclick="zCheck()">🚀 ตรวจสอบงาน</button></div>`;
+  zRes();
+}
+function zClear() { Z.rows = []; Z.col = -1; Z.res = null; zSave(); zRender(); }
+function zCheck() {
+  const B = zBr(); if (!B.length) return toast('ยังไม่มีรายชื่อสาขา');
+  const rows = Z.rows.map(r => r.join(' ').toUpperCase());
+  Z.res = B.map(b => {
+    const rx = zRx(b.id); let found = false, val = '';
+    for (let r = 0; r < Z.rows.length; r++) if (rx.test(rows[r])) { found = true; const v = Z.rows[r][Z.col]; if (v && String(v).trim() !== '') { val = String(v).trim(); break; } }
+    return { id: b.full, name: b.name, k: val ? 'ok' : 'no', nf: !found, val };
+  });
+  zRes(); vib([10, 30, 10]);
+  if (innerWidth < 980) $('zRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function zRes() {
+  if (!Z.res) { $('zRes').innerHTML = `<div class="empty">${Z.rows.length ? (Z.col < 0 ? 'แตะหัวคอลัมน์ที่จะเช็คก่อน แล้วกด 🚀' : 'กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้') : 'วางข้อมูลก่อน'}</div>`; $('zResMeta').textContent = ''; return; }
+  const c = { ok: 0, no: 0 }; Z.res.forEach(x => c[x.k]++);
+  $('zResMeta').textContent = 'คอลัมน์ ' + colName(Z.col) + ' · ' + (Z.rows[0][Z.col] || '');
+  $('zRes').innerHTML = `<div class="rk"><div class="ok"><small>ส่งแล้ว</small><b>${c.ok}</b></div><div class="no"><small>ยังไม่ส่ง</small><b>${c.no}</b></div></div>` +
+    Z.res.slice().sort((a, b) => (a.k === 'ok') - (b.k === 'ok')).map((x, i) => `<div class="rr" style="animation-delay:${Math.min(i * 30, 360)}ms"><span class="id">${esc(x.id)}</span><span class="nm">${esc(x.name)}${x.val ? `<small>${esc(x.val)}</small>` : x.nf ? '<small>ไม่มีในข้อมูลที่วาง</small>' : ''}</span><span class="st ${x.k}">${LBL[x.k]}</span></div>`).join('') +
+    `<div class="bar"><button class="tb save" id="zSave" onclick="zApply()">💾 บันทึกสถานะ</button></div><div class="meta">บันทึกแล้ว หน้า 📋 สถานะสาขา และลิงก์ Report ของหัวหน้าจะเปลี่ยนตามนี้</div>`;
+}
+function zApply() {
+  const b = $('zSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+  api('check', Z.res.map(x => ({ id: x.id, k: x.k, nf: x.nf }))).then(d => { Z.res = null; setD(d); tab('s'); toast('💾 บันทึกแล้ว ' + d.tasks.length + ' สาขา'); window.scrollTo({ top: 0, behavior: 'smooth' }); })
+    .catch(e => { b.disabled = false; b.textContent = '💾 บันทึกสถานะ'; toast('⚠️ ' + e.message); });
+}
+function openAbout() {
+  $('shBox').innerHTML = `<div class="about"><div class="lg">🤝</div><h3>🤝 รวมงาน ASM</h3><span class="by">จัดทำโดย บอสตัน สุดหล่อ 😎</span>
+    <div class="msg">🎯 <b>วัตถุประสงค์</b><br>เพื่อให้เพื่อนๆ สาขาในโซนที่ บอสตัน สุดหล่อ อยู่ด้วย ได้มีสิ่งดีๆ เบาภาระงานต่อวันมากขึ้น</div>
+    <div class="fight">💪 สู้ๆ ครับทุกท่าน</div><div class="cp">© 2026 บอสตัน สุดหล่อ · ผลงานต้นฉบับ สงวนสิทธิ์</div></div>
+    <div class="ft"><button class="ok" onclick="aboutDone()">ปิด</button></div>`;
+  $('sh').classList.add('on');
+}
+function aboutDone() { try { localStorage.setItem('about_seen_v1', '1'); } catch (e) {} closeSh(); if (window.afterAbout) { const f = window.afterAbout; window.afterAbout = null; f(); } }
+function aboutFirst(then) { let seen = false; try { seen = !!localStorage.getItem('about_seen_v1'); } catch (e) {} if (seen) { if (then) then(); return; } window.afterAbout = then; openAbout(); }
+load(); setInterval(() => { if (!document.hidden && Date.now() - LAST_EDIT > 8000) load(); }, 60000);
+setTimeout(() => aboutFirst(null), 400);
+</script>
+</body>
+</html>
