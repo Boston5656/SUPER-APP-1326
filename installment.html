@@ -248,19 +248,19 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 <script>
   // 📱 กัน iPhone แสดงหน้าเล็กเกิน: ถ้าหน้านี้ถูกจัดกว้างกว่าจอจริง (เช่น 980px ใน iframe) → ขยายกลับให้พอดีจอ
   function fitPhone() {
-    let fw = 0;
-    try { if (window.frameElement) fw = window.frameElement.getBoundingClientRect().width; } catch (e) {}
-    if (!fw && window.top === window && screen && screen.width) fw = Math.min(screen.width, screen.height) < 600 ? Math.min(screen.width, screen.height) : 0;
-    const iw = document.documentElement.clientWidth || innerWidth;
-    const de = document.documentElement;
-    if (fw > 0 && iw > fw * 1.15) {
-      const k = iw / fw;
+    // เทียบกับความกว้างจอจริงของเครื่อง (screen.width) — บน iPhone บางกรณีหน้าในแอปถูกจัดกว้าง ~980px แล้วย่อลงทั้งหน้า
+    const de = document.documentElement; de.style.zoom = ''; document.body.style.height = '';
+    const touch = (navigator.maxTouchPoints || 0) > 0 || 'ontouchstart' in window;
+    const sw = Math.min(screen.width || 0, screen.height || 0) > 0 ? (innerWidth > innerHeight ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height)) : 0;
+    const iw = de.clientWidth || innerWidth;
+    if (touch && sw > 0 && sw < 900 && iw > sw * 1.15) {
+      const k = iw / sw;
       de.style.zoom = k;
       document.body.style.height = (innerHeight / k) + 'px';
-    } else { de.style.zoom = ''; document.body.style.height = ''; }
+    }
   }
   fitPhone();
-  window.addEventListener('resize', () => { clearTimeout(window._fp); window._fp = setTimeout(() => { document.documentElement.style.zoom = ''; fitPhone(); }, 120); });
+  window.addEventListener('resize', () => { clearTimeout(window._fp); window._fp = setTimeout(fitPhone, 120); });
   const ALL_MO = [4, 6, 8, 10, 12, 15, 18, 20, 24, 36, 48];
   const DEF = { rates: [0, 0.69, 0.79, 0.99], mos: [6, 10, 12, 24] };
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
