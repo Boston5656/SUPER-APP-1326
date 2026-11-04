@@ -31,8 +31,9 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .seg{flex:1;min-width:0;display:flex;gap:4px;padding:4px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35);position:relative}
 .seg button{flex:1;border-radius:14px;padding:10px 6px;font-weight:700;font-size:14px;color:#6E6E73;white-space:nowrap;position:relative;z-index:1;transition:color .25s}
 .seg button.on{color:#fff}
-.seg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 6px);border-radius:14px;background:var(--d);transition:transform .45s var(--spring)}
-.seg.r i{transform:translateX(calc(100% + 4px))}
+.seg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 16px) / 3);border-radius:14px;background:var(--d);transition:transform .45s var(--spring),background .3s}
+.seg[data-i="1"] i{transform:translateX(calc(100% + 4px))}.seg[data-i="2"] i{transform:translateX(calc(200% + 8px))}
+.seg button{font-size:13px;padding:10px 2px}
 
 .calc{flex:1;min-height:0;background:var(--d);border-radius:32px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:0 30px 60px -24px rgba(60,40,0,.6)}
 .mode{display:none;flex:1;min-height:0;flex-direction:column;gap:10px}.mode.on{display:flex;animation:rise .4s var(--ios-ease) both}
@@ -141,6 +142,36 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .crt .ln.main b{font-size:34px}.crt .ln3 .ln b{font-size:19px}.crt .big{font-size:44px}.crt .sub3 b{font-size:16px;margin-top:3px}
 .crt .sval{font-size:70px;letter-spacing:0}
 .crt .sexp{font-size:22px}
+/* =================== 🪵 ธีมดั้งเดิม: ลูกคิด + จอ LCD =================== */
+.calc.wood{background:linear-gradient(180deg,#2A2A2C,#0E0E0F);box-shadow:0 30px 60px -24px rgba(0,0,0,.75),inset 0 2px 0 rgba(255,255,255,.12),inset 0 -3px 0 rgba(0,0,0,.6)}
+#mAba{gap:10px}
+.lcd{flex-shrink:0;border-radius:16px;padding:8px 14px 10px;background:linear-gradient(180deg,#B9C49A,#A7B386);border:6px solid #2A2A2A;box-shadow:inset 0 3px 8px rgba(0,0,0,.35),0 2px 0 rgba(255,230,190,.25);position:relative;overflow:hidden}
+.lcd::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%);pointer-events:none}
+.lcd-top{display:flex;justify-content:space-between;align-items:center;font:700 10px 'Space Grotesk',sans-serif;letter-spacing:1px;color:#3B4630}
+.sol{display:flex;gap:2px;padding:3px;border-radius:4px;background:#3A2A1E}.sol i{width:9px;height:11px;background:linear-gradient(135deg,#5A4A7A,#2A2244);border-radius:1px}
+.lcd-v{text-align:right;font-size:46px;line-height:1;margin-top:6px;min-height:46px}
+.lcd .s7{filter:none}.lcd .s7 .on{fill:#1C2614}.lcd .s7 .off{fill:rgba(28,38,20,.07)}
+.lcd-lol{position:absolute;left:12px;bottom:6px;font-size:28px;opacity:0;transform:scale(.3) rotate(-20deg)}
+.lcd-lol.on{animation:lol 1.6s var(--spring) both}
+@keyframes lol{0%{opacity:0;transform:scale(.3) rotate(-20deg)}20%{opacity:1;transform:scale(1.3) rotate(10deg)}35%,40%{transform:scale(1) rotate(-6deg)}50%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}85%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-14px)}}
+.aba{flex:0 0 auto;margin:auto 0;position:relative;border-radius:16px;padding:14px 10px;display:grid;grid-template-columns:repeat(9,1fr);gap:0;background:radial-gradient(120% 80% at 50% 0%,#151517,#050506 70%);box-shadow:inset 0 0 0 9px #141415,inset 0 0 0 10px #000,inset 0 0 0 11px rgba(255,255,255,.06),inset 0 14px 22px rgba(0,0,0,.9),inset 0 -8px 16px rgba(0,0,0,.7),0 16px 30px -12px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.07);touch-action:manipulation}
+.aba::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 9%),linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,0) 4%,rgba(255,255,255,0) 96%,rgba(255,255,255,.05))}
+.rod{position:relative;display:flex;flex-direction:column;align-items:center}
+.rod::before{content:'';position:absolute;top:2px;bottom:22px;left:50%;width:2.5px;margin-left:-1.25px;border-radius:2px;background:linear-gradient(90deg,#2A2A2A,#B8B8B8 45%,#5A5A5A);box-shadow:0 0 3px rgba(0,0,0,.8)}
+.deck{position:relative;width:100%;flex-shrink:0}
+.beam{position:relative;z-index:3;height:10px;width:100%;flex-shrink:0;background:transparent}
+#abaBeam{position:absolute;left:10px;right:10px;height:10px;z-index:2;pointer-events:none;background:linear-gradient(180deg,#FFFFFF 0%,#F4F4F4 45%,#BDBDBD 100%);box-shadow:0 3px 5px rgba(0,0,0,.75),0 -1px 0 rgba(0,0,0,.4);border-radius:1px}
+.rod.dot .beam::after{content:'';position:absolute;left:50%;top:2px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#111}
+.bead{position:absolute;left:50%;top:0;z-index:1;width:96%;max-width:56px;height:var(--bh);margin-left:calc(min(96%, 56px) / -2);cursor:pointer;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 44' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23FFF9C4'/%3E%3Cstop offset='.18' stop-color='%23FFE640'/%3E%3Cstop offset='.46' stop-color='%23FFC400'/%3E%3Cstop offset='.5' stop-color='%23E0A200'/%3E%3Cstop offset='.54' stop-color='%23F2B600'/%3E%3Cstop offset='.82' stop-color='%23B98300'/%3E%3Cstop offset='1' stop-color='%23805800'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='.28'/%3E%3Cstop offset='.2' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='.8' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.32'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M1,22 L21,3 Q24,0 28,0 H72 Q76,0 79,3 L99,22 L79,41 Q76,44 72,44 H28 Q24,44 21,41 Z' fill='url(%23g)'/%3E%3Cpath d='M1,22 L21,3 Q24,0 28,0 H72 Q76,0 79,3 L99,22 L79,41 Q76,44 72,44 H28 Q24,44 21,41 Z' fill='url(%23s)'/%3E%3Cellipse cx='40' cy='9' rx='22' ry='3.2' fill='%23fff' opacity='.7'/%3E%3Cpath d='M3,22 H97' stroke='%23fff' stroke-opacity='.35' stroke-width='1'/%3E%3C/svg%3E") center/100% 100% no-repeat;filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.75)) drop-shadow(0 0 1px rgba(0,0,0,.5));transition:transform .34s cubic-bezier(.3,1.35,.5,1)}
+.bead.hi{filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.75)) drop-shadow(0 0 6px rgba(255,214,0,.25)) brightness(1.04)}
+.bead:active{transition-duration:.12s}
+.rod small{position:absolute;bottom:3px;left:0;right:0;text-align:center;font:700 9.5px 'IBM Plex Sans Thai',sans-serif;color:#8E8E93;white-space:nowrap}
+.aba-acts{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
+.aba-acts button{height:44px;border-radius:14px;font-weight:700;font-size:13px;background:#2C2C2E;color:#FFE34D;transition:transform .3s var(--spring)}
+.aba-acts button:active{transform:scale(.94)}
+.aba-acts .y{background:var(--y);color:var(--d)} .aba-acts .lol{background:#FFE34D;color:#1C1C1E}
+@media (max-height:700px){.lcd-v{font-size:36px;min-height:36px}.aba{min-height:210px}}
+
 /* 📺 ป๊อปอัพเทียบหลายเดือน (จอ CRT) */
 #cmp{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.6)}
 #cmp.on{display:flex;animation:fadeIn .25s ease both}
@@ -177,7 +208,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 <div class="wrap">
   <div class="navrow">
     <span data-sys-back-slot></span>
-    <div class="seg" id="seg"><i></i><button class="on" data-m="inst" onclick="setMode('inst')">💳 ผ่อน</button><button data-m="std" onclick="setMode('std')">🧮 เครื่องคิดเลข</button></div>
+    <div class="seg" id="seg" data-i="0"><i></i><button class="on" data-m="inst" onclick="setMode('inst')">💳 ผ่อน</button><button data-m="std" onclick="setMode('std')">🧮 เครื่องคิดเลข</button><button data-m="aba" onclick="setMode('aba')">🪵 ดั้งเดิม</button></div>
   </div>
 
   <div class="calc">
@@ -227,6 +258,19 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
         <button class="k n" onclick="sk('4')">4</button><button class="k n" onclick="sk('5')">5</button><button class="k n" onclick="sk('6')">6</button><button class="k op" data-op="-" onclick="sk('-')">−</button>
         <button class="k n" onclick="sk('1')">1</button><button class="k n" onclick="sk('2')">2</button><button class="k n" onclick="sk('3')">3</button><button class="k op" data-op="+" onclick="sk('+')">+</button>
         <button class="k n wide" onclick="sk('0')">0</button><button class="k n" onclick="sk('.')">.</button><button class="k op" onclick="sk('=')">=</button>
+      </div>
+    </div>
+
+    <!-- ===== 🪵 ดั้งเดิม: ลูกคิดดำลูกเหลือง (แบบที่ใช้ในโรงเรียนไทย) 1/4 + จอ LCD ===== -->
+    <div class="mode" id="mAba">
+      <div class="lcd"><div class="lcd-top"><span>ลูกคิด 1326 · SOLAR</span><span class="sol"><i></i><i></i><i></i><i></i></span></div>
+        <div class="lcd-v" id="aVal"></div><div class="lcd-lol" id="aLol">😂</div></div>
+      <div class="aba" id="aba"></div>
+      <div class="aba-acts">
+        <button type="button" onclick="abaClear()">🧹 ปัดลูกคิด</button>
+        <button type="button" class="lol" onclick="aba555()">😂 555555555</button>
+        <button type="button" onclick="abaToStd()">🧮 ส่งเครื่องคิดเลข</button>
+        <button type="button" class="y" onclick="abaToInst()">💳 ใช้เป็นราคาผ่อน</button>
       </div>
     </div>
   </div>
@@ -307,8 +351,10 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   function setMode(m) {
     vib(6); LS.set('calc_mode', m);
     document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
-    $('seg').classList.toggle('r', m === 'std');
-    $('mInst').classList.toggle('on', m === 'inst'); $('mStd').classList.toggle('on', m === 'std');
+    $('seg').dataset.i = { inst: 0, std: 1, aba: 2 }[m] || 0;
+    $('mInst').classList.toggle('on', m === 'inst'); $('mStd').classList.toggle('on', m === 'std'); $('mAba').classList.toggle('on', m === 'aba');
+    document.querySelector('.calc').classList.toggle('wood', m === 'aba');
+    if (m === 'aba') abaRender(true);
     const c = document.querySelector((m === 'std' ? '#mStd' : '#mInst') + ' .crt'); if (c) { c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; }
     if (m === 'std') sRender();
   }
@@ -479,10 +525,70 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
     S.price = String(v); S.f = 'price'; render(); setMode('inst'); toast('💳 ใช้ ' + nice(String(v)) + ' เป็นราคาผ่อนแล้ว');
   }
 
+  // ========== 🪵 ลูกคิด (บน 2 ลูก ลูกละ 5 · ล่าง 4 ลูก ลูกละ 1) ==========
+  const AR = 9, PLACE = ['ร้อยล.', 'สิบล.', 'ล้าน', 'แสน', 'หมื่น', 'พัน', 'ร้อย', 'สิบ', 'หน่วย'];
+  const A = { u: Array(AR).fill(0), l: Array(AR).fill(0) };
+  let AC = null;
+  function tok(n) {   // เสียงลูกคิดกระทบ "ต๊อก"
+    try {
+      AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+      const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain();
+      o.type = 'triangle'; o.frequency.setValueAtTime(1800 + Math.random() * 500, t); o.frequency.exponentialRampToValueAtTime(380, t + .05);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.35 / Math.sqrt(n || 1), t + .004); g.gain.exponentialRampToValueAtTime(.0001, t + .07);
+      o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t + .08);
+    } catch (e) {}
+  }
+  function abaValue() { let v = 0; for (let r = 0; r < AR; r++) v = v * 10 + A.u[r] * 5 + A.l[r]; return v; }
+  function abaBuild() {
+    const box = $('aba'); if (box.dataset.ok) return;
+    box.innerHTML = PLACE.map((p, r) => `<div class="rod${(AR - 1 - r) % 3 === 0 ? ' dot' : ''}" data-r="${r}"><div class="deck up"></div><div class="beam"></div><div class="deck lo"></div><small>${p}</small></div>`).join('');
+    box.querySelectorAll('.rod').forEach(rod => {
+      const r = +rod.dataset.r;
+      rod.querySelector('.up').innerHTML = [0, 1].map(i => `<div class="bead" data-k="u" data-i="${i}"></div>`).join('');
+      rod.querySelector('.lo').innerHTML = [0, 1, 2, 3].map(i => `<div class="bead" data-k="l" data-i="${i}"></div>`).join('');
+    });
+    box.addEventListener('pointerdown', e => {
+      const b = e.target.closest('.bead'); if (!b) return; e.preventDefault();
+      const r = +b.closest('.rod').dataset.r, i = +b.dataset.i;
+      if (b.dataset.k === 'u') { const act = i >= 2 - A.u[r]; A.u[r] = act ? 1 - i : 2 - i; }
+      else { const act = i < A.l[r]; A.l[r] = act ? i : i + 1; }
+      tok(); vib(5); abaRender();
+    });
+    box.dataset.ok = 1;
+  }
+  function abaRender(first) {
+    abaBuild();
+    const box = $('aba'), rw = box.clientWidth / AR, bh = Math.max(14, Math.min(Math.round(rw * .52), 28));   // ลูกแบน กว้าง > สูง แบบลูกคิดจริง
+    box.style.setProperty('--bh', bh + 'px');
+    const gap = Math.round(bh * 1.25);
+    box.style.height = (28 + 4 + (2 * bh + gap + 4) + 10 + (4 * bh + gap + 4) + 24) + 'px';
+    let bm = $('abaBeam'); if (!bm) { bm = document.createElement('div'); bm.id = 'abaBeam'; box.appendChild(bm); }
+    bm.style.top = (14 + 2 * bh + gap + 4) + 'px';   // คานขาวชิ้นเดียวยาวตลอด (ไม่มีรอยต่อ)   // กรอบพอดีลูก
+    box.querySelectorAll('.rod').forEach(rod => {
+      const r = +rod.dataset.r, up = rod.querySelector('.up'), lo = rod.querySelector('.lo');
+      up.style.height = (2 * bh + gap + 4) + 'px'; lo.style.height = (4 * bh + gap + 4) + 'px';
+      up.querySelectorAll('.bead').forEach(b => { const i = +b.dataset.i, act = i >= 2 - A.u[r]; b.style.transform = `translateY(${2 + i * bh + (act ? gap : 0)}px)`; b.classList.toggle('hi', act); });
+      lo.querySelectorAll('.bead').forEach(b => { const i = +b.dataset.i, act = i < A.l[r]; b.style.transform = `translateY(${2 + i * bh + (act ? 0 : gap)}px)`; b.classList.toggle('hi', act); });
+    });
+    put($('aVal'), abaValue().toLocaleString('en-US'));
+  }
+  function abaSet(digs, stagger) {   // ตั้งค่าทีละหลัก (มีจังหวะ + เสียง)
+    digs.forEach((d, r) => setTimeout(() => { A.u[r] = d >= 5 ? 1 : 0; A.l[r] = d % 5; tok(2); abaRender(); }, stagger * r));
+  }
+  function abaClear() { vib(12); abaSet(Array(AR).fill(0), 45); }
+  function aba555() {
+    vib([20, 40, 20]); abaSet(Array(AR).fill(5), 90);
+    setTimeout(() => { const l = $('aLol'); l.classList.remove('on'); void l.offsetWidth; l.classList.add('on'); toast('555555555 😂'); }, 90 * AR);
+  }
+  function abaToInst() { const v = abaValue(); if (!v) return toast('ดีดลูกคิดก่อน'); S.price = String(v); S.f = 'price'; render(); setMode('inst'); toast('💳 ใช้ ' + v.toLocaleString('en-US') + ' เป็นราคาผ่อนแล้ว'); }
+  function abaToStd() { const v = abaValue(); C.toks = []; C.cur = String(v); C.fresh = false; C.op = null; C.last = '🪵 จากลูกคิด'; setMode('std'); sRender(); }
+  window.addEventListener('resize', () => { if ($('mAba').classList.contains('on')) abaRender(); });
+
   // คีย์บอร์ด (คอม / Legion Go)
   document.addEventListener('keydown', e => {
     if ($('ed').classList.contains('on')) { if (e.key === 'Enter') edSave(); if (e.key === 'Escape') edClose(); return; }
     if ($('cmp').classList.contains('on')) { if (e.key === 'Escape' || e.key === 'Enter') closeCmp(); return; }
+    if ($('mAba').classList.contains('on')) { if (e.key === 'Escape') abaClear(); return; }
     const std = $('mStd').classList.contains('on'), k = e.key;
     if (std) {
       const map = { Enter: '=', '=': '=', Backspace: 'BS', Escape: 'AC', Delete: 'AC', x: '*', X: '*' };
@@ -501,7 +607,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   });
 
   render(); sRender();
-  if (LS.get('calc_mode', 'inst') === 'std') setMode('std');
+  { const m0 = LS.get('calc_mode', 'inst'); if (m0 === 'std' || m0 === 'aba') setMode(m0); }
 </script>
 </body>
 </html>
