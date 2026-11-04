@@ -144,7 +144,12 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .crt .sexp{font-size:22px}
 /* =================== 🪵 ธีมดั้งเดิม: ลูกคิด + จอ LCD =================== */
 .calc.wood{background:linear-gradient(180deg,#2A2A2C,#0E0E0F);box-shadow:0 30px 60px -24px rgba(0,0,0,.75),inset 0 2px 0 rgba(255,255,255,.12),inset 0 -3px 0 rgba(0,0,0,.6)}
-#mAba{gap:10px}
+#mAba{position:relative;overflow:hidden}
+.aba-land{position:absolute;left:50%;top:50%;display:grid;grid-template-columns:minmax(0,1fr) 128px;grid-template-rows:auto minmax(0,1fr);gap:8px;transform-origin:50% 50%}
+.aba-land .lcd{grid-column:1;grid-row:1}.aba-land .aba{grid-column:1;grid-row:2;margin:auto 0}.aba-land .aba-acts{grid-column:2;grid-row:1/3;grid-template-columns:1fr;grid-template-rows:repeat(4,1fr)}
+.aba-land .aba-acts button{height:auto;min-height:44px;font-size:13px;line-height:1.25;padding:4px}
+.aba-land.rot .lcd-v{font-size:38px;min-height:38px;margin-top:2px}
+.aba-land.rot .lcd{padding:6px 14px 8px}
 .lcd{flex-shrink:0;border-radius:16px;padding:8px 14px 10px;background:linear-gradient(180deg,#B9C49A,#A7B386);border:6px solid #2A2A2A;box-shadow:inset 0 3px 8px rgba(0,0,0,.35),0 2px 0 rgba(255,230,190,.25);position:relative;overflow:hidden}
 .lcd::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.22),rgba(255,255,255,0) 40%);pointer-events:none}
 .lcd-top{display:flex;justify-content:space-between;align-items:center;font:700 10px 'Space Grotesk',sans-serif;letter-spacing:1px;color:#3B4630}
@@ -154,7 +159,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .lcd-lol{position:absolute;left:12px;bottom:6px;font-size:28px;opacity:0;transform:scale(.3) rotate(-20deg)}
 .lcd-lol.on{animation:lol 1.6s var(--spring) both}
 @keyframes lol{0%{opacity:0;transform:scale(.3) rotate(-20deg)}20%{opacity:1;transform:scale(1.3) rotate(10deg)}35%,40%{transform:scale(1) rotate(-6deg)}50%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}85%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-14px)}}
-.aba{flex:0 0 auto;margin:auto 0;position:relative;border-radius:16px;padding:14px 10px;display:grid;grid-template-columns:repeat(9,1fr);gap:0;background:radial-gradient(120% 80% at 50% 0%,#151517,#050506 70%);box-shadow:inset 0 0 0 9px #141415,inset 0 0 0 10px #000,inset 0 0 0 11px rgba(255,255,255,.06),inset 0 14px 22px rgba(0,0,0,.9),inset 0 -8px 16px rgba(0,0,0,.7),0 16px 30px -12px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.07);touch-action:manipulation}
+.aba{flex:0 0 auto;margin:auto 0;grid-template-columns:repeat(var(--ar,13),1fr)!important;position:relative;border-radius:16px;padding:14px 10px;display:grid;grid-template-columns:repeat(9,1fr);gap:0;background:radial-gradient(120% 80% at 50% 0%,#151517,#050506 70%);box-shadow:inset 0 0 0 9px #141415,inset 0 0 0 10px #000,inset 0 0 0 11px rgba(255,255,255,.06),inset 0 14px 22px rgba(0,0,0,.9),inset 0 -8px 16px rgba(0,0,0,.7),0 16px 30px -12px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.07);touch-action:manipulation}
 .aba::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 9%),linear-gradient(90deg,rgba(255,255,255,.05),rgba(255,255,255,0) 4%,rgba(255,255,255,0) 96%,rgba(255,255,255,.05))}
 .rod{position:relative;display:flex;flex-direction:column;align-items:center}
 .rod::before{content:'';position:absolute;top:2px;bottom:22px;left:50%;width:2.5px;margin-left:-1.25px;border-radius:2px;background:linear-gradient(90deg,#2A2A2A,#B8B8B8 45%,#5A5A5A);box-shadow:0 0 3px rgba(0,0,0,.8)}
@@ -162,15 +167,15 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .beam{position:relative;z-index:3;height:10px;width:100%;flex-shrink:0;background:transparent}
 #abaBeam{position:absolute;left:10px;right:10px;height:10px;z-index:2;pointer-events:none;background:linear-gradient(180deg,#FFFFFF 0%,#F4F4F4 45%,#BDBDBD 100%);box-shadow:0 3px 5px rgba(0,0,0,.75),0 -1px 0 rgba(0,0,0,.4);border-radius:1px}
 .rod.dot .beam::after{content:'';position:absolute;left:50%;top:2px;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:#111}
-.bead{position:absolute;left:50%;top:0;z-index:1;width:96%;max-width:56px;height:var(--bh);margin-left:calc(min(96%, 56px) / -2);cursor:pointer;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 44' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23FFF9C4'/%3E%3Cstop offset='.18' stop-color='%23FFE640'/%3E%3Cstop offset='.46' stop-color='%23FFC400'/%3E%3Cstop offset='.5' stop-color='%23E0A200'/%3E%3Cstop offset='.54' stop-color='%23F2B600'/%3E%3Cstop offset='.82' stop-color='%23B98300'/%3E%3Cstop offset='1' stop-color='%23805800'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='.28'/%3E%3Cstop offset='.2' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='.8' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.32'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M1,22 L21,3 Q24,0 28,0 H72 Q76,0 79,3 L99,22 L79,41 Q76,44 72,44 H28 Q24,44 21,41 Z' fill='url(%23g)'/%3E%3Cpath d='M1,22 L21,3 Q24,0 28,0 H72 Q76,0 79,3 L99,22 L79,41 Q76,44 72,44 H28 Q24,44 21,41 Z' fill='url(%23s)'/%3E%3Cellipse cx='40' cy='9' rx='22' ry='3.2' fill='%23fff' opacity='.7'/%3E%3Cpath d='M3,22 H97' stroke='%23fff' stroke-opacity='.35' stroke-width='1'/%3E%3C/svg%3E") center/100% 100% no-repeat;filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.75)) drop-shadow(0 0 1px rgba(0,0,0,.5));transition:transform .34s cubic-bezier(.3,1.35,.5,1)}
+.bead{position:absolute;left:50%;top:0;z-index:1;width:min(96%, calc(var(--bh) * 2.1));height:var(--bh);cursor:pointer;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 44' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23FFF9C4'/%3E%3Cstop offset='.18' stop-color='%23FFE640'/%3E%3Cstop offset='.46' stop-color='%23FFC400'/%3E%3Cstop offset='.5' stop-color='%23E0A200'/%3E%3Cstop offset='.54' stop-color='%23F2B600'/%3E%3Cstop offset='.82' stop-color='%23B98300'/%3E%3Cstop offset='1' stop-color='%23805800'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23000' stop-opacity='.28'/%3E%3Cstop offset='.2' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='.8' stop-color='%23000' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='%23000' stop-opacity='.32'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M1,22 L21,3 Q24,0 28,0 H72 Q76,0 79,3 L99,22 L79,41 Q76,44 72,44 H28 Q24,44 21,41 Z' fill='url(%23g)'/%3E%3Cpath d='M1,22 L21,3 Q24,0 28,0 H72 Q76,0 79,3 L99,22 L79,41 Q76,44 72,44 H28 Q24,44 21,41 Z' fill='url(%23s)'/%3E%3Cellipse cx='40' cy='9' rx='22' ry='3.2' fill='%23fff' opacity='.7'/%3E%3Cpath d='M3,22 H97' stroke='%23fff' stroke-opacity='.35' stroke-width='1'/%3E%3C/svg%3E") center/100% 100% no-repeat;filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.75)) drop-shadow(0 0 1px rgba(0,0,0,.5));transition:transform .34s cubic-bezier(.3,1.35,.5,1)}
 .bead.hi{filter:drop-shadow(0 2px 1.5px rgba(0,0,0,.75)) drop-shadow(0 0 6px rgba(255,214,0,.25)) brightness(1.04)}
 .bead:active{transition-duration:.12s}
 .rod small{position:absolute;bottom:3px;left:0;right:0;text-align:center;font:700 9.5px 'IBM Plex Sans Thai',sans-serif;color:#8E8E93;white-space:nowrap}
-.aba-acts{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
+.aba-acts{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;flex-shrink:0}
 .aba-acts button{height:44px;border-radius:14px;font-weight:700;font-size:13px;background:#2C2C2E;color:#FFE34D;transition:transform .3s var(--spring)}
 .aba-acts button:active{transform:scale(.94)}
 .aba-acts .y{background:var(--y);color:var(--d)} .aba-acts .lol{background:#FFE34D;color:#1C1C1E}
-@media (max-height:700px){.lcd-v{font-size:36px;min-height:36px}.aba{min-height:210px}}
+
 
 /* 📺 ป๊อปอัพเทียบหลายเดือน (จอ CRT) */
 #cmp{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.6)}
@@ -262,7 +267,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
     </div>
 
     <!-- ===== 🪵 ดั้งเดิม: ลูกคิดดำลูกเหลือง (แบบที่ใช้ในโรงเรียนไทย) 1/4 + จอ LCD ===== -->
-    <div class="mode" id="mAba">
+    <div class="mode" id="mAba"><div class="aba-land" id="abaLand">
       <div class="lcd"><div class="lcd-top"><span>ลูกคิด 1326 · SOLAR</span><span class="sol"><i></i><i></i><i></i><i></i></span></div>
         <div class="lcd-v" id="aVal"></div><div class="lcd-lol" id="aLol">😂</div></div>
       <div class="aba" id="aba"></div>
@@ -272,7 +277,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
         <button type="button" onclick="abaToStd()">🧮 ส่งเครื่องคิดเลข</button>
         <button type="button" class="y" onclick="abaToInst()">💳 ใช้เป็นราคาผ่อน</button>
       </div>
-    </div>
+    </div></div>
   </div>
 </div>
 
@@ -526,7 +531,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   }
 
   // ========== 🪵 ลูกคิด (บน 2 ลูก ลูกละ 5 · ล่าง 4 ลูก ลูกละ 1) ==========
-  const AR = 9, PLACE = ['ร้อยล.', 'สิบล.', 'ล้าน', 'แสน', 'หมื่น', 'พัน', 'ร้อย', 'สิบ', 'หน่วย'];
+  const AR = 13, PLACE = ['ล้านล.', 'แสนล.', 'หมื่นล.', 'พันล.', 'ร้อยล.', 'สิบล.', 'ล้าน', 'แสน', 'หมื่น', 'พัน', 'ร้อย', 'สิบ', 'หน่วย'];
   const A = { u: Array(AR).fill(0), l: Array(AR).fill(0) };
   let AC = null;
   function tok(n) {   // เสียงลูกคิดกระทบ "ต๊อก"
@@ -556,9 +561,22 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
     });
     box.dataset.ok = 1;
   }
+  // 📐 บังคับแนวนอน: จอตั้ง (มือถือ) → หมุนทั้งชุด 90° ให้เอียงมือถือดูแบบลูกคิดยาวจริง · จอนอน (คอม/Legion Go) → วางปกติ
+  function abaLayout() {
+    const m = $('mAba'), land = $('abaLand'), W = m.clientWidth, H = m.clientHeight, rot = H > W * 1.1;
+    land.classList.toggle('rot', rot);
+    const w = rot ? H : W, h = rot ? W : H;
+    land.style.width = w + 'px'; land.style.height = h + 'px';
+    land.style.transform = `translate(-50%, -50%)${rot ? ' rotate(90deg)' : ''}`;
+    return { w, h };
+  }
   function abaRender(first) {
     abaBuild();
-    const box = $('aba'), rw = box.clientWidth / AR, bh = Math.max(14, Math.min(Math.round(rw * .52), 28));   // ลูกแบน กว้าง > สูง แบบลูกคิดจริง
+    const L = abaLayout(), box = $('aba');
+    box.style.setProperty('--ar', AR);
+    const fixed = $('abaLand').querySelector('.lcd').offsetHeight + 8;
+    const rw = (L.w - 136 - 20) / AR, byW = Math.round(rw * .52), byH = Math.floor((L.h - fixed - 74) / 8.5);
+    const bh = Math.max(12, Math.min(byW, byH, 30));   // ลูกแบน กว้าง > สูง แบบลูกคิดจริง · พอดีทั้งกว้างและสูง
     box.style.setProperty('--bh', bh + 'px');
     const gap = Math.round(bh * 1.25);
     box.style.height = (28 + 4 + (2 * bh + gap + 4) + 10 + (4 * bh + gap + 4) + 24) + 'px';
@@ -567,8 +585,8 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
     box.querySelectorAll('.rod').forEach(rod => {
       const r = +rod.dataset.r, up = rod.querySelector('.up'), lo = rod.querySelector('.lo');
       up.style.height = (2 * bh + gap + 4) + 'px'; lo.style.height = (4 * bh + gap + 4) + 'px';
-      up.querySelectorAll('.bead').forEach(b => { const i = +b.dataset.i, act = i >= 2 - A.u[r]; b.style.transform = `translateY(${2 + i * bh + (act ? gap : 0)}px)`; b.classList.toggle('hi', act); });
-      lo.querySelectorAll('.bead').forEach(b => { const i = +b.dataset.i, act = i < A.l[r]; b.style.transform = `translateY(${2 + i * bh + (act ? 0 : gap)}px)`; b.classList.toggle('hi', act); });
+      up.querySelectorAll('.bead').forEach(b => { const i = +b.dataset.i, act = i >= 2 - A.u[r]; b.style.transform = `translate(-50%, ${2 + i * bh + (act ? gap : 0)}px)`; b.classList.toggle('hi', act); });
+      lo.querySelectorAll('.bead').forEach(b => { const i = +b.dataset.i, act = i < A.l[r]; b.style.transform = `translate(-50%, ${2 + i * bh + (act ? 0 : gap)}px)`; b.classList.toggle('hi', act); });
     });
     put($('aVal'), abaValue().toLocaleString('en-US'));
   }
@@ -582,7 +600,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   }
   function abaToInst() { const v = abaValue(); if (!v) return toast('ดีดลูกคิดก่อน'); S.price = String(v); S.f = 'price'; render(); setMode('inst'); toast('💳 ใช้ ' + v.toLocaleString('en-US') + ' เป็นราคาผ่อนแล้ว'); }
   function abaToStd() { const v = abaValue(); C.toks = []; C.cur = String(v); C.fresh = false; C.op = null; C.last = '🪵 จากลูกคิด'; setMode('std'); sRender(); }
-  window.addEventListener('resize', () => { if ($('mAba').classList.contains('on')) abaRender(); });
+  window.addEventListener('resize', () => { if ($('mAba').classList.contains('on')) setTimeout(abaRender, 60); });
 
   // คีย์บอร์ด (คอม / Legion Go)
   document.addEventListener('keydown', e => {
