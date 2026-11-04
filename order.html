@@ -283,7 +283,94 @@
     #scanv .sc-man button { border-radius: 14px; padding: 0 18px; background: var(--y); color: var(--d); font-weight: 800; }
     #view-report { display: none; }
     @media (max-width: 420px) { h1 { font-size: 26px; } .tile b { font-size: 21px; } .newb { padding: 13px 18px; font-size: 15px; } .seg button { font-size: 13px; } }
-  </style>
+      /* ===================== 🛵 หลอดสถานะเคส (แบบแอปส่งอาหาร) ===================== */
+    .trk { background: var(--d); color: #fff; border-radius: 24px; padding: 0 0 14px; margin-top: 12px; overflow: hidden; position: relative; }
+    .trk-scene { position: relative; height: 128px; background: radial-gradient(120% 90% at 50% 0%, #34343A 0%, #1C1C1E 70%); overflow: hidden; }
+    .trk-scene svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .trk-head { padding: 12px 16px 2px; display: flex; align-items: flex-start; gap: 10px; }
+    .trk-head > div:first-child { flex: 1; min-width: 0; }
+    .trk-head b { display: block; font: 800 16px/1.3 'IBM Plex Sans Thai', sans-serif; }
+    .trk-head small { display: block; font-size: 12.5px; color: #C7C7CC; font-weight: 600; line-height: 1.5; margin-top: 2px; }
+    .trk-head small i { font-style: normal; color: var(--y); font-weight: 800; }
+    .trk-eta { flex-shrink: 0; text-align: right; background: rgba(255,214,0,.12); border-radius: 14px; padding: 6px 10px; }
+    .trk-eta small { font-size: 10px; color: #AEAEB2; margin: 0; } .trk-eta b { font: 800 18px/1.1 'Kanit', sans-serif; color: var(--y); }
+    .trk-eta.late { background: rgba(255,69,58,.16); } .trk-eta.late b { color: #FF6961; }
+    .trk-eta.ok { background: rgba(48,209,88,.16); } .trk-eta.ok b { color: #30D158; }
+    .trk-bar { display: flex; align-items: flex-start; padding: 14px 10px 0; }
+    .trk-st { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; position: relative; }
+    .trk-st::before { content: ''; position: absolute; top: 13px; right: 50%; width: 100%; height: 5px; border-radius: 100px; background: #3A3A3C; }
+    .trk-st:first-child::before { display: none; }
+    .trk-st.ok::before, .trk-st.cur::before { background: var(--y); }
+    .trk-st.cur::before { background: repeating-linear-gradient(-45deg, var(--y) 0 7px, #E6B800 7px 14px); background-size: 20px 20px; animation: trkStripe .6s linear infinite; }
+    .trk-st .dot { position: relative; z-index: 1; width: 31px; height: 31px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; background: #2C2C2E; border: 2px solid #3A3A3C; transition: transform .4s var(--spring); }
+    .trk-st.ok .dot { background: var(--y); border-color: var(--y); color: var(--d); font-weight: 900; }
+    .trk-st.cur .dot { background: #fff; border-color: var(--y); box-shadow: 0 0 0 0 rgba(255,214,0,.6); animation: trkPulse 1.6s ease-out infinite; transform: scale(1.12); }
+    .trk-st.bad .dot { background: var(--or); border-color: var(--or); }
+    .trk-st span { margin-top: 6px; font-size: 10.5px; font-weight: 800; color: #8E8E93; text-align: center; line-height: 1.25; white-space: nowrap; }
+    .trk-st.ok span, .trk-st.cur span { color: #fff; }
+    .trk-st em { font-style: normal; font-size: 9.5px; color: #8E8E93; font-weight: 700; margin-top: 1px; min-height: 12px; }
+    .trk-mv { position: absolute; top: -9px; right: 50%; width: 100%; height: 30px; pointer-events: none; z-index: 2; }
+    .trk-mv > i { position: absolute; left: 0; top: 0; width: 30px; height: 30px; margin-left: -15px; animation: trkMove 2.6s ease-in-out infinite; }
+    .trk-mv.fast > i { animation-duration: 1.5s; }
+    .trk-mv svg { width: 30px; height: 30px; display: block; }
+    @keyframes trkMove { 0% { left: 6%; opacity: 0; } 12% { opacity: 1; } 85% { opacity: 1; } 100% { left: 88%; opacity: 0; } }
+    @keyframes trkStripe { to { background-position: 20px 0; } }
+    @keyframes trkPulse { 0% { box-shadow: 0 0 0 0 rgba(255,214,0,.55); } 100% { box-shadow: 0 0 0 12px rgba(255,214,0,0); } }
+    /* การ์ดคิว: หลอดย่อ (เห็นได้โดยไม่ต้องเปิดเคส) */
+    .trk-c { padding: 10px 0 0; margin: 10px -4px 0; }
+    .trk-c .trk-st::before { top: 10px; height: 4px; background: #E5E5EA; }
+    .trk-c .trk-st.ok::before { background: var(--d); }
+    .trk-c .trk-st.cur::before { background: repeating-linear-gradient(-45deg, var(--y) 0 7px, #E6B800 7px 14px); background-size: 20px 20px; animation: trkStripe .6s linear infinite; }
+    .trk-c .trk-st .dot { width: 24px; height: 24px; font-size: 11px; background: #F2F2F7; border: 2px solid #E5E5EA; }
+    .trk-c .trk-st.ok .dot { background: var(--d); border-color: var(--d); color: var(--y); font-size: 11px; }
+    .trk-c .trk-st.cur .dot { background: #fff; border-color: var(--y); transform: scale(1.1); }
+    .trk-c .trk-st span { font-size: 9px; color: #AEAEB2; margin-top: 4px; }
+    .trk-c .trk-st.ok span, .trk-c .trk-st.cur span { color: var(--d); }
+    .trk-c .trk-st em { display: none; }
+    .trk-c .trk-mv { top: -10px; height: 26px; } .trk-c .trk-mv > i, .trk-c .trk-mv svg { width: 26px; height: 26px; } .trk-c .trk-mv > i { margin-left: -13px; }
+    .trk-c .sc-l { stroke: var(--d); }
+    .oc.new .trk-c .trk-st::before { background: #3A3A3C; } .oc.new .trk-c .trk-st .dot { background: #2C2C2E; border-color: #3A3A3C; }
+    .oc.new .trk-c .trk-st.cur .dot { background: #fff; border-color: var(--y); } .oc.new .trk-c .trk-st.cur span { color: var(--y); }
+    .oc.new .trk-c .trk-st.cur::before { background: repeating-linear-gradient(-45deg, var(--y) 0 7px, #E6B800 7px 14px); background-size: 20px 20px; }
+    .trk-mini { display: flex; gap: 3px; margin-top: 9px; align-items: center; }
+    .trk-mini i { flex: 1; height: 5px; border-radius: 100px; background: #E5E5EA; }
+    .trk-mini i.ok { background: var(--d); } .trk-mini i.cur { background: repeating-linear-gradient(-45deg, var(--y) 0 5px, #E6B800 5px 10px); background-size: 14px 14px; animation: trkStripe .6s linear infinite; }
+    .trk-mini b { font-size: 10.5px; font-weight: 800; margin-left: 6px; white-space: nowrap; }
+    .oc.new .trk-mini i { background: #3A3A3C; }
+    .oc.new .trk-mini i.cur { background: repeating-linear-gradient(-45deg, var(--y) 0 5px, #E6B800 5px 10px); background-size: 14px 14px; } .oc.new .trk-mini b { color: var(--y); }
+
+    /* ฉาก (SVG) */
+    .sc-l { stroke: #fff; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+    .sc-y { fill: var(--y); } .sc-dim { fill: #3A3A3C; } .sc-dim2 { fill: #2C2C2E; }
+    .sc-scroll { animation: scScroll 1.2s linear infinite; } .sc-scroll.slow { animation-duration: 4s; } .sc-scroll.fast { animation-duration: .45s; }
+    @keyframes scScroll { from { transform: translateX(0); } to { transform: translateX(-80px); } }
+    .sc-bob { animation: scBob .26s ease-in-out infinite alternate; } @keyframes scBob { to { transform: translateY(-3px); } }
+    .sc-swing { animation: scSwing .52s ease-in-out infinite alternate; } .sc-swing.r { animation-direction: alternate-reverse; }
+    @keyframes scSwing { from { transform: rotate(38deg); } to { transform: rotate(-38deg); } }
+    .sc-knee { animation: scKnee .52s ease-in-out infinite alternate; } .sc-knee.r { animation-direction: alternate-reverse; }
+    @keyframes scKnee { 0% { transform: rotate(0); } 100% { transform: rotate(70deg); } }
+    .sc-elb { animation: scElb .52s ease-in-out infinite alternate; } @keyframes scElb { from { transform: rotate(-70deg); } to { transform: rotate(-100deg); } }
+    .sc-spin { animation: scSpin .32s linear infinite; } @keyframes scSpin { to { transform: rotate(360deg); } }
+    .sc-bounce { animation: scBounce .18s ease-in-out infinite alternate; } @keyframes scBounce { to { transform: translateY(-1.6px) rotate(-.8deg); } }
+    .sc-puff { animation: scPuff .9s ease-out infinite; opacity: 0; } @keyframes scPuff { 0% { transform: translate(0,0) scale(.4); opacity: .7; } 100% { transform: translate(-46px,-8px) scale(1.6); opacity: 0; } }
+    .sc-speed { animation: scSpeed .5s linear infinite; } @keyframes scSpeed { 0% { transform: translateX(30px); opacity: 0; } 30% { opacity: .9; } 100% { transform: translateX(-60px); opacity: 0; } }
+    .sc-fx { animation: scFx 1.8s linear infinite; } @keyframes scFx { from { transform: translateX(0); } to { transform: translateX(150px); } }
+    .sc-fy { animation: scFy 1.8s ease-in-out infinite; } @keyframes scFy { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-38px) rotate(-8deg); } }
+    .sc-fade { animation: scFade 1.8s linear infinite; } @keyframes scFade { 0%, 100% { opacity: 0; } 12%, 85% { opacity: 1; } }
+    .sc-glow { animation: scGlow 1.8s ease-in-out infinite; } @keyframes scGlow { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+    .sc-scan { animation: scScan 2.4s ease-in-out infinite; } @keyframes scScan { 0%, 100% { transform: translate(-34px, 6px); } 50% { transform: translate(34px, -6px); } }
+    .sc-line { animation: scLine 1.6s ease-in-out infinite; } @keyframes scLine { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(58px); } }
+    .sc-pop { animation: scPop 2.4s ease-out infinite; opacity: 0; } @keyframes scPop { 0%, 30% { opacity: 0; transform: scale(.3); } 45% { opacity: 1; transform: scale(1.15); } 55%, 90% { opacity: 1; transform: scale(1); } 100% { opacity: 0; } }
+    .sc-ring { animation: scRing 1s ease-in-out infinite; } @keyframes scRing { 0%, 100% { transform: rotate(0); } 15% { transform: rotate(16deg); } 30% { transform: rotate(-14deg); } 45% { transform: rotate(10deg); } 60% { transform: rotate(-6deg); } 75% { transform: rotate(0); } }
+    .sc-wave { animation: scWave 1.4s ease-out infinite; opacity: 0; } @keyframes scWave { 0% { opacity: .9; transform: scale(.6); } 100% { opacity: 0; transform: scale(1.5); } }
+    .sc-flip { animation: scFlip 2.4s ease-in-out infinite; } @keyframes scFlip { 0%, 70% { transform: rotate(0); } 100% { transform: rotate(180deg); } }
+    .sc-sign { stroke-dasharray: 340; animation: scSign 2.6s ease-in-out infinite; } @keyframes scSign { 0% { stroke-dashoffset: 340; } 70%, 100% { stroke-dashoffset: 0; } }
+    .sc-pen { animation: scPen 2.6s ease-in-out infinite; } @keyframes scPen { 0% { transform: translate(0,0); } 20% { transform: translate(30px,-8px); } 40% { transform: translate(62px,6px); } 55% { transform: translate(95px,-6px); } 70%, 100% { transform: translate(126px,2px); } }
+    .sc-conf { animation: scConf 2.2s linear infinite; } @keyframes scConf { 0% { transform: translateY(-30px) rotate(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(130px) rotate(540deg); opacity: 0; } }
+    .sc-draw { stroke-dasharray: 90; animation: scDraw 1s ease-out both; } @keyframes scDraw { from { stroke-dashoffset: 90; } to { stroke-dashoffset: 0; } }
+    .sc-back { animation: scBackA 1.6s ease-in-out infinite; } @keyframes scBackA { 0%, 100% { transform: translateX(14px); } 50% { transform: translateX(-14px); } }
+    @media (prefers-reduced-motion: reduce) { .trk *, .trk-mini * { animation: none !important; } }
+</style>
 </head>
 <body>
   <div class="navrow rise">
@@ -401,8 +488,9 @@
     const OA = window.OrderAlert;
     const IN_FRAME = window.parent !== window;
     if (!IN_FRAME) document.getElementById('homeb').style.display = 'flex';
-    const WORK = { store: '📦 เบิกในร้าน', branch: '🚗 ไปเบิกต่างสาขา', transfer: '📲 ย้ายข้อมูล', wait: '⏳ รอลูกค้า / เอกสาร' };
-    const LABEL = { new: 'รอคนรับ', claimed: 'รับเคสแล้ว', back: 'ส่งกลับ PC', picked: 'เบิกเครื่องแล้ว', parked: 'พักเคส', done: 'ปิดเคสแล้ว', cancel: 'ยกเลิก' };
+    const WORK = { store: '🏃 เบิกในตึก', branch: '🏍️ เบิกนอกตึก', wait: '⏳ รอลูกค้า / เอกสาร', transfer: '📲 ย้ายข้อมูล' };
+    const WORK_PICK = ['store', 'branch', 'wait'];
+    const LABEL = { new: 'รอคนรับ', claimed: 'รับเคสแล้ว', back: 'ส่งกลับ PC', picked: 'เบิกเครื่องแล้ว', parked: 'ย้ายข้อมูล', done: 'ปิดเคสแล้ว', cancel: 'ยกเลิก' };
     let CFG = null, Q = [], SKEW = 0, VIEW = 'queue', CUR = null, NEW = {}, CK = null, MEDIA = {}, REP = null;
 
     function vib(ms) { try { navigator.vibrate && navigator.vibrate(ms || 8); } catch (e) {} }
@@ -525,7 +613,138 @@
     function workTag(o) {
       const w = o.work; if (!w || o.status !== 'claimed') return '';
       const late = w.eta && nowS() > w.eta;
-      return `<span class="tg ${w.kind === 'branch' ? 'blue' : w.kind === 'transfer' ? 'or' : ''} ${late ? 'late' : ''}">${WORK[w.kind] || ''}${w.text ? ' ' + esc(w.text) : ''}${w.eta ? ' · เสร็จ ~' + hm(w.eta) : ''}</span>`;
+      return `<span class="tg ${w.kind === 'branch' ? 'blue' : w.kind === 'transfer' ? 'or' : ''} ${late ? 'late' : ''}">${WORK[w.kind] || ''}${w.text ? ' ' + esc(w.text) : ''}${w.ref ? ' · #' + esc(w.ref) : ''}${w.eta ? (w.kind === 'branch' ? ' · กลับ ~' : ' · เสร็จ ~') + hm(w.eta) : ''}</span>`;
+    }
+    // ===================== 🛵 หลอดสถานะเคส (แบบแอปส่งอาหาร) =====================
+    const TO = (x, y) => `style="transform-origin:${x}px ${y}px"`;
+    function scRunner() {   // 🏃 Stickman วิ่ง (แขน-ขาแกว่ง เข่างอ ตัวเด้ง)
+      const leg = (cls, dl) => `<g class="sc-swing${cls}" ${TO(160, 76)}><line class="sc-l" x1="160" y1="76" x2="160" y2="92"/><g class="sc-knee${cls}" ${TO(160, 92)}><line class="sc-l" x1="160" y1="92" x2="160" y2="107"/></g></g>`;
+      const arm = cls => `<g class="sc-swing${cls}" ${TO(162, 52)}><line class="sc-l" x1="162" y1="52" x2="162" y2="65"/><g class="sc-elb" ${TO(162, 65)}><line class="sc-l" x1="162" y1="65" x2="162" y2="76"/></g></g>`;
+      return `<g class="sc-bob">${arm(' r')}${leg('')}<line class="sc-l" x1="163" y1="47" x2="160" y2="76"/>${leg(' r')}${arm('')}<circle cx="164" cy="38" r="8" fill="#1C1C1E" class="sc-l"/></g>`;
+    }
+    function scBike() {   // 🏍️ มอไซค์ (ล้อหมุน ตัวสั่น คนขับก้ม หมวกเหลือง)
+      const wheel = (cx) => `<circle cx="${cx}" cy="96" r="12" fill="#1C1C1E" stroke="#fff" stroke-width="3.2"/><g class="sc-spin" ${TO(cx, 96)}><line x1="${cx - 10}" y1="96" x2="${cx + 10}" y2="96" stroke="#8E8E93" stroke-width="2"/><line x1="${cx}" y1="86" x2="${cx}" y2="106" stroke="#8E8E93" stroke-width="2"/></g><circle cx="${cx}" cy="96" r="2.5" fill="#fff"/>`;
+      return `<g class="sc-bounce" ${TO(160, 100)}>
+        <line class="sc-l" x1="120" y1="91" x2="138" y2="91" stroke="#8E8E93"/>
+        ${wheel(128)}${wheel(194)}
+        <path d="M128,96 L146,82 L182,80 L194,96" class="sc-l"/>
+        <path d="M138,84 Q146,70 168,71 L184,78 L150,86 Z" class="sc-y"/>
+        <line class="sc-l" x1="184" y1="74" x2="194" y2="96"/><line class="sc-l" x1="181" y1="70" x2="189" y2="66"/>
+        <line class="sc-l" x1="152" y1="76" x2="166" y2="58"/>
+        <path d="M154,77 L168,86 L162,96" class="sc-l"/>
+        <path d="M165,60 L180,66 L186,68" class="sc-l"/>
+        <circle cx="171" cy="50" r="8.5" class="sc-y"/><path d="M172,47 h8 a3,3 0 0 1 0,6 h-6" fill="#1C1C1E"/></g>
+        ${[0, .3, .6].map(d => `<circle cx="116" cy="90" r="4" fill="#8E8E93" class="sc-puff" style="animation-delay:${d}s;transform-origin:116px 90px"/>`).join('')}`;
+    }
+    function scene(kind) {
+      const speed = (ys, dur) => ys.map((y, i) => `<line x1="120" y1="${y}" x2="138" y2="${y}" stroke="#fff" stroke-width="2.4" stroke-linecap="round" class="sc-speed" style="animation-delay:${i * .17}s;animation-duration:${dur}s"/>`).join('');
+      const rep = (n, f) => Array.from({ length: n }, (_, i) => f(i)).join('');
+      let s = '';
+      if (kind === 'run') s = `<g class="sc-scroll slow">${rep(12, i => { const x = -320 + i * 80; return `<rect x="${x}" y="36" width="60" height="72" rx="6" class="sc-dim2"/><rect x="${x + 6}" y="42" width="48" height="7" rx="3" fill="#FFD600" opacity=".35"/><rect x="${x + 10}" y="58" width="18" height="50" rx="2" fill="#3A3A3C"/><rect x="${x + 32}" y="58" width="18" height="24" rx="2" fill="#3A3A3C"/>`; })}</g>
+          <line x1="-320" y1="108" x2="640" y2="108" stroke="#48484A" stroke-width="2"/>
+          <g class="sc-scroll">${rep(24, i => `<line x1="${-320 + i * 40}" y1="112" x2="${-332 + i * 40}" y2="126" stroke="#3A3A3C" stroke-width="2"/>`)}</g>
+          ${speed([56, 70, 88], .5)}${scRunner()}
+          <g transform="translate(206,86)"><rect width="22" height="22" rx="4" fill="#FFD600"/><path d="M0,7 h22 M11,0 v7" stroke="#1C1C1E" stroke-width="2"/><text x="11" y="18" font-size="8" text-anchor="middle" font-weight="900" fill="#1C1C1E">📦</text></g>`;
+      if (kind === 'bike') s = `<g class="sc-scroll slow">${rep(12, i => { const x = -320 + i * 80; return `<rect x="${x}" y="${30 + (i % 3) * 10}" width="34" height="${74 - (i % 3) * 10}" rx="3" class="sc-dim2"/><rect x="${x + 40}" y="56" width="26" height="48" rx="3" class="sc-dim2"/>${rep(3, k => `<rect x="${x + 6}" y="${40 + (i % 3) * 10 + k * 14}" width="6" height="6" fill="#FFD600" opacity="${(i + k) % 2 ? .45 : .15}"/><rect x="${x + 18}" y="${40 + (i % 3) * 10 + k * 14}" width="6" height="6" fill="#FFD600" opacity="${(i + k) % 2 ? .15 : .45}"/>`)}`; })}</g>
+          <rect x="-320" y="106" width="960" height="30" fill="#2C2C2E"/>
+          <g class="sc-scroll fast">${rep(26, i => `<rect x="${-320 + i * 40}" y="116" width="22" height="3.5" rx="2" fill="#FFD600" opacity=".8"/>`)}</g>
+          ${speed([60, 74, 86], .38)}${scBike()}`;
+      if (kind === 'xfer') {
+        const phone = (x, lab, fill) => `<rect x="${x}" y="26" width="42" height="76" rx="9" fill="#2C2C2E" stroke="#8E8E93" stroke-width="2.5"/><rect x="${x + 5}" y="34" width="32" height="56" rx="4" fill="#111"/>${fill}<text x="${x + 21}" y="116" font-size="9" font-weight="800" text-anchor="middle" fill="#AEAEB2">${lab}</text>`;
+        const doc = (c, d) => `<g transform="translate(86,52)"><g class="sc-fade" style="animation-delay:${d}s"><g class="sc-fx" style="animation-delay:${d}s"><g class="sc-fy" style="animation-delay:${d}s"><path d="M0,0 h12 l6,6 v16 h-18 z" fill="${c}"/><path d="M12,0 v6 h6" fill="none" stroke="#1C1C1E" stroke-width="1.2" opacity=".5"/><path d="M4,11 h10 M4,15 h10 M4,19 h6" stroke="#1C1C1E" stroke-width="1.4" opacity=".55"/></g></g></g></g>`;
+        s = `${phone(48, 'เครื่องเก่า', rep(4, k => `<rect x="58" y="${42 + k * 11}" width="22" height="6" rx="2" fill="#5E5CE6" opacity="${.9 - k * .2}"/>`))}
+          ${phone(230, 'เครื่องใหม่', rep(4, k => `<rect x="240" y="${42 + k * 11}" width="22" height="6" rx="2" fill="#30D158" class="sc-glow" style="animation-delay:${k * .3}s"/>`))}
+          <path d="M92,60 Q160,6 228,60" fill="none" stroke="#48484A" stroke-width="2" stroke-dasharray="3 6"/>
+          ${doc('#FFD600', 0)}${doc('#64D2FF', -.6)}${doc('#FF9F0A', -1.2)}`;
+      }
+      if (kind === 'scan') s = `<rect x="138" y="22" width="46" height="84" rx="10" fill="#2C2C2E" stroke="#8E8E93" stroke-width="2.5"/><rect x="143" y="30" width="36" height="64" rx="4" fill="#111"/>
+          <rect x="143" y="32" width="36" height="3" fill="#30D158" opacity=".8" class="sc-line"/>
+          <g class="sc-scan"><circle cx="161" cy="60" r="17" fill="rgba(255,214,0,.12)" stroke="#FFD600" stroke-width="4"/><line x1="173" y1="72" x2="187" y2="86" stroke="#FFD600" stroke-width="6" stroke-linecap="round"/></g>
+          ${[0, .5, 1].map((d, k) => `<g class="sc-pop" style="animation-delay:${d}s;transform-origin:226px ${44 + k * 22}px"><circle cx="226" cy="${44 + k * 22}" r="8" fill="#30D158"/><path d="M222,${44 + k * 22} l3,3 l5,-6" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/></g><rect x="240" y="${41 + k * 22}" width="${34 - k * 6}" height="6" rx="3" fill="#3A3A3C"/>`).join('')}
+          ${[0, .5, 1].map((d, k) => `<rect x="${70 - k * 4}" y="${41 + k * 22}" width="${40 + k * 4}" height="6" rx="3" fill="#3A3A3C"/>`).join('')}`;
+      if (kind === 'bell') s = `${[0, .45].map(d => `<circle cx="160" cy="60" r="34" fill="none" stroke="#FFD600" stroke-width="2" class="sc-wave" style="animation-delay:${d}s;transform-origin:160px 60px"/>`).join('')}
+          <g class="sc-ring" ${TO(160, 28)}><path d="M140,78 Q140,42 160,38 Q180,42 180,78 L186,84 L134,84 Z" class="sc-y"/><circle cx="160" cy="90" r="6" class="sc-y"/><circle cx="160" cy="33" r="4" class="sc-y"/></g>`;
+      if (kind === 'wait') s = `<g class="sc-flip" ${TO(160, 64)}><path d="M140,30 h40 M140,98 h40" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M144,32 L176,32 L162,64 L176,96 L144,96 L158,64 Z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><path d="M150,38 L170,38 L160,58 Z" class="sc-y"/><path d="M152,94 L168,94 L160,84 Z" class="sc-y"/></g>`;
+      if (kind === 'sign') s = `<g transform="rotate(-3 160 64)"><rect x="86" y="24" width="150" height="84" rx="8" fill="#F2F2F7"/><text x="96" y="42" font-size="9" font-weight="800" fill="#8E8E93">ลูกค้าเซ็นรับทราบ</text><line x1="96" y1="90" x2="226" y2="90" stroke="#C7C7CC" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <path d="M98,82 c8,-22 18,8 26,-6 s14,-16 22,2 s16,-10 24,-4 s14,10 26,-10 s10,6 18,2" fill="none" stroke="#1C1C1E" stroke-width="2.6" stroke-linecap="round" class="sc-sign"/></g>
+          <g class="sc-pen"><g transform="translate(92,52) rotate(35)"><rect x="0" y="-28" width="7" height="28" rx="2" class="sc-y"/><path d="M0,0 L3.5,8 L7,0 Z" fill="#fff"/></g></g>`;
+      if (kind === 'done') s = `${rep(14, i => `<rect x="${40 + i * 18}" y="0" width="6" height="10" rx="1.5" fill="${['#FFD600', '#30D158', '#64D2FF', '#FF9F0A', '#FF375F'][i % 5]}" class="sc-conf" style="animation-delay:${(i * .37) % 2.2}s;transform-origin:${43 + i * 18}px 5px"/>`)}
+          <circle cx="160" cy="62" r="32" fill="#30D158"/><path d="M144,62 l11,11 l22,-24" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" class="sc-draw"/>`;
+      if (kind === 'back') s = `<g class="sc-back"><rect x="168" y="26" width="42" height="76" rx="9" fill="#2C2C2E" stroke="#FF9F0A" stroke-width="2.5"/><text x="189" y="72" font-size="22" text-anchor="middle">📄</text></g>
+          <path d="M150,64 H104 M118,50 L104,64 L118,78" fill="none" stroke="#FF9F0A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>`;
+      return `<svg viewBox="0 0 320 128" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${s}</svg>`;
+    }
+    function trkMover(kind) {   // ตัวเล็กที่วิ่งบนหลอด
+      if (kind === 'run') return `<svg viewBox="136 26 50 86">${scRunner()}</svg>`;
+      if (kind === 'bike') return `<svg viewBox="108 38 96 72">${scBike()}</svg>`;
+      if (kind === 'xfer') return `<svg viewBox="0 0 30 30"><path d="M7,4 h11 l6,6 v16 h-17 z" fill="#64D2FF"/><path d="M11,15 h9 M11,19 h9" stroke="#1C1C1E" stroke-width="1.6"/></svg>`;
+      return '';
+    }
+    // ขั้นของเคส + ขั้นปัจจุบัน + ฉาก
+    function trkModel(o) {
+      const st = o.status, hs = o.h || [], ht = a => { const x = hs.filter(h => h.a === a).pop(); return x ? x.t : 0; };
+      const w = (st === 'claimed' && o.work) || null, outside = (w && w.kind === 'branch') || (st !== 'claimed' && o.branch);
+      const pk = o.park || {}, lp = o.lastPark || null;
+      const pickDone = !!o.pickedAt || st === 'picked' || st === 'done' || (st === 'parked' && pk.prev === 'picked');
+      const xferOn = !!(o.transfer || o.parked || st === 'parked' || lp);
+      const S = [
+        { k: 'claim', n: 'รับเคส', ic: '🙋', ok: st !== 'new', t: o.claimedAt },
+        { k: 'pick', n: 'เบิกเครื่อง', ic: outside ? '🏍️' : '🏃', ok: pickDone, t: o.pickedAt },
+        { k: 'chk', n: 'เช็คเครื่อง', ic: '🔍', ok: !!o.checkDone || st === 'done', t: o.checkAt }
+      ];
+      if (xferOn) S.push({ k: 'xfer', n: 'ย้ายข้อมูล', ic: '📲', ok: st === 'done' || !!(lp && lp.endAt) || !!pk.readyNow, t: (lp && lp.endAt) || pk.readyNow || ht('ready') });
+      S.push({ k: 'list', n: 'Check List', ic: '📋', ok: !!o.checkDone || st === 'done', t: o.checkAt });
+      S.push({ k: 'sign', n: 'เซ็นจบเคส', ic: '✍️', ok: st === 'done', t: o.closedAt });
+      let cur = S.findIndex(x => !x.ok);
+      if (st === 'parked' && !pk.readyNow) cur = S.findIndex(x => x.k === 'xfer');
+      if (st === 'claimed' && !pickDone) cur = 1;
+      if (st === 'done') cur = -1;
+      // ฉาก
+      const c = CFG && CFG.cfg && CFG.cfg.items ? CFG.cfg.items : null, ci = o.check && o.check.items ? o.check.items : null;
+      const ckTxt = ci ? `Check List ${(c || Object.keys(ci)).filter(n => ci[n]).length}/${(c || Object.keys(ci)).length}` : '';
+      let sc = { kind: 'bell', head: 'รอคนรับเคส', sub: 'แจ้งเตือนทุกคนในร้านแล้ว', eta: 0 };
+      if (st === 'claimed') {
+        if (!w) sc = { kind: 'run', head: `${o.staff || 'พนักงาน'} รับเคสแล้ว`, sub: 'เลือกด้านล่างว่า <i>เบิกในตึก</i> หรือ <i>เบิกนอกตึก</i>', idle: true };
+        else if (w.kind === 'branch') sc = { kind: 'bike', head: `${o.staff || 'พนักงาน'} กำลังไปเบิกนอกตึก`, sub: [w.text ? '📍 ' + esc(w.text) : '', w.ref ? '🧾 เลขดำเนินการ <i>' + esc(w.ref) + '</i>' : '', w.at ? 'ออกเดินทาง ' + hm(w.at) : ''].filter(Boolean).join(' · '), eta: w.eta, etaLab: 'กลับถึงร้าน' };
+        else if (w.kind === 'wait') sc = { kind: 'wait', head: 'รอลูกค้า / เอกสาร', sub: w.text ? esc(w.text) : '', eta: w.eta, etaLab: 'คาดว่า' };
+        else if (w.kind === 'transfer') sc = { kind: 'xfer', head: 'กำลังย้ายข้อมูล', sub: w.text ? esc(w.text) : '', eta: w.eta, etaLab: 'เสร็จ' };
+        else sc = { kind: 'run', head: `${o.staff || 'พนักงาน'} กำลังวิ่งไปเบิกเครื่องในตึก`, sub: w.text ? '📍 ' + esc(w.text) : 'ห้องสต๊อก / หลังร้าน', eta: w.eta, etaLab: 'เสร็จ' };
+      }
+      if (st === 'picked') sc = o.checkDone ? { kind: 'sign', head: 'รอลูกค้าเซ็นรับทราบ', sub: 'Check List ครบแล้ว · กดปุ่ม ✍️ ให้ลูกค้าเซ็นเพื่อจบเคส' }
+        : { kind: 'scan', head: 'กำลังเช็คเครื่องกับลูกค้า', sub: (ckTxt ? ckTxt + ' · ' : '') + 'PC ตรวจสภาพ + ทำ Check List' };
+      if (st === 'parked') sc = pk.readyNow ? { kind: 'done', head: 'ย้ายข้อมูลเสร็จ พร้อมส่งมอบ', sub: 'แจ้งลูกค้าในลิงก์สถานะแล้ว · ' + hm(pk.readyNow), small: true }
+        : { kind: 'xfer', head: 'กำลังย้ายข้อมูล', sub: [pk.where ? '📍 เครื่องอยู่ ' + esc(pk.where) : '', pk.backAt ? '🍜 ลูกค้ากลับ ' + hm(pk.backAt) : '', pk.text ? esc(pk.text) : ''].filter(Boolean).join(' · '), eta: pk.readyAt, etaLab: 'เสร็จ' };
+      if (st === 'back') sc = { kind: 'back', head: 'ส่งกลับ PC แก้ข้อมูล', sub: o.back ? esc(o.back.reason) + (o.back.text ? ' — ' + esc(o.back.text) : '') : '' };
+      if (st === 'done') sc = { kind: 'done', head: 'จบเคสแล้ว 🎉', sub: 'ลูกค้าเซ็นรับทราบ ' + hm(o.closedAt) + (o.sign && o.sign.name ? ' · ' + esc(o.sign.name) : '') };
+      if (st === 'new') sc.sub = o.assign && asgLive(o) ? `จองให้ ${esc(o.assign.nick)} · รอกดรับ` : 'แจ้งเตือนทุกคนในร้านแล้ว';
+      return { S, cur, sc, bad: st === 'back' };
+    }
+    function etaHTML(eta, lab) {
+      if (!eta) return '';
+      const m = Math.round((eta - nowS()) / 60000), late = m < 0;
+      return `<div class="trk-eta ${late ? 'late' : ''}" data-eta="${eta}" data-lab="${esc(lab || '')}"><small>${late ? 'เลยเวลา' : esc(lab || 'ประมาณ')}</small><b>${hm(eta)}</b><small>${late ? Math.abs(m) + ' นาที' : 'อีก ' + m + ' นาที'}</small></div>`;
+    }
+    function trkBarHTML(M) {
+      const sc = M.sc;
+      const mvKind = M.cur >= 0 && M.S[M.cur] && (M.S[M.cur].k === 'pick' ? (sc.kind === 'bike' ? 'bike' : sc.kind === 'run' && !sc.idle ? 'run' : '') : M.S[M.cur].k === 'xfer' && sc.kind === 'xfer' ? 'xfer' : '');
+      return M.S.map((x, i) => {
+        const cls = i === M.cur ? (M.bad ? 'cur bad' : 'cur') : (x.ok || M.cur === -1 || (M.cur > i && x.ok) ? 'ok' : '');
+        const mv = i === M.cur && i > 0 && mvKind ? `<div class="trk-mv ${mvKind === 'bike' ? 'fast' : ''}"><i>${trkMover(mvKind)}</i></div>` : '';
+        return `<div class="trk-st ${cls}">${mv}<div class="dot">${cls === 'ok' ? '✓' : x.ic}</div><span>${x.n}</span><em>${x.ok && x.t ? hm(x.t) : ''}</em></div>`;
+      }).join('');
+    }
+    function trackerHTML(o) {
+      if (o.status === 'cancel') return '';
+      const M = trkModel(o), sc = M.sc, bar = trkBarHTML(M);
+      return `<div class="trk"><div class="trk-scene">${scene(sc.kind)}</div>
+        <div class="trk-head"><div><b>${sc.head}</b>${sc.sub ? `<small>${sc.sub}</small>` : ''}</div>${etaHTML(sc.eta, sc.etaLab)}</div>
+        <div class="trk-bar">${bar}</div></div>`;
+    }
+    function trkMini(o) {
+      if (o.status === 'cancel' || o.status === 'done') return '';
+      return `<div class="trk-bar trk-c">${trkBarHTML(trkModel(o))}</div>`;
+      const M = trkModel(o), S = M.S;
+      return `<div class="trk-mini">${S.map((x, i) => `<i class="${i === M.cur ? 'cur' : x.ok ? 'ok' : ''}"></i>`).join('')}<b>${M.cur >= 0 ? S[M.cur].ic + ' ' + S[M.cur].n : ''}</b></div>`;
     }
     function card(o) {
       const mine = (o.staffAcct && o.staffAcct === me().acct) || (o.ownerAcct === me().acct);
@@ -537,16 +756,16 @@
       else if (o.status === 'new' && o.assign) tags.push(`<span class="tg or">⌛ ${esc(o.assign.nick)} ไม่รับในเวลา · เปิดให้ทุกคน</span>`);
       if (o.staff) tags.push(`<span class="tg">🙋 ${esc(o.staff)}${LV(o.staffAcct) === 'intern' ? ' 🔰' : ''}</span>`);
       if (o.status === 'back' && o.back) tags.push(`<span class="tg or">↩️ ${esc(o.back.reason)}</span>`);
-      if (o.status === 'parked' && o.park) tags.push(`<span class="tg">${o.park.readyNow ? '✅ พร้อมส่งมอบ' : o.park.readyAt ? '🅿️ เสร็จ ~' + hm(o.park.readyAt) : '🅿️ พักอยู่'}</span>`, o.park.backAt ? `<span class="tg">🍜 ลูกค้ากลับ ${hm(o.park.backAt)}</span>` : '', o.park.where ? `<span class="tg">📍 ${esc(o.park.where)}</span>` : '');
+      if (o.status === 'parked' && o.park) tags.push(`<span class="tg">${o.park.readyNow ? '✅ ย้ายเสร็จ พร้อมส่งมอบ' : o.park.readyAt ? '📲 เสร็จ ~' + hm(o.park.readyAt) : '📲 กำลังย้าย'}</span>`, o.park.backAt ? `<span class="tg">🍜 ลูกค้ากลับ ${hm(o.park.backAt)}</span>` : '', o.park.where ? `<span class="tg">📍 ${esc(o.park.where)}</span>` : '');
       if (o.status === 'picked') tags.push(`<span class="tg ${o.checkDone ? 'gr' : 'blue'}">${o.checkDone ? '✅ Check List ครบ · รอลูกค้าเซ็น' : '📋 รอ PC ทำ Check List'}</span>`);
-      if (o.transfer) tags.push(`<span class="tg or">📲 ย้ายข้อมูล</span>`);
+      if (o.transfer && o.status !== 'parked') tags.push(`<span class="tg or">📲 ลูกค้าขอย้ายข้อมูล</span>`);
       const wt = workTag(o); if (wt) tags.push(wt);
       const cb = claimBtnHTML(o), claimBtn = cb ? `<div class="act">${cb}</div>` : '';
       return `<div class="oc ${o.status}${mine ? ' mine' : ''}" onclick="showOrder('${o.no}')">
         <div class="t1"><span class="bd" style="background:${bc(o.brand)}"></span>${esc(o.brand)}<span class="no">#${esc(o.no)}</span><span class="st">${LABEL[o.status] || o.status}</span></div>
         <div class="md">${esc(o.model)}<small>${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' ×' + o.qty : ''}</small></div>
         <div class="mt">👤 ${esc(o.owner)}${o.total ? ' · 💰 ' + baht(o.total) : ''}${o.pay ? ' · 💳 ' + esc(o.pay) : ''}${o.extras ? ' · ➕ ' + esc(o.extras) : ''}</div>
-        <div class="ln">${tags.filter(Boolean).join('')}</div>${claimBtn}</div>`;
+        <div class="ln">${tags.filter(Boolean).join('')}</div>${trkMini(o)}${claimBtn}</div>`;
     }
     function renderQueue() {
       const act = Q.filter(o => ['new', 'claimed', 'back', 'picked', 'parked'].includes(o.status));
@@ -559,7 +778,7 @@
       document.getElementById('qNew').innerHTML = nw.length ? `<div class="sec">🔥 รอคนรับ <i>${nw.length}</i></div>` + nw.map(card).join('')
         : `<div class="lc" style="margin-bottom:14px"><div class="empty">✨ ไม่มี Order รอรับ${isStaff() ? ' — มีใหม่จะเด้งเสียงทันที' : ''}</div></div>`;
       document.getElementById('qWork').innerHTML = wk.length ? `<div class="sec">⚙️ กำลังทำ <i>${wk.length}</i></div>` + wk.map(card).join('') : '';
-      document.getElementById('qPark').innerHTML = pk.length ? `<div class="sec">🅿️ พักเคส · รอลูกค้า <i>${pk.length}</i></div>` + pk.map(card).join('') + '<div style="height:6px"></div>' : '';
+      document.getElementById('qPark').innerHTML = pk.length ? `<div class="sec">📲 กำลังย้ายข้อมูล <i>${pk.length}</i></div>` + pk.map(card).join('') + '<div style="height:6px"></div>' : '';
       document.getElementById('qDoneN').textContent = dn.length ? dn.filter(o => o.status === 'done').length + ' ใบ' : '';
       document.getElementById('qDone').innerHTML = dn.length ? dn.map(o => `<div class="dn ${o.status}" onclick="showOrder('${o.no}')"><span class="bd" style="background:${bc(o.brand)}"></span><b>${esc(o.brand)} ${esc(o.model)} ${esc(o.color)}</b><small>${o.status === 'cancel' ? 'ยกเลิก' : '✍️ ' + hm(o.closedAt)} · ${esc(o.staff || '-')}</small></div>`).join('')
         : '<div class="empty">ยังไม่มีเคสที่ปิดวันนี้</div>';
@@ -573,6 +792,10 @@
         const s = +el.dataset.since, lim = +el.dataset.lim; if (!s) return;
         el.textContent = '⏱ ' + mins(nowS() - s);
         if (lim) el.classList.toggle('late', nowS() - s > lim * 60000);
+      });
+      document.querySelectorAll('[data-eta]').forEach(el => {
+        const m = Math.round((+el.dataset.eta - nowS()) / 60000), late = m < 0, sm = el.querySelectorAll('small');
+        el.classList.toggle('late', late); if (sm[0]) sm[0].textContent = late ? 'เลยเวลา' : (el.dataset.lab || 'ประมาณ'); if (sm[1]) sm[1].textContent = late ? Math.abs(m) + ' นาที' : 'อีก ' + m + ' นาที';
       });
       let flip = false;
       document.querySelectorAll('[data-cd]').forEach(el => { const u = +el.dataset.cd, s = Math.ceil((u - nowS()) / 1000); if (s <= 0) flip = true; else el.textContent = `${Math.floor(s / 60)}:${pad(s % 60)}`; });
@@ -676,7 +899,7 @@
       if (btn) btn.disabled = true;
       return run(fn, ...args).then(r => { apply(r, msg); return r; }).catch(e => { if (btn) btn.disabled = false; toast(e.message, 1); throw e; });
     }
-    const H_LABEL = { stamp: '📸 ทำรูปส่งงาน', forfeit: '⌛ สละสิทธิ์ (ไม่รับในเวลา)', sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '🅿️ พักเคส', unpark: '▶️ กลับมาทำต่อ', ready: '✅ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก' };
+    const H_LABEL = { stamp: '📸 ทำรูปส่งงาน', forfeit: '⌛ สละสิทธิ์ (ไม่รับในเวลา)', sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '📲 เริ่มย้ายข้อมูล', unpark: '▶️ ย้ายข้อมูลเสร็จ ทำต่อ', ready: '✅ ย้ายข้อมูลเสร็จ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก' };
     function histLine(h) {
       let x = '';
       if (h.a === 'work') x = (WORK[h.kind] || '') + (h.text ? ' ' + h.text : '') + (h.mins ? ' · ~' + h.mins + ' นาที' : '');
@@ -703,7 +926,7 @@
         <div class="kv"><div><small>ลูกค้า</small><b>${esc(o.cust || '-')}</b></div><div><small>เบอร์ 7Club+</small><b>${esc(phoneTxt(o.phone) || '-')}</b></div>
         <div><small>ประเภทชำระ</small><b>${esc(o.pay || '-')}</b></div><div><small>พนักงานผู้รับ</small><b>${esc(o.staff || '—')}</b></div>
         <div class="w"><small>IMEI / SN</small><b>${esc(o.imei || '— ยังไม่ได้ใส่')}</b></div>
-        </div></div>${billHTML(o)}`;
+        </div></div>${trackerHTML(o)}${billHTML(o)}`;
       if (o.sale) h += `<div class="note ${o.sale.saved ? (o.sale.saved.ok ? 'gr' : 'rd') : 'wh'}">💰 <b>ข้อมูลขาย</b> · ${esc(o.sale.emp || 'ยังไม่เลือกพนักงานขาย')} · ${o.sale.price ? '฿' + Number(o.sale.price).toLocaleString('en-US') : 'ยังไม่ใส่ราคา'} · ผู้รับเคส ${esc(o.sale.receiver || o.staff || '-')}<br><small>${esc(o.sale.model)}${o.sale.type ? ', ' + esc(o.sale.type) : ''}</small>
         ${o.sale.saved ? (o.sale.saved.ok ? '<br>📊 <b>บันทึกเข้า Check List แล้ว</b> ' + hm(o.sale.saved.at) + ' — ไม่ต้องบันทึกซ้ำ' : '<br>⚠️ บันทึกเข้า Check List ไม่สำเร็จ: ' + esc(o.sale.saved.err)) : '<br>📊 ลูกค้าเซ็นแล้วจะเข้า Check List ให้เอง'}</div>`;
       if (o.status === 'done' && (o.photos || o.stamp)) h += `<div class="acts"><button class="d full" onclick="openStamp('${o.no}')">📸 รูปพร้อมส่งงาน<small>รุ่น + งานโฟกัส · แชร์ / บันทึกรูป</small></button></div>`;
@@ -711,8 +934,6 @@
       if (o.transfer) h += `<div class="note or">📲 <b>ลูกค้าต้องการย้ายข้อมูล</b> — ตอนเซ็นต้องกดยอมรับนโยบายย้ายข้อมูลด้วย</div>`;
       if (o.note) h += `<div class="note wh">📝 ${esc(o.note)}</div>`;
       if (o.status === 'back' && o.back) h += `<div class="note or">↩️ <b>${esc(o.back.reason)}</b>${o.back.text ? ' — ' + esc(o.back.text) : ''}<br><small>ส่งกลับโดย ${esc(o.back.by)} · ${hm(o.back.at)}</small></div>`;
-      if (o.status === 'claimed' && o.work) h += `<div class="note ${o.work.kind === 'branch' ? 'bl' : 'gr'}">${WORK[o.work.kind]}${o.work.text ? ' <b>' + esc(o.work.text) + '</b>' : ''}${o.work.eta ? ' · เสร็จประมาณ <b>' + hm(o.work.eta) + '</b>' : ''}</div>`;
-      if (o.status === 'parked' && o.park) h += `<div class="note pu">🅿️ <b>พักเคส</b>${o.park.readyAt ? ' · เสร็จประมาณ <b>' + hm(o.park.readyAt) + '</b>' : ''}${o.park.backAt ? ' · ลูกค้ากลับมา <b>' + hm(o.park.backAt) + '</b>' : ''}${o.park.where ? '<br>📍 เครื่องอยู่: <b>' + esc(o.park.where) + '</b>' : ''}${o.park.text ? '<br>' + esc(o.park.text) : ''}${o.park.readyNow ? '<br>✅ <b>พร้อมส่งมอบแล้ว</b> (' + hm(o.park.readyNow) + ')' : ''}</div>`;
       if (o.forfeit && o.status !== 'new') h += `<div class="note wh">⌛ ${esc(o.forfeit.nick)} ไม่รับในเวลาที่จอง → ${esc(o.staff)} รับแทน</div>`;
       if (o.hand && act) h += `<div class="note wh">🔁 รับช่วงจาก ${esc(o.hand.from)} · ${hm(o.hand.at)}${o.hand.text ? ' — ' + esc(o.hand.text) : ''}</div>`;
       if (o.status === 'cancel' && o.cancel) h += `<div class="note rd">✖️ ยกเลิกโดย ${esc(o.cancel.by)} · ${esc(o.cancel.reason)}</div>`;
@@ -739,10 +960,10 @@
         B.push(`<button class="${okSign ? 'y' : ''}" ${okSign ? '' : 'disabled'} onclick="openSign()">✍️ ให้ลูกค้าเซ็น<small>${okSign ? 'ปิดเคส + เข้า Check List' : !o.checkDone ? 'ทำ Check List ให้ครบก่อน' : !o.imei ? 'ใส่ IMEI ก่อน' : 'ใส่ข้อมูลขายให้ครบก่อน'}</small></button>`);
       }
       if (o.status === 'picked' && mine) B.push(`<button onclick="backSheet()">↩️ ส่งกลับ PC<small>ข้อมูลผิด</small></button>`);
-      if (['claimed', 'picked'].includes(o.status) && (asg || ownerish)) B.push(`<button onclick="parkSheet()">🅿️ พักเคส<small>ย้ายข้อมูลนาน / ลูกค้าไปทานข้าว</small></button>`);
+      if (['claimed', 'picked'].includes(o.status) && (asg || ownerish)) B.push(`<button onclick="parkSheet()">📲 ย้ายข้อมูล<small>เริ่มย้าย · ลูกค้าไปเดินเล่นได้</small></button>`);
       if (o.status === 'parked' && (asg || ownerish)) {
-        if (!o.park.readyNow) B.push(`<button class="y" onclick="act('unpark',['${o.no}',true],'✅ แจ้งว่าพร้อมส่งมอบแล้ว',this)">✅ พร้อมส่งมอบ<small>ลูกค้าเห็นในลิงก์สถานะ</small></button>`);
-        B.push(`<button onclick="act('unpark',['${o.no}',false],'▶️ กลับมาทำต่อ',this)">▶️ เลิกพัก ทำต่อ<small>ลูกค้ากลับมาแล้ว</small></button>`);
+        if (!o.park.readyNow) B.push(`<button class="y" onclick="act('unpark',['${o.no}',true],'✅ แจ้งว่าย้ายข้อมูลเสร็จแล้ว',this)">✅ ย้ายเสร็จ พร้อมส่งมอบ<small>ลูกค้าเห็นในลิงก์สถานะ</small></button>`);
+        B.push(`<button onclick="act('unpark',['${o.no}',false],'▶️ กลับมาทำต่อ',this)">▶️ ย้ายเสร็จ ทำขั้นต่อ<small>ลูกค้ากลับมาแล้ว</small></button>`);
       }
       if (['claimed', 'picked', 'parked', 'back'].includes(o.status) && asg) B.push(me().level === 'intern' && mine ? `<button class="d" onclick="handSheet()">🔁 ส่งมอบให้พี่<small>พี่ในร้าน / ผู้จัดการ รับช่วงต่อ</small></button>` : `<button onclick="handSheet()">🔁 ส่งต่อเคส<small>หมดกะ / ติดลูกค้า</small></button>`);
       if (act && (owner || m.mgr)) B.push(`<button class="r" onclick="cancelSheet()">✖️ ยกเลิก Order<small>ลูกค้าเปลี่ยนใจ / เปิดผิด</small></button>`);
@@ -783,28 +1004,38 @@
       if (MEDIA[no] && MEDIA[no].n === (CUR.photos || 0) + (CUR.sign ? 1 : 0)) return paint(MEDIA[no].d);
       run('getMedia', no).then(md => { MEDIA[no] = { n: (CUR.photos || 0) + (CUR.sign ? 1 : 0), d: md }; paint(md); }).catch(() => { const el = document.getElementById('dMedia'); if (el) el.innerHTML = '<div class="empty">โหลดรูปไม่สำเร็จ</div>'; });
     }
-    const slotTxt = s => String(s || '').startsWith('fail:') ? '❌ ' + s.slice(5) : s === 'park' ? '🅿️ ก่อนพัก' : '📷 ตัวเครื่อง';
+    const slotTxt = s => String(s || '').startsWith('fail:') ? '❌ ' + s.slice(5) : s === 'park' ? '📲 ก่อนย้ายข้อมูล' : '📷 ตัวเครื่อง';
     function zoom(src) { const z = document.getElementById('zoom'); z.querySelector('img').src = src; z.classList.add('on'); }
 
     // งานที่กำลังทำ (คนรับเคส)
     let WK = null;
     function workPanel(o) {
-      WK = { kind: (o.work && o.work.kind) || 'store', mins: (o.work && o.work.mins) || 0, text: (o.work && o.work.text) || '' };
-      return `<div class="wk"><div class="lab" style="margin-top:2px"><span>กำลังทำอะไรอยู่</span><small>PC เจ้าของบิลจะได้แจ้งเตือน</small></div>
-        <div class="chips" id="wkKind">${Object.keys(WORK).map(k => `<button data-v="${k}" class="${WK.kind === k ? 'on' : ''}">${WORK[k]}</button>`).join('')}</div>
-        <div class="lab"><span>ใช้เวลาประมาณ</span></div>
-        <div class="chips" id="wkMin">${[0, 10, 15, 30, 45, 60, 120].map(n => `<button data-v="${n}" class="${WK.mins === n ? 'on' : ''}">${n ? n + ' นาที' : 'ไม่ระบุ'}</button>`).join('')}</div>
-        <input class="inp" id="wkText" maxlength="80" placeholder="เช่น ไปเบิกที่ ID1067 / รอเอกสารไฟแนนซ์" value="${esc(WK.text)}" style="margin-top:8px">
-        <div class="acts" style="margin-top:8px"><button class="d full" onclick="saveWork(this)">📣 อัปเดตให้ PC รู้</button></div></div>`;
+      const w = o.work || {};
+      WK = { kind: WORK_PICK.includes(w.kind) ? w.kind : 'store', mins: w.mins || 0, text: w.text || '', ref: w.ref || '' };
+      const t = w.eta ? new Date(w.eta) : new Date(Date.now() + 30 * 60000), tv = `${pad(t.getHours())}:${pad(Math.round(t.getMinutes() / 5) * 5 % 60)}`;
+      return `<div class="wk"><div class="lab" style="margin-top:2px"><span>ไปเบิกเครื่องที่ไหน</span><small>PC เจ้าของบิลจะได้แจ้งเตือน</small></div>
+        <div class="chips" id="wkKind">${WORK_PICK.map(k => `<button data-v="${k}" class="${WK.kind === k ? 'on' : ''}">${WORK[k]}</button>`).join('')}</div>
+        <div id="wkIn" ${WK.kind === 'branch' ? 'hidden' : ''}><div class="lab"><span>ใช้เวลาประมาณ</span></div>
+          <div class="chips" id="wkMin">${[0, 5, 10, 15, 30, 45, 60].map(n => `<button data-v="${n}" class="${WK.mins === n ? 'on' : ''}">${n ? n + ' นาที' : 'ไม่ระบุ'}</button>`).join('')}</div></div>
+        <div id="wkOut" ${WK.kind === 'branch' ? '' : 'hidden'}>
+          <div class="two" style="margin-top:8px"><div><div class="lab"><span>🧾 เลขดำเนินการ</span></div><input class="inp" id="wkRef" maxlength="40" placeholder="เช่น TR-0012345" value="${esc(WK.ref)}" autocomplete="off" autocapitalize="characters"></div>
+          <div><div class="lab"><span>⏰ กลับถึงร้าน</span></div><input class="inp" type="time" id="wkAt" value="${tv}"></div></div></div>
+        <input class="inp" id="wkText" maxlength="80" placeholder="${WK.kind === 'branch' ? 'ไปเบิกที่ไหน เช่น ID1067 / คลังฟิวเจอร์' : 'เช่น ห้องสต๊อกชั้น 2 / รอเอกสารไฟแนนซ์'}" value="${esc(WK.text)}" style="margin-top:8px">
+        <div class="acts" style="margin-top:8px"><button class="d full" onclick="saveWork(this)">📣 อัปเดตหลอดสถานะ</button></div></div>`;
     }
     document.addEventListener('click', e => {
       const b = e.target.closest('#wkKind button, #wkMin button'); if (!b) return;
       b.parentNode.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); vib(5);
-      if (b.closest('#wkKind') && b.dataset.v === 'branch' && !document.getElementById('wkText').value) document.getElementById('wkText').placeholder = 'ไปเบิกที่สาขาไหน เช่น ID1067';
+      if (b.closest('#wkKind')) {
+        const out = b.dataset.v === 'branch';
+        document.getElementById('wkOut').hidden = !out; document.getElementById('wkIn').hidden = out;
+        document.getElementById('wkText').placeholder = out ? 'ไปเบิกที่ไหน เช่น ID1067 / คลังฟิวเจอร์' : b.dataset.v === 'wait' ? 'เช่น รอเอกสารไฟแนนซ์ / ลูกค้าไปถอนเงิน' : 'เช่น ห้องสต๊อกชั้น 2';
+      }
     });
     function saveWork(btn) {
-      const k = (document.querySelector('#wkKind button.on') || {}).dataset, mn = (document.querySelector('#wkMin button.on') || {}).dataset;
-      act('setWork', [CUR.no, k ? k.v : 'store', mn ? +mn.v : 0, document.getElementById('wkText').value.trim()], '📣 อัปเดตแล้ว — PC ได้แจ้งเตือน', btn);
+      const k = (document.querySelector('#wkKind button.on') || {}).dataset, mn = (document.querySelector('#wkMin button.on') || {}).dataset, kind = k ? k.v : 'store';
+      const x = kind === 'branch' ? { ref: document.getElementById('wkRef').value.trim(), at: document.getElementById('wkAt').value } : {};
+      act('setWork', [CUR.no, kind, kind === 'branch' ? 0 : (mn ? +mn.v : 0), document.getElementById('wkText').value.trim(), x], kind === 'branch' ? '🏍️ ออกเดินทางแล้ว — PC ได้แจ้งเตือน' : '📣 อัปเดตแล้ว — PC ได้แจ้งเตือน', btn);
     }
     // PC แก้ข้อมูล (ส่งกลับ)
     function fixPanel(o) {
@@ -843,19 +1074,19 @@
     function doPicked(btn) { act('markPicked', [CUR.no, document.getElementById('pkI').value.trim()], '📦 แจ้ง PC แล้ว', btn).then(() => closeS('miniS')).catch(() => {}); }
     function parkSheet() {
       const tn = new Date(Date.now() + 90 * 60000);
-      mini(miniHead('🅿️', 'พักเคส · รอลูกค้า', 'ย้ายออกจากคิวหลัก ไม่มีแจ้งเตือนกวนระหว่างรอ') + `<div class="lab"><span>ทำเสร็จประมาณ</span></div>
+      mini(miniHead('📲', 'ย้ายข้อมูล', 'ระหว่างย้ายไม่มีแจ้งเตือนกวน · เตือนก่อนลูกค้ากลับ 15 นาที') + `<div class="lab"><span>ย้ายเสร็จประมาณ</span></div>
         <div class="chips" id="pkM">${[30, 60, 90, 120, 180].map(n => `<button data-v="${n}" class="${n === 120 ? 'on' : ''}">${n < 60 ? n + ' นาที' : n / 60 + ' ชม.'}</button>`).join('')}</div>
         <div class="lab"><span>ลูกค้าจะกลับมาตอน</span><small>เตือนคุณก่อน 15 นาที</small></div><input class="inp big" type="time" id="pkB" value="${pad(tn.getHours())}:${pad(Math.round(tn.getMinutes() / 5) * 5 % 60)}">
         <div class="lab"><span>📍 เครื่องอยู่ที่ไหน</span></div><div class="chips" id="pkW">${['ชาร์จอยู่หลังเคาน์เตอร์', 'ลิ้นชักเคาน์เตอร์', 'ห้องสต๊อก', 'อยู่กับ PC'].map(w => `<button data-v="${w}">${w}</button>`).join('')}</div>
         <input class="inp" id="pkWx" maxlength="80" placeholder="หรือพิมพ์ เช่น ลิ้นชัก 2" style="margin-top:6px">
-        <div class="lab"><span>หมายเหตุ</span></div><textarea id="pkT" maxlength="160" placeholder="เช่น ย้ายข้อมูล iCloud 120GB / ลูกค้าไปทานข้าวชั้น 3"></textarea>
+        <div class="lab"><span>หมายเหตุ</span></div><textarea id="pkT" maxlength="160" placeholder="เช่น iCloud 120GB / Smart Switch · ลูกค้าไปทานข้าวชั้น 3"></textarea>
         <div class="note wh" style="margin-top:8px">💡 ถ่ายรูปเครื่องก่อนเริ่มย้าย (ใน Check List) กันเรื่อง "รอยมาตั้งแต่แรก" · ให้ลูกค้าสแกน QR ในใบนี้ไว้ดูสถานะ</div>
-        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ยกเลิก</button><button class="b-dk" onclick="doPark(this)">🅿️ พักเคส</button></div>`);
+        <div class="sfoot"><button class="b-no" onclick="closeS('miniS')">ยกเลิก</button><button class="b-dk" onclick="doPark(this)">📲 เริ่มย้ายข้อมูล</button></div>`);
       chipBind('pkM'); chipBind('pkW');
     }
     function doPark(btn) {
       const p = { readyMins: +(chipVal('pkM') || 0), backAt: document.getElementById('pkB').value, where: document.getElementById('pkWx').value.trim() || chipVal('pkW'), text: document.getElementById('pkT').value.trim() };
-      act('park', [CUR.no, p], '🅿️ พักเคสแล้ว', btn).then(() => closeS('miniS')).catch(() => {});
+      act('park', [CUR.no, p], '📲 เริ่มย้ายข้อมูลแล้ว', btn).then(() => closeS('miniS')).catch(() => {});
     }
     function handSheet() {
       mini(miniHead('🔁', me().level === 'intern' && !me().mgr ? 'ส่งมอบให้พี่' : 'ส่งต่อเคส', me().level === 'intern' && !me().mgr ? 'น้องฝึกงานส่งมอบได้เฉพาะพี่ในร้าน / ผู้จัดการ' : 'คนรับช่วงได้แจ้งเตือนพร้อมรายละเอียดทั้งหมด') + `<div class="lab"><span>ส่งให้</span></div><div class="chips" id="hdP"><div class="loading" style="padding:10px">กำลังโหลดรายชื่อ…</div></div>
@@ -1241,7 +1472,7 @@
         <div class="lc" style="margin-top:14px"><div class="ch"><b>↩️ ส่งกลับ PC เพราะอะไร</b><small>${nBack} ครั้ง</small></div>${bars(backs)}${nBack ? `<div class="ch" style="margin-top:10px"><b style="font-size:14px">แยกแบรนด์</b></div>${bars(backBrand)}` : ''}</div>
         <div class="lc" style="margin-top:14px"><div class="ch"><b>⏳ เคสยาว (แยกไว้ ไม่ปนเคสปกติ)</b></div>
           <div class="hb"><span>🚗 ไปเบิกต่างสาขา</span><em><s style="width:${L.length ? branch.length / L.length * 100 : 0}%"></s></em><b>${branch.length}</b></div>
-          <div class="hb"><span>🅿️ พักเคส${pm.length ? ` · เฉลี่ย ${Math.round(pm.reduce((a, b) => a + b, 0) / pm.length)} นาที` : ''}</span><em><s style="width:${L.length ? parked.length / L.length * 100 : 0}%"></s></em><b>${parked.length}</b></div>
+          <div class="hb"><span>📲 ย้ายข้อมูล${pm.length ? ` · เฉลี่ย ${Math.round(pm.reduce((a, b) => a + b, 0) / pm.length)} นาที` : ''}</span><em><s style="width:${L.length ? parked.length / L.length * 100 : 0}%"></s></em><b>${parked.length}</b></div>
           <div class="hb"><span>📲 ย้ายข้อมูล</span><em><s style="width:${L.length ? L.filter(o => o.transfer).length / L.length * 100 : 0}%"></s></em><b>${L.filter(o => o.transfer).length}</b></div>
           ${Object.keys(branchM).length ? `<div class="ch" style="margin-top:10px"><b style="font-size:14px">รุ่นที่ต้องไปเบิกต่างสาขา</b><small>ใช้คุยเรื่องขอสต๊อก</small></div>${bars(branchM)}` : ''}</div>
         <div class="lc" style="margin-top:14px"><div class="ch"><b>💰 ยอดขาย (ปิดเคสแล้ว)</b><small>${baht(done.reduce((t, o) => t + (o.total || 0), 0))}</small></div>
