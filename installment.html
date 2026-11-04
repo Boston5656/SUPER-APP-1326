@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>คำนวณผ่อน 1326</title>
+<meta name="theme-color" content="#FFD600">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   🧮 เครื่องคิดเลขผ่อน 1326 — ปุ่ม + − × ÷ เปลี่ยนเป็น ปุ่มดอกเบี้ย / ปุ่มเดือน
+   คำนวณแบบเดียวกับแท็บผ่อนในแอปสต๊อก: ดอกคงที่ (Flat rate) = ยอดจัด × ดอก%/เดือน × จำนวนเดือน
+   ========================================================= */
+:root{ --y:#FFD600; --d:#1C1C1E; --d2:#2C2C2E; --d3:#3A3A3C; --g:#8E8E93; --ok:#30D158; --red:#FF6961;
+  --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{min-height:100vh;min-height:100dvh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),radial-gradient(90% 60% at 110% 110%,#FFC400 0%,rgba(255,196,0,0) 60%),var(--y);
+  background-attachment:fixed;padding:calc(8px + env(safe-area-inset-top)) 12px calc(14px + env(safe-area-inset-bottom));
+  -webkit-user-select:none;user-select:none}
+button{font-family:inherit;cursor:pointer;color:inherit;border:0}
+.num{font-family:'Space Grotesk','IBM Plex Sans Thai',sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.navrow{display:flex;gap:8px;align-items:stretch}
+[data-sys-back-slot]{display:flex}[data-sys-back-slot]:empty{display:none}
+.titlebar{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 8px 8px 16px;border-radius:18px;
+  background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35)}
+.titlebar h1{margin:0;font-size:16px;font-weight:700;white-space:nowrap}
+.tb-btn{border-radius:12px;padding:8px 12px;font-weight:700;font-size:12.5px;background:var(--d);color:var(--y);transition:transform .35s var(--spring)}
+.tb-btn:active{transform:scale(.9)}
+
+/* ตัวเครื่อง */
+.calc{background:var(--d);border-radius:34px;padding:14px;box-shadow:0 30px 60px -24px rgba(60,40,0,.6),inset 0 1px 0 rgba(255,255,255,.06);animation:rise .55s var(--ios-ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+
+/* จอ */
+.scr{background:#111113;border-radius:24px;padding:12px 14px 14px;box-shadow:inset 0 2px 10px rgba(0,0,0,.5)}
+.fld{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:5px 10px;border-radius:12px;color:#8E8E93;cursor:pointer;transition:background .25s,color .25s}
+.fld small{font-size:12px;font-weight:700;white-space:nowrap}
+.fld b{font-size:17px;font-weight:700;color:#C7C7CC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fld.on{background:rgba(255,214,0,.12);color:var(--y)} .fld.on b{color:#fff}
+.fld.on b::after{content:'';display:inline-block;width:2px;height:.95em;margin-left:3px;vertical-align:-2px;background:var(--y);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.fld.price b{font-size:34px;line-height:1.15;letter-spacing:-.5px}
+.fld.price.on b{color:#fff}
+.row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px}
+.row2 .fld{flex-direction:column;align-items:flex-start;gap:0;padding:6px 10px;background:rgba(255,255,255,.04)}
+.row2 .fld.on{background:rgba(255,214,0,.14)}
+.row2 .fld b{font-size:15px}
+.res{margin-top:10px;padding:12px 12px 10px;border-radius:18px;background:linear-gradient(160deg,#2C2C2E,#1F1F21);border:1px solid rgba(255,214,0,.18)}
+.res-top{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.res-top small{display:block;font-size:11.5px;font-weight:700;color:#AEAEB2}
+.res-top .big{font-size:40px;font-weight:700;color:var(--y);line-height:1;letter-spacing:-1px}
+.res-top .big i{font-style:normal;font-size:15px;color:#AEAEB2;margin-left:4px;letter-spacing:0}
+.res-top .mo{font-size:13px;font-weight:800;color:var(--d);background:var(--y);padding:5px 10px;border-radius:100px;white-space:nowrap}
+.res-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.res-sub div{font-size:10.5px;font-weight:700;color:#8E8E93}
+.res-sub b{display:block;font-size:13.5px;color:#E5E5EA;margin-top:1px}
+.res-sub .r b{color:var(--red)}
+
+/* ปุ่มเดือน (แทน + − × ÷) */
+.lab{display:flex;justify-content:space-between;align-items:center;margin:12px 4px 6px;font-size:11px;font-weight:800;color:#8E8E93}
+.lab button{background:none;color:#8E8E93;font-size:11px;font-weight:700;padding:0}
+.months{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.k{height:54px;border-radius:18px;font-size:22px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;
+  transition:transform .35s var(--spring),background .2s,color .2s,filter .2s;touch-action:manipulation}
+.k:active{transform:scale(.88);filter:brightness(1.25);transition-duration:.08s}
+.k small{font-size:9.5px;font-weight:700;margin-top:3px;opacity:.75}
+.k.m{height:46px;border-radius:15px;background:#3A2E00;color:var(--y);font-size:18px;font-weight:700}
+.k.m.on{background:var(--y);color:var(--d);box-shadow:0 6px 16px -6px rgba(255,214,0,.7)}
+.k.m .pm{font-size:9px;font-weight:700;opacity:.8;margin-top:2px}
+.k.m.on .pm{opacity:.9}
+
+/* แป้นตัวเลข + คอลัมน์ดอกเบี้ย */
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.k.n{background:var(--d3);color:#fff}
+.k.f{background:#A5A5AA;color:var(--d);font-size:16px;font-weight:700}
+.k.f.on{background:#fff}
+.k.r{background:#FF9F0A;color:#fff;font-size:18px;font-weight:700}
+.k.r.on{background:#fff;color:#FF9F0A}
+.k.r small{opacity:.9}
+.k.zero{grid-column:span 1}
+
+.share{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.share button{height:46px;border-radius:16px;font-weight:700;font-size:13.5px;background:rgba(255,255,255,.08);color:#fff;transition:transform .35s var(--spring)}
+.share button:active{transform:scale(.94)}
+.share .y{background:var(--y);color:var(--d)}
+.note{font-size:11px;color:rgba(28,28,30,.6);text-align:center;font-weight:600;line-height:1.5;padding:0 8px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,160%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);white-space:nowrap}
+#toast.on{transform:translate(-50%,0)}
+/* แก้ปุ่มดอก (กดค้าง) */
+#rateEd{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:12px}
+#rateEd.on{display:flex}
+#rateEd .box{width:100%;max-width:420px;background:#fff;border-radius:26px;padding:16px;animation:rise .4s var(--ios-ease) both}
+#rateEd h3{margin:0 0 4px;font-size:16px} #rateEd p{margin:0 0 12px;font-size:12px;color:#8E8E93;font-weight:600}
+#rateEd .g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+#rateEd input{width:100%;height:48px;border-radius:14px;border:0;background:#F2F2F7;text-align:center;font:700 17px 'Space Grotesk',sans-serif}
+#rateEd .ft{display:flex;gap:8px;margin-top:12px}
+#rateEd .ft button{flex:1;height:46px;border-radius:15px;font-weight:700;background:#F2F2F7}
+#rateEd .ft .ok{background:var(--d);color:var(--y)}
+@media (max-height:700px){.k{height:46px}.k.m{height:40px}.fld.price b{font-size:28px}.res-top .big{font-size:32px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="navrow">
+    <span data-sys-back-slot></span>
+    <div class="titlebar"><h1>🧮 คำนวณผ่อน</h1><button class="tb-btn" type="button" onclick="clearAll()">AC ทั้งหมด</button></div>
+  </div>
+
+  <div class="calc">
+    <div class="scr">
+      <div class="fld price on" data-f="price" onclick="setField('price')"><small>💰 ราคา</small><b class="num" id="vPrice">0</b></div>
+      <div class="row2">
+        <div class="fld" data-f="down" onclick="setField('down')"><small>💵 ดาวน์</small><b class="num" id="vDown">0</b></div>
+        <div class="fld" data-f="rate" onclick="setField('rate')"><small>📈 ดอก/เดือน</small><b class="num" id="vRate">0.79%</b></div>
+        <div class="fld" data-f="mo" onclick="vib(5)"><small>📅 ผ่อน</small><b class="num" id="vMo">12 ด.</b></div>
+      </div>
+      <div class="res">
+        <div class="res-top"><div><small>ค่างวดต่อเดือน</small><div class="big num" id="rMonthly">0<i>บาท</i></div></div><span class="mo" id="rMo">12 เดือน</span></div>
+        <div class="res-sub">
+          <div>ยอดจัด<b class="num" id="rLoan">0</b></div>
+          <div class="r">ดอกรวม<b class="num" id="rInt">0</b></div>
+          <div>รวมทั้งสิ้น<b class="num" id="rTot">0</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab"><span>📅 ปุ่มเดือน — กดแล้วคิดทันที</span><span id="moHint"></span></div>
+    <div class="months" id="months"></div>
+
+    <div class="pad" id="pad">
+      <button class="k f" onclick="key('AC')">C</button>
+      <button class="k f" onclick="key('BS')">⌫</button>
+      <button class="k f" data-fk="down" onclick="toggleField('down')">ดาวน์</button>
+      <button class="k r rk" data-i="0"></button>
+      <button class="k n" onclick="key('7')">7</button><button class="k n" onclick="key('8')">8</button><button class="k n" onclick="key('9')">9</button>
+      <button class="k r rk" data-i="1"></button>
+      <button class="k n" onclick="key('4')">4</button><button class="k n" onclick="key('5')">5</button><button class="k n" onclick="key('6')">6</button>
+      <button class="k r rk" data-i="2"></button>
+      <button class="k n" onclick="key('1')">1</button><button class="k n" onclick="key('2')">2</button><button class="k n" onclick="key('3')">3</button>
+      <button class="k r rk" data-i="3"></button>
+      <button class="k n" onclick="key('0')">0</button><button class="k n" onclick="key('00')">00</button><button class="k n" onclick="key('.')">.</button>
+      <button class="k f" data-fk="rate" onclick="toggleField('rate')">ดอก%<small>พิมพ์เอง</small></button>
+    </div>
+
+    <div class="share">
+      <button type="button" onclick="copyText()">📋 คัดลอกส่งลูกค้า</button>
+      <button type="button" class="y" onclick="copyText(true)">📋 คัดลอกทุกเดือน</button>
+    </div>
+  </div>
+  <p class="note">ดอกเบี้ยแบบคงที่ (Flat rate) ต่อเดือน · ปัดเป็นบาท · ตัวเลขเพื่อประมาณการ ยอดจริงตามไฟแนนซ์อนุมัติ<br>กดค้างที่ปุ่มดอกสีส้ม = เปลี่ยนค่าปุ่ม (จำในเครื่องนี้)</p>
+</div>
+
+<div id="rateEd"><div class="box">
+  <h3>⚙️ ตั้งค่าปุ่มดอกเบี้ย</h3><p>% ต่อเดือน · บันทึกไว้ในเครื่องนี้</p>
+  <div class="g" id="reG"></div>
+  <div class="ft"><button onclick="rateReset()">ค่าเริ่มต้น</button><button onclick="closeRateEd()">ยกเลิก</button><button class="ok" onclick="saveRateEd()">บันทึก</button></div>
+</div></div>
+<div id="toast"></div>
+
+<script>
+  const MONTHS = [4, 6, 8, 10, 12, 15, 18, 20, 24, 36, 48];
+  const RATE_DEF = [0, 0.69, 0.79, 0.99];
+  const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
+  let RATES = LS.get('inst_rates', RATE_DEF);
+  if (!Array.isArray(RATES) || RATES.length !== 4) RATES = RATE_DEF.slice();
+  const S = { price: '', down: '', rate: String(LS.get('inst_rate', 0.79)), mo: LS.get('inst_mo', 12), f: 'price', fresh: false };
+
+  const $ = id => document.getElementById(id);
+  const fmt = n => Math.round(n).toLocaleString('en-US');
+  function vib(ms) { try { navigator.vibrate && navigator.vibrate(ms || 6); } catch (e) {} }
+  function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  const num = s => parseFloat(s) || 0;
+
+  function calc(mo) {
+    const price = num(S.price), down = Math.min(num(S.down), price), rate = num(S.rate), m = mo || S.mo;
+    const loan = Math.max(0, price - down), int = loan * rate / 100 * m, tot = loan + int;
+    return { price, down, rate, m, loan, int, tot, monthly: m ? tot / m : 0 };
+  }
+  function render() {
+    const r = calc();
+    $('vPrice').textContent = S.price ? Number(S.price).toLocaleString('en-US') + (S.price.endsWith('.') ? '.' : '') : '0';
+    $('vDown').textContent = S.down ? Number(S.down).toLocaleString('en-US') : '0';
+    $('vRate').textContent = (S.rate === '' ? '0' : S.rate) + '%';
+    $('vMo').textContent = S.mo + ' ด.';
+    $('rMonthly').innerHTML = fmt(r.monthly) + '<i>บาท</i>';
+    $('rMo').textContent = S.mo + ' เดือน';
+    $('rLoan').textContent = fmt(r.loan); $('rInt').textContent = fmt(r.int); $('rTot').textContent = fmt(r.tot);
+    document.querySelectorAll('.fld[data-f]').forEach(el => el.classList.toggle('on', el.dataset.f === S.f));
+    document.querySelectorAll('[data-fk]').forEach(el => el.classList.toggle('on', el.dataset.fk === S.f));
+    // ปุ่มเดือน: โชว์ค่างวดของแต่ละเดือนไว้ใต้ตัวเลข
+    $('months').innerHTML = MONTHS.map(m => { const c = calc(m); return `<button class="k m${m === S.mo ? ' on' : ''}" onclick="setMo(${m})">${m}<span class="pm num">${r.price ? fmt(c.monthly) : 'เดือน'}</span></button>`; }).join('');
+    document.querySelectorAll('.rk').forEach(b => { const v = RATES[+b.dataset.i]; b.innerHTML = `${v}%<small>${v === 0 ? 'ผ่อน 0%' : 'ต่อเดือน'}</small>`; b.classList.toggle('on', num(S.rate) === v && S.f !== 'rate'); });
+    $('moHint').textContent = r.price ? 'ตัวเลขเล็ก = ค่างวด/เดือน' : '';
+  }
+  function setField(f) { S.f = f; S.fresh = true; vib(5); render(); }
+  function toggleField(f) { setField(S.f === f ? 'price' : f); }
+  function key(k) {
+    vib(6);
+    const f = S.f;
+    if (k === 'AC') { S[f] = f === 'rate' ? '0' : ''; S.fresh = false; return render(); }
+    if (k === 'BS') { S[f] = String(S[f]).slice(0, -1); S.fresh = false; return render(); }
+    let v = S.fresh && f === 'rate' ? '' : String(S[f]); S.fresh = false;
+    if (k === '.') { if (f !== 'rate' || v.includes('.')) return; v = (v || '0') + '.'; }
+    else {
+      if (v === '0' && k !== '.') v = '';
+      v += k;
+      if (f === 'rate') { if (!/^\d{0,2}(\.\d{0,2})?$/.test(v)) return; }
+      else if (v.replace(/\D/g, '').length > 8) return;
+    }
+    S[f] = v;
+    if (f === 'rate') LS.set('inst_rate', num(v));
+    render();
+  }
+  function setMo(m) { S.mo = m; LS.set('inst_mo', m); vib(8); render(); bump('rMonthly'); }
+  function setRate(v) { S.rate = String(v); LS.set('inst_rate', v); if (S.f === 'rate') S.f = 'price'; vib(8); render(); bump('rMonthly'); }
+  function bump(id) { const el = $(id); el.animate && el.animate([{ transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.34,1.56,.64,1)' }); }
+  function clearAll() { S.price = ''; S.down = ''; S.f = 'price'; vib(10); render(); }
+
+  // ปุ่มดอก: แตะ = ใช้ · กดค้าง = ตั้งค่า
+  document.querySelectorAll('.rk').forEach(b => {
+    let t = null, long = false;
+    b.addEventListener('pointerdown', () => { long = false; t = setTimeout(() => { long = true; openRateEd(); }, 550); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, () => clearTimeout(t)));
+    b.addEventListener('click', () => { if (!long) setRate(RATES[+b.dataset.i]); });
+    b.addEventListener('contextmenu', e => e.preventDefault());
+  });
+  function openRateEd() { vib(15); $('reG').innerHTML = RATES.map((v, i) => `<input inputmode="decimal" id="re${i}" value="${v}">`).join(''); $('rateEd').classList.add('on'); }
+  function closeRateEd() { $('rateEd').classList.remove('on'); }
+  function saveRateEd() { RATES = [0, 1, 2, 3].map(i => Math.max(0, Math.min(9.99, Math.round(num($('re' + i).value) * 100) / 100))); LS.set('inst_rates', RATES); closeRateEd(); render(); toast('✅ บันทึกปุ่มดอกแล้ว'); }
+  function rateReset() { RATES = RATE_DEF.slice(); LS.set('inst_rates', RATES); closeRateEd(); render(); toast('↩️ กลับค่าเริ่มต้น'); }
+
+  // คีย์บอร์ด (คอม / Legion Go)
+  document.addEventListener('keydown', e => {
+    if ($('rateEd').classList.contains('on')) { if (e.key === 'Enter') saveRateEd(); if (e.key === 'Escape') closeRateEd(); return; }
+    if (/^[0-9]$/.test(e.key)) key(e.key);
+    else if (e.key === '.') key('.');
+    else if (e.key === 'Backspace') key('BS');
+    else if (e.key === 'Escape' || e.key === 'Delete') key('AC');
+    else if (e.key === 'd' || e.key === 'D') toggleField('down');
+    else if (e.key === '%' || e.key === 'r' || e.key === 'R') toggleField('rate');
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const i = MONTHS.indexOf(S.mo) + (e.key === 'ArrowRight' ? 1 : -1); if (MONTHS[i]) setMo(MONTHS[i]); }
+    else return;
+    e.preventDefault();
+  });
+
+  function summary(all) {
+    const r = calc();
+    const head = [`🧮 คำนวณผ่อน (ประมาณการ)`, `ราคา ${fmt(r.price)} บาท` + (r.down ? ` · ดาวน์ ${fmt(r.down)}` : '') + ` · ดอก ${r.rate}%/เดือน`, `ยอดจัด ${fmt(r.loan)} บาท`];
+    const lines = all ? MONTHS.map(m => { const c = calc(m); return `• ${m} เดือน = ${fmt(c.monthly)} บาท/เดือน (รวม ${fmt(c.tot)})`; })
+      : [`ผ่อน ${r.m} เดือน = ${fmt(r.monthly)} บาท/เดือน`, `ดอกรวม ${fmt(r.int)} · รวมทั้งสิ้น ${fmt(r.tot)} บาท`];
+    return head.concat(lines, ['*ยอดจริงตามไฟแนนซ์อนุมัติ', 'BaNANA Future Park Rangsit (ID1326)']).join('\n');
+  }
+  function copyText(all) {
+    if (!num(S.price)) return toast('ใส่ราคาก่อน');
+    const t = summary(all);
+    const ok = () => toast('📋 คัดลอกแล้ว — วางในไลน์ได้เลย');
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok).catch(() => fallback(t, ok)); else fallback(t, ok);
+  }
+  function fallback(t, ok) { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) {} a.remove(); }
+
+  render();
+</script>
+</body>
+</html>
