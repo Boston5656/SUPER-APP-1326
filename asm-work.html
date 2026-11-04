@@ -97,6 +97,109 @@ button:focus{outline:none}
 .foot-cr{text-align:center;font-size:11.5px;font-weight:700;color:rgba(28,28,30,.55);margin:18px 0 6px}
 .about .cp{font-size:11px;color:#8E8E93;font-weight:600;margin-top:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* 🚀 ZK เช็คงานจากชีต (ใช้ร่วม asm.html / asm-work.html) */
+.zk *{box-sizing:border-box}
+.zk-two{display:block}
+@media (min-width:980px){.zk-two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(360px,1fr);gap:12px;align-items:start}}
+.zk-card{background:#FFFDF5;border-radius:22px;padding:14px;margin-bottom:12px;box-shadow:0 8px 22px -14px rgba(60,48,0,.55);animation:zkRise .4s cubic-bezier(.32,.72,0,1) both}
+@keyframes zkRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.zk-card h3{margin:0 2px 4px;font:700 16px 'Kanit','IBM Plex Sans Thai',sans-serif;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.zk-card h3 small{font:600 12px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73}
+.zk-card p.h{margin:0 2px 10px;font:600 12.5px/1.55 'IBM Plex Sans Thai',sans-serif;color:#6E6E73}
+.zk-paste{width:100%;min-height:80px;border:2px dashed rgba(28,28,30,.25);border-radius:16px;background:#fff;padding:12px;font:600 14px 'IBM Plex Sans Thai',sans-serif;resize:vertical;color:#1C1C1E}
+.zk-paste:focus{outline:none;border-color:#1C1C1E}
+.zk-opt{display:grid;grid-template-columns:132px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;font:700 13px 'IBM Plex Sans Thai',sans-serif}
+.zk-opt .in{display:flex;gap:6px;min-width:0;flex-wrap:wrap}
+.zk-opt select{flex:1;min-width:120px;height:42px;border-radius:12px;border:0;background:#F2F2F7;padding:0 10px;font:600 13.5px 'IBM Plex Sans Thai',sans-serif;color:#1C1C1E}
+.zk-opt select.on{background:#1C1C1E;color:#FFD600}
+.zk-seg{display:flex;gap:4px;background:#F2F2F7;border-radius:12px;padding:4px;flex:1}
+.zk-seg button{flex:1;border:0;border-radius:9px;padding:9px 6px;font:700 12.5px 'IBM Plex Sans Thai',sans-serif;background:none;color:#6E6E73;cursor:pointer}
+.zk-seg button.on{background:#1C1C1E;color:#FFD600}
+@media (max-width:520px){.zk-opt{grid-template-columns:1fr;gap:5px}}
+.zk-pick{display:flex;align-items:center;gap:10px;background:#1C1C1E;color:#fff;border-radius:14px;padding:10px 12px;margin:4px 0 10px;font:700 13px 'IBM Plex Sans Thai',sans-serif;flex-wrap:wrap}
+.zk-pick b{color:#FFD600;font-size:15px}.zk-pick .tip{flex:1;color:#AEAEB2;font-weight:600;font-size:12px;text-align:right}
+.zk-grid{overflow:auto;max-height:52vh;border-radius:14px;background:#fff;border:1px solid #EEE;-webkit-overflow-scrolling:touch}
+.zk-grid table{border-collapse:separate;border-spacing:0;font:500 12.5px 'IBM Plex Sans Thai',sans-serif;min-width:100%;color:#1C1C1E}
+.zk-grid th,.zk-grid td{padding:8px 10px;border-bottom:1px solid #F0F0F0;border-right:1px solid #F5F5F5;white-space:nowrap;text-align:left;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.zk-grid thead th{position:sticky;top:0;z-index:2;background:#1C1C1E;color:#fff;font-weight:700;cursor:pointer}
+.zk-grid thead th small{display:block;font:700 10px 'Space Grotesk',sans-serif;color:#8E8E93}
+.zk-grid th.sel{background:#FFD600;color:#1C1C1E}.zk-grid th.sel small{color:rgba(28,28,30,.6)}
+.zk-grid th.zk-hb{box-shadow:inset 0 -3px 0 #60A5FA}.zk-grid th.zk-ha{box-shadow:inset 0 -3px 0 #C084FC}
+.zk-grid td.sel{background:#FFF7C7;font-weight:700}
+.zk-grid td.rn,.zk-grid th.rn{position:sticky;left:0;background:#FAFAFA;color:#AEAEB2;z-index:1;cursor:default}.zk-grid thead th.rn{background:#1C1C1E;z-index:3}
+.zk-grid tr.zin td.rn{color:#1C1C1E;font-weight:700;box-shadow:inset 3px 0 0 #FFD600}
+.zk-grid tr.out td{color:#C7C7CC}.zk-grid tr.out td.sel{background:#FAFAFA;font-weight:500}
+.zk-meta{font:700 12px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73;margin:8px 2px 0;line-height:1.5}
+.zk-lg{display:inline-flex;align-items:center;gap:4px;margin-right:10px}.zk-lg i{width:12px;height:4px;border-radius:2px;display:inline-block}
+.zk-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.zk-btn{flex:1;min-width:120px;height:48px;border:0;border-radius:15px;font:700 14.5px 'IBM Plex Sans Thai',sans-serif;cursor:pointer;background:#F2F2F7;color:#1C1C1E;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.zk-btn:active{transform:scale(.95)}.zk-btn.go{background:#1C1C1E;color:#FFD600;flex:2}.zk-btn.go:disabled{opacity:.35}.zk-btn.save{background:#16A34A;color:#fff;flex:2}
+.zk-k{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 10px}.zk-k div{border-radius:16px;padding:11px;background:#fff}
+.zk-k small{display:block;font:700 12px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73}.zk-k b{font:800 28px 'Kanit',sans-serif}.zk-k .ok b{color:#15803D}.zk-k .no b{color:#BE123C}
+.zk-r{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px 10px;align-items:center;background:#fff;border-radius:14px;padding:10px 12px;margin-bottom:6px;animation:zkRise .4s cubic-bezier(.32,.72,0,1) both}
+.zk-r .id{background:#1C1C1E;color:#FFD600;font:700 12px 'Space Grotesk',sans-serif;border-radius:9px;padding:5px 8px}
+.zk-r .nm{font:700 13.5px 'IBM Plex Sans Thai',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1C1C1E}
+.zk-r .nm small{display:block;font-size:11.5px;color:#8E8E93;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.zk-r .pb{grid-column:2/4;height:6px;border-radius:6px;background:#F2F2F7;overflow:hidden}.zk-r .pb i{display:block;height:100%;border-radius:6px;background:#16A34A}
+.zk-st{font:800 12.5px 'IBM Plex Sans Thai',sans-serif;border-radius:100px;padding:6px 11px;white-space:nowrap}.zk-st.ok{background:#DCFCE7;color:#15803D}.zk-st.no{background:#FFE4E6;color:#BE123C}
+.zk-empty{text-align:center;padding:24px 10px;color:#6E6E73;font:700 14px 'IBM Plex Sans Thai',sans-serif}
+
+.zk-role{display:grid;grid-template-columns:132px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;font:700 13px 'IBM Plex Sans Thai',sans-serif;color:#1C1C1E}
+@media (max-width:520px){.zk-role{grid-template-columns:1fr;gap:5px}}
+.zk-role .in{display:flex;gap:6px;min-width:0}
+.zk-cb{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:44px;border:0;border-radius:12px;background:#F2F2F7;padding:0 12px;font:700 13.5px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73;cursor:pointer;text-align:left}
+.zk-cb span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zk-cb i{font-style:normal;opacity:.6}
+.zk-cb.on{background:#1C1C1E;color:#FFD600}.zk-cb.need{box-shadow:inset 0 0 0 2px #FFD600;color:#1C1C1E;background:#FFF7C7;animation:zkPulse 1.6s ease-in-out infinite}
+@keyframes zkPulse{50%{box-shadow:inset 0 0 0 2px #F59E0B}}
+.zk-role select{flex:1;min-width:0;height:44px;border-radius:12px;border:0;background:#1C1C1E;color:#FFD600;padding:0 10px;font:700 13.5px 'IBM Plex Sans Thai',sans-serif}
+.zk-tg{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:2px 2px 8px;font:700 12.5px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73}
+.zk-tg button{border:0;border-radius:100px;padding:7px 12px;font:700 12.5px 'IBM Plex Sans Thai',sans-serif;background:#F2F2F7;color:#1C1C1E;cursor:pointer}.zk-tg button.on{background:#1C1C1E;color:#FFD600}
+.zk-pop{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;padding:10px;animation:zkFade .2s both}
+@keyframes zkFade{from{opacity:0}to{opacity:1}}
+.zk-pop .bx{width:100%;max-width:560px;max-height:86vh;display:flex;flex-direction:column;background:#F2F2F7;border-radius:24px;padding:14px;animation:zkRise .35s cubic-bezier(.32,.72,0,1) both}
+.zk-pop h4{margin:0 2px 8px;font:700 16px 'Kanit','IBM Plex Sans Thai',sans-serif;color:#1C1C1E;display:flex;justify-content:space-between;align-items:center}
+.zk-pop h4 button{border:0;background:#fff;border-radius:10px;width:34px;height:34px;font-size:15px;cursor:pointer}
+.zk-pop input{width:100%;height:46px;border:0;border-radius:14px;background:#fff;padding:0 14px;font:600 15px 'IBM Plex Sans Thai',sans-serif;margin-bottom:8px}
+.zk-pop input:focus{outline:2px solid #1C1C1E}
+.zk-pop .ls{overflow:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:6px;padding-bottom:4px}
+.zk-it{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;border:0;border-radius:14px;background:#fff;padding:10px 12px;text-align:left;cursor:pointer;font-family:'IBM Plex Sans Thai',sans-serif;color:#1C1C1E}
+.zk-it:active{transform:scale(.98)} .zk-it.on{box-shadow:inset 0 0 0 2px #1C1C1E}
+.zk-it .c{background:#1C1C1E;color:#FFD600;font:700 11.5px 'Space Grotesk',sans-serif;border-radius:8px;padding:4px 7px;min-width:30px;text-align:center}
+.zk-it b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zk-it small{display:block;font-size:11.5px;color:#8E8E93;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zk-it .f{font:700 11px 'IBM Plex Sans Thai',sans-serif;color:#6E6E73;text-align:right;white-space:nowrap}
+.zk-it.star .c{background:#FFD600;color:#1C1C1E}
+.zk-act{display:flex;flex-direction:column;gap:6px}.zk-act button{height:50px;border:0;border-radius:14px;background:#fff;font:700 15px 'IBM Plex Sans Thai',sans-serif;color:#1C1C1E;cursor:pointer;text-align:left;padding:0 16px}
+.zk-act button.on{background:#1C1C1E;color:#FFD600}
+
+.zk-sheetcard{padding:10px}
+.zk-sbar{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.zk-fx{background:#1C1C1E;color:#FFD600;font:700 12px 'Space Grotesk',sans-serif;border-radius:8px;padding:6px 9px;min-width:46px;text-align:center}
+.zk-fxv{flex:1;min-width:0;background:#fff;border-radius:8px;padding:6px 10px;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#3A3A3C;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #EEE}
+.zk-mini{border:0;border-radius:9px;background:#F2F2F7;padding:7px 10px;font:700 12px 'IBM Plex Sans Thai',sans-serif;cursor:pointer;color:#1C1C1E}
+.zk-gwrap{position:relative;overflow:auto;max-height:60vh;border-radius:10px;background:#fff;border:1px solid #DADCE0;-webkit-overflow-scrolling:touch}
+.zk-sheet{border-collapse:separate;border-spacing:0;font:400 12.5px Arial,'IBM Plex Sans Thai',sans-serif;color:#202124;min-width:100%}
+.zk-sheet td{height:26px;min-width:84px;max-width:200px;padding:3px 6px;border-right:1px solid #E2E3E3;border-bottom:1px solid #E2E3E3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#fff;cursor:cell}
+.zk-sheet thead th{position:sticky;top:0;z-index:3;background:#F8F9FA;color:#5F6368;font:600 11.5px Arial,sans-serif;height:26px;border-right:1px solid #DADCE0;border-bottom:1px solid #DADCE0;cursor:pointer;user-select:none;-webkit-user-select:none}
+.zk-sheet thead th.zk-cl:hover{background:#E8EAED}
+.zk-sheet thead th.sel{background:#FFD600;color:#1C1C1E;font-weight:800}
+.zk-sheet thead th.zk-hb{box-shadow:inset 0 -3px 0 #60A5FA}.zk-sheet thead th.zk-ha{box-shadow:inset 0 -3px 0 #C084FC}
+.zk-sheet .zk-corner{left:0;z-index:4;width:40px;min-width:40px}
+.zk-sheet .zk-rn{position:sticky;left:0;z-index:2;background:#F8F9FA;color:#5F6368;font:600 11px Arial,sans-serif;width:40px;min-width:40px;text-align:center;border-right:1px solid #DADCE0;border-bottom:1px solid #E2E3E3}
+.zk-sheet tr.hd td{font-weight:700;background:#F1F3F4}
+.zk-sheet tr.zin .zk-rn{background:#FFD600;color:#1C1C1E}
+.zk-sheet tr.zin td{background:#FFFBE0}
+.zk-sheet tr.out td{color:#BDC1C6}
+.zk-sheet td.sel{background:#FFF3B0!important;font-weight:700}
+.zk-sheet tr.hd td.sel{background:#FFE566!important}
+.zk-sheet td.cur{outline:2px solid #1A73E8;outline-offset:-2px;position:relative;z-index:1}
+.zk-cap{position:absolute;opacity:.01;border:0;padding:0;margin:0;resize:none;font-size:16px;background:transparent;color:transparent;caret-color:transparent;z-index:1}
+.zk-more{background:#F2F2F7;border-radius:14px;padding:10px 12px;margin-top:8px}
+.zk-more summary{cursor:pointer;font:600 12.5px 'IBM Plex Sans Thai',sans-serif;color:#3A3A3C;list-style:none}.zk-more summary::-webkit-details-marker{display:none}
+.zk-more summary i{font-style:normal;color:#8E8E93}.zk-more[open] summary{margin-bottom:10px}
+.zk-rocket{width:100%;margin-top:10px;height:56px;border:0;border-radius:16px;background:#1C1C1E;color:#FFD600;font:800 16px 'Kanit','IBM Plex Sans Thai',sans-serif;cursor:pointer;box-shadow:0 12px 24px -12px rgba(0,0,0,.7);transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 14px}
+.zk-rocket:active{transform:scale(.97)}.zk-rocket:disabled{background:#E5E5EA;color:#6E6E73;box-shadow:none;font-size:14px}
+.zk-cut{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;background:#ECFDF3;color:#15803D;border-radius:12px;padding:9px 12px;font:700 12.5px 'IBM Plex Sans Thai',sans-serif}
+.zk-cut button{margin-left:auto;border:0;border-radius:9px;background:#fff;color:#1C1C1E;padding:6px 10px;font:700 12px 'IBM Plex Sans Thai',sans-serif;cursor:pointer}
 </style>
 </head>
 <body>
@@ -117,15 +220,7 @@ button:focus{outline:none}
     <div class="bar"><button class="tb red" onclick="resetAll(this)">🔄 เริ่มงานใหม่ (ทุกสาขา = ยังไม่ส่ง)</button></div>
   </div>
 
-  <div id="v-c" style="display:none"><div class="two">
-    <div>
-      <div class="card"><h3>📋 วางข้อมูลดิบ <small id="zMeta"></small></h3>
-        <p class="h">ก๊อปทั้งตารางจาก Excel / Google Sheet มาวางในช่องนี้ → แตะหัวคอลัมน์ที่จะเช็ค → กด 🚀 · ข้อมูลอยู่ในเครื่องนี้ ไม่ส่งขึ้นระบบ (ส่งแค่ผลรายสาขา)</p>
-        <textarea class="paste" id="zIn" placeholder="แตะตรงนี้ แล้ว วาง (Paste) ได้เลย…"></textarea></div>
-      <div class="card" id="zSheet"><div class="empty">ยังไม่มีข้อมูล — วางตารางในช่องด้านบน</div></div>
-    </div>
-    <div class="card"><h3>📊 ผลตรวจสอบ <small id="zResMeta"></small></h3><div id="zRes"><div class="empty">กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้</div></div></div>
-  </div></div>
+  <div id="v-c" style="display:none"><div class="zk" id="zkRoot"></div></div>
   <div class="foot-cr">© 2026 บอสตัน สุดหล่อ · Made with ❤️ for เพื่อนๆ ในโซน</div>
 </div>
 <div class="sheet" id="sh" onclick="if(event.target===this)closeSh()"><div class="box" id="shBox"></div></div>
@@ -153,7 +248,7 @@ function setD(d) {
   D = d; $('sub').textContent = (d.am || 'ZONE ASM') + (d.updated ? ' · อัปเดต ' + d.updated : '');
   if (document.activeElement !== $('ttl')) $('ttl').value = d.title || '';
   $('repBtn').style.display = d.reportKey ? '' : 'none';
-  render(); if ($('v-c').style.display !== 'none' && !Z.res) zRender();
+  render(); if ($('v-c').style.display !== 'none') ZK.render();
 }
 const LBL = { ok: '✅ ส่งแล้ว', no: '❎ ยังไม่ส่ง', warn: '⚠️ ไม่พบสาขา' };
 function render() {
@@ -195,82 +290,268 @@ function copyRep() { if (D && D.reportKey) clip(new URL('asm-report.html?k=' + e
 function tab(t) {
   $('tb-s').classList.toggle('on', t === 's'); $('tb-c').classList.toggle('on', t === 'c');
   $('v-s').style.display = t === 's' ? '' : 'none'; $('v-c').style.display = t === 'c' ? '' : 'none';
-  if (t === 'c') zRender(); vib(6);
+  if (t === 'c') ZK.render(); vib(6);
 }
 
-// ===== 🚀 เช็คงานจากชีต (แบบเดียวกับเมนู 🚀 ในชีต ASM) — เจอ ID + คอลัมน์ที่เลือกมีค่า = ส่งแล้ว · ว่าง/ไม่เจอ = ยังไม่ส่ง =====
-const ZK = 'asm_work_sheet_v1';
-let Z = (() => { try { return JSON.parse(localStorage.getItem(ZK)) || {}; } catch (e) { return {}; } })();
-Z.rows = Z.rows || []; Z.col = Z.col == null ? -1 : Z.col; Z.res = null;
-const zSave = () => { try { localStorage.setItem(ZK, JSON.stringify({ rows: Z.rows, col: Z.col, at: Z.at })); } catch (e) { toast('ข้อมูลใหญ่เกิน เครื่องจำไม่ได้ (ยังใช้ได้จนปิดหน้า)'); } };
-function parseTSV(txt) {
-  const rows = []; let row = [], cell = '', q = false; const sep = txt.indexOf('\t') >= 0 ? '\t' : ',';
-  for (let i = 0; i < txt.length; i++) {
-    const c = txt[i];
-    if (q) { if (c === '"') { if (txt[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
-    else if (c === '"' && cell === '') q = true;
-    else if (c === sep) { row.push(cell); cell = ''; }
-    else if (c === '\n' || c === '\r') { if (c === '\r' && txt[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
-    else cell += c;
+// =========================================================
+// 🚀 ZK เช็คงานจากชีต — วางข้อมูลดิบ → เลือกคอลัมน์สาขา / กรอง ASM / คอลัมน์ที่ต้องกรอก → ตรวจสอบ → บันทึก
+//   • คอลัมน์สาขา = หาเลขสาขาเฉพาะคอลัมน์นั้น (กันเลขสาขาปลายทางในงาน Rotate มานับผิด) · "ทั้งแถว" = แบบเมนู 🚀 เดิม
+//   • กรอง ASM = นับเฉพาะแถวของโซนเรา
+//   • นับว่าส่ง: "อย่างน้อย 1 แถว" หรือ "ครบทุกแถว" (เช่น Rotate สาขาเรามี 6-7 แถว ต้องกรอกเลขส่งออกครบ)
+//   • ไม่เจอสาขาในข้อมูล = ยังไม่ส่ง · ข้อมูลดิบอยู่ในเครื่องนี้ ส่งขึ้นระบบแค่ผลรายสาขา
+// =========================================================
+var ZK = (function () {
+  var O = null, EL = null, S = { rows: [], col: -1, bc: -1, ac: -1, av: '', mode: 'any', at: 0, open: 0 }, RES = null;
+  function e(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function vib(n) { try { navigator.vibrate && navigator.vibrate(n); } catch (x) {} }
+  // 💾 เก็บในเครื่อง: ตัวเลือกอยู่ใน localStorage · ข้อมูลตาราง (ใหญ่ได้หลักร้อย MB) อยู่ใน IndexedDB
+  var DBP = null, SAVE_T = null, SAVED_ROWS = null;
+  function db() {
+    if (DBP) return DBP;
+    DBP = new Promise(function (ok, no) {
+      try { var q = indexedDB.open('zk_sheet', 1); q.onupgradeneeded = function () { q.result.createObjectStore('rows'); }; q.onsuccess = function () { ok(q.result); }; q.onerror = function () { no(q.error); }; } catch (x) { no(x); }
+    });
+    return DBP;
   }
-  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
-  const w = Math.max(0, ...rows.map(r => r.length));
-  return rows.filter(r => r.some(x => String(x).trim() !== '')).map(r => { while (r.length < w) r.push(''); return r.map(x => String(x).trim()); });
-}
-const colName = c => { let n = '', x = c + 1; while (x > 0) { const m = (x - 1) % 26; n = String.fromCharCode(65 + m) + n; x = Math.floor((x - 1) / 26); } return n; };
-const zBr = () => ((D && D.tasks) || []).map(t => ({ id: String(t.id).replace(/^ID/i, '').trim(), full: t.id, name: t.name })).filter(b => b.id);
-const zRx = id => new RegExp('(?:^|\\D)' + id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\D|$)', 'i');
-function zPaste(txt) {
-  const rows = parseTSV(txt); if (!rows.length) return toast('ไม่พบข้อมูลที่วาง');
-  Z.rows = rows; Z.col = -1; Z.at = Date.now(); Z.res = null; zSave(); zRender(); vib(10);
-  toast('📋 วางแล้ว ' + rows.length + ' แถว — แตะหัวคอลัมน์ที่จะเช็ค');
-}
-function zPick(c) { Z.col = c; Z.res = null; zSave(); zRender(); vib(8); }
-function zRender() {
-  const inp = $('zIn');
-  if (!inp._b) {
-    inp._b = 1;
-    inp.addEventListener('paste', e => { const d = (e.clipboardData || window.clipboardData).getData('text'); if (d) { e.preventDefault(); inp.value = ''; zPaste(d); } });
-    inp.addEventListener('change', () => { if (inp.value.trim()) { const v = inp.value; inp.value = ''; zPaste(v); } });
+  function idb(mode, fn) { return db().then(function (d) { return new Promise(function (ok, no) { var t = d.transaction('rows', mode), st = t.objectStore('rows'), r = fn(st); t.oncomplete = function () { ok(r && r.result); }; t.onerror = function () { no(t.error); }; }); }); }
+  function meta() { var m = {}; Object.keys(S).forEach(function (k) { if (k !== 'rows') m[k] = S[k]; }); m.n = S.rows.length; return m; }
+  function load() {
+    try { var s = JSON.parse(localStorage.getItem(O.key)); if (s) { var rows = s.rows; delete s.rows; S = Object.assign(S, s); if (rows && rows.length) S.rows = rows; } } catch (x) {}
+    if (S.rows.length) return;   // ข้อมูลเก่าแบบ localStorage
+    idb('readonly', function (st) { return st.get(O.key); }).then(function (rows) { if (rows && rows.length && !S.rows.length) { S.rows = rows; SAVED_ROWS = rows; render(); } }).catch(function () {});
   }
-  const R = Z.rows;
-  $('zMeta').textContent = R.length ? `${R.length} แถว · ${R[0].length} คอลัมน์` : '';
-  if (!R.length) { $('zSheet').innerHTML = '<div class="empty">ยังไม่มีข้อมูล — วางตารางในช่องด้านบน</div>'; zRes(); return; }
-  const rx = zBr().map(b => zRx(b.id)), zin = {};
-  R.forEach((r, i) => { const s = r.join(' ').toUpperCase(); if (rx.some(x => x.test(s))) zin[i] = 1; });
-  const H = R[0];
-  $('zSheet').innerHTML = `<div class="pick">🎯 คอลัมน์ที่เช็ค: <b>${Z.col >= 0 ? colName(Z.col) + ' · ' + esc(H[Z.col] || '') : 'ยังไม่ได้เลือก'}</b><span class="tip">แตะหัวคอลัมน์ในตาราง</span></div>
-    <div class="grid"><table><thead><tr><th class="rn">#</th>${H.map((h, c) => `<th class="${c === Z.col ? 'sel' : ''}" onclick="zPick(${c})"><small>${colName(c)}</small>${esc(h || '-')}</th>`).join('')}</tr></thead>
-    <tbody>${R.slice(1, 300).map((r, i) => `<tr class="${zin[i + 1] ? 'zin' : ''}"><td class="rn">${i + 2}</td>${r.map((x, c) => `<td class="${c === Z.col ? 'sel' : ''}">${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
-    <div class="meta">แถวที่มีแถบเหลือง = สาขาในโซน (${Object.keys(zin).length} แถว)${R.length > 300 ? ' · แสดง 300 แถวแรก (คำนวณครบทุกแถว)' : ''}</div>
-    <div class="bar"><button class="tb ghost" onclick="zClear()">🗑 ล้าง</button><button class="tb go" ${Z.col < 0 ? 'disabled' : ''} onclick="zCheck()">🚀 ตรวจสอบงาน</button></div>`;
-  zRes();
-}
-function zClear() { Z.rows = []; Z.col = -1; Z.res = null; zSave(); zRender(); }
-function zCheck() {
-  const B = zBr(); if (!B.length) return toast('ยังไม่มีรายชื่อสาขา');
-  const rows = Z.rows.map(r => r.join(' ').toUpperCase());
-  Z.res = B.map(b => {
-    const rx = zRx(b.id); let found = false, val = '';
-    for (let r = 0; r < Z.rows.length; r++) if (rx.test(rows[r])) { found = true; const v = Z.rows[r][Z.col]; if (v && String(v).trim() !== '') { val = String(v).trim(); break; } }
-    return { id: b.full, name: b.name, k: val ? 'ok' : 'no', nf: !found, val };
-  });
-  zRes(); vib([10, 30, 10]);
-  if (innerWidth < 980) $('zRes').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-function zRes() {
-  if (!Z.res) { $('zRes').innerHTML = `<div class="empty">${Z.rows.length ? (Z.col < 0 ? 'แตะหัวคอลัมน์ที่จะเช็คก่อน แล้วกด 🚀' : 'กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้') : 'วางข้อมูลก่อน'}</div>`; $('zResMeta').textContent = ''; return; }
-  const c = { ok: 0, no: 0 }; Z.res.forEach(x => c[x.k]++);
-  $('zResMeta').textContent = 'คอลัมน์ ' + colName(Z.col) + ' · ' + (Z.rows[0][Z.col] || '');
-  $('zRes').innerHTML = `<div class="rk"><div class="ok"><small>ส่งแล้ว</small><b>${c.ok}</b></div><div class="no"><small>ยังไม่ส่ง</small><b>${c.no}</b></div></div>` +
-    Z.res.slice().sort((a, b) => (a.k === 'ok') - (b.k === 'ok')).map((x, i) => `<div class="rr" style="animation-delay:${Math.min(i * 30, 360)}ms"><span class="id">${esc(x.id)}</span><span class="nm">${esc(x.name)}${x.val ? `<small>${esc(x.val)}</small>` : x.nf ? '<small>ไม่มีในข้อมูลที่วาง</small>' : ''}</span><span class="st ${x.k}">${LBL[x.k]}</span></div>`).join('') +
-    `<div class="bar"><button class="tb save" id="zSave" onclick="zApply()">💾 บันทึกสถานะ</button></div><div class="meta">บันทึกแล้ว หน้า 📋 สถานะสาขา และลิงก์ Report ของหัวหน้าจะเปลี่ยนตามนี้</div>`;
-}
-function zApply() {
-  const b = $('zSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
-  api('check', Z.res.map(x => ({ id: x.id, k: x.k, nf: x.nf }))).then(d => { Z.res = null; setD(d); tab('s'); toast('💾 บันทึกแล้ว ' + d.tasks.length + ' สาขา'); window.scrollTo({ top: 0, behavior: 'smooth' }); })
-    .catch(e => { b.disabled = false; b.textContent = '💾 บันทึกสถานะ'; toast('⚠️ ' + e.message); });
-}
+  function save() {
+    try { localStorage.setItem(O.key, JSON.stringify(meta())); } catch (x) {}
+    if (SAVED_ROWS === S.rows && !S._dirty) return;
+    clearTimeout(SAVE_T);
+    SAVE_T = setTimeout(function () {
+      var rows = S.rows; S._dirty = 0;
+      idb('readwrite', function (st) { return rows.length ? st.put(rows, O.key) : st.delete(O.key); }).then(function () { SAVED_ROWS = rows; })
+        .catch(function () { O.toast('เครื่องจำข้อมูลไม่ได้ (ยังใช้ได้จนปิดหน้า)'); });
+    }, 300);
+  }
+  function parse(txt) {
+    var rows = [], row = [], cell = '', q = false, sep = txt.indexOf('\t') >= 0 ? '\t' : ',';
+    for (var i = 0; i < txt.length; i++) {
+      var c = txt[i];
+      if (q) { if (c === '"') { if (txt[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+      else if (c === '"' && cell === '') q = true;
+      else if (c === sep) { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && txt[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+      else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    var w = 0; rows.forEach(function (r) { w = Math.max(w, r.length); });
+    return rows.filter(function (r) { return r.some(function (x) { return String(x).trim() !== ''; }); })
+      .map(function (r) { while (r.length < w) r.push(''); return r.map(function (x) { return String(x).trim(); }); });
+  }
+  function colName(c) { var n = '', x = c + 1; while (x > 0) { var m = (x - 1) % 26; n = String.fromCharCode(65 + m) + n; x = Math.floor((x - 1) / 26); } return n; }
+  function rx(id) { return new RegExp('(?:^|\\D)' + id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\D|$)', 'i'); }
+  function brs() { return (O.branches() || []).map(function (b) { return { id: String(b.id).replace(/^ID/i, '').trim(), full: b.id, name: b.name, re: rx(String(b.id).replace(/^ID/i, '').trim()) }; }).filter(function (b) { return b.id; }); }
+  function body() { return S.rows.slice(1); }
+  function rowBranch(r, B) { var t = S.bc >= 0 ? String(r[S.bc]) : r.join(' '); for (var i = 0; i < B.length; i++) if (B[i].re.test(t)) return B[i]; return null; }
+  function rowASM(r) { return S.ac < 0 || !S.av || String(r[S.ac]).trim() === S.av; }
+  function uniq(c) { var m = {}; body().forEach(function (r) { var v = String(r[c]).trim(); if (v) m[v] = (m[v] || 0) + 1; }); return Object.keys(m).sort(function (a, b) { return m[b] - m[a]; }).map(function (v) { return [v, m[v]]; }); }
+  function detect() {   // เดาคอลัมน์สาขา / ASM / โหมด จากหัวตาราง + ข้อมูล
+    var H = S.rows[0] || [], B = brs(), R = body().slice(0, 600);
+    var best = -1, bs = 0;
+    H.forEach(function (h, c) {
+      var hit = R.filter(function (r) { var t = String(r[c]); return B.some(function (b) { return b.re.test(t); }); }).length;
+      var sc = hit * (/สาขา|branch|store|shop|รหัส|^id|plant|site/i.test(h) ? 1.5 : 1) * (/ปลายทาง|ผู้รับ|รับ|to\b|dest/i.test(h) ? .4 : 1);
+      if (sc > bs) { bs = sc; best = c; }
+    });
+    S.bc = best;
+    S.ac = -1; S.av = '';
+    H.forEach(function (h, c) { if (S.ac < 0 && c !== S.bc && /asm|area|ผู้จัดการเขต|เขต|zone|โซน/i.test(h)) S.ac = c; });
+    if (S.ac >= 0) {   // ค่า ASM ที่เจอบ่อยสุดในแถวที่เป็นสาขาเรา
+      var m = {}; R.forEach(function (r) { if (rowBranch(r, B)) { var v = String(r[S.ac]).trim(); if (v) m[v] = (m[v] || 0) + 1; } });
+      var k = Object.keys(m).sort(function (a, b) { return m[b] - m[a]; })[0]; S.av = k || '';
+      if (!S.av) S.ac = -1;
+    }
+    var cnt = {}; R.forEach(function (r) { var b = rowBranch(r, B); if (b && rowASM(r)) cnt[b.id] = (cnt[b.id] || 0) + 1; });
+    var v = Object.keys(cnt).map(function (k) { return cnt[k]; });
+    S.mode = v.length && v.reduce(function (a, b) { return a + b; }, 0) / v.length > 1.4 ? 'all' : 'any';
+  }
+  function paste(txt, r0, c0) {
+    var rows = parse(txt); if (!rows.length) return O.toast('ไม่พบข้อมูลที่วาง');
+    r0 = r0 || 0; c0 = c0 || 0;
+    var fresh = !S.rows.length || (r0 === 0 && c0 === 0);
+    if (fresh) { S.rows = rows; S.col = -1; FULL = null; }
+    else { rows.forEach(function (row, i) { row.forEach(function (v, j) { while (S.rows.length <= r0 + i) S.rows.push([]); S.rows[r0 + i][c0 + j] = v; }); }); var w = 0; S.rows.forEach(function (x) { w = Math.max(w, x.length); }); S.rows.forEach(function (x) { for (var k = 0; k < w; k++) if (x[k] == null) x[k] = ''; }); }
+    S.at = Date.now(); S._dirty = 1; RES = null; if (fresh) detect(); save(); render(); vib(10);
+    O.toast('📋 วางแล้ว ' + (S.rows.length - 1) + ' แถว — คลิกตัวอักษรคอลัมน์ที่ต้องเช็ค แล้วกด 🚀');
+  }
+  function set(k, v) { S[k] = v; if (k === 'ac') S.av = v >= 0 ? ((uniq(v)[0] || [''])[0]) : ''; RES = null; save(); render(); vib(6); }
+  function check() {
+    if (S.col < 0) return O.toast('คลิกตัวอักษรคอลัมน์ (A B C …) ที่ต้องเช็คก่อน');
+    var B = brs(); if (!B.length) return O.toast('ยังไม่มีรายชื่อสาขาในโซน');
+    var st = {}; B.forEach(function (b) { st[b.id] = { t: 0, f: 0, v: '' }; });
+    body().forEach(function (r) {
+      if (!rowASM(r)) return; var b = rowBranch(r, B); if (!b) return;
+      var x = st[b.id], val = String(r[S.col] == null ? '' : r[S.col]).trim(); x.t++; if (val) { x.f++; if (!x.v) x.v = val; }
+    });
+    RES = B.map(function (b) {
+      var x = st[b.id], ok = S.mode === 'all' ? x.t > 0 && x.f === x.t : x.f > 0;
+      var d = !x.t ? 'ไม่พบในข้อมูล' : S.mode === 'all' ? 'กรอก ' + x.f + '/' + x.t + ' แถว' : (x.v || 'ว่างเปล่า');
+      return { id: b.full, name: b.name, k: ok ? 'ok' : 'no', nf: !x.t, t: x.t, f: x.f, d: d };
+    });
+    // ✂️ ตัดแถวที่ไม่เกี่ยวกับโซนเรา (สาขาอื่น / ASM อื่น) ทิ้ง → ข้อมูลเบาลง · กด ↩ คืนข้อมูลเต็มได้จนกว่าจะปิดหน้า
+    var keep = [S.rows[0]], drop = 0;
+    body().forEach(function (r) { if (rowASM(r) && rowBranch(r, B)) keep.push(r); else drop++; });
+    if (drop) {
+      FULL = FULL || S.rows; S.rows = keep; S._dirty = 1; CUR = { r: 0, c: 0 }; save(); render();
+      O.toast('✂️ ตัดแถวนอกโซนทิ้ง ' + drop.toLocaleString() + ' แถว · เหลือ ' + (keep.length - 1).toLocaleString() + ' แถวของโซนเรา');
+    } else renderRes();
+    vib([10, 30, 10]);
+    if (innerWidth < 980) { var r = EL.querySelector('#zkRes'); r && r.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+  var FULL = null;   // ข้อมูลเต็มก่อนตัด (อยู่ในหน่วยความจำ ไม่เก็บลงเครื่อง)
+  function undoCut() { if (!FULL) return; S.rows = FULL; FULL = null; S._dirty = 1; RES = null; save(); render(); O.toast('↩ คืนข้อมูลเต็มแล้ว ' + (S.rows.length - 1).toLocaleString() + ' แถว'); }
+  function apply() {
+    var b = EL.querySelector('#zkSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+    O.save(RES.map(function (x) { return { id: x.id, k: x.k, nf: x.nf, d: x.d }; })).then(function () { RES = null; render(); O.onSaved && O.onSaved(); })
+      .catch(function (err) { b.disabled = false; b.textContent = '💾 บันทึกสถานะ'; O.toast('บันทึกไม่สำเร็จ: ' + (err && err.message || err || '')); });
+  }
+  function clear() { FULL = null; S = { rows: [], col: -1, bc: -1, ac: -1, av: '', mode: 'any', at: 0, open: 0 }; RES = null; save(); render(); }
+
+  // ===== ตัวเลือกคอลัมน์ (ค้นหาชื่อหัวคอลัมน์ได้ — ชีตจริงมีหลายสิบคอลัมน์) =====
+  var ROLE = { bc: ['🏪 คอลัมน์สาขา', 'ทั้งแถว (หาเลขสาขาทุกช่อง)'], ac: ['🧭 คอลัมน์ ASM', 'ไม่กรอง ASM'], col: ['🎯 ช่องที่ต้องกรอก', ''] };
+  function colInfo(c) {
+    var B = body(), f = 0, ex = [];
+    for (var i = 0; i < B.length; i++) { var v = String(B[i][c] || '').trim(); if (v) { f++; if (ex.length < 3 && ex.indexOf(v) < 0) ex.push(v); } }
+    return { f: f, ex: ex };
+  }
+  function closePop() { var p = document.getElementById('zkPop'); if (p) p.remove(); }
+  function pop(html) { closePop(); var d = document.createElement('div'); d.className = 'zk-pop'; d.id = 'zkPop'; d.onclick = function (ev) { if (ev.target === d) closePop(); }; d.innerHTML = '<div class="bx">' + html + '</div>'; document.body.appendChild(d); return d; }
+  function pick(role) {
+    var H = S.rows[0] || [], n = body().length, B = brs();
+    var hint = role === 'bc' ? /สาขา|branch|store|shop|รหัส|plant|site/i : role === 'ac' ? /asm|area|เขต|zone|โซน/i : /เลข|กรอก|no\.?|number|ส่ง|เอกสาร|ref|status|สถานะ/i;
+    var items = H.map(function (h, c) { var x = colInfo(c); return { c: c, h: h || '(ไม่มีหัว)', f: x.f, ex: x.ex, star: hint.test(h) }; });
+    var d = pop('<h4>' + ROLE[role][0] + '<button onclick="ZK._close()">✕</button></h4><input id="zkQ" placeholder="🔍 พิมพ์ชื่อคอลัมน์ เช่น เลขส่งออก" autocomplete="off"><div class="ls" id="zkLs"></div>');
+    var draw = function (q) {
+      q = String(q || '').trim().toLowerCase();
+      var L = items.filter(function (it) { return !q || (it.h + ' ' + colName(it.c)).toLowerCase().indexOf(q) >= 0; });
+      if (!q) L = L.slice().sort(function (a, b) { return b.star - a.star || a.c - b.c; });
+      d.querySelector('#zkLs').innerHTML = (ROLE[role][1] && !q ? '<button class="zk-it' + (S[role] < 0 ? ' on' : '') + '" onclick="ZK._pick(\'' + role + '\',-1)"><span class="c">–</span><span><b>' + ROLE[role][1] + '</b></span><span></span></button>' : '') +
+        (L.length ? L.map(function (it) {
+          return '<button class="zk-it' + (it.star ? ' star' : '') + (S[role] === it.c ? ' on' : '') + '" onclick="ZK._pick(\'' + role + '\',' + it.c + ')"><span class="c">' + colName(it.c) + '</span><span><b>' + e(it.h) + '</b><small>' + (it.ex.length ? e(it.ex.join(' · ')) : 'ว่างทั้งคอลัมน์') + '</small></span><span class="f">มีค่า ' + it.f + '/' + n + '</span></button>';
+        }).join('') : '<div class="zk-empty">ไม่เจอคอลัมน์ที่ชื่อนี้</div>');
+    };
+    draw(''); var q = d.querySelector('#zkQ'); q.oninput = function () { draw(q.value); };
+    if (innerWidth > 700) setTimeout(function () { q.focus(); }, 60);
+  }
+  function headMenu(c) {   // แตะหัวคอลัมน์ในตาราง → ตั้งเป็นอะไร
+    var H = S.rows[0] || [];
+    pop('<h4>' + colName(c) + ' · ' + e(H[c] || '-') + '<button onclick="ZK._close()">✕</button></h4><div class="zk-act">' +
+      '<button class="' + (S.col === c ? 'on' : '') + '" onclick="ZK._pick(\'col\',' + c + ')">🎯 ช่องที่ต้องกรอก</button>' +
+      '<button class="' + (S.bc === c ? 'on' : '') + '" onclick="ZK._pick(\'bc\',' + c + ')">🏪 คอลัมน์สาขา</button>' +
+      '<button class="' + (S.ac === c ? 'on' : '') + '" onclick="ZK._pick(\'ac\',' + c + ')">🧭 คอลัมน์ ASM</button></div>');
+  }
+  function doPick(role, c) { closePop(); set(role, c); }
+  function opts(sel, list, allow) { return (allow ? '<option value="-1"' + (sel < 0 ? ' selected' : '') + '>' + allow + '</option>' : '') + list; }
+  // ===== หน้าชีต: ตารางเซลแบบ Google Sheet — แตะเซลแล้ววาง · คลิกตัวอักษรคอลัมน์ = เลือกคอลัมน์ที่เช็ค · 🚀 =====
+  var CUR = { r: 0, c: 0 }, MAXR = 500;
+  function render() {
+    if (!EL) return;
+    if (!EL.querySelector('#zkGrid')) {
+      EL.innerHTML = '<div class="zk-two"><div><div class="zk-card zk-sheetcard">' +
+        '<div class="zk-sbar"><span class="zk-fx" id="zkFx">A1</span><span class="zk-fxv" id="zkFxv">แตะเซล A1 แล้ววาง (Ctrl+V / กดค้าง → วาง)</span><button class="zk-mini" onclick="ZK.clear()">🗑 ล้าง</button></div>' +
+        '<div class="zk-gwrap" id="zkWrap"><div id="zkGrid"></div><textarea id="zkCap" class="zk-cap" aria-label="วางข้อมูล" autocomplete="off" autocorrect="off" spellcheck="false"></textarea></div>' +
+        '<div id="zkFoot"></div></div></div>' +
+        '<div class="zk-card"><h3>📊 ผลตรวจสอบ <small id="zkResMeta"></small></h3><div id="zkRes"></div></div></div>';
+      var cap = EL.querySelector('#zkCap');
+      cap.addEventListener('paste', function (ev) { var d = (ev.clipboardData || window.clipboardData).getData('text'); if (d) { ev.preventDefault(); cap.value = ''; paste(d, CUR.r, CUR.c); } });
+      cap.addEventListener('input', function () { var v = cap.value; if (v.indexOf('\t') >= 0 || v.indexOf('\n') >= 0) { cap.value = ''; paste(v, CUR.r, CUR.c); } });
+      cap.addEventListener('keydown', function (ev) {
+        var k = ev.key, d = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1], Enter: [1, 0], Tab: [0, 1] }[k];
+        if (d && !cap.value) { ev.preventDefault(); selCell(Math.max(0, CUR.r + d[0]), Math.max(0, CUR.c + d[1])); }
+        if ((k === 'Delete' || k === 'Backspace') && !cap.value && S.rows[CUR.r]) { ev.preventDefault(); S.rows[CUR.r][CUR.c] = ''; S._dirty = 1; RES = null; save(); render(); }
+      });
+      cap.addEventListener('change', function () { var v = cap.value.trim(); if (v) { cap.value = ''; setCell(CUR.r, CUR.c, v); } });
+    }
+    var R = S.rows, H = R[0] || [], B = brs();
+    var nc = Math.max(R.length ? H.length + 2 : 0, 12), nr = Math.min(Math.max(R.length + 5, 25), MAXR + 1);
+    var zr = {}, inz = 0;
+    for (var i = 1; i < R.length; i++) { var b = rowBranch(R[i], B), a = rowASM(R[i]); if (b && a) { zr[i] = 1; inz++; } else if (b) zr[i] = 2; }
+    var h = '<table class="zk-sheet"><thead><tr><th class="zk-corner"></th>';
+    for (var c = 0; c < nc; c++) h += '<th class="zk-cl' + (c === S.col ? ' sel' : '') + (c === S.bc ? ' zk-hb' : '') + (c === S.ac ? ' zk-ha' : '') + '" onclick="ZK._col(' + c + ')">' + colName(c) + (c === S.col ? ' 🎯' : c === S.bc ? ' 🏪' : c === S.ac ? ' 🧭' : '') + '</th>';
+    h += '</tr></thead><tbody>';
+    for (var r = 0; r < nr; r++) {
+      var row = R[r] || [];
+      h += '<tr class="' + (r === 0 && R.length ? 'hd' : zr[r] === 1 ? 'zin' : zr[r] === 2 ? 'out' : '') + '"><th class="zk-rn">' + (r + 1) + '</th>';
+      for (c = 0; c < nc; c++) { var v = row[c] == null ? '' : row[c]; h += '<td data-r="' + r + '" data-c="' + c + '" class="' + (c === S.col ? 'sel' : '') + '">' + e(v) + '</td>'; }
+      h += '</tr>';
+    }
+    h += '</tbody></table>';
+    var g = EL.querySelector('#zkGrid'); g.innerHTML = h;
+    g.onclick = function (ev) { var td = ev.target.closest('td'); if (td) selCell(+td.dataset.r, +td.dataset.c); };
+    g.querySelectorAll('th.zk-cl').forEach(function (th, c) {   // กดค้าง / คลิกขวา ที่ตัวอักษรคอลัมน์ = ตั้งเป็นคอลัมน์สาขา / ASM
+      var t = null;
+      th.addEventListener('pointerdown', function () { clearTimeout(t); t = setTimeout(function () { HOLD = 'skip'; vib(15); headMenu(c); }, 520); });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (k) { th.addEventListener(k, function () { clearTimeout(t); }); });
+      th.addEventListener('contextmenu', function (ev) { ev.preventDefault(); clearTimeout(t); HOLD = 'skip'; headMenu(c); setTimeout(function () { HOLD = null; }, 400); });
+    });
+    selCell(Math.min(CUR.r, nr - 1), Math.min(CUR.c, nc - 1), true);
+    // ตัวเลือก (เดาให้แล้ว) + ปุ่ม 🚀
+    var avOpts = S.ac >= 0 ? uniq(S.ac).slice(0, 80).map(function (u) { return '<option' + (u[0] === S.av ? ' selected' : '') + ' value="' + e(u[0]) + '">' + e(u[0]) + ' (' + u[1] + ')</option>'; }).join('') : '';
+    var lbl = function (c, none) { return c >= 0 ? colName(c) + ' · ' + e(H[c] || '-') : none; };
+    EL.querySelector('#zkFoot').innerHTML = !R.length ? '<div class="zk-meta">💡 ก๊อปทั้งชีตจาก Google Sheet / Excel (Ctrl+A → Ctrl+C) แล้วแตะเซล A1 → วาง · ข้อมูลอยู่ในเครื่องนี้ ส่งขึ้นระบบแค่ผลรายสาขา</div>' :
+      '<div class="zk-meta">' + (R.length - 1) + ' แถว · ' + H.length + ' คอลัมน์ · <b style="color:#1C1C1E">แถบเหลือง = สาขาในโซน ' + inz + ' แถว</b>' + (S.ac >= 0 ? ' · ตัวจาง = ASM อื่น' : '') + (R.length > MAXR ? ' · แสดง ' + MAXR + ' แถวแรก (คำนวณครบ)' : '') + '</div>' +
+      '<details class="zk-more"' + (S.open ? ' open' : '') + ' ontoggle="ZK._st(\'open\',this.open)"><summary>⚙️ สาขา: <b>' + (S.bc >= 0 ? colName(S.bc) : 'ทั้งแถว') + '</b> · ASM: <b>' + (S.ac >= 0 ? e(S.av) : 'ไม่กรอง') + '</b> · <b>' + (S.mode === 'all' ? 'ต้องครบทุกแถว' : 'อย่างน้อย 1 แถว') + '</b> <i>(แตะเพื่อแก้)</i></summary>' +
+        '<div class="zk-role"><span>🏪 คอลัมน์สาขา</span><div class="in"><button class="zk-cb' + (S.bc >= 0 ? ' on' : '') + '" onclick="ZK._open(\'bc\')"><span>' + lbl(S.bc, 'ทั้งแถว (หาเลขสาขาทุกช่อง)') + '</span><i>▾</i></button></div></div>' +
+        '<div class="zk-role"><span>🧭 กรองตาม ASM</span><div class="in"><button class="zk-cb' + (S.ac >= 0 ? ' on' : '') + '" onclick="ZK._open(\'ac\')"><span>' + lbl(S.ac, 'ไม่กรอง') + '</span><i>▾</i></button>' + (S.ac >= 0 ? '<select onchange="ZK.set(\'av\',this.value)">' + avOpts + '</select>' : '') + '</div></div>' +
+        '<div class="zk-role"><span>📏 นับว่าส่งเมื่อ</span><div class="in"><div class="zk-seg"><button class="' + (S.mode === 'any' ? 'on' : '') + '" onclick="ZK.set(\'mode\',\'any\')">กรอกอย่างน้อย 1 แถว</button><button class="' + (S.mode === 'all' ? 'on' : '') + '" onclick="ZK.set(\'mode\',\'all\')">กรอกครบทุกแถว</button></div></div></div>' +
+        '<div class="zk-meta" style="margin-top:0">💡 แตะตัวอักษรคอลัมน์ค้างไว้ / ปุ่มด้านบน = ตั้งเป็นคอลัมน์สาขา หรือ ASM</div></details>' +
+      (FULL ? '<div class="zk-cut">✂️ ตัดแถวนอกโซนแล้ว เหลือ ' + (R.length - 1).toLocaleString() + ' จาก ' + (FULL.length - 1).toLocaleString() + ' แถว <button onclick="ZK._undo()">↩ คืนข้อมูลเต็ม</button></div>' : '') +
+      '<button class="zk-rocket"' + (S.col < 0 ? ' disabled' : '') + ' onclick="ZK.check()">' + (S.col < 0 ? '👆 คลิกตัวอักษรคอลัมน์ (A B C …) ที่ต้องเช็คก่อน' : '🚀 ตรวจสอบงาน · คอลัมน์ ' + colName(S.col) + ' ' + e(H[S.col] || '') + '') + '</button>';
+    renderRes();
+  }
+  function selCell(r, c, quiet) {
+    CUR = { r: r, c: c };
+    var g = EL.querySelector('#zkGrid'), td = g.querySelector('td[data-r="' + r + '"][data-c="' + c + '"]');
+    g.querySelectorAll('td.cur').forEach(function (x) { x.classList.remove('cur'); });
+    var cap = EL.querySelector('#zkCap'), wrap = EL.querySelector('#zkWrap');
+    EL.querySelector('#zkFx').textContent = colName(c) + (r + 1);
+    var v = (S.rows[r] || [])[c]; EL.querySelector('#zkFxv').textContent = v != null && v !== '' ? v : (S.rows.length ? '' : 'แตะเซล A1 แล้ววาง (Ctrl+V / กดค้าง → วาง)');
+    if (!td) return;
+    td.classList.add('cur');
+    cap.style.left = td.offsetLeft + 'px'; cap.style.top = td.offsetTop + 'px'; cap.style.width = td.offsetWidth + 'px'; cap.style.height = td.offsetHeight + 'px';
+    if (!quiet) { cap.focus({ preventScroll: true }); var wr = wrap.getBoundingClientRect(), tr = td.getBoundingClientRect(); if (tr.right > wr.right) wrap.scrollLeft += tr.right - wr.right + 8; if (tr.left < wr.left + 40) wrap.scrollLeft -= wr.left + 40 - tr.left; if (tr.bottom > wr.bottom) wrap.scrollTop += tr.bottom - wr.bottom + 8; if (tr.top < wr.top + 34) wrap.scrollTop -= wr.top + 34 - tr.top; }
+  }
+  function setCell(r, c, v) { while (S.rows.length <= r) S.rows.push([]); var w = Math.max(c + 1, (S.rows[0] || []).length); S.rows.forEach(function (x) { while (x.length < w) x.push(''); }); S.rows[r][c] = v; S._dirty = 1; RES = null; save(); render(); }
+  var HOLD = null;
+  function colClick(c) {
+    if (HOLD === 'skip') { HOLD = null; return; }
+    if (!S.rows.length) return O.toast('วางข้อมูลก่อน');
+    S.col = S.col === c ? -1 : c; RES = null; save(); render(); vib(8);
+  }
+  function renderRes() {
+    var el = EL.querySelector('#zkRes'), meta = EL.querySelector('#zkResMeta');
+    if (!RES) { meta.textContent = ''; el.innerHTML = '<div class="zk-empty">' + (S.rows.length ? (S.col < 0 ? 'คลิกตัวอักษรคอลัมน์ที่ต้องเช็ค แล้วกด 🚀' : 'กด 🚀 ตรวจสอบงาน แล้วผลจะขึ้นตรงนี้') : 'วางข้อมูลก่อน') + '</div>'; return; }
+    var c = { ok: 0, no: 0 }; RES.forEach(function (x) { c[x.k]++; });
+    meta.textContent = 'ช่อง ' + colName(S.col) + ' · ' + (S.mode === 'all' ? 'ต้องครบทุกแถว' : 'อย่างน้อย 1 แถว');
+    el.innerHTML = '<div class="zk-k"><div class="ok"><small>ส่งแล้ว</small><b>' + c.ok + '</b></div><div class="no"><small>ยังไม่ส่ง</small><b>' + c.no + '</b></div></div>' +
+      RES.slice().sort(function (a, b) { return (a.k === 'ok') - (b.k === 'ok') || (b.t - b.f) - (a.t - a.f); }).map(function (x, i) {
+        return '<div class="zk-r" style="animation-delay:' + Math.min(i * 30, 360) + 'ms"><span class="id">' + e(x.id) + '</span><span class="nm">' + e(x.name) + '<small>' + e(x.d) + '</small></span><span class="zk-st ' + x.k + '">' + (x.k === 'ok' ? '✅ ส่งแล้ว' : '❎ ยังไม่ส่ง') + '</span>' +
+          (S.mode === 'all' && x.t ? '<div class="pb"><i style="width:' + Math.round(100 * x.f / x.t) + '%;' + (x.f < x.t ? 'background:#F59E0B' : '') + '"></i></div>' : '') + '</div>';
+      }).join('') +
+      '<div class="zk-bar"><button class="zk-btn save" id="zkSave" onclick="ZK.apply()">💾 บันทึกสถานะ</button></div><div class="zk-meta">บันทึกแล้ว หน้าสถานะสาขา และลิงก์ Report ของหัวหน้าจะเปลี่ยนตามนี้</div>';
+  }
+  return {
+    mount: function (el, o) { EL = el; O = o; load(); render(); },
+    render: function () { if (EL && !RES) render(); },
+    set: set, check: check, apply: apply, clear: clear,
+    _open: pick, _head: headMenu, _pick: doPick, _close: closePop, _col: colClick, _undo: undoCut, _st: function (k, v) { S[k] = v ? 1 : 0; save(); },
+    _state: function () { return S; }, _res: function () { return RES; }, _paste: paste
+  };
+})();
+
+ZK.mount($('zkRoot'), {
+  key: 'asm_work_sheet_v2', toast: toast,
+  branches: () => ((D && D.tasks) || []).map(t => ({ id: t.id, name: t.name })),
+  save: list => api('check', list).then(d => { setD(d); return d; }),
+  onSaved: () => { tab('s'); toast('💾 บันทึกสถานะแล้ว'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+});
 function openAbout() {
   $('shBox').innerHTML = `<div class="about"><div class="lg">🤝</div><h3>🤝 รวมงาน ASM</h3><span class="by">จัดทำโดย บอสตัน สุดหล่อ 😎</span>
     <div class="msg">🎯 <b>วัตถุประสงค์</b><br>เพื่อให้เพื่อนๆ สาขาในโซนที่ บอสตัน สุดหล่อ อยู่ด้วย ได้มีสิ่งดีๆ เบาภาระงานต่อวันมากขึ้น</div>
