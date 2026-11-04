@@ -1006,6 +1006,7 @@
     .rk-fbars small { font-size: 9px; color: #8E8E93; font-weight: 700; }
     .rk-fbars.month b { font-size: 8.5px; } .rk-fbars.month small { font-size: 8px; }
     .rk-ft th.it { max-width: 74px; overflow: hidden; text-overflow: ellipsis; }
+    .rkf { display: flex; flex-direction: column; } .rkf-sum { order: 0; } .rkf-r { order: 1; } .rkf-l { order: 2; } .rkf-m { order: 3; }
     /* 📦 เครื่องเปล่า · 🏅 แชมป์รายงาน · 📈 พัฒนาขึ้น · 📆 วันในสัปดาห์ */
     .rk-fx3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 0 16px; }
     .rk-bare-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -1098,6 +1099,22 @@
       .rk-qgrid .rk-pc .sh { grid-column: 2; grid-row: 2; }
       .rk-qgrid .rk-pc .dl { grid-column: 3; grid-row: 2; }
       .rk-qgrid .rk-pc .bars { height: 42px; }
+      /* 🎯 งานโฟกัส: 3 คอลัมน์ พอดีจอเดียว (แคปทีเดียวบรีฟได้) */
+      .rkf.rk-qgrid { display: grid; grid-template-columns: 330px minmax(0, 1fr) 340px; grid-template-areas: "sum sum sum" "l m r"; gap: 0 14px; align-items: start; }
+      .rkf-sum { grid-area: sum; } .rkf-l { grid-area: l; } .rkf-m { grid-area: m; min-width: 0; } .rkf-r { grid-area: r; }
+      .rkf-2 { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 14px; } .rkf-2.one { grid-template-columns: 1fr; }
+      .rkf .rk-panel { margin-bottom: 12px; padding: 14px; }
+      .rkf .rk-sum3 { margin-bottom: 0; grid-template-columns: repeat(4, 1fr); }
+      .rkf .rk-fbars { height: 96px; } .rkf .rk-dow .bar { height: 70px; }
+      .rkf .rk-qgrid .rk-pc, .rkf .rk-pc { padding: 10px 14px; }
+      .rkf .rk-ch > div, .rkf .rk-im > div { padding: 5px 0; }
+      .rkf .rk-fitems > div { padding: 4px 2px; }
+      .rkf .rk-legend { margin-top: 6px; }
+      #page-rank.rk-ffit .rk-wrap { max-width: none; }
+      #page-rank.rk-ffit { padding-top: 10px; padding-bottom: 6px; }
+      #page-rank.rk-ffit .rk-top { margin-bottom: 8px; } #page-rank.rk-ffit .rk-back { width: 38px; height: 38px; border-radius: 13px; font-size: 22px; }
+      #page-rank.rk-ffit .rk-title h2 { font-size: 21px; margin-top: 2px; } #page-rank.rk-ffit .rk-eyebrow { padding: 2px 8px; font-size: 9px; }
+      #page-rank.rk-ffit .rk-cats { margin-bottom: 8px; } #page-rank.rk-ffit .rk-cats button { padding: 6px 8px; }
       .rk-ty td { font-size: 13px; padding: 10px 7px; }
       .rk-t td { font-size: 14px; padding: 11px 10px; }
     }
@@ -1537,7 +1554,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.04-02';
+    const APP_VER = '2026.11.04-03';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -3306,6 +3323,7 @@
       rkCharts.forEach(c => { try { c.destroy(); } catch (e) {} }); rkCharts = [];
       const mt = document.getElementById('rk-metric');
       if (isF) { if (mt) mt.style.display = 'none'; rkFocusRender(); return; }
+      rkFitReset();
       if (!rk.data) { if (rk.err) body.innerHTML = `<div class="rk-empty">${rk.err}</div>`; else body.innerHTML = '<div class="rk-loading">กำลังโหลด Ranking…</div>'; return; }
       const solo = rk.cat === 'IPHONE' || rk.cat === 'IPAD';
       if (mt) mt.style.display = (solo && rk.period !== 'YOY') || rk.period === 'DAY' ? 'none' : '';
@@ -3370,15 +3388,42 @@
           rkF[ck] = { t: Date.now() - 80000, d: { status: 'error', message: e.message } };
           if (rk.cat === 'FOCUS' && rk.fRange === r && rk.fKey[r] === key) rkFocusRender();
         }).getFocusRanking(r, key);
-        if (!hit) { body.innerHTML = ctl + '<div class="rk-loading">กำลังโหลดงานโฟกัส…</div>'; return; }
+        if (!hit) { rkFitReset(); body.innerHTML = ctl + '<div class="rk-loading">กำลังโหลดงานโฟกัส…</div>'; return; }
       }
       const d = hit.d;
       if (!d || d.status !== 'success') { body.innerHTML = ctl + `<div class="rk-panel rk-empty" style="color:#AEAEB2">${(d && (d.message || d.error)) || 'ยังไม่มีข้อมูล'}${/getFocusRanking|ไม่พบคำสั่ง|ยังไม่ได้ใส่/.test((d && (d.message || d.error)) || '') ? '<br><small>อัปเดต API.gs / Check.gs แล้ว Deploy เป็น New version</small>' : ''}</div>`; return; }
       body.innerHTML = ctl + rkFocusHTML(d);
+      rkFit();
       animateIn(body.querySelectorAll('.rk-pc, .rk-panel:not(.rk-fctl)'), 'ios-in', 50, 0, 400);
       requestAnimationFrame(() => body.querySelectorAll('[data-w]').forEach(i => { i.style.width = i.dataset.w + '%'; }));
       requestAnimationFrame(() => body.querySelectorAll('[data-h]').forEach(i => { i.style.height = i.dataset.h + '%'; }));
     }
+    // ---------- 🖥️ พอดีจอเดียว (คอม / Legion Go): ย่อทั้งหน้าให้ไม่ต้องเลื่อน → แคปทีเดียวบรีฟได้ ----------
+    function rkFitWide() { return innerWidth >= 1100 && innerWidth > innerHeight; }
+    function rkFitReset() {
+      const pg = document.getElementById('page-rank'), b = document.getElementById('rk-body');
+      if (pg) pg.classList.remove('rk-ffit'); if (b) { b.style.zoom = ''; b.style.width = ''; }
+    }
+    function rkFit() {
+      const pg = document.getElementById('page-rank'), b = document.getElementById('rk-body');
+      if (!pg || !b) return;
+      if (rk.cat !== 'FOCUS' || !rkFitWide() || !document.getElementById('rkf')) return rkFitReset();
+      pg.classList.add('rk-ffit');
+      const sc = pg.scrollTop; pg.scrollTop = 0; window.scrollTo(0, 0);
+      b.style.zoom = ''; b.style.width = '';
+      const top = b.getBoundingClientRect().top, avail = innerHeight - top - 10;
+      const H = () => b.getBoundingClientRect().height;
+      if (H() <= avail) return;
+      let lo = 0.45, hi = 1;
+      for (let k = 0; k < 7; k++) {   // หา scale ที่ใหญ่สุดที่ยังพอดีจอ (ย่อแล้วขยายความกว้างชดเชย = ใช้พื้นที่เต็มจอ)
+        const m = (lo + hi) / 2; b.style.zoom = m;
+        if (H() <= avail) lo = m; else hi = m;
+      }
+      b.style.zoom = lo;
+      if (sc) pg.scrollTop = 0;
+    }
+    window.addEventListener('resize', () => { clearTimeout(rkFit.t); rkFit.t = setTimeout(() => { if (rk && rk.cat === 'FOCUS') rkFit(); }, 150); });
+
     // ---------- 🎯 ตัวช่วย: % ต่อเครื่อง / วันทำงาน / เป้า ----------
     const rkFIsTarget = (d, n) => (d.targets || []).indexOf(n) !== -1;
     function rkFBase(d, o, n) { return rkFIsTarget(d, n) ? (o.itemBase && o.itemBase[n]) || 0 : o.units; }   // งานเป้าหมาย = นับเฉพาะเครื่องที่งานนั้นเป็นเป้า (ตาม FOCUS_TARGETS ใน Check.gs)
@@ -3512,7 +3557,7 @@
         const p = rkFPct(d, agg, n); return `<td>${p == null ? '–' : p.toFixed(0) + '%'}</td>`; }).join('')}<td class="hide-m"></td></tr>`;
       t += `</tbody></table></div><div class="rk-legend"><span>% ต่อเครื่อง = เครื่องที่ติดงานนั้น ÷ เครื่องที่งานนั้นเป็นเป้า (เช่น 7CARE+ นับเฉพาะ Apple · ULTRA CARE+ นับเฉพาะเครื่องที่ไม่ใช่ Apple) · เขียว = ถึงเป้า Dashboard · แดง = ยังไม่ถึง</span><span>วันทำงาน = วันที่มีกะในตารางกะ − วันที่แจ้งลา/หยุด (นับถึงวันนี้)</span>${d.prevPartial ? '<span>* ช่วงนี้ยังไม่จบ เทียบกับจำนวนวันเท่ากันของช่วงก่อน</span>' : ''}<span>อัปเดต ${e(d.updated || '')}</span></div></div>`;
       const X = rkFExtra(d, list, cols);
-      return sum + `<div class="rk-fx3">${X.bare}${X.champ}${X.imp}</div><div class="rk-qgrid"><div>${pod}${itemsH}</div><div>${t}${seriesH}${X.dow}</div></div>`;
+      return `<div class="rkf rk-qgrid" id="rkf"><div class="rkf-sum">${sum}</div><div class="rkf-l">${pod}${itemsH}</div><div class="rkf-m">${t}<div class="rkf-2${X.dow ? '' : ' one'}">${seriesH}${X.dow}</div></div><div class="rkf-r">${X.bare}${X.champ}${X.imp}</div></div>`;
     }
     // ---------- 📦 เครื่องเปล่า · 🏅 แชมป์รายงาน · 📈 พัฒนาขึ้นมากสุด · 📆 วันในสัปดาห์ ----------
     function rkFChamps(list, cols) {   // { งาน: { v, names[] } } คนที่ทำได้มากสุดในแต่ละงาน
