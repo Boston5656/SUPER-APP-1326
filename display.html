@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Display 1326</title>
+<meta name="theme-color" content="#FFD600">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script>window.GAS_APP = 'display';</script>
+<script src="gas.js?v=2026.11.04-1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+/* =========================================================
+   📸 Display 1326 — ถ่ายรูปตามหัวข้อฟอร์มบริษัท → รูปลงสไลด์เอง → ผู้จัดการตรวจ → โหลด PowerPoint ส่งบริษัท
+   ========================================================= */
+:root{ --y:#FFD600; --d:#1C1C1E; --d2:#2C2C2E; --g:#8E8E93; --ok:#16A34A; --no:#E5484D;
+  --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;overflow-x:hidden}
+body{min-height:100vh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),var(--y);background-attachment:fixed;
+  padding:calc(8px + env(safe-area-inset-top)) 12px calc(110px + env(safe-area-inset-bottom))}
+button{font-family:inherit;cursor:pointer;color:inherit;border:0;background:none;padding:0}
+button:focus{outline:none}
+.num{font-family:'Space Grotesk','IBM Plex Sans Thai',sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:1100px;margin:0 auto}
+.navrow{position:sticky;top:calc(8px + env(safe-area-inset-top));z-index:40;display:flex;gap:8px;align-items:stretch;margin-bottom:12px}
+[data-sys-back-slot]{display:flex}[data-sys-back-slot]:empty{display:none}
+.titlebar{flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:18px;
+  background:rgba(255,255,255,.78);-webkit-backdrop-filter:saturate(180%) blur(20px);backdrop-filter:saturate(180%) blur(20px);border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35)}
+.titlebar h1{margin:0;font-size:16px;font-weight:700;white-space:nowrap;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.titlebar h1 small{display:block;font-size:11px;color:#6E6E73;font-weight:600}
+.ring{position:relative;width:44px;height:44px;flex-shrink:0}
+.ring svg{width:44px;height:44px;transform:rotate(-90deg)} .ring b{position:absolute;inset:0;display:grid;place-items:center;font:700 11px 'Space Grotesk',sans-serif}
+.tb-btn{border-radius:12px;padding:9px 11px;font-weight:700;font-size:13px;background:var(--d);color:var(--y)}
+
+.hero{background:var(--d);color:#fff;border-radius:24px;padding:14px 16px;margin-bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.hero div{background:rgba(255,255,255,.06);border-radius:14px;padding:8px 10px}
+.hero small{display:block;font-size:10.5px;color:#AEAEB2;font-weight:700}
+.hero b{font:700 20px 'Space Grotesk',sans-serif}
+.hero .cv{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hero .cv b{font:700 14px 'IBM Plex Sans Thai',sans-serif;color:var(--y)}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px}.chips::-webkit-scrollbar{display:none}
+.chips button{flex-shrink:0;border-radius:100px;padding:8px 13px;background:rgba(255,255,255,.75);font-weight:700;font-size:13px;transition:transform .3s var(--spring)}
+.chips button.on{background:var(--d);color:var(--y)} .chips button i{font-style:normal;opacity:.6;margin-left:4px}
+.chips button:active{transform:scale(.92)}
+
+.list{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:760px){.list{grid-template-columns:1fr 1fr}}
+.card{background:#FFFDF5;border-radius:22px;padding:12px;box-shadow:0 6px 20px -14px rgba(60,48,0,.5);animation:rise .45s var(--ios-ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.card.none{opacity:.55}
+.ch{display:flex;align-items:center;gap:8px}
+.ch .no{font:700 11px 'Space Grotesk',sans-serif;background:var(--d);color:var(--y);border-radius:8px;padding:3px 7px;flex-shrink:0}
+.ch b{flex:1;min-width:0;font-size:14.5px;line-height:1.3}
+.ch .st{font-size:11px;font-weight:800;border-radius:100px;padding:3px 9px;white-space:nowrap}
+.st.ok{background:#E3F9E9;color:#1E7B34}.st.part{background:#FFF1D6;color:#8A5300}.st.todo{background:#F2F2F7;color:#6E6E73}.st.bad{background:#FFE5E5;color:#C11A1F}.st.na{background:#EEE;color:#888}
+.hint{font-size:11.5px;color:#8E8E93;font-weight:600;margin:5px 0 8px;line-height:1.45}
+.slots{display:grid;gap:8px}
+.slot{background:#F2F2F7;border-radius:16px;padding:8px;position:relative}
+.slot.bad{box-shadow:inset 0 0 0 2px var(--no)} .slot.ok{box-shadow:inset 0 0 0 2px #34C759}
+.sl-h{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;margin-bottom:6px;gap:6px}
+.sl-h small{color:#8E8E93;font-weight:700}
+.ph{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:6px}
+.ph .im{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#DDD center/cover no-repeat;cursor:pointer}
+.ph .im img{width:100%;height:100%;object-fit:cover;display:block}
+.ph .im .by{position:absolute;left:4px;bottom:4px;font-size:9.5px;font-weight:700;color:#fff;background:rgba(0,0,0,.55);border-radius:6px;padding:1px 5px}
+.ph .im.up::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.55) linear-gradient(90deg,transparent,rgba(255,255,255,.8),transparent) 0 0/200% 100%;animation:shim 1s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.add{display:flex;gap:6px;margin-top:6px}
+.add button{flex:1;height:40px;border-radius:12px;font-weight:700;font-size:13px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);transition:transform .3s var(--spring)}
+.add button:active{transform:scale(.94)} .add .cam{background:var(--d);color:var(--y)}
+.rv{display:flex;gap:6px;margin-top:6px}
+.rv button{flex:1;height:34px;border-radius:10px;font-weight:800;font-size:12.5px;background:#fff}
+.rv .ok.on{background:#34C759;color:#fff} .rv .bad.on{background:var(--no);color:#fff}
+.note{font-size:12px;font-weight:700;color:#C11A1F;background:#FFE5E5;border-radius:10px;padding:6px 9px;margin-top:6px}
+.memo{margin-top:8px}
+.memo textarea{width:100%;min-height:40px;resize:vertical;border:0;border-radius:12px;background:#FFF6C9;padding:9px 11px;font:600 13px/1.45 'IBM Plex Sans Thai',sans-serif;color:var(--d)}
+.memo textarea:focus{outline:2px solid var(--d)}
+.memo .mc{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;margin-top:5px}.memo .mc::-webkit-scrollbar{display:none}
+.memo .mc button{flex-shrink:0;font-size:11.5px;font-weight:700;padding:5px 9px;border-radius:100px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.memo small{display:block;font-size:10.5px;color:#8E8E93;font-weight:700;margin-top:3px}
+.nonebtn{margin-top:8px;font-size:12px;font-weight:700;color:#6E6E73;text-decoration:underline}
+
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(255,214,0,0),rgba(255,214,0,.95) 35%)}
+.bar .in{max-width:640px;margin:0 auto;display:flex;gap:8px}
+.bar button{flex:1;height:54px;border-radius:18px;font-weight:800;font-size:15px;background:var(--d);color:var(--y);box-shadow:0 10px 24px -10px rgba(0,0,0,.6);transition:transform .3s var(--spring)}
+.bar button:active{transform:scale(.95)} .bar button small{display:block;font-size:11px;font-weight:600;color:#AEAEB2}
+.bar .g{flex:0 0 auto;width:54px;background:#fff;color:var(--d);font-size:20px}
+
+.sheet{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:10px}
+.sheet.on{display:flex}
+.sheet .box{width:100%;max-width:520px;max-height:90vh;overflow:auto;background:#F2F2F7;border-radius:26px;padding:16px;animation:rise .35s var(--ios-ease) both}
+.sheet h3{margin:0 0 4px;font-size:17px} .sheet p{margin:0 0 12px;font-size:12.5px;color:#6E6E73;font-weight:600;line-height:1.5}
+.sheet input,.sheet textarea{width:100%;border:0;border-radius:14px;background:#fff;padding:13px;font:600 15px 'IBM Plex Sans Thai',sans-serif}
+.sheet .ft{display:flex;gap:8px;margin-top:12px}
+.sheet .ft button{flex:1;height:48px;border-radius:15px;font-weight:700;background:#fff}
+.sheet .ft .ok{background:var(--d);color:var(--y)} .sheet .ft .rd{background:var(--no);color:#fff}
+.sheet .chips button{background:#fff}
+.prog{height:10px;border-radius:100px;background:#E5E5EA;overflow:hidden;margin:10px 0}
+.prog i{display:block;height:100%;width:0;background:var(--d);border-radius:100px;transition:width .3s}
+#viewer{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.92);display:none;flex-direction:column;align-items:center;justify-content:center;padding:14px}
+#viewer.on{display:flex}
+#viewer img{max-width:100%;max-height:78vh;border-radius:12px}
+#viewer .vb{display:flex;gap:8px;margin-top:12px}
+#viewer .vb button{height:46px;padding:0 18px;border-radius:15px;font-weight:700;background:#2C2C2E;color:#fff}
+#viewer .vb .rd{background:var(--no)}
+#viewer small{color:#AEAEB2;font-weight:600;margin-top:8px}
+#toast{pointer-events:none;position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translate(-50%,200%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);max-width:90vw;text-align:center}
+#toast{opacity:0;transition:transform .45s var(--spring),opacity .25s}#toast.on{transform:translate(-50%,0);opacity:1}
+.empty{text-align:center;padding:30px 10px;font-weight:700;color:rgba(28,28,30,.55)}
+.load{text-align:center;padding:40px 0;font-weight:700;color:rgba(28,28,30,.6)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="navrow">
+    <span data-sys-back-slot></span>
+    <div class="titlebar">
+      <div class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="rgba(28,28,30,.12)" stroke-width="5"/><circle id="ringC" cx="22" cy="22" r="18" fill="none" stroke="#1C1C1E" stroke-width="5" stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="113" style="transition:stroke-dashoffset .6s"/></svg><b id="ringT">0%</b></div>
+      <h1>📸 รูป Display<small id="sub">กำลังโหลด…</small></h1>
+      <button class="tb-btn" id="gear" style="display:none" onclick="openSet()">⚙️</button>
+    </div>
+  </div>
+  <div class="hero" id="hero"></div>
+  <div class="chips" id="flt"></div>
+  <div class="list" id="list"><div class="load">กำลังโหลดหัวข้อ…</div></div>
+</div>
+
+<div class="bar"><div class="in">
+  <button onclick="exportPptx()">⬇️ สร้างไฟล์ PowerPoint<small id="barSub">รูปลงสไลด์ให้อัตโนมัติ</small></button>
+  <button class="g" onclick="load(true)" aria-label="รีเฟรช">🔄</button>
+</div></div>
+
+<input type="file" id="fCam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fLib" accept="image/*" multiple hidden>
+<div class="sheet" id="sh" onclick="if(event.target===this)closeSh()"><div class="box" id="shBox"></div></div>
+<div id="viewer" onclick="if(event.target===this)closeView()"><img id="vImg" alt=""><small id="vCap"></small><div class="vb" id="vBtns"></div></div>
+<div id="toast"></div>
+
+<script>
+// ===== หัวข้อจากฟอร์มบริษัท (แม่แบบ display-template.pptx) =====
+// [ไฟล์สไลด์, ชื่อหัวข้อ, [[x, y, w, h (EMU), ป้ายใต้กรอบ, คำแนะนำในกรอบ], ...]]
+const SL = [["ppt/slides/slide1.xml","ID___: Name________________________",[[668740,1600200,10850100,4648200,"","รูปถ่ายหน้าร้านต้องถ่ายให้เห็นบริเวณหน้าร้านทั้งหมดเต็มเฟรม และเห็นป้ายร้าน"]]],["ppt/slides/slide2.xml","รูปรวมร้าน",[[688183,1081468,5301948,4634343,"มุมด้านซ้าย","ถ่ายภาพรวมร้านมุมกว้าง ทั้งซ้าย-ขวา ให้เห็นป้ายร้านชัดเจน"],[6082151,1052945,5450207,4634343,"มุมด้านขวา","ถ่ายภาพรวมร้านมุมกว้าง ทั้งซ้าย-ขวา ให้เห็นป้ายร้านชัดเจน"]]],["ppt/slides/slide3.xml","รูปทางเดินภายในร้าน",[[627827,1081475,10904700,4634400,"","ถ่ายภาพรวมทางเดินภายในร้าน ถ่ายมาให้ครอบคลุม"]]],["ppt/slides/slide4.xml","รูปเพดานภายในร้าน",[[627827,1081475,10904700,4634400,"","ถ่ายภาพรวมเพดานภายในร้าน ให้เห็นหลอดไฟเพดานที่เปิดทุกดวง ถ่ายมาให้ครอบคลุม"]]],["ppt/slides/slide5.xml","รูปโต๊ะ iPhone + Apple Watch",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายกราฟิกบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายกราฟิกบนโต๊ะทั้งหมดให้ชัดเจน · White Program : หากหน้าร้านมีโต๊ะเสริมให้ถ่ายมาด้วย"]]],["ppt/slides/slide6.xml","รูปโต๊ะ iPad",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายกราฟิกบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายกราฟิกบนโต๊ะทั้งหมดให้ชัดเจน · White Program : หากหน้าร้านมีโต๊ะเสริมให้ถ่ายมาด้วย"]]],["ppt/slides/slide7.xml","รูปโต๊ะ Macbook",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายกราฟิกบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายกราฟิกบนโต๊ะทั้งหมดให้ชัดเจน · White Program : หากหน้าร้านมีโต๊ะเสริมให้ถ่ายมาด้วย"]]],["ppt/slides/slide8.xml","DCOTA",[[668740,1241946,10850100,5006400,"","แคปรูปสถานะ DCOTA"]]],["ppt/slides/slide9.xml","รูป Wall BTB Apple",[[668740,1241946,10850100,5006400,"","ถ่ายแบบเต็ม Wall ให้เห็นกราฟิกบนหัว Wall และสินค้าทั้งหมด"]]],["ppt/slides/slide10.xml","รูปโต๊ะ Smartphone (SAMSUNG)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide11.xml","รูปโต๊ะ Smartphone (OPPO)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide12.xml","รูปโต๊ะ Smartphone (VIVO)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide13.xml","รูปโต๊ะ Smartphone (HUAWEI)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide14.xml","รูปโต๊ะ Smartphone (REALME)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide15.xml","รูปโต๊ะ Smartphone (XIAOMI)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide16.xml","รูปโต๊ะ Smartphone (HONOR)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide17.xml","รูปโต๊ะ Smartphone (TCL)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide18.xml","รูปโต๊ะ Smartphone (INFINIX)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide19.xml","รูปโต๊ะ Smartphone (ZTC/Nubia)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide20.xml","รูปโต๊ะ Smartphone (Tecno)",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide21.xml","Wall Smartphone",[[668740,1241946,10849970,5006454,"","ต้องถ่ายให้ครบทุกแบรนด์ ให้เห็นรูปฃัดเจน"]]],["ppt/slides/slide22.xml","Surface",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide23.xml","สินค้า IOT โต๊ะที่ 1",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide24.xml","สินค้า IOT โต๊ะที่ 2",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide25.xml","Wall Monitor (DIY)",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวม Wall ให้เห็นสินค้าเดโม และป้ายราคาทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide26.xml","ตู้กระจก (DIY)",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวม Wall ให้เห็นสินค้าเดโม และป้ายราคาทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide27.xml","รูป ALL IN ONE /PC BRAND โต๊ะที่ 1",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide28.xml","รูป ALL IN ONE /PC BRAND โต๊ะที่ 2",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide29.xml","Printer / UPS",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide30.xml","รูปโต๊ะ Notebook 1",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide31.xml","รูปโต๊ะ Notebook 2",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide32.xml","รูปโต๊ะ Notebook 3",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพรวมโต๊ะให้เห็นสินค้าเดโม และป้ายราคาบนโต๊ะทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide33.xml","Wall Notebook",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวม Wall ให้เห็นสินค้าเดโม และป้ายราคาทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide34.xml","Gondola ตัวที่ 1",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพ Wall แบบหน้าตรงให้เห็นสินค้า และป้ายทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพ Wall แบบหน้าตรงให้เห็นสินค้า และป้ายทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide35.xml","Gondola ตัวที่ 2",[[627797,1052945,5301948,4634343,"ด้านหน้า","ถ่ายภาพ Wall แบบหน้าตรงให้เห็นสินค้า และป้ายทั้งหมดให้ชัดเจน"],[6082151,1052945,5450207,4634343,"ด้านหลัง","ถ่ายภาพ Wall แบบหน้าตรงให้เห็นสินค้า และป้ายทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide36.xml","BaNANA SURE",[[668740,1241946,10849970,5006454,"",""]]],["ppt/slides/slide37.xml","Wall Play Station",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวม Wall ให้เห็นสินค้าเดโม และป้ายราคาทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide38.xml","Wall ACC 1-4",[[668740,1241946,10849970,5006454,"(กรุณาเพิ่มสไลด์ให้เท่ากับจำนวน ตู้ Wall ที่มีในร้าน)","ถ่ายแบบเต็ม Wall ให้เห็นกราฟิกบนหัว Wall และสินค้าทั้งหมด"]]],["ppt/slides/slide39.xml","Wall ACC 5-8",[[668740,1241946,10849970,5006454,"(กรุณาเพิ่มสไลด์ให้เท่ากับจำนวน ตู้ Wall ที่มีในร้าน)","ถ่ายแบบเต็ม Wall ให้เห็นกราฟิกบนหัว Wall และสินค้าทั้งหมด"]]],["ppt/slides/slide40.xml","Wall ACC 9-12",[[668740,1241946,10849970,5006454,"(กรุณาเพิ่มสไลด์ให้เท่ากับจำนวน ตู้ Wall ที่มีในร้าน)","ถ่ายแบบเต็ม Wall ให้เห็นกราฟิกบนหัว Wall และสินค้าทั้งหมด"]]],["ppt/slides/slide41.xml","โต๊ะ Testdrive",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวมโต๊ะให้เห็นของบนโต๊ะ และเก้าอี้ทั้งหมดให้ชัดเจน"]]],["ppt/slides/slide42.xml","Trade in Kit (ถ้ามี)",[[668740,1241946,10849970,5006454,"","ถ่ายภาพรวมอุปกรณ์ Trade in kit ให้ครบทุกชิ้น"]]],["ppt/slides/slide43.xml","รูปโต๊ะ Service",[[627797,1052945,5301948,4634343,"ด้านหน้า","เก็บอุปกรณ์ให้เป็นระเบียบ"],[6082151,1052945,5450207,4634343,"ด้านหลัง","เก็บอุปกรณ์ให้เป็นระเบียบ"]]],["ppt/slides/slide44.xml","รูปโต๊ะ Cashier",[[627797,1052945,5301948,4634343,"ด้านหน้า","เก็บอุปกรณ์ กระดาษโน๊ตให้เป็นระเบียบ · ไม่ตั้งป้ายโปรโมชั่นมากเกินไป"],[6082151,1052945,5450207,4634343,"ด้านหลัง","เก็บอุปกรณ์ กระดาษโน๊ตให้เป็นระเบียบ"]]],["ppt/slides/slide45.xml","รูปห้อง STOCK",[[627797,1052945,5301948,4634343,"มุมด้านซ้าย","ถ่ายมุมกว้าง ให้เห็นชั้นวางสินค้าทั้งหมด · ** กล่องสินค้าต้องเก็บให้เป็นระเบียบ"],[6082151,1052945,5450207,4634343,"มุมด้านขวา","ถ่ายมุมกว้าง ให้เห็นชั้นวางสินค้าทั้งหมด"]]],["ppt/slides/slide46.xml","สื่อ Apple ภายในร้าน",[[668740,1241946,10849970,5006454,"",""]]],["ppt/slides/slide47.xml","สื่อภายในร้าน (Standee)",[[668740,1241946,10849970,5006454,"","ไม่ตั้งป้ายโปรโมชั่นมากเกินไป"]]],["ppt/slides/slide48.xml","สื่อประชาสัมพันธ์ ศูนย์การค้า",[[668740,1241946,10849970,5006454,"","** ให้สังเกตว่าจะมีโลโก้ของห้างแต่ละสาขาต่างๆ อยู่มุมหนึ่งของสื่อประชาสัมพันธ์"]]],["ppt/slides/slide49.xml","สื่อ Digital Signage (ถ้ามี)",[[668740,1241946,10849970,5006454,"",""]]]];
+const BIG = 9000000;   // กรอบกว้าง (เต็มสไลด์) = ใส่ได้หลายรูป เช่น Wall Smartphone / Wall ACC
+const maxOf = (b, i) => i === 0 ? 1 : b[2] > BIG ? 6 : 1;   // หน้าปก = รูปหน้าร้าน 1 รูป
+const titleOf = (s, i) => i === 0 ? 'หน้าปก · รูปหน้าร้าน' : s[1];
+
+let ST = null, UPD = '', FLT = 'all', BUSY = {}, TH = {}, CUR = null, PEND = {};
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+// 🌐 โหมด GO (display.html?go=1) = ลิงก์สำหรับสาขาอื่น: รูปอยู่ในเครื่องนี้ (IndexedDB) ไม่ล็อกอิน ไม่ผ่านระบบ · ส่งแค่สถานะให้คนตามงาน
+const GO = new URLSearchParams(location.search).has('go');
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmALqdO95c1UTHKNGhNIAvyDSercHbETyzd3aCivS_nmxgd6pZ5-iB50F0oHAlUwoyOg/exec';
+const LOC = (() => {
+  const KEY = 'dgo_state', db = new Promise(ok => { try { const r = indexedDB.open('dgo', 1); r.onupgradeneeded = () => r.result.createObjectStore('img'); r.onsuccess = () => ok(r.result); r.onerror = () => ok(null); } catch (e) { ok(null); } });
+  const tx = (mode, fn) => db.then(d => new Promise((ok, no) => { if (!d) return no(new Error('เครื่องนี้เก็บรูปไม่ได้ (โหมดส่วนตัว?)')); const t = d.transaction('img', mode), st = t.objectStore('img'); const r = fn(st); t.oncomplete = () => ok(r && r.result); t.onerror = () => no(t.error); }));
+  const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const get = () => { let s = null; try { s = JSON.parse(localStorage.getItem(KEY)); } catch (e) {} s = s || {}; s.cfg = s.cfg || { cover: '', id: '', name: '' }; s.round = s.round || { id: today(), start: today(), photos: {}, none: {}, review: {}, notes: {}, upd: 1 }; return s; };
+  const put = s => { s.round.upd = Date.now(); try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { throw new Error('พื้นที่ในเครื่องเต็ม'); } return { cfg: s.cfg, round: s.round, me: { nick: 'ฉัน' }, mgr: false, go: true }; };
+  const view = s => ({ cfg: s.cfg, round: s.round, me: { nick: 'ฉัน' }, mgr: false, go: true });
+  const rmImgs = ids => tx('readwrite', st => { ids.forEach(i => st.delete(i)); });
+  return {
+    getState: since => { const s = get(); return since && String(since) === String(s.round.upd) ? { same: true } : view(s); },
+    addPhoto: async (k, full, th, w, h, mx) => {
+      const id = 'L' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), t = id + 't';
+      await tx('readwrite', st => { st.put(full, id); st.put(th, t); });
+      const s = get(), L = s.round.photos[k] = s.round.photos[k] || []; L.push({ id, t, w, h, by: 'ฉัน', at: Date.now() });
+      const drop = []; while (L.length > mx) { const o = L.shift(); drop.push(o.id, o.t); } if (drop.length) await rmImgs(drop);
+      return put(s);
+    },
+    delPhoto: async (k, id) => { const s = get(), L = s.round.photos[k] || [], x = L.find(p => p.id === id); if (x) await rmImgs([x.id, x.t]); s.round.photos[k] = L.filter(p => p.id !== id); if (!s.round.photos[k].length) delete s.round.photos[k]; return put(s); },
+    setNone: (i, on) => { const s = get(); if (on) s.round.none[i] = { by: 'ฉัน', at: Date.now() }; else delete s.round.none[i]; return put(s); },
+    setNote: (i, t) => { const s = get(); s.round.notes = s.round.notes || {}; if (t) s.round.notes[i] = { t: String(t).slice(0, 200), by: 'ฉัน', at: Date.now() }; else delete s.round.notes[i]; return put(s); },
+    getImages: ids => tx('readonly', st => { const out = {}; ids.forEach(i => { const r = st.get(i); r.onsuccess = () => { out[i] = r.result || ''; }; }); return { result: out }; }),
+    markExport: () => { const s = get(); s.round.exported = Date.now(); return put(s); },
+    markSent: () => { const s = get(); s.round.sent = Date.now(); return put(s); },
+    saveCfg: c => { const s = get(); s.cfg.id = String(c.id || '').replace(/\D/g, '').slice(0, 6); s.cfg.name = String(c.name || '').trim().slice(0, 80); s.cfg.cover = `ID${s.cfg.id}: ${s.cfg.name}`; put(s); return s.cfg; },
+    newRound: async () => { const s = get(), ids = []; Object.values(s.round.photos).forEach(L => L.forEach(p => ids.push(p.id, p.t))); await rmImgs(ids); s.round = { id: today(), start: today(), photos: {}, none: {}, review: {}, notes: {}, upd: 1 }; return put(s); },
+    review: () => view(get())
+  };
+})();
+const run = (fn, ...a) => GO ? Promise.resolve().then(() => LOC[fn](...a))
+  : new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(no)[fn](...a));
+// 📡 ส่งสถานะให้คนตามงาน (ไม่มีรูป ไม่มีข้อมูลลูกค้า)
+function ping(sent) {
+  if (!GO || !ST || !ST.cfg.id) return;
+  const S = stats(), photos = Object.values(ST.round.photos).reduce((a, L) => a + L.length, 0), notes = Object.keys(ST.round.notes || {}).length;
+  fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+    body: JSON.stringify({ fn: 'dispPing', args: [{ id: ST.cfg.id, name: ST.cfg.name, filled: S.done, total: S.tot, photos, notes, sent: !!sent }] }) }).catch(() => {});
+}
+function vib(ms) { try { navigator.vibrate && navigator.vibrate(ms || 8); } catch (e) {} }
+function toast(m, ms) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), ms || 2200); }
+const hm = t => { const d = new Date(t); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const dmy = s => { const [y, m, d] = String(s).slice(0, 10).split('-'); return `${+d}/${+m}/${(+y + 543) % 100}`; };
+
+// ===== โหลดสถานะ =====
+function load(force) {
+  run('getState', force ? '' : UPD).then(r => { if (r && r.same) return; apply(r); }).catch(e => { $('sub').textContent = '⚠️ ' + e.message; if (/getState|ไม่พบ/.test(e.message)) $('list').innerHTML = '<div class="empty">ยังไม่ได้อัป Display.gs / API.gs — Deploy เป็น New version ก่อน</div>'; });
+}
+function apply(r) { ST = r; UPD = String(r.round.upd || ''); if (MEMO_EDIT < 0) render(); fetchThumbs(); }
+setInterval(() => { if (!document.hidden && !Object.keys(BUSY).length) load(); }, 20000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) load(); });
+
+function stats() {
+  const R = ST.round; let tot = 0, done = 0, ok = 0, bad = 0;
+  SL.forEach((s, i) => { if (R.none[i]) return; s[2].forEach((b, j) => { const k = i + '-' + j; tot++; if ((R.photos[k] || []).length) done++; const v = R.review[k]; if (v && v.ok) ok++; if (v && !v.ok) bad++; }); });
+  return { tot, done, ok, bad };
+}
+function slideState(i) {
+  const R = ST.round, s = SL[i];
+  if (R.none[i]) return 'na';
+  const ks = s[2].map((b, j) => i + '-' + j);
+  if (ks.some(k => R.review[k] && !R.review[k].ok)) return 'bad';
+  const n = ks.filter(k => (R.photos[k] || []).length).length;
+  return n === ks.length ? 'ok' : n ? 'part' : 'todo';
+}
+const ST_TXT = { ok: '✓ ครบ', part: 'ยังไม่ครบ', todo: 'ยังไม่ถ่าย', bad: '✗ ถ่ายใหม่', na: 'ไม่มีในสาขา' };
+
+function render() {
+  const R = ST.round, S = stats(), pct = S.tot ? Math.round(S.done / S.tot * 100) : 0;
+  $('ringC').style.strokeDashoffset = 113 - 113 * pct / 100; $('ringT').textContent = pct + '%';
+  $('sub').textContent = `รอบ ${dmy(R.start)} · ${S.done}/${S.tot} ช่อง` + (R.exported ? ' · โหลดไฟล์แล้ว ' + hm(R.exported) : '');
+  $('gear').style.display = ST.mgr || GO ? '' : 'none';
+  if (GO) document.title = 'Display ' + (ST.cfg.id ? 'ID' + ST.cfg.id : '');
+  $('hero').innerHTML = `<div><small>ถ่ายแล้ว</small><b>${S.done}<span style="font-size:12px;color:#8E8E93">/${S.tot}</span></b></div><div><small>เหลือ</small><b>${S.tot - S.done}</b></div>
+    <div><small>ตรวจผ่าน</small><b style="color:#34C759">${S.ok}</b></div><div><small>ให้ถ่ายใหม่</small><b style="color:${S.bad ? '#FF6961' : '#fff'}">${S.bad}</b></div>
+    <div class="cv"><span style="font-size:12px;color:#AEAEB2;font-weight:700">หน้าปก</span><b>${esc(ST.cfg.cover || 'ยังไม่ได้ตั้งค่าสาขา — กด ⚙️')}</b></div>`;
+  const cnt = { all: SL.length, todo: 0, bad: 0, ok: 0 };
+  SL.forEach((s, i) => { const x = slideState(i); if (x === 'todo' || x === 'part') cnt.todo++; if (x === 'bad') cnt.bad++; if (x === 'ok') cnt.ok++; });
+  $('flt').innerHTML = [['all', 'ทั้งหมด'], ['todo', 'ยังไม่ครบ'], ['bad', 'ถ่ายใหม่'], ['ok', 'ครบแล้ว']].map(([k, t]) => `<button class="${FLT === k ? 'on' : ''}" onclick="FLT='${k}';render()">${t}<i>${cnt[k]}</i></button>`).join('');
+  $('barSub').textContent = S.done < S.tot ? `ยังขาด ${S.tot - S.done} ช่อง — สร้างได้เลย ช่องที่ขาดจะว่างไว้` : 'ครบทุกช่องแล้ว 🎉';
+  const html = SL.map((s, i) => {
+    const x = slideState(i);
+    if (FLT === 'todo' && !(x === 'todo' || x === 'part')) return '';
+    if (FLT === 'bad' && x !== 'bad') return ''; if (FLT === 'ok' && x !== 'ok') return '';
+    const none = !!R.none[i];
+    const slots = none ? '' : `<div class="slots" style="grid-template-columns:${s[2].length > 1 ? '1fr 1fr' : '1fr'}">${s[2].map((b, j) => slotHTML(i, j, b)).join('')}</div>`;
+    return `<div class="card ${none ? 'none' : ''}" id="c${i}"><div class="ch"><span class="no">${i + 1}</span><b>${esc(titleOf(s, i))}</b><span class="st ${x}">${ST_TXT[x]}</span></div>
+      ${!none && s[2][0] && s[2][0][5] ? `<div class="hint">💡 ${esc(s[2][0][5])}${maxOf(s[2][0], i) > 1 ? ` · ใส่ได้ถึง ${maxOf(s[2][0], i)} รูป เรียงในกรอบให้เอง` : ''}</div>` : '<div style="height:8px"></div>'}
+      ${slots}${i > 0 ? memoHTML(i) : ''}${i > 0 ? `<button class="nonebtn" onclick="setNone(${i},${!none})">${none ? '↩️ สาขาเรามีหัวข้อนี้' : 'สาขาเราไม่มีหัวข้อนี้'}</button>` : ''}</div>`;
+  }).join('');
+  $('list').innerHTML = html || '<div class="empty">ไม่มีหัวข้อในกลุ่มนี้ ✨</div>';
+}
+const MEMO_Q = ['ไฟโต๊ะดับ แจ้งเซลแล้ว', 'สินค้าเดโมหมด รอของเข้า', 'ป้ายราคาอยู่ระหว่างเปลี่ยน', 'เครื่องเดโมเสีย ส่งซ่อมแล้ว', 'รอสื่อจากบริษัท'];
+function memoHTML(i) {
+  const n = (ST.round.notes || {})[i];
+  return `<div class="memo"><textarea id="m${i}" maxlength="200" rows="1" placeholder="📝 หมายเหตุใต้สไลด์ (ถ้ามี) เช่น ไฟโต๊ะดับ แจ้งเซลแล้ว" onfocus="MEMO_EDIT=${i}" oninput="memoTyping(${i})" onblur="memoSave(${i})">${esc(n ? n.t : '')}</textarea>
+    ${n ? `<small>บันทึกโดย ${esc(n.by)} · ${hm(n.at)}</small>` : ''}<div class="mc">${MEMO_Q.map(q => `<button onmousedown="event.preventDefault()" onclick="memoQuick(${i},'${q}')">+ ${q}</button>`).join('')}</div></div>`;
+}
+let MEMO_EDIT = -1, MEMO_T = null;
+function memoTyping(i) { clearTimeout(MEMO_T); MEMO_T = setTimeout(() => memoSave(i, true), 1200); }
+function memoQuick(i, q) { const t = $('m' + i); t.value = t.value.trim() ? t.value.trim() + ' · ' + q : q; memoSave(i); }
+function memoSave(i, keep) {
+  clearTimeout(MEMO_T); const t = $('m' + i); if (!t) return;
+  const v = t.value.trim(), cur = ((ST.round.notes || {})[i] || {}).t || '';
+  if (!keep) MEMO_EDIT = -1;
+  if (v === cur) return;
+  BUSY['m' + i] = 1;
+  run('setNote', i, v).then(r => { delete BUSY['m' + i]; ST = r; UPD = String(r.round.upd || ''); if (MEMO_EDIT !== i) render(); toast(v ? '📝 บันทึกหมายเหตุแล้ว' : '🗑 ลบหมายเหตุแล้ว'); }).catch(e => { delete BUSY['m' + i]; toast('⚠️ ' + e.message); });
+}
+function slotHTML(i, j, b) {
+  const k = i + '-' + j, L = ST.round.photos[k] || [], rv = ST.round.review[k], mx = maxOf(b, i), pend = PEND[k] || [];
+  const ims = L.map(p => `<div class="im" onclick="view('${k}','${p.id}')">${TH[p.t || p.id] ? `<img src="${TH[p.t || p.id]}" alt="">` : ''}${GO ? '' : `<span class="by">${esc(p.by)}</span>`}</div>`).join('') + pend.map(u => `<div class="im up"><img src="${u}" alt=""></div>`).join('');
+  const full = L.length + pend.length >= mx;
+  return `<div class="slot ${rv ? (rv.ok ? 'ok' : 'bad') : ''}"><div class="sl-h"><span>${esc(b[4] || (mx > 1 ? 'รูปทั้งหมด' : 'รูป'))}</span><small>${L.length}/${mx}</small></div>
+    ${ims ? `<div class="ph">${ims}</div>` : ''}
+    ${rv && !rv.ok ? `<div class="note">✗ ${esc(rv.note || 'ถ่ายใหม่')} — ${esc(rv.by)}</div>` : ''}
+    ${!full || mx === 1 ? `<div class="add"><button class="cam" onclick="pick('${k}',${mx},1)">📷 ${L.length && mx === 1 ? 'ถ่ายใหม่' : 'ถ่าย'}</button><button onclick="pick('${k}',${mx},0)">🖼️ อัลบั้ม</button></div>` : ''}
+    ${ST.mgr && L.length ? `<div class="rv"><button class="ok ${rv && rv.ok ? 'on' : ''}" onclick="rev('${k}',true)">✓ ผ่าน</button><button class="bad ${rv && !rv.ok ? 'on' : ''}" onclick="rev('${k}',false)">✗ ถ่ายใหม่</button></div>` : ''}</div>`;
+}
+
+// ===== รูปเล็ก =====
+function fetchThumbs() {
+  const need = [];
+  Object.values(ST.round.photos).forEach(L => L.forEach(p => { const id = p.t || p.id; if (!TH[id] && !need.includes(id)) need.push(id); }));
+  if (!need.length) return;
+  const go = () => { const b = need.splice(0, 12); if (!b.length) return render(); run('getImages', b).then(r => { Object.assign(TH, r); render(); go(); }).catch(() => {}); };
+  go();
+}
+
+// ===== ถ่าย / เลือกรูป → ย่อในเครื่อง → อัปโหลด =====
+let PICK = null;
+function pick(k, mx, cam) { PICK = { k, mx }; const f = cam ? $('fCam') : $('fLib'); f.multiple = !cam && mx > 1; f.value = ''; f.click(); }
+['fCam', 'fLib'].forEach(id => $(id).addEventListener('change', e => { const fs = [...e.target.files]; if (PICK && fs.length) upload(PICK.k, PICK.mx, fs); }));
+async function shrink(file, max, q) {
+  let src;
+  try { src = await createImageBitmap(file, { imageOrientation: 'from-image' }); }
+  catch (e) { src = await new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = URL.createObjectURL(file); }); }
+  const W = src.width, H = src.height, s = Math.min(1, max / Math.max(W, H)), w = Math.round(W * s), h = Math.round(H * s);
+  const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(src, 0, 0, w, h);
+  return { url: c.toDataURL('image/jpeg', q), w, h };
+}
+async function upload(k, mx, files) {
+  const L0 = (ST.round.photos[k] || []).length;
+  files = files.slice(0, mx === 1 ? 1 : Math.max(1, mx - L0));
+  for (const f of files) {
+    const pv = URL.createObjectURL(f);
+    (PEND[k] = PEND[k] || []).push(pv); BUSY[k] = 1; render();
+    try {
+      const full = await shrink(f, 1600, .82), th = await shrink(f, 360, .72);
+      const r = await run('addPhoto', k, full.url, th.url, full.w, full.h, mx);
+      const L = r.round.photos[k] || []; const last = L[L.length - 1]; if (last) TH[last.t || last.id] = th.url;
+      ST = r; UPD = String(r.round.upd || ''); vib(12); toast('📸 บันทึกแล้ว');
+    } catch (e) { toast('⚠️ อัปโหลดไม่สำเร็จ: ' + e.message, 4000); }
+    PEND[k] = (PEND[k] || []).filter(u => u !== pv); if (!PEND[k].length) delete PEND[k];
+    delete BUSY[k]; render();
+  }
+}
+function setNone(i, on) { vib(); run('setNone', i, on).then(apply).catch(e => toast('⚠️ ' + e.message)); }
+
+// ===== ดูรูป / ลบ =====
+function view(k, id) {
+  const p = (ST.round.photos[k] || []).find(x => x.id === id); if (!p) return;
+  CUR = { k, id }; $('vImg').src = TH[p.t || p.id] || ''; $('vCap').textContent = `ถ่ายโดย ${p.by} · ${hm(p.at)}`;
+  $('vBtns').innerHTML = `<button onclick="closeView()">ปิด</button><button class="rd" onclick="delCur()">🗑 ลบรูปนี้</button>`;
+  $('viewer').classList.add('on');
+  run('getImages', [p.id]).then(r => { if (CUR && CUR.id === id && r[id]) $('vImg').src = r[id]; }).catch(() => {});
+}
+function closeView() { $('viewer').classList.remove('on'); CUR = null; }
+function delCur() { if (!CUR) return; const { k, id } = CUR; closeView(); run('delPhoto', k, id).then(r => { apply(r); toast('🗑 ลบแล้ว'); }).catch(e => toast('⚠️ ' + e.message)); }
+
+// ===== ผู้จัดการ: ตรวจ / ตั้งค่า / รอบใหม่ =====
+function rev(k, ok) {
+  const cur = ST.round.review[k];
+  if (ok) return run('review', k, cur && cur.ok ? null : true, '').then(apply);
+  sheet(`<h3>✗ ให้ถ่ายใหม่</h3><p>น้องจะเห็นเหตุผลนี้ในช่องรูป</p>
+    <div class="chips" id="rvC">${['รูปไม่ชัด', 'ไม่เห็นป้าย/กราฟิก', 'มุมไม่ครบ', 'สินค้าไม่ครบ/ไม่เป็นระเบียบ', 'ผิดหัวข้อ'].map(t => `<button onclick="document.getElementById('rvN').value='${t}'">${t}</button>`).join('')}</div>
+    <input id="rvN" maxlength="120" placeholder="หรือพิมพ์เอง" value="${cur && !cur.ok ? esc(cur.note) : ''}">
+    <div class="ft">${cur && !cur.ok ? '<button onclick="run(\'review\',\'' + k + '\',null,\'\').then(apply);closeSh()">ยกเลิกสถานะ</button>' : '<button onclick="closeSh()">ยกเลิก</button>'}<button class="rd" onclick="run('review','${k}',false,document.getElementById('rvN').value).then(apply);closeSh()">ส่งกลับให้ถ่ายใหม่</button></div>`);
+}
+function goSetup(first) {
+  sheet(`<h3>${first ? '👋 ตั้งค่าสาขาครั้งแรก' : '⚙️ ตั้งค่าสาขา'}</h3><p>ใส่ครั้งเดียว เครื่องจะจำไว้ แล้วใส่ในหน้าปก (สไลด์แรก) ให้เองทุกครั้ง · รูปเก็บอยู่ในเครื่องนี้เท่านั้น</p>
+    <div style="display:grid;grid-template-columns:110px 1fr;gap:8px"><input id="gId" inputmode="numeric" maxlength="6" placeholder="ID เช่น 1067" value="${esc(ST.cfg.id || '')}"><input id="gNm" maxlength="80" placeholder="ชื่อสาขา เช่น BN SEACON SQUARE" value="${esc(ST.cfg.name || '')}"></div>
+    <p style="margin-top:8px" id="gPv">หน้าปก: <b>ID${esc(ST.cfg.id || '____')}: ${esc(ST.cfg.name || '________')}</b></p>
+    <div class="ft">${first ? '' : '<button onclick="closeSh()">ปิด</button>'}<button class="ok" onclick="goSave()">บันทึก</button></div>
+    ${first ? '' : `<p style="margin-top:16px">🔁 <b>เริ่มรอบใหม่</b> (จันทร์เว้นจันทร์) — ลบรูปรอบนี้ออกจากเครื่อง แล้วเริ่มถ่ายใหม่</p>
+    <div class="ft"><button class="rd" onclick="if(confirm('เริ่มรอบใหม่? รูปรอบนี้ในเครื่องจะถูกลบ (สร้างไฟล์ส่งไปแล้วหรือยัง?)'))run('newRound').then(r=>{closeSh();TH={};apply(r);toast('🔁 เริ่มรอบใหม่แล้ว')})">เริ่มรอบใหม่</button></div>`}`);
+  const pv = () => { const a = $('gId').value.replace(/\D/g, ''), b = $('gNm').value.trim(); $('gPv').innerHTML = `หน้าปก: <b>ID${esc(a || '____')}: ${esc(b || '________')}</b>`; };
+  $('gId').oninput = pv; $('gNm').oninput = pv;
+}
+function goSave() {
+  const id = $('gId').value.replace(/\D/g, ''), nm = $('gNm').value.trim();
+  if (!id || !nm) return toast('ใส่ ID และชื่อสาขาให้ครบ');
+  run('saveCfg', { id, name: nm }).then(() => { closeSh(); load(true); toast('✅ บันทึกแล้ว'); });
+}
+function openSet() {
+  if (GO) return goSetup(false);
+  sheet(`<h3>⚙️ ตั้งค่า Display</h3><p>ข้อความหน้าปก (สไลด์แรก) — ใส่ให้อัตโนมัติทุกครั้งที่สร้างไฟล์</p>
+    <input id="cvIn" maxlength="120" value="${esc(ST.cfg.cover)}">
+    <div class="ft"><button onclick="closeSh()">ปิด</button><button class="ok" onclick="run('saveCfg',{cover:document.getElementById('cvIn').value}).then(()=>{closeSh();load(true);toast('✅ บันทึกแล้ว')})">บันทึก</button></div>
+    <p style="margin-top:16px">🔁 <b>เริ่มรอบใหม่</b> (จันทร์เว้นจันทร์) — ล้างช่องในแอปให้ถ่ายใหม่ รูปรอบเก่ายังเก็บอยู่ใน Google Drive โฟลเดอร์ "Display 1326"</p>
+    <div class="ft"><button class="rd" onclick="if(confirm('เริ่มรอบใหม่? ช่องรูปในแอปจะว่างทั้งหมด'))run('newRound').then(r=>{closeSh();TH={};apply(r);toast('🔁 เริ่มรอบใหม่แล้ว')})">เริ่มรอบใหม่</button></div>
+    <p style="margin-top:16px">🌐 <b>ลิงก์ให้สาขาอื่น</b> — รูปอยู่ในเครื่องสาขานั้น ไม่ผ่านระบบเรา · ส่งแค่สถานะ "สร้างไฟล์แล้ว / ส่งแล้ว"</p>
+    <div class="ft"><button onclick="copyL(goLink())">📋 คัดลอกลิงก์สาขา</button><button class="ok" onclick="trackLink()">📊 ลิงก์ติดตามงาน</button></div>`);
+}
+const goLink = () => new URL('display.html?go=1', location.href).href;
+function copyL(u, msg) { (navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => toast(msg || '📋 คัดลอกลิงก์แล้ว — วางในไลน์ได้เลย')).catch(() => prompt('ก๊อปลิงก์นี้', u)); }
+function trackLink() { run('trackKey').then(k => copyL(new URL('display-track.html?k=' + k, location.href).href, '📋 คัดลอกลิงก์ติดตามแล้ว — ส่งให้เพื่อนที่ตามงาน')).catch(e => toast('⚠️ ' + e.message)); }
+function sheet(h) { $('shBox').innerHTML = h; $('sh').classList.add('on'); }
+function closeSh() { $('sh').classList.remove('on'); }
+
+// ===== ⬇️ สร้าง PowerPoint จากแม่แบบบริษัท (ทำในเครื่อง) =====
+const xmlEsc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+// จัดรูป n รูปให้พอดีกรอบ (ไม่ตัดรูป) → เลือกจำนวนคอลัมน์ที่ทำให้รูปใหญ่สุด
+function layout(box, imgs) {
+  const [X, Y, W, H] = box, pad = 45720, g = 64008, n = imgs.length; let best = null;
+  for (let c = 1; c <= n; c++) {
+    const r = Math.ceil(n / c), cw = (W - 2 * pad - (c - 1) * g) / c, chh = (H - 2 * pad - (r - 1) * g) / r;
+    const areas = imgs.map(p => { const a = (p.w || 4) / (p.h || 3), w = Math.min(cw, chh * a); return w * (w / a); });
+    const sc = Math.min(...areas); if (!best || sc > best.sc) best = { c, r, cw, chh, sc };
+  }
+  return imgs.map((p, i) => {
+    const row = Math.floor(i / best.c), inRow = Math.min(best.c, n - row * best.c), col = i % best.c;
+    const a = (p.w || 4) / (p.h || 3), w = Math.min(best.cw, best.chh * a), h = w / a;
+    const rowW = inRow * best.cw + (inRow - 1) * g, x0 = X + (W - rowW) / 2, gridH = best.r * best.chh + (best.r - 1) * g, y0 = Y + (H - gridH) / 2;
+    return { x: Math.round(x0 + col * (best.cw + g) + (best.cw - w) / 2), y: Math.round(y0 + row * (best.chh + g) + (best.chh - h) / 2), w: Math.round(w), h: Math.round(h) };
+  });
+}
+function prog(t, p) { sheet(`<h3>⬇️ กำลังสร้างไฟล์</h3><p id="pgT">${t}</p><div class="prog"><i id="pgI" style="width:${p}%"></i></div>`); }
+function progSet(t, p) { const a = $('pgT'), b = $('pgI'); if (a) a.textContent = t; if (b) b.style.width = p + '%'; }
+async function exportPptx() {
+  if (!ST) return; if (typeof JSZip === 'undefined') return toast('⚠️ โหลดตัวสร้างไฟล์ไม่สำเร็จ ลองรีเฟรช');
+  const R = ST.round, all = [];
+  Object.keys(R.photos).forEach(k => { const i = +k.split('-')[0]; if (!R.none[i]) R.photos[k].forEach(p => all.push(p.id)); });
+  prog('โหลดแม่แบบฟอร์มบริษัท…', 3);
+  try {
+    const tpl = await fetch('display-template.pptx?b=' + Date.now()).then(r => { if (!r.ok) throw new Error('ไม่พบไฟล์แม่แบบ display-template.pptx'); return r.arrayBuffer(); });
+    const zip = await JSZip.loadAsync(tpl), IMG = {};
+    for (let i = 0; i < all.length; i += 4) {   // ดึงรูปจริงทีละ 4 รูป
+      progSet(`ดึงรูป ${Math.min(all.length, i + 4)}/${all.length}…`, 5 + 80 * (i / Math.max(1, all.length)));
+      Object.assign(IMG, await run('getImages', all.slice(i, i + 4)));
+    }
+    progSet('วางรูปลงสไลด์…', 88);
+    let ct = await zip.file('[Content_Types].xml').async('string');
+    if (!/Extension="jpg"/i.test(ct)) { ct = ct.replace('<Default Extension="png"', '<Default Extension="jpg" ContentType="image/jpeg"/><Default Extension="png"'); zip.file('[Content_Types].xml', ct); }
+    let pid = 9000, rn = 0;
+    for (let i = 0; i < SL.length; i++) {
+      const [part, , boxes] = SL[i]; let xml = await zip.file(part).async('string');
+      const relP = part.replace('slides/', 'slides/_rels/') + '.rels'; let rel = await zip.file(relP).async('string');
+      let add = '';
+      if (i === 0) {   // หน้าปก: ID / ชื่อสาขา
+        const cv = xmlEsc(ST.cfg.cover);
+        xml = /<a:t>ID_{2,}[^<]*<\/a:t>/.test(xml) ? xml.replace(/<a:t>ID_{2,}[^<]*<\/a:t>/, `<a:t>${cv}</a:t>`) : xml.replace(/(<p:cNvPr id="57"[\s\S]*?<a:t>)[^<]*(<\/a:t>)/, `$1${cv}$2`);
+      }
+      const white = b => `<p:sp><p:nvSpPr><p:cNvPr id="${++pid}" name="พื้นรูป"/><p:cNvSpPr/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="${b[0] + 12700}" y="${b[1] + 12700}"/><a:ext cx="${b[2] - 25400}" cy="${b[3] - 25400}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill><a:ln><a:noFill/></a:ln></p:spPr></p:sp>`;   // ปิดข้อความคำแนะนำในกรอบ
+      if (R.none[i]) {
+        const x0 = Math.min(...boxes.map(b => b[0])), x1 = Math.max(...boxes.map(b => b[0] + b[2])), b = boxes.length ? [x0, boxes[0][1], x1 - x0, boxes[0][3]] : [457200, 1600000, 11000000, 4600000];
+        boxes.forEach(bx => add += white(bx));
+        add += `<p:sp><p:nvSpPr><p:cNvPr id="${++pid}" name="ไม่มีในสาขา"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="${b[0]}" y="${Math.round(b[1] + b[3] / 2 - 400000)}"/><a:ext cx="${b[2]}" cy="800000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></p:spPr><p:txBody><a:bodyPr anchor="ctr"/><a:lstStyle/><a:p><a:pPr algn="ctr"/><a:r><a:rPr lang="th-TH" sz="3200" b="1"><a:solidFill><a:srgbClr val="C00000"/></a:solidFill></a:rPr><a:t>ไม่มีในสาขา</a:t></a:r></a:p></p:txBody></p:sp>`;
+      } else {
+        boxes.forEach((b, j) => {
+          const L = (R.photos[i + '-' + j] || []).filter(p => IMG[p.id]); if (!L.length) return;
+          add += white(b);
+          layout(b, L).forEach((pos, n) => {
+            const p = L[n], m = IMG[p.id].match(/^data:image\/(\w+);base64,(.+)$/); if (!m) return;
+            const ext = m[1] === 'png' ? 'png' : 'jpg', name = `disp_${i + 1}_${j + 1}_${n + 1}.${ext}`, rid = 'rIdDsp' + (++rn);
+            zip.file('ppt/media/' + name, m[2], { base64: true });
+            rel = rel.replace('</Relationships>', `<Relationship Id="${rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/${name}"/></Relationships>`);
+            add += `<p:pic><p:nvPicPr><p:cNvPr id="${++pid}" name="รูป ${i + 1}-${j + 1}-${n + 1}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr><a:xfrm><a:off x="${pos.x}" y="${pos.y}"/><a:ext cx="${pos.w}" cy="${pos.h}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>`;
+          });
+        });
+      }
+      const note = (R.notes || {})[i];
+      if (note && note.t && i > 0) {   // 📝 หมายเหตุ = กล่องข้อความช่องว่างด้านล่างสไลด์
+        const bot = Math.max(...boxes.map(b => b[1] + b[3] + (b[4] ? 470000 : 0)), 6100000) + 40000, top = Math.min(bot, 6858000 - 420000);
+        add += `<p:sp><p:nvSpPr><p:cNvPr id="${++pid}" name="หมายเหตุ"/><p:cNvSpPr txBox="1"/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="${Math.min(...boxes.map(b => b[0]))}" y="${top}"/><a:ext cx="${Math.max(...boxes.map(b => b[0] + b[2])) - Math.min(...boxes.map(b => b[0]))}" cy="${6858000 - top - 30000}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/></p:spPr><p:txBody><a:bodyPr wrap="square" lIns="0" tIns="0" rIns="0" bIns="0" anchor="t"><a:normAutofit/></a:bodyPr><a:lstStyle/><a:p><a:r><a:rPr lang="th-TH" sz="1400" b="1"><a:solidFill><a:srgbClr val="C00000"/></a:solidFill></a:rPr><a:t>หมายเหตุ: ${xmlEsc(note.t)}</a:t></a:r></a:p></p:txBody></p:sp>`;
+      }
+      if (add) { xml = xml.replace('</p:spTree>', add + '</p:spTree>'); zip.file(part, xml); zip.file(relP, rel); }
+      else if (i === 0) zip.file(part, xml);
+    }
+    progSet('บีบไฟล์…', 94);
+    const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', compression: 'DEFLATE', compressionOptions: { level: 3 } });
+    const fname = `รูปถ่าย Display ${ST.cfg.cover.split(':')[0] || 'ID1326'} ${dmy(R.start).replace(/\//g, '-')}.pptx`;
+    run('markExport').then(r => { ST = r; UPD = String(r.round.upd || ''); render(); ping(false); }).catch(() => {});
+    const file = new File([blob], fname, { type: blob.type }), mb = (blob.size / 1048576).toFixed(1);
+    sheet(`<h3>✅ สร้างไฟล์เสร็จแล้ว</h3><p>${esc(fname)} · ${mb} MB · ${all.length} รูป</p>
+      <div class="ft"><button onclick="dl()">⬇️ บันทึกไฟล์</button>${navigator.canShare && navigator.canShare({ files: [file] }) ? '<button class="ok" onclick="shareF()">📤 แชร์ / ส่งไลน์</button>' : ''}</div>
+      ${GO ? '<div class="ft"><button class="ok" style="background:#16A34A;color:#fff" onclick="sentDone()">✅ ส่งบริษัทแล้ว (แจ้งคนตามงาน)</button></div>' : ''}
+      <div class="ft"><button onclick="closeSh()">ปิด</button></div>`);
+    window.sentDone = () => run('markSent').then(r => { ST = r; render(); ping(true); closeSh(); toast('✅ แจ้งว่าส่งแล้ว ขอบคุณครับ'); });
+    window.dl = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click(); a.remove(); };
+    window.shareF = () => navigator.share({ files: [file], title: fname }).catch(() => {});
+  } catch (e) { sheet(`<h3>⚠️ สร้างไฟล์ไม่สำเร็จ</h3><p>${esc(e.message)}</p><div class="ft"><button onclick="closeSh()">ปิด</button></div>`); }
+}
+
+if (GO) { document.querySelectorAll('.bar .g').forEach(b => b.style.display = 'none'); }
+load(true);
+if (GO) setTimeout(() => { if (ST && !ST.cfg.id) goSetup(true); }, 300);
+</script>
+</body>
+</html>

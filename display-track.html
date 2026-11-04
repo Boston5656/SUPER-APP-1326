@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ติดตามรูป Display</title>
+<meta name="theme-color" content="#FFD600">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* 📊 ติดตามรูป Display — ใครส่ง / ยังไม่ส่ง รายรอบ (จันทร์เว้นจันทร์) · เห็นแค่สถานะ ไม่มีรูป */
+:root{ --y:#FFD600; --d:#1C1C1E; --ok:#16A34A; --or:#F59E0B; --no:#E5484D; --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); }
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;overflow-x:hidden}
+body{min-height:100vh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),var(--y);background-attachment:fixed;padding:calc(10px + env(safe-area-inset-top)) 12px 30px}
+button{font-family:inherit;cursor:pointer;color:inherit;border:0;background:none;padding:0}
+.num{font-family:'Space Grotesk','IBM Plex Sans Thai',sans-serif;font-variant-numeric:tabular-nums}
+.wrap{max-width:980px;margin:0 auto}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.top h1{flex:1;margin:0;font-size:20px;line-height:1.2}.top h1 small{display:block;font-size:12px;color:rgba(28,28,30,.6);font-weight:600}
+.tb{border-radius:14px;padding:10px 12px;font-weight:700;font-size:13px;background:var(--d);color:var(--y);transition:transform .3s var(--spring)}
+.tb:active{transform:scale(.92)} .tb.w{background:#fff;color:var(--d)}
+.rnd{display:flex;align-items:center;gap:8px;background:var(--d);color:#fff;border-radius:20px;padding:8px;margin-bottom:10px}
+.rnd button{width:40px;height:40px;border-radius:13px;background:rgba(255,255,255,.1);font-size:20px}
+.rnd button:disabled{opacity:.25}
+.rnd b{flex:1;text-align:center;font-size:15px}.rnd b small{display:block;font-size:11px;color:#AEAEB2;font-weight:600}
+.sum{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.sum > div{background:#FFFDF5;border-radius:18px;padding:10px 12px}
+.sum small{display:block;font-size:11px;color:#8E8E93;font-weight:700}.sum b{font:700 24px 'Space Grotesk',sans-serif}
+.ring{display:grid;place-items:center;position:relative;width:74px;padding:6px!important}
+.ring svg{width:62px;height:62px;transform:rotate(-90deg)}.ring span{position:absolute;font:700 15px 'Space Grotesk',sans-serif}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:10px}.chips::-webkit-scrollbar{display:none}
+.chips button{flex-shrink:0;border-radius:100px;padding:8px 13px;background:rgba(255,255,255,.75);font-weight:700;font-size:13px}
+.chips button.on{background:var(--d);color:var(--y)} .chips i{font-style:normal;opacity:.6;margin-left:4px}
+.list{display:grid;grid-template-columns:1fr;gap:8px}
+@media (min-width:760px){.list{grid-template-columns:1fr 1fr}}
+.row{background:#FFFDF5;border-radius:18px;padding:11px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 10px;align-items:center;animation:rise .4s var(--ios-ease) both;box-shadow:0 4px 14px -10px rgba(60,48,0,.5)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.row .id{font:700 12px 'Space Grotesk',sans-serif;background:var(--d);color:var(--y);border-radius:9px;padding:4px 8px;grid-row:1/3}
+.row .nm{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .st{font-size:11.5px;font-weight:800;border-radius:100px;padding:4px 10px;white-space:nowrap;justify-self:end}
+.st.sent{background:#DCFCE7;color:#15803D}.st.ready{background:#FEF3C7;color:#B45309}.st.wip{background:#E0F2FE;color:#0369A1}.st.none{background:#FFE4E6;color:#BE123C}
+.row .meta{grid-column:2/4;display:flex;align-items:center;gap:8px;font-size:11.5px;color:#6E6E73;font-weight:600}
+.bar{flex:1;height:7px;border-radius:100px;background:#EEE;overflow:hidden;min-width:60px}.bar i{display:block;height:100%;border-radius:100px;background:var(--d)}
+.empty,.load{text-align:center;padding:36px 10px;font-weight:700;color:rgba(28,28,30,.55)}
+.sheet{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:10px}
+.sheet.on{display:flex}
+.sheet .box{width:100%;max-width:560px;max-height:90vh;overflow:auto;background:#F2F2F7;border-radius:26px;padding:16px;animation:rise .35s var(--ios-ease) both}
+.sheet h3{margin:0 0 4px;font-size:17px}.sheet p{margin:0 0 10px;font-size:12.5px;color:#6E6E73;font-weight:600;line-height:1.5}
+.sheet input,.sheet textarea{width:100%;border:0;border-radius:12px;background:#fff;padding:11px;font:600 14px 'IBM Plex Sans Thai',sans-serif}
+.br{display:grid;grid-template-columns:90px 1fr 40px;gap:6px;margin-bottom:6px}
+.br button{border-radius:12px;background:#fff;font-size:16px}
+.ft{display:flex;gap:8px;margin-top:12px}.ft button{flex:1;height:48px;border-radius:15px;font-weight:700;background:#fff}.ft .ok{background:var(--d);color:var(--y)}
+#toast{pointer-events:none;position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,200%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);max-width:90vw;text-align:center}
+#toast{opacity:0;transition:transform .45s var(--spring),opacity .25s}#toast.on{transform:translate(-50%,0);opacity:1}
+@media (max-width:520px){.sum{grid-template-columns:auto 1fr 1fr 1fr;gap:6px}.sum > div:not(.ring){padding:9px 9px}.sum b{font-size:21px}.sum small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ring{width:64px}.ring svg{width:54px;height:54px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><h1>📊 ติดตามรูป Display<small id="upd">กำลังโหลด…</small></h1>
+    <button class="tb w" onclick="copySum()">📋 สรุปส่งไลน์</button><button class="tb" onclick="openBr()">⚙️</button></div>
+  <div class="rnd"><button id="pv" onclick="step(-1)">‹</button><b id="rLab">–</b><button id="nx" onclick="step(1)">›</button></div>
+  <div class="sum" id="sum"></div>
+  <div class="chips" id="flt"></div>
+  <div class="list" id="list"><div class="load">กำลังโหลด…</div></div>
+</div>
+<div class="sheet" id="sh" onclick="if(event.target===this)closeSh()"><div class="box" id="shBox"></div></div>
+<div id="toast"></div>
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbwmALqdO95c1UTHKNGhNIAvyDSercHbETyzd3aCivS_nmxgd6pZ5-iB50F0oHAlUwoyOg/exec';
+const K = new URLSearchParams(location.search).get('k') || '';
+let D = null, R = '', FLT = 'all';
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const TH = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'], DW = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
+const dLab = iso => { const [y, m, d] = iso.split('-').map(Number); return `${d} ${TH[m - 1]} ${(y + 543) % 100}`; };
+const tLab = t => { const d = new Date(t); return `${DW[d.getDay()]} ${d.getDate()} ${TH[d.getMonth()]} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; };
+const addDays = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 2200); }
+function api(fn, ...args) {
+  return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow', body: JSON.stringify({ fn, args }) })
+    .then(r => r.json()).then(r => { if (!r.ok) throw new Error(r.error || 'ผิดพลาด'); if (r.data && r.data.error) throw new Error(r.data.error); return r.data; });
+}
+function load() {
+  if (!K) { $('list').innerHTML = '<div class="empty">ลิงก์ไม่ครบ — ขอลิงก์ติดตามจากผู้จัดการ 1326 ใหม่</div>'; return; }
+  api('dispTrack', K).then(d => { D = d; if (!R) R = d.current; render(); }).catch(e => { $('upd').textContent = '⚠️ ' + e.message; $('list').innerHTML = `<div class="empty">${esc(e.message)}</div>`; });
+}
+function step(n) { R = addDays(R, n * 14); render(); }
+function rows() {
+  const RD = (D.rounds || {})[R] || {}, ids = new Set(D.branches.map(b => b.id).concat(Object.keys(RD)));
+  return [...ids].map(id => {
+    const b = D.branches.find(x => x.id === id) || {}, o = RD[id];
+    const st = !o ? 'none' : o.sent ? 'sent' : o.filled >= o.total && o.total ? 'ready' : 'wip';
+    return { id, name: (o && o.name) || b.name || '', o, st };
+  }).sort((a, b) => ({ none: 0, wip: 1, ready: 2, sent: 3 }[a.st] - { none: 0, wip: 1, ready: 2, sent: 3 }[b.st]) || a.id.localeCompare(b.id));
+}
+const ST_T = { sent: '✅ ส่งแล้ว', ready: '📄 ไฟล์พร้อม · ยังไม่กดส่ง', wip: '📸 สร้างไฟล์แล้ว · ยังไม่ครบ', none: '⏳ ยังไม่ทำ' };
+function render() {
+  const L = rows(), n = L.length, c = { sent: 0, ready: 0, wip: 0, none: 0 }; L.forEach(x => c[x.st]++);
+  const pct = n ? Math.round(c.sent / n * 100) : 0, isCur = R === D.current;
+  $('rLab').innerHTML = `รอบ ${dLab(R)} – ${dLab(addDays(R, 13))}<small>${isCur ? 'รอบปัจจุบัน · จันทร์เว้นจันทร์' : 'รอบก่อนหน้า'}</small>`;
+  $('nx').disabled = R >= D.current;
+  $('upd').textContent = `อัปเดต ${tLab(D.now)} · ${n} สาขา`;
+  $('sum').innerHTML = `<div class="ring"><svg viewBox="0 0 62 62"><circle cx="31" cy="31" r="26" fill="none" stroke="#EEE" stroke-width="7"/><circle cx="31" cy="31" r="26" fill="none" stroke="#16A34A" stroke-width="7" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="${163.4 - 163.4 * pct / 100}"/></svg><span>${pct}%</span></div>
+    <div><small>✅ ส่งแล้ว</small><b style="color:#15803D">${c.sent}<span style="font-size:13px;color:#8E8E93">/${n}</span></b></div>
+    <div><small>📄 ยังไม่กดส่ง</small><b style="color:#B45309">${c.ready + c.wip}</b></div>
+    <div class="hide-m"><small>⏳ ยังไม่ทำ</small><b style="color:#BE123C">${c.none}</b></div>`;
+  $('flt').innerHTML = [['all', 'ทั้งหมด', n], ['none', 'ยังไม่ทำ', c.none], ['wip', 'ทำแล้ว ยังไม่ส่ง', c.ready + c.wip], ['sent', 'ส่งแล้ว', c.sent]].map(([k, t, v]) => `<button class="${FLT === k ? 'on' : ''}" onclick="FLT='${k}';render()">${t}<i>${v}</i></button>`).join('');
+  const show = L.filter(x => FLT === 'all' || x.st === FLT || (FLT === 'wip' && x.st === 'ready'));
+  $('list').innerHTML = show.length ? show.map((x, i) => `<div class="row" style="animation-delay:${i * .025}s"><span class="id">ID${esc(x.id)}</span><span class="nm">${esc(x.name || '—')}</span><span class="st ${x.st}">${ST_T[x.st]}</span>
+    <div class="meta">${x.o ? `<span>${tLab(x.o.sent || x.o.at)}</span><div class="bar"><i style="width:${x.o.total ? Math.round(x.o.filled / x.o.total * 100) : 0}%"></i></div><span class="num">${x.o.filled}/${x.o.total} ช่อง</span>${x.o.notes ? `<span>📝 ${x.o.notes}</span>` : ''}` : '<span>ยังไม่มีการสร้างไฟล์ในรอบนี้</span>'}</div></div>`).join('')
+    : `<div class="empty">${D.branches.length ? 'ไม่มีสาขาในกลุ่มนี้ ✨' : 'ยังไม่มีรายชื่อสาขา — กด ⚙️ เพิ่มสาขาที่ต้องส่ง หรือรอสาขาสร้างไฟล์ ระบบจะเพิ่มให้เอง'}</div>`;
+}
+function copySum() {
+  if (!D) return;
+  const L = rows(), sent = L.filter(x => x.st === 'sent'), not = L.filter(x => x.st !== 'sent');
+  const t = [`📸 รูป Display รอบ ${dLab(R)} — ส่งแล้ว ${sent.length}/${L.length} สาขา`, '']
+    .concat(not.length ? ['⏳ ยังไม่ส่ง:'].concat(not.map(x => `• ID${x.id} ${x.name}${x.st === 'none' ? '' : ' (ทำแล้ว ยังไม่กดส่ง)'}`)) : ['ครบทุกสาขาแล้ว 🎉']).join('\n');
+  (navigator.clipboard && window.isSecureContext ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast('📋 คัดลอกแล้ว — วางในไลน์ได้เลย')).catch(() => prompt('ก๊อปข้อความนี้', t));
+}
+const rowH = b => `<div class="br"><input inputmode="numeric" maxlength="6" placeholder="ID" value="${esc(b.id)}"><input maxlength="80" placeholder="ชื่อสาขา" value="${esc(b.name)}"><button onclick="this.parentNode.remove()">✕</button></div>`;
+function addBr() { $('brL').insertAdjacentHTML('beforeend', rowH({ id: '', name: '' })); const L = $('brL').querySelectorAll('input'); L[L.length - 2].focus(); }
+function openBr() {
+  if (!D) return;
+  $('shBox').innerHTML = `<h3>⚙️ สาขาที่ต้องส่ง</h3><p>สาขาที่ไม่อยู่ในรายชื่อแต่สร้างไฟล์ ระบบจะเพิ่มให้เอง</p><div id="brL">${D.branches.map(rowH).join('')}</div>
+    <div class="ft" style="margin-top:4px"><button onclick="addBr()">＋ เพิ่มสาขา</button></div>
+    <p style="margin-top:14px">วันจันทร์ที่เริ่มนับรอบ (จันทร์เว้นจันทร์)</p><input type="date" id="anc" value="${esc(D.anchor)}">
+    <div class="ft"><button onclick="closeSh()">ยกเลิก</button><button class="ok" onclick="saveBr()">บันทึก</button></div>`;
+  $('sh').classList.add('on');
+}
+function saveBr() {
+  const br = [...document.querySelectorAll('#brL .br')].map(r => { const i = r.querySelectorAll('input'); return { id: i[0].value.replace(/\D/g, ''), name: i[1].value.trim() }; }).filter(b => b.id);
+  api('dispTrackSave', K, { branches: br, anchor: $('anc').value }).then(d => { D = d; R = d.current; closeSh(); render(); toast('✅ บันทึกแล้ว'); }).catch(e => toast('⚠️ ' + e.message));
+}
+function closeSh() { $('sh').classList.remove('on'); }
+load(); setInterval(() => { if (!document.hidden) load(); }, 60000);
+</script>
+</body>
+</html>
