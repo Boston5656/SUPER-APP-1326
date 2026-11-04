@@ -252,14 +252,14 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
     const de = document.documentElement; de.style.zoom = ''; document.body.style.height = '';
     const touch = (navigator.maxTouchPoints || 0) > 0 || 'ontouchstart' in window;
     const sw = Math.min(screen.width || 0, screen.height || 0) > 0 ? (innerWidth > innerHeight ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height)) : 0;
-    const iw = de.clientWidth || innerWidth;
+    const iw = Math.max(de.clientWidth || 0, innerWidth || 0);
     if (touch && sw > 0 && sw < 900 && iw > sw * 1.15) {
       const k = iw / sw;
       de.style.zoom = k;
       document.body.style.height = (innerHeight / k) + 'px';
     }
   }
-  fitPhone();
+  fitPhone(); window.addEventListener('load', fitPhone); setTimeout(fitPhone, 400);
   window.addEventListener('resize', () => { clearTimeout(window._fp); window._fp = setTimeout(fitPhone, 120); });
   const ALL_MO = [4, 6, 8, 10, 12, 15, 18, 20, 24, 36, 48];
   const DEF = { rates: [0, 0.69, 0.79, 0.99], mos: [6, 10, 12, 24] };
