@@ -1006,6 +1006,38 @@
     .rk-fbars small { font-size: 9px; color: #8E8E93; font-weight: 700; }
     .rk-fbars.month b { font-size: 8.5px; } .rk-fbars.month small { font-size: 8px; }
     .rk-ft th.it { max-width: 74px; overflow: hidden; text-overflow: ellipsis; }
+    /* 📦 เครื่องเปล่า · 🏅 แชมป์รายงาน · 📈 พัฒนาขึ้น · 📆 วันในสัปดาห์ */
+    .rk-fx3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 0 16px; }
+    .rk-bare-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .rk-bare-top b { font-family: var(--f-num); font-size: 30px; line-height: 1; }
+    .rk-bare-top b small { font-size: 13px; color: #8E8E93; margin-left: 3px; }
+    .rk-bare-top i { font-style: normal; font-size: 11.5px; color: #AEAEB2; font-weight: 600; }
+    .rk-bl > div { display: grid; grid-template-columns: 78px 1fr 64px; align-items: center; gap: 8px; padding: 4px 0; font-size: 11.5px; }
+    .rk-bl span { font-family: var(--f-num); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-bl em { height: 8px; border-radius: 100px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .rk-bl em s { display: block; height: 100%; width: 0; border-radius: 100px; background: #FF9F0A; transition: width 1s var(--ios-ease); }
+    .rk-bl b { text-align: right; font-family: var(--f-num); font-size: 12px; }
+    .rk-bl b small { color: #8E8E93; font-size: 10px; margin-left: 2px; }
+    .rk-ch > div, .rk-im > div { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-top: 1px solid rgba(255,255,255,.06); }
+    .rk-ch > div:first-child, .rk-im > div:first-child { border-top: 0; }
+    .rk-ch .it { flex: 0 0 38%; font-family: var(--f-num); font-size: 11.5px; font-weight: 700; color: #AEAEB2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-ch .nm, .rk-im .nm { flex: 1; min-width: 0; font-weight: 700; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rk-ch .nm i { font-style: normal; margin-right: 4px; }
+    .rk-ch b, .rk-im b { font-family: var(--f-num); font-size: 13px; white-space: nowrap; }
+    .rk-im .md { width: 26px; height: 26px; border-radius: 9px; display: grid; place-items: center; font: 800 12px var(--f-num); background: rgba(52,199,89,.16); color: #34C759; flex-shrink: 0; }
+    .rk-im b { color: #34C759; } .rk-im small { display: block; font-size: 10px; color: #8E8E93; font-weight: 600; text-align: right; }
+    .rk-dow { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; align-items: end; }
+    .rk-dow > div { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+    .rk-dow .bar { width: 100%; max-width: 40px; height: 90px; display: flex; align-items: flex-end; }
+    .rk-dow .bar i { width: 100%; border-radius: 8px 8px 3px 3px; background: rgba(255,255,255,.2); height: 0; transition: height 1s var(--ios-ease); }
+    .rk-dow .best .bar i { background: var(--yellow); } .rk-dow .low .bar i { background: rgba(255,159,10,.55); }
+    .rk-dow b { font-family: var(--f-num); font-size: 12px; } .rk-dow small { font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .rk-dow em { font-style: normal; font-size: 9.5px; color: #AEAEB2; font-weight: 600; white-space: nowrap; min-height: 13px; }
+    .rk-dow b { min-height: 16px; }
+    .rk-bare-top .dl { font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 100px; }
+    .fp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .fp-chips span { font: 700 12px/1.3 'IBM Plex Sans Thai', sans-serif; padding: 6px 10px; border-radius: 12px; }
+    .fp-chips.ok span { background: #E8F7EC; color: #1E7A36; } .fp-chips.op span { background: #FFF4E5; color: #A35200; }
     @media (max-width: 640px) { .rk-fbars.month b { display: none; } .rk-fbars.month > div:nth-child(even) small { visibility: hidden; } }
 
     /* 🎯 งานโฟกัส: % ต่อเครื่อง / รายคน */
@@ -1505,7 +1537,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.04-01';
+    const APP_VER = '2026.11.04-02';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;
@@ -3479,7 +3511,49 @@
         if (!pctMode) return `<td>${fmtUnit(agg.items[n] || 0)}</td>`;
         const p = rkFPct(d, agg, n); return `<td>${p == null ? '–' : p.toFixed(0) + '%'}</td>`; }).join('')}<td class="hide-m"></td></tr>`;
       t += `</tbody></table></div><div class="rk-legend"><span>% ต่อเครื่อง = เครื่องที่ติดงานนั้น ÷ เครื่องที่งานนั้นเป็นเป้า (เช่น 7CARE+ นับเฉพาะ Apple · ULTRA CARE+ นับเฉพาะเครื่องที่ไม่ใช่ Apple) · เขียว = ถึงเป้า Dashboard · แดง = ยังไม่ถึง</span><span>วันทำงาน = วันที่มีกะในตารางกะ − วันที่แจ้งลา/หยุด (นับถึงวันนี้)</span>${d.prevPartial ? '<span>* ช่วงนี้ยังไม่จบ เทียบกับจำนวนวันเท่ากันของช่วงก่อน</span>' : ''}<span>อัปเดต ${e(d.updated || '')}</span></div></div>`;
-      return sum + `<div class="rk-qgrid"><div>${pod}${itemsH}</div><div>${t}${seriesH}</div></div>`;
+      const X = rkFExtra(d, list, cols);
+      return sum + `<div class="rk-fx3">${X.bare}${X.champ}${X.imp}</div><div class="rk-qgrid"><div>${pod}${itemsH}</div><div>${t}${seriesH}${X.dow}</div></div>`;
+    }
+    // ---------- 📦 เครื่องเปล่า · 🏅 แชมป์รายงาน · 📈 พัฒนาขึ้นมากสุด · 📆 วันในสัปดาห์ ----------
+    function rkFChamps(list, cols) {   // { งาน: { v, names[] } } คนที่ทำได้มากสุดในแต่ละงาน
+      const out = {};
+      cols.forEach(n => { let v = 0, names = []; list.forEach(x => { const q = x.items[n] || 0; if (q > v) { v = q; names = [x.name]; } else if (q && q === v) names.push(x.name); }); if (v) out[n] = { v, names }; });
+      return out;
+    }
+    function rkFExtra(d, list, cols) {
+      const e = v => acEsc(v), T = d.total, G = rk.fGroup, out = {};
+      // 📦 เครื่องเปล่า (ทั้งร้าน)
+      if (T.bare != null) {
+        const bp = T.units ? T.bare / T.units * 100 : 0, pp = T.prevUnits ? T.prevBare / T.prevUnits * 100 : null;
+        const dlt = pp == null ? '' : (() => { const x = bp - pp, c = x < -0.5 ? 'up' : (x > 0.5 ? 'dn' : 'fl'); return `<span class="dl ${c}">${x > 0 ? '▲' : (x < 0 ? '▼' : '•')} ${Math.abs(x).toFixed(0)} จุด vs ${RK_PREV_LBL[d.range]}${d.prevPartial ? '*' : ''} (${pp.toFixed(0)}%)</span>`; })();
+        const by = Object.keys(T.bareBy || {}).map(k => Object.assign({ k }, T.bareBy[k])).filter(x => x.u >= 2).sort((a, b) => b.b - a.b || b.u - a.u).slice(0, 6);
+        const mx = Math.max(1, ...by.map(x => x.b));
+        out.bare = `<div class="rk-panel"><div class="rk-ph"><b>📦 เครื่องเปล่า</b><span>ขายแล้วยังไม่ได้ติดงานเลย · ทั้งร้าน</span></div>
+          <div class="rk-bare-top"><b style="color:${bp <= 20 ? '#34C759' : bp <= 40 ? '#FF9F0A' : '#FF6961'}">${fmtUnit(T.bare)}<small>/ ${fmtUnit(T.units)} เครื่อง</small></b><i>${bp.toFixed(0)}% ของเครื่องที่ขาย</i>${dlt}</div>
+          <div class="rk-bl">${by.length ? by.map(x => `<div><span>${e(x.k)}</span><em><s data-w="${(x.b / mx * 100).toFixed(0)}"></s></em><b>${x.b}<small>/${x.u} · ${(x.b / x.u * 100).toFixed(0)}%</small></b></div>`).join('') : '<p class="rk-legend">ติดงานครบทุกเครื่อง 🎉</p>'}</div>
+          <div class="rk-legend"><span>แยกตามแบรนด์เครื่อง · = โอกาสที่ยังเปิดอยู่ ไม่ใช่ความผิดใคร</span></div></div>`;
+      } else out.bare = '';
+      // 🏅 แชมป์รายงาน
+      const C = rkFChamps(list, cols), ck = cols.filter(n => C[n]);
+      out.champ = `<div class="rk-panel"><div class="rk-ph"><b>🏅 แชมป์รายงาน</b><span>ทำได้มากสุดในแต่ละงาน (ชิ้น)</span></div><div class="rk-ch">${ck.length ? ck.map(n =>
+        `<div><span class="it">${e(n)}</span><span class="nm"><i>🏅</i>${C[n].names.slice(0, 2).map(e).join(', ')}${C[n].names.length > 2 ? ' +' + (C[n].names.length - 2) : ''}</span><b>${fmtUnit(C[n].v)}</b></div>`).join('') : '<p class="rk-legend">ยังไม่มีข้อมูลช่วงนี้</p>'}</div></div>`;
+      // 📈 พัฒนาขึ้นมากสุด (เทียบช่วงก่อน · ชิ้น)
+      const imp = list.filter(x => x.prev > 0 && x.focus > x.prev).map(x => Object.assign({ dl: x.focus - x.prev }, x)).sort((a, b) => b.dl - a.dl || b.focus - a.focus).slice(0, 4);
+      const nw = list.filter(x => !(x.prev > 0) && x.focus > 0).length;
+      out.imp = `<div class="rk-panel"><div class="rk-ph"><b>📈 พัฒนาขึ้นมากสุด</b><span>เทียบ${RK_PREV_LBL[d.range]}${d.prevPartial ? ' (จำนวนวันเท่ากัน)' : ''}</span></div><div class="rk-im">${imp.length ? imp.map((x, i) =>
+        `<div><span class="md">${i + 1}</span><span class="nm">${e(x.name)}</span><span><b>+${fmtUnit(x.dl)} ชิ้น</b><small>${fmtUnit(x.prev)} → ${fmtUnit(x.focus)} · +${(x.dl / x.prev * 100).toFixed(0)}%</small></span></div>`).join('')
+        : `<p class="rk-legend">${d.range === 'day' && rk.fKey.day === rkFNow('day') ? 'วันนี้ยังเพิ่งเริ่ม — ลองดูอีกทีช่วงเย็น' : 'ยังไม่มีคนที่ทำได้มากกว่า' + RK_PREV_LBL[d.range]}</p>`}</div>${nw ? `<div class="rk-legend"><span>✨ ${nw} ${G === 'brand' ? 'แบรนด์' : 'คน'}เริ่มมีงานโฟกัสครั้งแรกในช่วงนี้</span></div>` : ''}</div>`;
+      // 📆 วันในสัปดาห์ (รายเดือน / ราย Q · ทั้งร้าน)
+      out.dow = '';
+      if (d.range !== 'day' && T.dow) {
+        const order = [1, 2, 3, 4, 5, 6, 0], v = order.map(i => { const x = T.dow[i]; return { i, x, avg: x.days ? x.f / x.days : 0, per: x.u ? x.f / x.u : 0 }; });
+        const has = v.filter(z => z.x.days), mx = Math.max(0.01, ...v.map(z => z.avg));
+        const best = has.reduce((b, z) => !b || z.avg > b.avg ? z : b, null), low = has.length > 2 ? has.reduce((b, z) => !b || z.avg < b.avg ? z : b, null) : null;
+        out.dow = `<div class="rk-panel"><div class="rk-ph"><b>📆 วันในสัปดาห์</b><span>งานโฟกัสเฉลี่ยต่อวัน · ทั้งร้าน</span></div><div class="rk-dow">${v.map(z =>
+          `<div class="${z === best ? 'best' : z === low ? 'low' : ''}"><b>${z.x.days ? z.avg.toFixed(1) : '–'}</b><div class="bar"><i data-h="${z.x.days ? Math.max(4, z.avg / mx * 100).toFixed(0) : 0}"></i></div><small>${RK_DOW[z.i]}</small><em>${z.x.days ? z.per.toFixed(2) + '/เครื่อง' : ''}</em></div>`).join('')}</div>
+          <div class="rk-legend">${best ? `<span>ดีสุด: วัน${RK_DOW[best.i]} (${best.avg.toFixed(1)} ชิ้น/วัน)</span>` : ''}${low && low !== best ? `<span>เบาสุด: วัน${RK_DOW[low.i]} — ลองวางคนถนัดงานโฟกัสไว้วันนี้</span>` : ''}<span>ตัวเลขล่าง = งานต่อเครื่องของวันนั้น</span></div></div>`;
+      }
+      return out;
     }
 
     // ---------- 👤 รายคน: เทียบทีม / เป้า + ขายแล้วไม่ได้ติดอะไร ----------
@@ -3513,14 +3587,26 @@
       h += `<div class="fp-sec"><b>🔎 ขายเครื่องแล้ว แต่ยังไม่ได้ติด</b>${miss.length ? miss.slice(0, 6).map(r =>
         `<div class="fp-miss"><span>ไม่มี <b>${e(r.n)}</b></span><em>${r.miss} จาก ${r.b} เครื่อง</em></div>`).join('') : '<div class="fp-miss"><span>ติดงานเป้าครบทุกเครื่อง 🎉</span></div>'}</div>`;
       const cmp = rows.filter(r => r.p != null && r.tp != null && r.b >= 3).map(r => Object.assign({ diff: r.p - r.tp }, r)).sort((a, b) => b.diff - a.diff);
-      const good = cmp.filter(r => r.diff > 0).slice(0, 2), weak = cmp.filter(r => r.diff < 0).slice(-2).reverse();
-      if (good.length || weak.length) h += `<div class="fp-sec"><b>💬 คุยกับน้อง</b>
-        ${good.map(r => `<div class="fp-tip ok">👍 ${e(r.n)} ทำได้ ${r.p.toFixed(0)}% สูงกว่าทีม (${r.tp.toFixed(0)}%) +${r.diff.toFixed(0)} จุด</div>`).join('')}
-        ${weak.map(r => `<div class="fp-tip bad">💪 ${e(r.n)} ${r.p.toFixed(0)}% ต่ำกว่าทีม (${r.tp.toFixed(0)}%) ${r.diff.toFixed(0)} จุด — ขาดอีก ${Math.max(1, Math.ceil(r.tp / 100 * r.b - r.got))} เครื่องถึงจะเท่าทีม</div>`).join('')}</div>`;
+      const good = cmp.filter(r => r.diff > 0).slice(0, 3), weak = cmp.filter(r => r.diff < 0).slice(-2).reverse();
+      const C = rkFChamps(list, d.items), champ = Object.keys(C).filter(n => C[n].names.indexOf(x.name) !== -1);
+      const dl = x.prev > 0 ? x.focus - x.prev : null;
+      const bp = x.units && x.bare != null ? x.bare / x.units * 100 : null, tb = agg.units ? list.reduce((a, y) => a + (y.bare || 0), 0) / agg.units * 100 : null;
+      const okC = champ.sort((a, b) => C[b].v - C[a].v).slice(0, 3).map(n => `🏅 แชมป์ ${e(n)} (${C[n].v} ชิ้น)`)
+        .concat(good.filter(r => champ.indexOf(r.n) === -1).map(r => `👍 ${e(r.n)} ${r.p.toFixed(0)}% · ทีม ${r.tp.toFixed(0)}%`))
+        .concat(dl > 0 ? [`📈 มากกว่า${RK_PREV_LBL[d.range]} +${dl} ชิ้น`] : [])
+        .concat(bp != null && tb != null && bp < tb - 0.5 ? [`📦 เครื่องเปล่าน้อยกว่าทีม (${bp.toFixed(0)}% · ทีม ${tb.toFixed(0)}%)`] : []);
+      const opC = weak.map(r => `🌱 ${e(r.n)} ${r.p.toFixed(0)}% · อีก ${Math.max(1, Math.ceil(r.tp / 100 * r.b - r.got))} เครื่องเท่าทีม`)
+        .concat(bp != null && tb != null && bp > tb + 0.5 && x.bare ? [`📦 เครื่องเปล่า ${x.bare} จาก ${x.units} เครื่อง (${bp.toFixed(0)}% · ทีม ${tb.toFixed(0)}%)`] : []);
+      if (okC.length || opC.length) h = h.replace('<div class="fp-sec"><b>🎯 ติดงานต่อเครื่อง', `<div class="fp-sec"><b>💬 คุยกับ${G === 'brand' ? 'แบรนด์' : 'น้อง'}</b>
+        ${okC.length ? `<div class="fp-chips ok">${okC.map(t => `<span>${t}</span>`).join('')}</div>` : ''}
+        ${opC.length ? `<div class="fp-chips op">${opC.map(t => `<span>${t}</span>`).join('')}</div>` : ''}</div><div class="fp-sec"><b>🎯 ติดงานต่อเครื่อง`);
+      rk.fPersonExtra = { ok: okC, op: opC };
       h += `<button class="fp-copy" onclick="rkFCopy(this)">📋 คัดลอกสรุปของ ${e(x.name)}</button>`;
       rk.fPersonText = [`🎯 งานโฟกัส ${x.name} · ${rkFLabel(d.range, d.key)}`, `เครื่อง ${x.units} · งาน ${x.focus} ชิ้น (${x.units ? (x.focus / x.units).toFixed(2) : 0}/เครื่อง)` + (G !== 'brand' ? ` · ${W.days} วันทำงาน (${W.days ? (x.focus / W.days).toFixed(2) : 0}/วัน)` : ''), '']
         .concat(rows.filter(r => r.p != null).map(r => `• ${r.n} ${r.p.toFixed(0)}% (ติด ${r.got}/${r.b})` + (r.tp != null ? ` · ทีม ${r.tp.toFixed(0)}%` : '') + (r.tg ? ` · เป้า ${r.tg.t}%` : '')))
-        .concat(miss.length ? ['', 'ยังไม่ได้ติด:'].concat(miss.slice(0, 6).map(r => `• ${r.n} ${r.miss} จาก ${r.b} เครื่อง`)) : []).join('\n');
+        .concat(miss.length ? ['', 'ยังไม่ได้ติด:'].concat(miss.slice(0, 6).map(r => `• ${r.n} ${r.miss} จาก ${r.b} เครื่อง`)) : [])
+        .concat(okC.length ? ['', 'จุดเด่น:'].concat(okC.map(t => '• ' + t.replace(/&amp;/g, '&'))) : [])
+        .concat(opC.length ? ['', 'ยังมีโอกาส:'].concat(opC.map(t => '• ' + t.replace(/&amp;/g, '&'))) : []).join('\n');
       document.getElementById('fp-title').textContent = x.name;
       document.getElementById('fp-sub').textContent = `${{ staff: 'พนักงานร้าน', pc: 'PC แบรนด์', brand: 'แบรนด์' }[G]} · ${rkFLabel(d.range, d.key)}`;
       document.getElementById('fp-body').innerHTML = h;
