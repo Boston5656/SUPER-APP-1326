@@ -1258,7 +1258,7 @@
     @keyframes badgePop { from { transform: scale(0); } }
     @keyframes badgePulse { 0%, 100% { box-shadow: 0 0 0 2.5px var(--yellow, #FFD600), 0 0 0 0 rgba(255,159,10,.6); } 50% { box-shadow: 0 0 0 2.5px var(--yellow, #FFD600), 0 0 0 7px rgba(255,159,10,0); } }
     #frame-host { position: absolute; inset: 0; }
-    #frame-host iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    #frame-host iframe { position: absolute; inset: 0; width: 1px; min-width: 100%; height: 100%; border: 0; }   /* iOS: กัน iframe ขยายกว้างตามเนื้อหา */
     #frame-host iframe { display: none; background: #FFD600; }
     #frame-host iframe.on { display: block; }
     #frame-loading { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; pointer-events: none; z-index: 46; }
@@ -1554,7 +1554,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.04-05';
+    const APP_VER = '2026.11.04-06';
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
         if (!j || !j.v || j.v === APP_VER) return;

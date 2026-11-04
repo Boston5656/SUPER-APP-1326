@@ -2,106 +2,147 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>คำนวณผ่อน 1326</title>
 <meta name="theme-color" content="#FFD600">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=VT323&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
-   🧮 เครื่องคิดเลขผ่อน 1326 — ปุ่ม + − × ÷ เปลี่ยนเป็น ปุ่มดอกเบี้ย / ปุ่มเดือน
-   คำนวณแบบเดียวกับแท็บผ่อนในแอปสต๊อก: ดอกคงที่ (Flat rate) = ยอดจัด × ดอก%/เดือน × จำนวนเดือน
+   🧮 เครื่องคิดเลข 1326
+   โหมด "ผ่อน": ปุ่ม + − × ÷ → คอลัมน์ปุ่มเดือน + คอลัมน์ปุ่มดอกเบี้ย (กดค้าง = เปลี่ยนค่าปุ่ม · ปุ่ม ✎ = พิมพ์เอง)
+   สูตรเหมือนแท็บผ่อนในแอปสต๊อก: ดอกคงที่ (Flat) = ยอดจัด × ดอก%/เดือน × จำนวนเดือน
+   โหมด "เครื่องคิดเลข": บวก ลบ คูณ หาร ปกติ (คูณ/หารก่อน บวก/ลบ) · ส่งผลไปเป็นราคาในโหมดผ่อนได้
    ========================================================= */
-:root{ --y:#FFD600; --d:#1C1C1E; --d2:#2C2C2E; --d3:#3A3A3C; --g:#8E8E93; --ok:#30D158; --red:#FF6961;
+:root{ --y:#FFD600; --d:#1C1C1E; --d3:#3A3A3C; --g:#8E8E93; --or:#FF9F0A; --red:#FF6961;
   --ios-ease:cubic-bezier(.32,.72,0,1); --spring:cubic-bezier(.34,1.56,.64,1); }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0}
-body{min-height:100vh;min-height:100dvh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
-  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),radial-gradient(90% 60% at 110% 110%,#FFC400 0%,rgba(255,196,0,0) 60%),var(--y);
-  background-attachment:fixed;padding:calc(8px + env(safe-area-inset-top)) 12px calc(14px + env(safe-area-inset-bottom));
-  -webkit-user-select:none;user-select:none}
-button{font-family:inherit;cursor:pointer;color:inherit;border:0}
+html,body{margin:0;width:100%;overflow-x:hidden}
+body{height:100vh;height:100dvh;color:var(--d);font-family:'IBM Plex Sans Thai',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 55% at 50% -12%,#FFF3A6 0%,rgba(255,243,166,0) 60%),var(--y);
+  padding:calc(8px + env(safe-area-inset-top)) 10px calc(10px + env(safe-area-inset-bottom));-webkit-user-select:none;user-select:none;overflow:hidden}
+button{font-family:inherit;cursor:pointer;color:inherit;border:0;padding:0;background:none}
+button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outline-offset:2px}
 .num{font-family:'Space Grotesk','IBM Plex Sans Thai',sans-serif;font-variant-numeric:tabular-nums}
-.wrap{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
-.navrow{display:flex;gap:8px;align-items:stretch}
+.wrap{max-width:480px;height:100%;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.navrow{display:flex;gap:8px;align-items:stretch;flex-shrink:0}
 [data-sys-back-slot]{display:flex}[data-sys-back-slot]:empty{display:none}
-.titlebar{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 8px 8px 16px;border-radius:18px;
-  background:rgba(255,255,255,.72);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35)}
-.titlebar h1{margin:0;font-size:16px;font-weight:700;white-space:nowrap}
-.tb-btn{border-radius:12px;padding:8px 12px;font-weight:700;font-size:12.5px;background:var(--d);color:var(--y);transition:transform .35s var(--spring)}
-.tb-btn:active{transform:scale(.9)}
+.seg{flex:1;min-width:0;display:flex;gap:4px;padding:4px;border-radius:18px;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px -10px rgba(60,48,0,.35);position:relative}
+.seg button{flex:1;border-radius:14px;padding:10px 6px;font-weight:700;font-size:14px;color:#6E6E73;white-space:nowrap;position:relative;z-index:1;transition:color .25s}
+.seg button.on{color:#fff}
+.seg i{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 6px);border-radius:14px;background:var(--d);transition:transform .45s var(--spring)}
+.seg.r i{transform:translateX(calc(100% + 4px))}
 
-/* ตัวเครื่อง */
-.calc{background:var(--d);border-radius:34px;padding:14px;box-shadow:0 30px 60px -24px rgba(60,40,0,.6),inset 0 1px 0 rgba(255,255,255,.06);animation:rise .55s var(--ios-ease) both}
-@keyframes rise{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+.calc{flex:1;min-height:0;background:var(--d);border-radius:32px;padding:12px;display:flex;flex-direction:column;gap:10px;box-shadow:0 30px 60px -24px rgba(60,40,0,.6)}
+.mode{display:none;flex:1;min-height:0;flex-direction:column;gap:10px}.mode.on{display:flex;animation:rise .4s var(--ios-ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-/* จอ */
-.scr{background:#111113;border-radius:24px;padding:12px 14px 14px;box-shadow:inset 0 2px 10px rgba(0,0,0,.5)}
-.fld{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:5px 10px;border-radius:12px;color:#8E8E93;cursor:pointer;transition:background .25s,color .25s}
-.fld small{font-size:12px;font-weight:700;white-space:nowrap}
-.fld b{font-size:17px;font-weight:700;color:#C7C7CC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fld.on{background:rgba(255,214,0,.12);color:var(--y)} .fld.on b{color:#fff}
-.fld.on b::after{content:'';display:inline-block;width:2px;height:.95em;margin-left:3px;vertical-align:-2px;background:var(--y);animation:blink 1s steps(1) infinite}
+/* ---------- จอโหมดผ่อน ---------- */
+.scr{background:#111113;border-radius:24px;padding:8px;box-shadow:inset 0 2px 10px rgba(0,0,0,.5);flex-shrink:0}
+.ln{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 10px;border-radius:13px;cursor:pointer;transition:background .2s}
+.ln small{font-size:12.5px;font-weight:700;color:#8E8E93;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.ln b{font-size:18px;font-weight:700;color:#D1D1D6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ln.main b{font-size:32px;line-height:1.15;color:#fff;letter-spacing:-.5px}
+.ln.on{background:rgba(255,214,0,.13)} .ln.on small{color:var(--y)} .ln.on b{color:#fff}
+.ln.on b::after{content:'';display:inline-block;width:2px;height:.9em;margin-left:3px;vertical-align:-2px;background:var(--y);animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-.fld.price b{font-size:34px;line-height:1.15;letter-spacing:-.5px}
-.fld.price.on b{color:#fff}
-.row2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px}
-.row2 .fld{flex-direction:column;align-items:flex-start;gap:0;padding:6px 10px;background:rgba(255,255,255,.04)}
-.row2 .fld.on{background:rgba(255,214,0,.14)}
-.row2 .fld b{font-size:15px}
-.res{margin-top:10px;padding:12px 12px 10px;border-radius:18px;background:linear-gradient(160deg,#2C2C2E,#1F1F21);border:1px solid rgba(255,214,0,.18)}
-.res-top{display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.ln3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px}
+.ln3 .ln{flex-direction:column;align-items:flex-start;gap:1px;background:rgba(255,255,255,.04)} .ln3 .ln.on{background:rgba(255,214,0,.13)}
+.ln3 .ln b{font-size:16px}
+.res{margin-top:6px;padding:10px 12px;border-radius:18px;background:linear-gradient(160deg,#2C2C2E,#1F1F21);border:1px solid rgba(255,214,0,.2)}
+.res-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .res-top small{display:block;font-size:11.5px;font-weight:700;color:#AEAEB2}
-.res-top .big{font-size:40px;font-weight:700;color:var(--y);line-height:1;letter-spacing:-1px}
-.res-top .big i{font-style:normal;font-size:15px;color:#AEAEB2;margin-left:4px;letter-spacing:0}
-.res-top .mo{font-size:13px;font-weight:800;color:var(--d);background:var(--y);padding:5px 10px;border-radius:100px;white-space:nowrap}
-.res-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
-.res-sub div{font-size:10.5px;font-weight:700;color:#8E8E93}
-.res-sub b{display:block;font-size:13.5px;color:#E5E5EA;margin-top:1px}
-.res-sub .r b{color:var(--red)}
+.big{font-size:38px;font-weight:700;color:var(--y);line-height:1.05;letter-spacing:-1px}
+.big i{font-style:normal;font-size:14px;color:#AEAEB2;margin-left:4px;letter-spacing:0}
+.mo{font-size:13px;font-weight:800;color:var(--d);background:var(--y);padding:6px 11px;border-radius:100px;white-space:nowrap}
+.sub3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px;font-size:10.5px;font-weight:700;color:#8E8E93}
+.sub3 b{display:block;font-size:13.5px;color:#E5E5EA}
+.sub3 .r b{color:var(--red)}
 
-/* ปุ่มเดือน (แทน + − × ÷) */
-.lab{display:flex;justify-content:space-between;align-items:center;margin:12px 4px 6px;font-size:11px;font-weight:800;color:#8E8E93}
-.lab button{background:none;color:#8E8E93;font-size:11px;font-weight:700;padding:0}
-.months{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.k{height:54px;border-radius:18px;font-size:22px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;
-  transition:transform .35s var(--spring),background .2s,color .2s,filter .2s;touch-action:manipulation}
-.k:active{transform:scale(.88);filter:brightness(1.25);transition-duration:.08s}
-.k small{font-size:9.5px;font-weight:700;margin-top:3px;opacity:.75}
-.k.m{height:46px;border-radius:15px;background:#3A2E00;color:var(--y);font-size:18px;font-weight:700}
-.k.m.on{background:var(--y);color:var(--d);box-shadow:0 6px 16px -6px rgba(255,214,0,.7)}
-.k.m .pm{font-size:9px;font-weight:700;opacity:.8;margin-top:2px}
-.k.m.on .pm{opacity:.9}
-
-/* แป้นตัวเลข + คอลัมน์ดอกเบี้ย */
-.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+/* ---------- แป้นปุ่ม ---------- */
+.pad{flex:1;min-height:0;display:grid;gap:7px}
+.pad.inst{grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr)}
+.pad.std{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,1fr)}
+.k{min-height:40px;border-radius:18px;font-size:24px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;
+  transition:transform .3s var(--spring),background .2s,color .2s,filter .15s;touch-action:manipulation;position:relative}
+.k:active{transform:scale(.9);filter:brightness(1.3);transition-duration:.06s}
+.k small{font-size:9.5px;font-weight:700;margin-top:3px;opacity:.8;white-space:nowrap}
 .k.n{background:var(--d3);color:#fff}
 .k.f{background:#A5A5AA;color:var(--d);font-size:16px;font-weight:700}
 .k.f.on{background:#fff}
-.k.r{background:#FF9F0A;color:#fff;font-size:18px;font-weight:700}
-.k.r.on{background:#fff;color:#FF9F0A}
-.k.r small{opacity:.9}
-.k.zero{grid-column:span 1}
+.k.m{background:#3D3200;color:var(--y);font-size:19px;font-weight:700}
+.k.m.on{background:var(--y);color:var(--d);box-shadow:0 6px 16px -6px rgba(255,214,0,.7)}
+.k.r{background:var(--or);color:#fff;font-size:17px;font-weight:700}
+.k.r.on{background:#fff;color:var(--or)}
+.k.ed{font-size:15px}.k.ed small{opacity:.75}
+.k.op{background:var(--or);color:#fff;font-size:30px;font-weight:500}
+.k.op.on{background:#fff;color:var(--or)}
+.k.wide{grid-column:span 2;align-items:flex-start;padding-left:26px}
+.colh{font-size:10px;font-weight:800;color:#8E8E93;text-align:center;align-self:end;padding-bottom:2px}
 
-.share{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.share button{height:46px;border-radius:16px;font-weight:700;font-size:13.5px;background:rgba(255,255,255,.08);color:#fff;transition:transform .35s var(--spring)}
-.share button:active{transform:scale(.94)}
-.share .y{background:var(--y);color:var(--d)}
-.note{font-size:11px;color:rgba(28,28,30,.6);text-align:center;font-weight:600;line-height:1.5;padding:0 8px}
-#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,160%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);white-space:nowrap}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex-shrink:0}
+.acts button{height:44px;border-radius:15px;font-weight:700;font-size:13.5px;background:rgba(255,255,255,.08);color:#fff;transition:transform .3s var(--spring)}
+.acts button:active{transform:scale(.94)}
+.acts .y{background:var(--y);color:var(--d)}
+
+/* ---------- จอเครื่องคิดเลขปกติ ---------- */
+.sscr{flex:1;min-height:90px;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-end;padding:8px 10px 4px;overflow:hidden}
+.sexp{font-size:20px;color:#8E8E93;font-weight:600;min-height:26px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;direction:ltr}
+.sval{font-size:64px;font-weight:500;color:#fff;line-height:1.05;letter-spacing:-1.5px;white-space:nowrap;max-width:100%}
+.stool{display:flex;gap:6px;margin-top:6px}
+.stool button{font-size:12px;font-weight:700;padding:7px 12px;border-radius:100px;background:rgba(255,214,0,.14);color:var(--y)}
+.pad.std{flex:0 0 auto;aspect-ratio:4/5;max-height:62%}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,180%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);max-width:90vw;text-align:center}
 #toast.on{transform:translate(-50%,0)}
-/* แก้ปุ่มดอก (กดค้าง) */
-#rateEd{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:12px}
-#rateEd.on{display:flex}
-#rateEd .box{width:100%;max-width:420px;background:#fff;border-radius:26px;padding:16px;animation:rise .4s var(--ios-ease) both}
-#rateEd h3{margin:0 0 4px;font-size:16px} #rateEd p{margin:0 0 12px;font-size:12px;color:#8E8E93;font-weight:600}
-#rateEd .g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-#rateEd input{width:100%;height:48px;border-radius:14px;border:0;background:#F2F2F7;text-align:center;font:700 17px 'Space Grotesk',sans-serif}
-#rateEd .ft{display:flex;gap:8px;margin-top:12px}
-#rateEd .ft button{flex:1;height:46px;border-radius:15px;font-weight:700;background:#F2F2F7}
-#rateEd .ft .ok{background:var(--d);color:var(--y)}
-@media (max-height:700px){.k{height:46px}.k.m{height:40px}.fld.price b{font-size:28px}.res-top .big{font-size:32px}}
+/* ตั้งค่าปุ่ม (กดค้าง) */
+#ed{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;padding:12px}
+#ed.on{display:flex}
+#ed .box{width:100%;max-width:440px;background:#fff;border-radius:26px;padding:16px;animation:rise .35s var(--ios-ease) both}
+#ed h3{margin:0 0 4px;font-size:16px} #ed p{margin:0 0 12px;font-size:12px;color:#8E8E93;font-weight:600}
+#ed .g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+#ed input{width:100%;height:48px;border-radius:14px;border:0;background:#F2F2F7;text-align:center;font:700 17px 'Space Grotesk',sans-serif}
+#ed .ft{display:flex;gap:8px;margin-top:12px}
+#ed .ft button{flex:1;height:46px;border-radius:15px;font-weight:700;background:#F2F2F7}
+#ed .ft .ok{background:var(--d);color:var(--y)}
+/* =================== 📺 จอ CRT เขียว + ตัวเลข 7 ส่วน (ดิจิตอลคลาสสิค) =================== */
+:root{ --crt:#3DFF7E; --crt2:#1E9E4C; --crtbg:#03140A; --amb:#FFB547; }
+.crt{position:relative;overflow:hidden;background:radial-gradient(130% 120% at 50% 40%,#072A14 0%,var(--crtbg) 70%,#010804 100%)!important;
+  border:2px solid #0B2A16;box-shadow:inset 0 0 30px rgba(0,0,0,.85),inset 0 0 2px rgba(61,255,126,.4),0 0 0 3px #0E0E10,0 8px 22px -10px rgba(0,0,0,.9)!important;
+  color:var(--crt);animation:crtOn .9s cubic-bezier(.2,.8,.2,1) both}
+.crt::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;border-radius:inherit;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,rgba(0,0,0,0) 1px 3px),radial-gradient(120% 100% at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
+.crt::after{content:'';position:absolute;left:0;right:0;top:-30%;height:30%;pointer-events:none;z-index:4;
+  background:linear-gradient(180deg,rgba(61,255,126,0),rgba(61,255,126,.07) 50%,rgba(61,255,126,0));animation:crtRoll 5.5s linear infinite}
+.crt > *{position:relative;z-index:2}
+.crt .flick{animation:crtFlick 4s steps(1) infinite}
+@keyframes crtRoll{from{transform:translateY(0)}to{transform:translateY(440%)}}
+@keyframes crtFlick{0%,100%{opacity:1}12%{opacity:.93}13%{opacity:1}47%{opacity:.96}48%{opacity:1}71%{opacity:.9}72%{opacity:1}}
+@keyframes crtOn{0%{transform:scale(1,.004);filter:brightness(6) saturate(0);opacity:.2}35%{transform:scale(1,.004);filter:brightness(6);opacity:1}60%{transform:scale(1,1.04);filter:brightness(2)}100%{transform:none;filter:none}}
+/* ตัวอักษร / ป้าย */
+.crt .ln small,.crt .res-top small,.crt .sub3,.crt .sexp{color:var(--crt2)!important;font-family:'VT323','IBM Plex Sans Thai',monospace;letter-spacing:.3px;text-shadow:0 0 6px rgba(61,255,126,.35)}
+.crt .ln small{font-size:15px} .crt .res-top small{font-size:14px} .crt .sub3{font-size:13.5px}
+.crt .ln.on{background:rgba(61,255,126,.09);box-shadow:inset 0 0 0 1px rgba(61,255,126,.35)} .crt .ln.on small{color:var(--crt)!important}
+.crt .ln3 .ln{background:rgba(61,255,126,.035)}
+.crt .ln b,.crt .big,.crt .sub3 b,.crt .sval{color:var(--crt)!important}
+.crt .ln.on b::after{display:none}
+.crt .res{background:rgba(0,0,0,.25);border:1px solid rgba(61,255,126,.28);box-shadow:inset 0 0 18px rgba(61,255,126,.06)}
+.crt .mo{background:var(--crt);color:#02200D;box-shadow:0 0 14px rgba(61,255,126,.6);font-family:'VT323',monospace;font-size:18px;padding:3px 11px}
+.crt .sub3 .r b{color:var(--amb)!important}
+.crt .big i,.crt .u{font-family:'VT323','IBM Plex Sans Thai',monospace;font-style:normal;color:var(--crt2);font-size:17px;margin-left:5px;text-shadow:0 0 6px rgba(61,255,126,.4)}
+.crt .stool button{background:rgba(61,255,126,.12);color:var(--crt);font-family:'VT323','IBM Plex Sans Thai',monospace;font-size:16px;box-shadow:inset 0 0 0 1px rgba(61,255,126,.35)}
+/* 7 ส่วน */
+.s7{display:inline-flex;align-items:flex-end;height:1em;filter:drop-shadow(0 0 3px rgba(61,255,126,.85)) drop-shadow(0 0 10px rgba(61,255,126,.35));vertical-align:baseline}
+.s7 svg{height:1em;width:auto;display:block;overflow:visible}
+.s7 .on{fill:var(--crt)} .s7 .off{fill:rgba(61,255,126,.075)}
+.amb .s7{filter:drop-shadow(0 0 3px rgba(255,181,71,.85))} .amb .s7 .on{fill:var(--amb)} .amb .s7 .off{fill:rgba(255,181,71,.08)}
+.cur{display:inline-block;width:.45em;height:.85em;margin-left:4px;background:var(--crt);box-shadow:0 0 8px var(--crt);animation:blink 1s steps(1) infinite;vertical-align:-1px}
+.crt .ln.main b{font-size:34px}.crt .ln3 .ln b{font-size:19px}.crt .big{font-size:44px}.crt .sub3 b{font-size:16px;margin-top:3px}
+.crt .sval{font-size:70px;letter-spacing:0}
+.crt .sexp{font-size:22px}
+@media (max-height:680px){.crt .ln.main b{font-size:28px}.crt .big{font-size:34px}.crt .sval{font-size:52px}}
+@media (max-height:680px){.ln.main b{font-size:26px}.big{font-size:30px}.k{font-size:20px;border-radius:15px}.sval{font-size:48px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -109,162 +150,290 @@ button{font-family:inherit;cursor:pointer;color:inherit;border:0}
 <div class="wrap">
   <div class="navrow">
     <span data-sys-back-slot></span>
-    <div class="titlebar"><h1>🧮 คำนวณผ่อน</h1><button class="tb-btn" type="button" onclick="clearAll()">AC ทั้งหมด</button></div>
+    <div class="seg" id="seg"><i></i><button class="on" data-m="inst" onclick="setMode('inst')">💳 ผ่อน</button><button data-m="std" onclick="setMode('std')">🧮 เครื่องคิดเลข</button></div>
   </div>
 
   <div class="calc">
-    <div class="scr">
-      <div class="fld price on" data-f="price" onclick="setField('price')"><small>💰 ราคา</small><b class="num" id="vPrice">0</b></div>
-      <div class="row2">
-        <div class="fld" data-f="down" onclick="setField('down')"><small>💵 ดาวน์</small><b class="num" id="vDown">0</b></div>
-        <div class="fld" data-f="rate" onclick="setField('rate')"><small>📈 ดอก/เดือน</small><b class="num" id="vRate">0.79%</b></div>
-        <div class="fld" data-f="mo" onclick="vib(5)"><small>📅 ผ่อน</small><b class="num" id="vMo">12 ด.</b></div>
-      </div>
-      <div class="res">
-        <div class="res-top"><div><small>ค่างวดต่อเดือน</small><div class="big num" id="rMonthly">0<i>บาท</i></div></div><span class="mo" id="rMo">12 เดือน</span></div>
-        <div class="res-sub">
-          <div>ยอดจัด<b class="num" id="rLoan">0</b></div>
-          <div class="r">ดอกรวม<b class="num" id="rInt">0</b></div>
-          <div>รวมทั้งสิ้น<b class="num" id="rTot">0</b></div>
+    <!-- ===== โหมดผ่อน ===== -->
+    <div class="mode on" id="mInst">
+      <div class="scr crt"><div class="flick">
+        <div class="ln main" data-f="price" onclick="setField('price')"><small>💰 ราคา</small><b class="num" id="vPrice">0</b></div>
+        <div class="ln3">
+          <div class="ln" data-f="down" onclick="setField('down')"><small>💵 ดาวน์</small><b class="num" id="vDown">0</b></div>
+          <div class="ln" data-f="rate" onclick="setField('rate')"><small>📈 ดอก/เดือน</small><b class="num" id="vRate">0%</b></div>
+          <div class="ln" data-f="mo" onclick="setField('mo')"><small>📅 ผ่อน</small><b class="num" id="vMo">12 ด.</b></div>
         </div>
+        <div class="res">
+          <div class="res-top"><div><small>ค่างวดต่อเดือน</small><div class="big num" id="rMonthly">0<i>บาท</i></div></div><span class="mo num" id="rMo">12 เดือน</span></div>
+          <div class="sub3"><div>ยอดจัด<b class="num" id="rLoan">0</b></div><div class="r amb">ดอกรวม<b class="num" id="rInt">0</b></div><div>รวมทั้งสิ้น<b class="num" id="rTot">0</b></div></div>
+        </div>
+      </div></div>
+      <div class="pad inst">
+        <button class="k f" onclick="key('AC')">C</button>
+        <button class="k f" onclick="key('BS')">⌫</button>
+        <button class="k f" data-fk="down" onclick="toggleField('down')">ดาวน์</button>
+        <button class="k f ed" data-fk="mo" onclick="toggleField('mo')">เดือน<small>✎ พิมพ์เอง</small></button>
+        <button class="k f ed" data-fk="rate" onclick="toggleField('rate')">ดอก %<small>✎ พิมพ์เอง</small></button>
+
+        <button class="k n" onclick="key('7')">7</button><button class="k n" onclick="key('8')">8</button><button class="k n" onclick="key('9')">9</button>
+        <button class="k m mk" data-i="0"></button><button class="k r rk" data-i="0"></button>
+        <button class="k n" onclick="key('4')">4</button><button class="k n" onclick="key('5')">5</button><button class="k n" onclick="key('6')">6</button>
+        <button class="k m mk" data-i="1"></button><button class="k r rk" data-i="1"></button>
+        <button class="k n" onclick="key('1')">1</button><button class="k n" onclick="key('2')">2</button><button class="k n" onclick="key('3')">3</button>
+        <button class="k m mk" data-i="2"></button><button class="k r rk" data-i="2"></button>
+        <button class="k n" onclick="key('0')">0</button><button class="k n" onclick="key('00')">00</button><button class="k n" onclick="key('.')">.</button>
+        <button class="k m mk" data-i="3"></button><button class="k r rk" data-i="3"></button>
       </div>
+      <div class="acts"><button type="button" onclick="copyText()">📋 คัดลอกส่งลูกค้า</button><button type="button" class="y" onclick="copyText(true)">📋 เทียบหลายเดือน</button></div>
     </div>
 
-    <div class="lab"><span>📅 ปุ่มเดือน — กดแล้วคิดทันที</span><span id="moHint"></span></div>
-    <div class="months" id="months"></div>
-
-    <div class="pad" id="pad">
-      <button class="k f" onclick="key('AC')">C</button>
-      <button class="k f" onclick="key('BS')">⌫</button>
-      <button class="k f" data-fk="down" onclick="toggleField('down')">ดาวน์</button>
-      <button class="k r rk" data-i="0"></button>
-      <button class="k n" onclick="key('7')">7</button><button class="k n" onclick="key('8')">8</button><button class="k n" onclick="key('9')">9</button>
-      <button class="k r rk" data-i="1"></button>
-      <button class="k n" onclick="key('4')">4</button><button class="k n" onclick="key('5')">5</button><button class="k n" onclick="key('6')">6</button>
-      <button class="k r rk" data-i="2"></button>
-      <button class="k n" onclick="key('1')">1</button><button class="k n" onclick="key('2')">2</button><button class="k n" onclick="key('3')">3</button>
-      <button class="k r rk" data-i="3"></button>
-      <button class="k n" onclick="key('0')">0</button><button class="k n" onclick="key('00')">00</button><button class="k n" onclick="key('.')">.</button>
-      <button class="k f" data-fk="rate" onclick="toggleField('rate')">ดอก%<small>พิมพ์เอง</small></button>
-    </div>
-
-    <div class="share">
-      <button type="button" onclick="copyText()">📋 คัดลอกส่งลูกค้า</button>
-      <button type="button" class="y" onclick="copyText(true)">📋 คัดลอกทุกเดือน</button>
+    <!-- ===== โหมดเครื่องคิดเลข ===== -->
+    <div class="mode" id="mStd">
+      <div class="sscr crt" style="border-radius:24px"><div class="flick" style="display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;width:100%;height:100%">
+        <div class="sexp num" id="sExp"></div>
+        <div class="sval num" id="sVal">0</div>
+        <div class="stool"><button type="button" onclick="stdCopy()">📋 คัดลอก</button><button type="button" onclick="stdToInst()">💳 ใช้เป็นราคาผ่อน</button></div>
+      </div></div>
+      <div class="pad std">
+        <button class="k f" id="sAC" onclick="sk('AC')">AC</button><button class="k f" onclick="sk('BS')">⌫</button><button class="k f" onclick="sk('%')">%</button><button class="k op" data-op="/" onclick="sk('/')">÷</button>
+        <button class="k n" onclick="sk('7')">7</button><button class="k n" onclick="sk('8')">8</button><button class="k n" onclick="sk('9')">9</button><button class="k op" data-op="*" onclick="sk('*')">×</button>
+        <button class="k n" onclick="sk('4')">4</button><button class="k n" onclick="sk('5')">5</button><button class="k n" onclick="sk('6')">6</button><button class="k op" data-op="-" onclick="sk('-')">−</button>
+        <button class="k n" onclick="sk('1')">1</button><button class="k n" onclick="sk('2')">2</button><button class="k n" onclick="sk('3')">3</button><button class="k op" data-op="+" onclick="sk('+')">+</button>
+        <button class="k n wide" onclick="sk('0')">0</button><button class="k n" onclick="sk('.')">.</button><button class="k op" onclick="sk('=')">=</button>
+      </div>
     </div>
   </div>
-  <p class="note">ดอกเบี้ยแบบคงที่ (Flat rate) ต่อเดือน · ปัดเป็นบาท · ตัวเลขเพื่อประมาณการ ยอดจริงตามไฟแนนซ์อนุมัติ<br>กดค้างที่ปุ่มดอกสีส้ม = เปลี่ยนค่าปุ่ม (จำในเครื่องนี้)</p>
 </div>
 
-<div id="rateEd"><div class="box">
-  <h3>⚙️ ตั้งค่าปุ่มดอกเบี้ย</h3><p>% ต่อเดือน · บันทึกไว้ในเครื่องนี้</p>
-  <div class="g" id="reG"></div>
-  <div class="ft"><button onclick="rateReset()">ค่าเริ่มต้น</button><button onclick="closeRateEd()">ยกเลิก</button><button class="ok" onclick="saveRateEd()">บันทึก</button></div>
+<div id="ed"><div class="box">
+  <h3 id="edT">⚙️ ตั้งค่าปุ่ม</h3><p id="edS">บันทึกไว้ในเครื่องนี้</p>
+  <div class="g" id="edG"></div>
+  <div class="ft"><button onclick="edReset()">ค่าเริ่มต้น</button><button onclick="edClose()">ยกเลิก</button><button class="ok" onclick="edSave()">บันทึก</button></div>
 </div></div>
 <div id="toast"></div>
 
 <script>
-  const MONTHS = [4, 6, 8, 10, 12, 15, 18, 20, 24, 36, 48];
-  const RATE_DEF = [0, 0.69, 0.79, 0.99];
+  const ALL_MO = [4, 6, 8, 10, 12, 15, 18, 20, 24, 36, 48];
+  const DEF = { rates: [0, 0.69, 0.79, 0.99], mos: [6, 10, 12, 24] };
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
-  let RATES = LS.get('inst_rates', RATE_DEF);
-  if (!Array.isArray(RATES) || RATES.length !== 4) RATES = RATE_DEF.slice();
-  const S = { price: '', down: '', rate: String(LS.get('inst_rate', 0.79)), mo: LS.get('inst_mo', 12), f: 'price', fresh: false };
+  const ok4 = (a, d) => Array.isArray(a) && a.length === 4 && a.every(x => typeof x === 'number' && isFinite(x)) ? a : d.slice();
+  let RATES = ok4(LS.get('inst_rates', DEF.rates), DEF.rates), MOS = ok4(LS.get('inst_mos', DEF.mos), DEF.mos);
+  const S = { price: '', down: '', rate: String(LS.get('inst_rate', 0)), mo: String(LS.get('inst_mo', 12)), f: 'price', fresh: false };
 
   const $ = id => document.getElementById(id);
+  const num = s => parseFloat(s) || 0;
   const fmt = n => Math.round(n).toLocaleString('en-US');
   function vib(ms) { try { navigator.vibrate && navigator.vibrate(ms || 6); } catch (e) {} }
   function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
-  const num = s => parseFloat(s) || 0;
+  function bump(id) { const el = $(id); el.animate && el.animate([{ transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.34,1.56,.64,1)' }); }
 
-  function calc(mo) {
-    const price = num(S.price), down = Math.min(num(S.down), price), rate = num(S.rate), m = mo || S.mo;
-    const loan = Math.max(0, price - down), int = loan * rate / 100 * m, tot = loan + int;
-    return { price, down, rate, m, loan, int, tot, monthly: m ? tot / m : 0 };
+  // ========== 📺 ตัวเลข 7 ส่วน (วาดเอง ไม่ต้องโหลดฟอนต์) ==========
+  const SEG = { a: '10,2 50,2 56,8 50,14 10,14 4,8', b: '52,10 58,16 58,44 52,50 46,44 46,16', c: '52,50 58,56 58,84 52,90 46,84 46,56',
+    d: '10,86 50,86 56,92 50,98 10,98 4,92', e: '8,50 14,56 14,84 8,90 2,84 2,56', f: '8,10 14,16 14,44 8,50 2,44 2,16', g: '10,44 50,44 56,50 50,56 10,56 4,50' };
+  const DIG = { 0: 'abcdef', 1: 'bc', 2: 'abged', 3: 'abgcd', 4: 'fgbc', 5: 'afgcd', 6: 'afgedc', 7: 'abc', 8: 'abcdefg', 9: 'abcdfg', '-': 'g', ' ': '', E: 'adefg', r: 'eg', o: 'cdeg' };
+  function s7(text) {
+    let h = '';
+    for (const ch of String(text)) {
+      if (DIG[ch] != null) h += `<svg viewBox="-4 0 70 100"><g transform="skewX(-7)">${Object.keys(SEG).map(k => `<polygon class="${DIG[ch].includes(k) ? 'on' : 'off'}" points="${SEG[k]}"/>`).join('')}</g></svg>`;
+      else if (ch === '.') h += `<svg viewBox="0 0 16 100"><circle class="on" cx="6" cy="92" r="6"/></svg>`;
+      else if (ch === ',') h += `<svg viewBox="0 0 16 100"><circle class="on" cx="7" cy="90" r="5"/><path class="on" d="M10,92 L4,106 L1,104 L5,92 Z"/></svg>`;
+    }
+    return `<span class="s7">${h}</span>`;
   }
+  // แสดงตัวเลขแบบ 7 ส่วน + หน่วยตัวอักษร (ถ้ามี) + เคอร์เซอร์
+  function put(el, numTxt, unit, cur) { el.innerHTML = s7(numTxt) + (unit ? `<span class="u">${unit}</span>` : '') + (cur ? '<span class="cur"></span>' : ''); }
+  // ตัวเลขผลลัพธ์เปลี่ยน = สุ่มตัวเลขวิ่งแป๊บนึงแล้วค่อยหยุด (แบบเครื่องคิดเลข/สล็อต)
+  function roll(el, finalTxt, unit) {
+    if (el._v === finalTxt) return; el._v = finalTxt; clearInterval(el._t);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return put(el, finalTxt, unit);
+    let n = 0; const steps = 7;
+    el._t = setInterval(() => {
+      n++;
+      if (n >= steps) { clearInterval(el._t); put(el, finalTxt, unit); return; }
+      const keep = Math.floor(finalTxt.length * n / steps);   // ตัวซ้ายค่อยๆ ล็อก
+      put(el, finalTxt.split('').map((c, i) => /\d/.test(c) && i >= keep ? String(Math.floor(Math.random() * 10)) : c).join(''), unit);
+    }, 38);
+  }
+
+  // ========== โหมด ==========
+  function setMode(m) {
+    vib(6); LS.set('calc_mode', m);
+    document.querySelectorAll('#seg button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+    $('seg').classList.toggle('r', m === 'std');
+    $('mInst').classList.toggle('on', m === 'inst'); $('mStd').classList.toggle('on', m === 'std');
+    const c = document.querySelector((m === 'std' ? '#mStd' : '#mInst') + ' .crt'); if (c) { c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; }
+    if (m === 'std') sRender();
+  }
+
+  // ========== 💳 ผ่อน ==========
+  function calc(mo) {
+    const price = num(S.price), down = Math.min(num(S.down), price), rate = num(S.rate), m = mo || Math.max(1, Math.round(num(S.mo)) || 1);
+    const loan = Math.max(0, price - down), int = loan * rate / 100 * m, tot = loan + int;
+    return { price, down, rate, m, loan, int, tot, monthly: tot / m };
+  }
+  const show = (v, f) => v === '' ? '0' : (f === 'rate' ? v : Number(v).toLocaleString('en-US') + (String(v).endsWith('.') ? '.' : ''));
   function render() {
     const r = calc();
-    $('vPrice').textContent = S.price ? Number(S.price).toLocaleString('en-US') + (S.price.endsWith('.') ? '.' : '') : '0';
-    $('vDown').textContent = S.down ? Number(S.down).toLocaleString('en-US') : '0';
-    $('vRate').textContent = (S.rate === '' ? '0' : S.rate) + '%';
-    $('vMo').textContent = S.mo + ' ด.';
-    $('rMonthly').innerHTML = fmt(r.monthly) + '<i>บาท</i>';
-    $('rMo').textContent = S.mo + ' เดือน';
-    $('rLoan').textContent = fmt(r.loan); $('rInt').textContent = fmt(r.int); $('rTot').textContent = fmt(r.tot);
-    document.querySelectorAll('.fld[data-f]').forEach(el => el.classList.toggle('on', el.dataset.f === S.f));
+    put($('vPrice'), show(S.price), '', S.f === 'price');
+    put($('vDown'), show(S.down), '', S.f === 'down');
+    put($('vRate'), S.rate === '' ? '0' : S.rate, '%', S.f === 'rate');
+    put($('vMo'), S.mo === '' ? '0' : S.mo, 'ด.', S.f === 'mo');
+    roll($('rMonthly'), fmt(r.monthly), 'บาท');
+    $('rMo').textContent = r.m + ' เดือน';
+    roll($('rLoan'), fmt(r.loan)); roll($('rInt'), fmt(r.int)); roll($('rTot'), fmt(r.tot));
+    document.querySelectorAll('.ln[data-f]').forEach(el => el.classList.toggle('on', el.dataset.f === S.f));
     document.querySelectorAll('[data-fk]').forEach(el => el.classList.toggle('on', el.dataset.fk === S.f));
-    // ปุ่มเดือน: โชว์ค่างวดของแต่ละเดือนไว้ใต้ตัวเลข
-    $('months').innerHTML = MONTHS.map(m => { const c = calc(m); return `<button class="k m${m === S.mo ? ' on' : ''}" onclick="setMo(${m})">${m}<span class="pm num">${r.price ? fmt(c.monthly) : 'เดือน'}</span></button>`; }).join('');
+    document.querySelectorAll('.mk').forEach(b => { const v = MOS[+b.dataset.i], c = calc(v); b.innerHTML = `${v} ด.<small class="num">${r.price ? fmt(c.monthly) : 'เดือน'}</small>`; b.classList.toggle('on', r.m === v && S.f !== 'mo'); });
     document.querySelectorAll('.rk').forEach(b => { const v = RATES[+b.dataset.i]; b.innerHTML = `${v}%<small>${v === 0 ? 'ผ่อน 0%' : 'ต่อเดือน'}</small>`; b.classList.toggle('on', num(S.rate) === v && S.f !== 'rate'); });
-    $('moHint').textContent = r.price ? 'ตัวเลขเล็ก = ค่างวด/เดือน' : '';
   }
-  function setField(f) { S.f = f; S.fresh = true; vib(5); render(); }
+  function setField(f) { S.f = f; S.fresh = f === 'rate' || f === 'mo'; vib(5); render(); }
   function toggleField(f) { setField(S.f === f ? 'price' : f); }
   function key(k) {
     vib(6);
     const f = S.f;
-    if (k === 'AC') { S[f] = f === 'rate' ? '0' : ''; S.fresh = false; return render(); }
+    if (k === 'AC') { S[f] = ''; S.fresh = false; return render(); }
     if (k === 'BS') { S[f] = String(S[f]).slice(0, -1); S.fresh = false; return render(); }
-    let v = S.fresh && f === 'rate' ? '' : String(S[f]); S.fresh = false;
+    let v = S.fresh ? '' : String(S[f]); S.fresh = false;
     if (k === '.') { if (f !== 'rate' || v.includes('.')) return; v = (v || '0') + '.'; }
     else {
-      if (v === '0' && k !== '.') v = '';
+      if (v === '0') v = '';
       v += k;
-      if (f === 'rate') { if (!/^\d{0,2}(\.\d{0,2})?$/.test(v)) return; }
-      else if (v.replace(/\D/g, '').length > 8) return;
+      if (f === 'rate' && !/^\d{0,2}(\.\d{0,2})?$/.test(v)) return;
+      if (f === 'mo' && (!/^\d{1,2}$/.test(v) || +v > 99)) return;
+      if ((f === 'price' || f === 'down') && v.length > 8) return;
     }
     S[f] = v;
     if (f === 'rate') LS.set('inst_rate', num(v));
+    if (f === 'mo') LS.set('inst_mo', num(v));
     render();
   }
-  function setMo(m) { S.mo = m; LS.set('inst_mo', m); vib(8); render(); bump('rMonthly'); }
+  function setMo(m) { S.mo = String(m); LS.set('inst_mo', m); if (S.f === 'mo') S.f = 'price'; vib(8); render(); bump('rMonthly'); }
   function setRate(v) { S.rate = String(v); LS.set('inst_rate', v); if (S.f === 'rate') S.f = 'price'; vib(8); render(); bump('rMonthly'); }
-  function bump(id) { const el = $(id); el.animate && el.animate([{ transform: 'scale(1.08)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.34,1.56,.64,1)' }); }
-  function clearAll() { S.price = ''; S.down = ''; S.f = 'price'; vib(10); render(); }
 
-  // ปุ่มดอก: แตะ = ใช้ · กดค้าง = ตั้งค่า
-  document.querySelectorAll('.rk').forEach(b => {
-    let t = null, long = false;
-    b.addEventListener('pointerdown', () => { long = false; t = setTimeout(() => { long = true; openRateEd(); }, 550); });
-    ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, () => clearTimeout(t)));
-    b.addEventListener('click', () => { if (!long) setRate(RATES[+b.dataset.i]); });
-    b.addEventListener('contextmenu', e => e.preventDefault());
-  });
-  function openRateEd() { vib(15); $('reG').innerHTML = RATES.map((v, i) => `<input inputmode="decimal" id="re${i}" value="${v}">`).join(''); $('rateEd').classList.add('on'); }
-  function closeRateEd() { $('rateEd').classList.remove('on'); }
-  function saveRateEd() { RATES = [0, 1, 2, 3].map(i => Math.max(0, Math.min(9.99, Math.round(num($('re' + i).value) * 100) / 100))); LS.set('inst_rates', RATES); closeRateEd(); render(); toast('✅ บันทึกปุ่มดอกแล้ว'); }
-  function rateReset() { RATES = RATE_DEF.slice(); LS.set('inst_rates', RATES); closeRateEd(); render(); toast('↩️ กลับค่าเริ่มต้น'); }
-
-  // คีย์บอร์ด (คอม / Legion Go)
-  document.addEventListener('keydown', e => {
-    if ($('rateEd').classList.contains('on')) { if (e.key === 'Enter') saveRateEd(); if (e.key === 'Escape') closeRateEd(); return; }
-    if (/^[0-9]$/.test(e.key)) key(e.key);
-    else if (e.key === '.') key('.');
-    else if (e.key === 'Backspace') key('BS');
-    else if (e.key === 'Escape' || e.key === 'Delete') key('AC');
-    else if (e.key === 'd' || e.key === 'D') toggleField('down');
-    else if (e.key === '%' || e.key === 'r' || e.key === 'R') toggleField('rate');
-    else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const i = MONTHS.indexOf(S.mo) + (e.key === 'ArrowRight' ? 1 : -1); if (MONTHS[i]) setMo(MONTHS[i]); }
-    else return;
-    e.preventDefault();
-  });
+  // แตะ = ใช้ · กดค้าง = ตั้งค่าปุ่ม
+  function holdKeys(sel, onTap, onHold) {
+    document.querySelectorAll(sel).forEach(b => {
+      let t = null, long = false;
+      b.addEventListener('pointerdown', () => { long = false; t = setTimeout(() => { long = true; onHold(); }, 550); });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, () => clearTimeout(t)));
+      b.addEventListener('click', () => { if (!long) onTap(+b.dataset.i); });
+      b.addEventListener('contextmenu', e => e.preventDefault());
+    });
+  }
+  holdKeys('.rk', i => setRate(RATES[i]), () => edOpen('rate'));
+  holdKeys('.mk', i => setMo(MOS[i]), () => edOpen('mo'));
+  let ED = null;
+  function edOpen(kind) {
+    ED = kind; vib(15);
+    $('edT').textContent = kind === 'rate' ? '⚙️ ตั้งค่าปุ่มดอกเบี้ย' : '⚙️ ตั้งค่าปุ่มเดือน';
+    $('edS').textContent = (kind === 'rate' ? '% ต่อเดือน' : 'จำนวนเดือน') + ' · บันทึกไว้ในเครื่องนี้';
+    $('edG').innerHTML = (kind === 'rate' ? RATES : MOS).map((v, i) => `<input inputmode="decimal" id="ed${i}" value="${v}">`).join('');
+    $('ed').classList.add('on');
+  }
+  function edClose() { $('ed').classList.remove('on'); ED = null; }
+  function edSave() {
+    const vals = [0, 1, 2, 3].map(i => num($('ed' + i).value));
+    if (ED === 'rate') { RATES = vals.map(v => Math.max(0, Math.min(9.99, Math.round(v * 100) / 100))); LS.set('inst_rates', RATES); }
+    else { MOS = vals.map(v => Math.max(1, Math.min(99, Math.round(v)))); LS.set('inst_mos', MOS); }
+    edClose(); render(); toast('✅ บันทึกปุ่มแล้ว');
+  }
+  function edReset() { if (ED === 'rate') { RATES = DEF.rates.slice(); LS.set('inst_rates', RATES); } else { MOS = DEF.mos.slice(); LS.set('inst_mos', MOS); } edClose(); render(); toast('↩️ กลับค่าเริ่มต้น'); }
 
   function summary(all) {
     const r = calc();
-    const head = [`🧮 คำนวณผ่อน (ประมาณการ)`, `ราคา ${fmt(r.price)} บาท` + (r.down ? ` · ดาวน์ ${fmt(r.down)}` : '') + ` · ดอก ${r.rate}%/เดือน`, `ยอดจัด ${fmt(r.loan)} บาท`];
-    const lines = all ? MONTHS.map(m => { const c = calc(m); return `• ${m} เดือน = ${fmt(c.monthly)} บาท/เดือน (รวม ${fmt(c.tot)})`; })
+    const head = ['🧮 คำนวณผ่อน (ประมาณการ)', `ราคา ${fmt(r.price)} บาท` + (r.down ? ` · ดาวน์ ${fmt(r.down)}` : '') + ` · ดอก ${r.rate}%/เดือน`, `ยอดจัด ${fmt(r.loan)} บาท`];
+    const mos = [...new Set(MOS.concat(r.m))].sort((a, b) => a - b);
+    const lines = all ? mos.map(m => { const c = calc(m); return `• ${m} เดือน = ${fmt(c.monthly)} บาท/เดือน (รวม ${fmt(c.tot)})`; })
       : [`ผ่อน ${r.m} เดือน = ${fmt(r.monthly)} บาท/เดือน`, `ดอกรวม ${fmt(r.int)} · รวมทั้งสิ้น ${fmt(r.tot)} บาท`];
     return head.concat(lines, ['*ยอดจริงตามไฟแนนซ์อนุมัติ', 'BaNANA Future Park Rangsit (ID1326)']).join('\n');
   }
-  function copyText(all) {
-    if (!num(S.price)) return toast('ใส่ราคาก่อน');
-    const t = summary(all);
-    const ok = () => toast('📋 คัดลอกแล้ว — วางในไลน์ได้เลย');
-    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok).catch(() => fallback(t, ok)); else fallback(t, ok);
+  function clip(t, msg) {
+    const ok = () => toast(msg || '📋 คัดลอกแล้ว — วางในไลน์ได้เลย');
+    const fb = () => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) {} a.remove(); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok).catch(fb); else fb();
   }
-  function fallback(t, ok) { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) {} a.remove(); }
+  function copyText(all) { if (!num(S.price)) return toast('ใส่ราคาก่อน'); clip(summary(all)); }
 
-  render();
+  // ========== 🧮 เครื่องคิดเลขปกติ ==========
+  const C = { toks: [], cur: '0', fresh: true, op: null, last: '' };   // toks = [ตัวเลข, op, ตัวเลข, op ...]
+  const OPS = { '+': 1, '-': 1, '*': 2, '/': 2 }, SYM = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+  function evalToks(t) {   // คูณ/หารก่อน แล้วบวก/ลบ
+    const a = [num(t[0])];
+    for (let i = 1; i < t.length; i += 2) {
+      const op = t[i], b = num(t[i + 1]);
+      if (op === '*') a[a.length - 1] *= b; else if (op === '/') a[a.length - 1] = b === 0 ? NaN : a[a.length - 1] / b; else a.push(op === '-' ? -b : b);
+    }
+    return a.reduce((x, y) => x + y, 0);
+  }
+  const clean = x => { if (!isFinite(x)) return 'Error'; const r = Math.round(x * 1e10) / 1e10; return String(r); };
+  const nice = s => { if (s === 'Error') return s; const [i, d] = String(s).split('.'); const neg = i.startsWith('-'); const ii = Number(neg ? i.slice(1) : i).toLocaleString('en-US'); return (neg ? '-' : '') + ii + (d != null ? '.' + d : ''); };
+  function sRender() {
+    const exp = C.toks.map((t, i) => i % 2 ? ' ' + SYM[t] + ' ' : nice(t)).join('');
+    $('sExp').textContent = C.last || exp || '';
+    const v = $('sVal'), t = C.cur === 'Error' ? 'Error' : nice(C.cur);
+    if (C.cur === 'Error') put(v, 'Error'); else if (C.justEq) { C.justEq = false; v._v = null; roll(v, t); } else { clearInterval(v._t); v._v = t; put(v, t); }
+    v.style.fontSize = ''; const w = v.parentElement.clientWidth - 24, cw = v.scrollWidth;
+    if (cw > w) v.style.fontSize = Math.max(22, Math.floor(parseFloat(getComputedStyle(v).fontSize) * w / cw)) + 'px';
+    $('sAC').textContent = C.cur !== '0' && !C.fresh ? 'C' : 'AC';
+    document.querySelectorAll('.k.op[data-op]').forEach(b => b.classList.toggle('on', C.fresh && C.op === b.dataset.op && C.toks.length > 0));
+  }
+  function sk(k) {
+    vib(6);
+    if (C.cur === 'Error' && k !== 'AC') { C.cur = '0'; C.toks = []; C.fresh = true; }
+    if (/^[0-9]$/.test(k)) {
+      if (C.fresh) { C.cur = k; C.fresh = false; if (!C.op && C.toks.length === 0) C.last = ''; }
+      else if (C.cur.replace(/[-.]/g, '').length < 12) C.cur = C.cur === '0' ? k : C.cur + k;
+    } else if (k === '.') {
+      if (C.fresh) { C.cur = '0.'; C.fresh = false; } else if (!C.cur.includes('.')) C.cur += '.';
+    } else if (k === 'BS') {
+      if (!C.fresh) { C.cur = C.cur.length > 1 && !(C.cur.length === 2 && C.cur.startsWith('-')) ? C.cur.slice(0, -1) : '0'; }
+    } else if (k === 'AC') {
+      if ($('sAC').textContent === 'C') { C.cur = '0'; C.fresh = true; } else { C.toks = []; C.cur = '0'; C.fresh = true; C.op = null; C.last = ''; }
+    } else if (k === '%') {
+      // แบบ iPhone: บวก/ลบ = % ของตัวหน้า (1000 + 7% = 1070) · คูณ/หาร = ÷100
+      const base = C.toks.length && (C.op === '+' || C.op === '-') ? evalToks(C.toks.slice(0, -1)) : 1;
+      C.cur = clean(num(C.cur) / 100 * (C.toks.length && (C.op === '+' || C.op === '-') ? base : 1)); C.fresh = false;
+    } else if (OPS[k]) {
+      if (C.fresh && C.toks.length) C.toks[C.toks.length - 1] = k;   // เปลี่ยนเครื่องหมาย
+      else { C.toks.push(C.cur, k); C.cur = clean(evalToks(C.toks.slice(0, -1))); }
+      C.op = k; C.fresh = true; C.last = '';
+    } else if (k === '=') {
+      if (!C.toks.length) return sRender();
+      const t = C.toks.concat(C.fresh ? [C.cur] : [C.cur]);
+      const r = clean(evalToks(t));
+      C.last = t.map((x, i) => i % 2 ? ' ' + SYM[x] + ' ' : nice(x)).join('') + ' =';
+      C.toks = []; C.cur = r; C.fresh = true; C.op = null; C.justEq = true;
+    }
+    sRender();
+  }
+  function stdCopy() { clip(String(C.cur), '📋 คัดลอก ' + nice(C.cur)); }
+  function stdToInst() {
+    const v = Math.round(num(C.cur)); if (!(v > 0)) return toast('ผลลัพธ์ต้องมากกว่า 0');
+    S.price = String(v); S.f = 'price'; render(); setMode('inst'); toast('💳 ใช้ ' + nice(String(v)) + ' เป็นราคาผ่อนแล้ว');
+  }
+
+  // คีย์บอร์ด (คอม / Legion Go)
+  document.addEventListener('keydown', e => {
+    if ($('ed').classList.contains('on')) { if (e.key === 'Enter') edSave(); if (e.key === 'Escape') edClose(); return; }
+    const std = $('mStd').classList.contains('on'), k = e.key;
+    if (std) {
+      const map = { Enter: '=', '=': '=', Backspace: 'BS', Escape: 'AC', Delete: 'AC', x: '*', X: '*' };
+      const kk = map[k] || ('0123456789.+-*/%'.includes(k) ? k : null); if (!kk) return; sk(kk);
+    } else {
+      if (/^[0-9.]$/.test(k)) key(k);
+      else if (k === 'Backspace') key('BS');
+      else if (k === 'Escape' || k === 'Delete') key('AC');
+      else if (k === 'd' || k === 'D') toggleField('down');
+      else if (k === 'm' || k === 'M') toggleField('mo');
+      else if (k === '%' || k === 'r' || k === 'R') toggleField('rate');
+      else if (k === 'Enter') setField('price');
+      else return;
+    }
+    e.preventDefault();
+  });
+
+  render(); sRender();
+  if (LS.get('calc_mode', 'inst') === 'std') setMode('std');
 </script>
 </body>
 </html>
