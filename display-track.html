@@ -56,12 +56,17 @@ button{font-family:inherit;cursor:pointer;color:inherit;border:0;background:none
 #toast{pointer-events:none;position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,200%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);max-width:90vw;text-align:center}
 #toast{opacity:0;transition:transform .45s var(--spring),opacity .25s}#toast.on{transform:translate(-50%,0);opacity:1}
 @media (max-width:520px){.sum{grid-template-columns:auto 1fr 1fr 1fr;gap:6px}.sum > div:not(.ring){padding:9px 9px}.sum b{font-size:21px}.sum small{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ring{width:64px}.ring svg{width:54px;height:54px}}
+.about{text-align:center;padding:6px 4px 2px}.about .lg{font-size:46px;animation:abBob 2.4s ease-in-out infinite}
+@keyframes abBob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+.about h3{font-size:19px!important;margin:4px 0 2px!important}.about .by{display:inline-block;background:var(--d);color:var(--y);border-radius:100px;padding:6px 14px;font-weight:700;font-size:13px;margin:6px 0 12px}
+.about .msg{background:#fff;border-radius:18px;padding:14px;font-size:14px;line-height:1.7;font-weight:600;color:#3A3A3C;text-align:left}
+.about .fight{font-size:16px;font-weight:700;margin-top:12px;color:#1C1C1E}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top"><h1>📊 ติดตามรูป Display<small id="upd">กำลังโหลด…</small></h1>
-    <button class="tb w" onclick="copySum()">📋 สรุปส่งไลน์</button><button class="tb" onclick="openBr()">⚙️</button></div>
+    <button class="tb w" onclick="copySum()">📋 สรุปส่งไลน์</button><button class="tb w" onclick="openAbout()">ℹ️</button><button class="tb" onclick="openBr()">⚙️</button></div>
   <div class="rnd"><button id="pv" onclick="step(-1)">‹</button><b id="rLab">–</b><button id="nx" onclick="step(1)">›</button></div>
   <div class="sum" id="sum"></div>
   <div class="chips" id="flt"></div>
@@ -134,6 +139,13 @@ function openBr() {
 function saveBr() {
   const br = [...document.querySelectorAll('#brL .br')].map(r => { const i = r.querySelectorAll('input'); return { id: i[0].value.replace(/\D/g, ''), name: i[1].value.trim() }; }).filter(b => b.id);
   api('dispTrackSave', K, { branches: br, anchor: $('anc').value }).then(d => { D = d; R = d.current; closeSh(); render(); toast('✅ บันทึกแล้ว'); }).catch(e => toast('⚠️ ' + e.message));
+}
+function openAbout() {
+  $('shBox').innerHTML = `<div class="about"><div class="lg">📸</div><h3>📊 ติดตามรูป Display</h3><span class="by">จัดทำโดย บอสตัน สุดหล่อ 😎</span>
+    <div class="msg">🎯 <b>วัตถุประสงค์</b><br>เพื่อให้เพื่อนๆ สาขาในโซนที่ บอสตัน สุดหล่อ อยู่ด้วย ได้มีสิ่งดีๆ เบาภาระงานต่อวันมากขึ้น</div>
+    <div class="fight">💪 สู้ๆ ครับทุกท่าน</div></div>
+    <div class="ft"><button class="ok" onclick="closeSh()">ปิด</button></div>`;
+  $('sh').classList.add('on');
 }
 function closeSh() { $('sh').classList.remove('on'); }
 load(); setInterval(() => { if (!document.hidden) load(); }, 60000);
