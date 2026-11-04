@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+<!-- © 2026 บอสตัน สุดหล่อ (BaNANA ID1326) — ผลงานต้นฉบับ จัดทำเพื่อเพื่อนๆ สาขาในโซน -->
+<meta name="author" content="บอสตัน สุดหล่อ">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Display 1326</title>
@@ -118,6 +121,14 @@ button:focus{outline:none}
 .about .msg{background:#fff;border-radius:18px;padding:14px;font-size:14px;line-height:1.7;font-weight:600;color:#3A3A3C;text-align:left}
 .about .fight{font-size:16px;font-weight:700;margin-top:12px;color:#1C1C1E}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.credit{display:flex;align-items:center;gap:10px;width:100%;margin:0 0 12px;padding:11px 14px;border-radius:18px;background:linear-gradient(135deg,#1C1C1E,#3A3A3C);color:#fff;text-align:left;box-shadow:0 8px 22px -12px rgba(0,0,0,.6);position:relative;overflow:hidden}
+.credit::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,214,0,.28) 50%,transparent 65%);transform:translateX(-100%);animation:crShine 3.6s ease-in-out infinite}
+@keyframes crShine{0%,55%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.credit .ic{font-size:26px;animation:abBob 2.4s ease-in-out infinite}.credit .tx{flex:1;min-width:0}
+.credit b{display:block;font-size:15px;color:#FFD600;letter-spacing:.2px}.credit small{display:block;font-size:11px;color:#D1D1D6;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.credit .i{font-size:11px;font-weight:700;background:rgba(255,214,0,.18);color:#FFD600;border-radius:100px;padding:4px 9px;flex-shrink:0}
+.foot-cr{text-align:center;font-size:11.5px;font-weight:700;color:rgba(28,28,30,.55);margin:18px 0 6px}
+.about .cp{font-size:11px;color:#8E8E93;font-weight:600;margin-top:10px}
 </style>
 </head>
 <body>
@@ -127,13 +138,15 @@ button:focus{outline:none}
     <div class="titlebar">
       <div class="ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="18" fill="none" stroke="rgba(28,28,30,.12)" stroke-width="5"/><circle id="ringC" cx="22" cy="22" r="18" fill="none" stroke="#1C1C1E" stroke-width="5" stroke-linecap="round" stroke-dasharray="113" stroke-dashoffset="113" style="transition:stroke-dashoffset .6s"/></svg><b id="ringT">0%</b></div>
       <h1>📸 รูป Display<small id="sub">กำลังโหลด…</small></h1>
-      <button class="tb-btn" onclick="openAbout()" style="background:rgba(255,255,255,.7);color:#1C1C1E">ℹ️</button>
+      
       <button class="tb-btn" id="gear" style="display:none" onclick="openSet()">⚙️</button>
     </div>
   </div>
+  <button class="credit" onclick="openAbout()"><span class="ic">😎</span><span class="tx"><b>จัดทำโดย บอสตัน สุดหล่อ</b><small>เพื่อเพื่อนๆ สาขาในโซน · เบาภาระงานต่อวัน · สู้ๆ ครับ 💪</small></span><span class="i">ℹ️ About</span></button>
   <div class="hero" id="hero"></div>
   <div class="chips" id="flt"></div>
   <div class="list" id="list"><div class="load">กำลังโหลดหัวข้อ…</div></div>
+  <div class="foot-cr">© 2026 บอสตัน สุดหล่อ · Made with ❤️ for เพื่อนๆ ในโซน</div>
 </div>
 
 <div class="bar"><div class="in">
@@ -370,10 +383,12 @@ function sheet(h) { $('shBox').innerHTML = h; $('sh').classList.add('on'); }
 function openAbout() {
   $('shBox').innerHTML = `<div class="about"><div class="lg">📸</div><h3>📸 รูป Display</h3><span class="by">จัดทำโดย บอสตัน สุดหล่อ 😎</span>
     <div class="msg">🎯 <b>วัตถุประสงค์</b><br>เพื่อให้เพื่อนๆ สาขาในโซนที่ บอสตัน สุดหล่อ อยู่ด้วย ได้มีสิ่งดีๆ เบาภาระงานต่อวันมากขึ้น</div>
-    <div class="fight">💪 สู้ๆ ครับทุกท่าน</div></div>
-    <div class="ft"><button class="ok" onclick="closeSh()">ปิด</button></div>`;
+    <div class="fight">💪 สู้ๆ ครับทุกท่าน</div><div class="cp">© 2026 บอสตัน สุดหล่อ · ผลงานต้นฉบับ สงวนสิทธิ์</div></div>
+    <div class="ft"><button class="ok" onclick="aboutDone()">ปิด</button></div>`;
   $('sh').classList.add('on');
 }
+function aboutDone() { try { localStorage.setItem('about_seen_v1', '1'); } catch (e) {} closeSh(); if (window.afterAbout) { const f = window.afterAbout; window.afterAbout = null; f(); } }
+function aboutFirst(then) { let seen = false; try { seen = !!localStorage.getItem('about_seen_v1'); } catch (e) {} if (seen) { if (then) then(); return; } window.afterAbout = then; openAbout(); }
 function closeSh() { $('sh').classList.remove('on'); }
 
 // ===== ⬇️ สร้าง PowerPoint จากแม่แบบบริษัท (ทำในเครื่อง) =====
@@ -441,7 +456,8 @@ async function exportPptx() {
     }
     progSet('บีบไฟล์…', 94);
     const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation', compression: 'DEFLATE', compressionOptions: { level: 3 } });
-    const fname = `รูปถ่าย Display ${ST.cfg.cover.split(':')[0] || 'ID1326'} ${dmy(R.start).replace(/\//g, '-')}.pptx`;
+    const bid = String(ST.cfg.id || ((ST.cfg.cover || '').match(/ID\s*(\d+)/i) || [])[1] || '1326').replace(/\D/g, '') || '1326';
+    const fname = bid + '.pptx';   // บริษัทกำหนด: ชื่อไฟล์ = เลข ID สาขาอย่างเดียว เช่น 1326.pptx
     run('markExport').then(r => { ST = r; UPD = String(r.round.upd || ''); render(); ping(false); }).catch(() => {});
     const file = new File([blob], fname, { type: blob.type }), mb = (blob.size / 1048576).toFixed(1);
     sheet(`<h3>✅ สร้างไฟล์เสร็จแล้ว</h3><p>${esc(fname)} · ${mb} MB · ${all.length} รูป</p>
@@ -456,7 +472,7 @@ async function exportPptx() {
 
 if (GO) { document.querySelectorAll('.bar .g').forEach(b => b.style.display = 'none'); }
 load(true);
-if (GO) setTimeout(() => { if (ST && !ST.cfg.id) goSetup(true); }, 300);
+setTimeout(() => aboutFirst(GO ? () => { if (ST && !ST.cfg.id) goSetup(true); } : null), 300);   // เปิดครั้งแรก โชว์ About ก่อน
 </script>
 </body>
 </html>
