@@ -61,9 +61,9 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .sub3 .r b{color:var(--red)}
 
 /* ---------- แป้นปุ่ม ---------- */
-.pad{flex:1;min-height:0;display:grid;gap:7px}
-.pad.inst{grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr)}
-.pad.std{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,1fr)}
+.pad{flex:0 1 auto;min-height:0;display:grid;gap:7px;margin-top:auto}
+.pad.inst{grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,minmax(40px,74px))}
+.pad.std{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,minmax(44px,82px))}
 .k{min-height:40px;border-radius:18px;font-size:24px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;
   transition:transform .3s var(--spring),background .2s,color .2s,filter .15s;touch-action:manipulation;position:relative}
 .k:active{transform:scale(.9);filter:brightness(1.3);transition-duration:.06s}
@@ -92,7 +92,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .sval{font-size:64px;font-weight:500;color:#fff;line-height:1.05;letter-spacing:-1.5px;white-space:nowrap;max-width:100%}
 .stool{display:flex;gap:6px;margin-top:6px}
 .stool button{font-size:12px;font-weight:700;padding:7px 12px;border-radius:100px;background:rgba(255,214,0,.14);color:var(--y)}
-.pad.std{flex:0 0 auto;aspect-ratio:4/5;max-height:62%}
+.sscr{max-height:320px}
 
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,180%);background:var(--d);color:#fff;padding:11px 18px;border-radius:100px;font-weight:700;font-size:13.5px;z-index:99;transition:transform .45s var(--spring);max-width:90vw;text-align:center}
 #toast.on{transform:translate(-50%,0)}
@@ -141,6 +141,33 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
 .crt .ln.main b{font-size:34px}.crt .ln3 .ln b{font-size:19px}.crt .big{font-size:44px}.crt .sub3 b{font-size:16px;margin-top:3px}
 .crt .sval{font-size:70px;letter-spacing:0}
 .crt .sexp{font-size:22px}
+/* 📺 ป๊อปอัพเทียบหลายเดือน (จอ CRT) */
+#cmp{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.6)}
+#cmp.on{display:flex;animation:fadeIn .25s ease both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+#cmp .tv{width:100%;max-width:440px;max-height:calc(100% - 10px);display:flex;flex-direction:column;background:#161618;border-radius:30px;padding:10px;box-shadow:0 30px 70px -20px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.06)}
+#cmp .crt{border-radius:22px;padding:12px 12px 10px;display:flex;flex-direction:column;min-height:0;flex:1}
+#cmp .flick{display:flex;flex-direction:column;min-height:0;flex:1}
+.ch{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-family:'VT323','IBM Plex Sans Thai',monospace;color:var(--crt);text-shadow:0 0 8px rgba(61,255,126,.6);padding:0 4px 6px;border-bottom:1px dashed rgba(61,255,126,.35)}
+.ch b{font-size:22px;font-weight:400;letter-spacing:.5px} .ch small{font-size:15px;color:var(--crt2)}
+.cinfo{font-family:'VT323','IBM Plex Sans Thai',monospace;color:var(--crt2);font-size:15px;padding:6px 4px 4px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.cinfo i{font-style:normal;color:var(--crt)}
+.clist{overflow-y:auto;min-height:0;flex:1;padding:2px 0;scrollbar-width:none}
+.clist::-webkit-scrollbar{display:none}
+.cr{position:relative;display:grid;grid-template-columns:62px 1fr auto;align-items:center;gap:8px;padding:6px 8px;border-radius:10px;cursor:pointer;opacity:0}
+.cr.show{animation:crIn .32s steps(4) both}
+@keyframes crIn{0%{opacity:0;transform:translateX(-6px);filter:brightness(3)}60%{opacity:1}100%{opacity:1;transform:none;filter:none}}
+.cr .m{font-size:22px;line-height:1;color:var(--crt)} .cr .m .u{font-size:15px}
+.cr .p{font-size:26px;line-height:1;text-align:right;color:var(--crt)} .cr .p .u{font-size:15px}
+.cr .t{font-family:'VT323',monospace;font-size:14px;color:var(--crt2);text-align:right;min-width:62px;line-height:1.1}
+.cr.sel{background:rgba(61,255,126,.12);box-shadow:inset 0 0 0 1px rgba(61,255,126,.5)}
+.cr.sel::before{content:'▶';position:absolute;margin-left:-14px;color:var(--crt);font-size:10px;animation:blink 1s steps(1) infinite}
+.cr:active{background:rgba(61,255,126,.2)}
+.cft{display:flex;gap:8px;margin-top:10px}
+.cft button{flex:1;height:46px;border-radius:15px;font-weight:700;font-size:14px;background:#2C2C2E;color:#fff;transition:transform .3s var(--spring)}
+.cft button:active{transform:scale(.94)} .cft .y{background:var(--crt);color:#02200D;box-shadow:0 0 16px rgba(61,255,126,.45)}
+#cmp.off .tv{animation:tvOff .32s ease-in both}
+@keyframes tvOff{0%{transform:none}60%{transform:scale(1,.006);filter:brightness(4)}100%{transform:scale(0,.006);opacity:0}}
 @media (max-height:680px){.crt .ln.main b{font-size:28px}.crt .big{font-size:34px}.crt .sval{font-size:52px}}
 @media (max-height:680px){.ln.main b{font-size:26px}.big{font-size:30px}.k{font-size:20px;border-radius:15px}.sval{font-size:48px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -184,7 +211,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
         <button class="k n" onclick="key('0')">0</button><button class="k n" onclick="key('00')">00</button><button class="k n" onclick="key('.')">.</button>
         <button class="k m mk" data-i="3"></button><button class="k r rk" data-i="3"></button>
       </div>
-      <div class="acts"><button type="button" onclick="copyText()">📋 คัดลอกส่งลูกค้า</button><button type="button" class="y" onclick="copyText(true)">📋 เทียบหลายเดือน</button></div>
+      <div class="acts"><button type="button" onclick="copyText()">📋 คัดลอกส่งลูกค้า</button><button type="button" class="y" onclick="openCmp()">📺 เทียบหลายเดือน</button></div>
     </div>
 
     <!-- ===== โหมดเครื่องคิดเลข ===== -->
@@ -210,9 +237,30 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   <div class="g" id="edG"></div>
   <div class="ft"><button onclick="edReset()">ค่าเริ่มต้น</button><button onclick="edClose()">ยกเลิก</button><button class="ok" onclick="edSave()">บันทึก</button></div>
 </div></div>
+<div id="cmp" onclick="if(event.target===this)closeCmp()"><div class="tv"><div class="crt"><div class="flick">
+  <div class="ch"><b>&gt; เทียบค่างวด_</b><small id="cTime"></small></div>
+  <div class="cinfo" id="cInfo"></div>
+  <div class="clist" id="cList"></div>
+</div></div>
+<div class="cft"><button type="button" onclick="closeCmp()">✕ ปิด</button><button type="button" class="y" onclick="copyText(true)">📋 คัดลอกทั้งหมด</button></div></div></div>
 <div id="toast"></div>
 
 <script>
+  // 📱 กัน iPhone แสดงหน้าเล็กเกิน: ถ้าหน้านี้ถูกจัดกว้างกว่าจอจริง (เช่น 980px ใน iframe) → ขยายกลับให้พอดีจอ
+  function fitPhone() {
+    let fw = 0;
+    try { if (window.frameElement) fw = window.frameElement.getBoundingClientRect().width; } catch (e) {}
+    if (!fw && window.top === window && screen && screen.width) fw = Math.min(screen.width, screen.height) < 600 ? Math.min(screen.width, screen.height) : 0;
+    const iw = document.documentElement.clientWidth || innerWidth;
+    const de = document.documentElement;
+    if (fw > 0 && iw > fw * 1.15) {
+      const k = iw / fw;
+      de.style.zoom = k;
+      document.body.style.height = (innerHeight / k) + 'px';
+    } else { de.style.zoom = ''; document.body.style.height = ''; }
+  }
+  fitPhone();
+  window.addEventListener('resize', () => { clearTimeout(window._fp); window._fp = setTimeout(() => { document.documentElement.style.zoom = ''; fitPhone(); }, 120); });
   const ALL_MO = [4, 6, 8, 10, 12, 15, 18, 20, 24, 36, 48];
   const DEF = { rates: [0, 0.69, 0.79, 0.99], mos: [6, 10, 12, 24] };
   const LS = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
@@ -342,7 +390,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   function summary(all) {
     const r = calc();
     const head = ['🧮 คำนวณผ่อน (ประมาณการ)', `ราคา ${fmt(r.price)} บาท` + (r.down ? ` · ดาวน์ ${fmt(r.down)}` : '') + ` · ดอก ${r.rate}%/เดือน`, `ยอดจัด ${fmt(r.loan)} บาท`];
-    const mos = [...new Set(MOS.concat(r.m))].sort((a, b) => a - b);
+    const mos = cmpMonths();
     const lines = all ? mos.map(m => { const c = calc(m); return `• ${m} เดือน = ${fmt(c.monthly)} บาท/เดือน (รวม ${fmt(c.tot)})`; })
       : [`ผ่อน ${r.m} เดือน = ${fmt(r.monthly)} บาท/เดือน`, `ดอกรวม ${fmt(r.int)} · รวมทั้งสิ้น ${fmt(r.tot)} บาท`];
     return head.concat(lines, ['*ยอดจริงตามไฟแนนซ์อนุมัติ', 'BaNANA Future Park Rangsit (ID1326)']).join('\n');
@@ -352,6 +400,25 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
     const fb = () => { const a = document.createElement('textarea'); a.value = t; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) {} a.remove(); };
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok).catch(fb); else fb();
   }
+  // 📺 เทียบหลายเดือน = ป๊อปอัพจอ CRT · ตัวเลขพิมพ์ขึ้นทีละบรรทัด · แตะบรรทัด = เลือกเดือนนั้น
+  function cmpMonths() { return [...new Set(ALL_MO.concat(MOS, calc().m))].sort((a, b) => a - b); }
+  function openCmp() {
+    if (!num(S.price)) return toast('ใส่ราคาก่อน');
+    vib(10);
+    const r = calc(), cm = $('cmp');
+    const d = new Date(), p2 = n => String(n).padStart(2, '0');
+    $('cTime').textContent = `${p2(d.getHours())}:${p2(d.getMinutes())}`;
+    $('cInfo').innerHTML = `<span>ราคา <i>${fmt(r.price)}</i></span>${r.down ? `<span>ดาวน์ <i>${fmt(r.down)}</i></span>` : ''}<span>ยอดจัด <i>${fmt(r.loan)}</i></span><span>ดอก <i>${r.rate}%</i>/ด.</span>`;
+    $('cList').innerHTML = cmpMonths().map((m, i) => { const c = calc(m);
+      return `<div class="cr${m === r.m ? ' sel' : ''}" style="animation-delay:${.35 + i * .07}s" onclick="pickCmp(${m})"><span class="m">${s7(String(m))}<span class="u">ด.</span></span><span class="p">${s7(fmt(c.monthly))}<span class="u">/ด.</span></span><span class="t">รวม ${fmt(c.tot)}<br>ดอก ${fmt(c.int)}</span></div>`; }).join('');
+    cm.classList.remove('off'); cm.classList.add('on');
+    const crt = cm.querySelector('.crt'); crt.style.animation = 'none'; void crt.offsetWidth; crt.style.animation = '';
+    requestAnimationFrame(() => cm.querySelectorAll('.cr').forEach(x => x.classList.add('show')));
+    setTimeout(() => { const sel = cm.querySelector('.cr.sel'); if (sel) sel.scrollIntoView({ block: 'nearest' }); }, 400);
+  }
+  function closeCmp() { const cm = $('cmp'); if (!cm.classList.contains('on')) return; cm.classList.add('off'); setTimeout(() => cm.classList.remove('on', 'off'), 300); }
+  function pickCmp(m) { setMo(m); document.querySelectorAll('#cList .cr').forEach(x => x.classList.toggle('sel', x.onclick && x.getAttribute('onclick') === `pickCmp(${m})`)); setTimeout(closeCmp, 260); }
+
   function copyText(all) { if (!num(S.price)) return toast('ใส่ราคาก่อน'); clip(summary(all)); }
 
   // ========== 🧮 เครื่องคิดเลขปกติ ==========
@@ -415,6 +482,7 @@ button:focus{outline:none}button:focus-visible{outline:2px solid var(--y);outlin
   // คีย์บอร์ด (คอม / Legion Go)
   document.addEventListener('keydown', e => {
     if ($('ed').classList.contains('on')) { if (e.key === 'Enter') edSave(); if (e.key === 'Escape') edClose(); return; }
+    if ($('cmp').classList.contains('on')) { if (e.key === 'Escape' || e.key === 'Enter') closeCmp(); return; }
     const std = $('mStd').classList.contains('on'), k = e.key;
     if (std) {
       const map = { Enter: '=', '=': '=', Backspace: 'BS', Escape: 'AC', Delete: 'AC', x: '*', X: '*' };
