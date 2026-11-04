@@ -1306,6 +1306,13 @@
     moveTabGlider(null, true);
     document.getElementById('stockSection').classList.add('section-enter');
 
+    // 🧮 เปิดเป็นแอป "คำนวณผ่อน" แยก (จากหน้าหลัก): stock.html?tab=interest&solo=1 → เปิดหน้าผ่อนเลย ซ่อนแท็บอื่น
+    (function () {
+      const q = new URLSearchParams(location.search), tab = q.get('tab');
+      if (tab && ['interest', 'price', 'promo'].includes(tab)) switchTab(tab);
+      if (q.get('solo') === '1') { const t = document.getElementById('tabShell'); if (t) t.style.display = 'none'; }
+    })();
+
     // ถ้าเพิ่งกลับมาจากหน้าสแกน ให้สลับไปแท็บเช็คราคาและค้นหาทันที
     if (initialBarcode) {
       switchTab('price');
