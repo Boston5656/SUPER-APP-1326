@@ -143,6 +143,7 @@
       <button id="t-log" onclick="setView('log')">📊 ประวัติ</button>
     </div>
     <button class="rb" onclick="openHelp()" aria-label="วิธีใช้" style="font:800 20px Kanit,serif">i</button>
+    <button class="rb" onclick="openNt()" aria-label="แจ้งเตือน">🔔</button>
     <button class="rb" id="gearBtn" onclick="openSet()" aria-label="ตั้งค่า" style="display:none">⚙️</button>
   </div>
 
@@ -169,6 +170,7 @@
   </div>
 
   <div class="sheet lv2" id="cfS"><div class="bd" onclick="closeS('cfS')"></div><div class="box" id="cfBox"></div></div>
+  <div class="sheet" id="ntS"><div class="bd" onclick="closeS('ntS')"></div><div class="box" id="ntBox"></div></div>
   <div class="sheet" id="setS"><div class="bd" onclick="closeS('setS')"></div><div class="box" id="setBox"></div></div>
   <div class="toast" id="toast"></div>
 
@@ -347,6 +349,37 @@
       }).catch(e => document.getElementById('logBody').innerHTML = `<div class="lc"><div class="empty">${esc(e.message)}</div></div>`);
     }
 
+    // ===================== 🔔 เช็กแจ้งเตือน (ทุกคน) =====================
+    function ntRow(ok, title, sub) { return `<div class="tgl" style="cursor:default"><span>${ok === true ? '✅' : ok === false ? '❌' : '⚠️'} ${title}<small>${sub}</small></span></div>`; }
+    async function openNt() {
+      const box = document.getElementById('ntBox');
+      box.innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">🔔</span><div><h3>แจ้งเตือนพักทานข้าว</h3><small>กำลังตรวจ…</small></div><button class="x" onclick="closeS('ntS')">✕</button></div><div class="msg">⏳ กำลังเช็กระบบ…</div>`;
+      openS('ntS');
+      try { paintNt(await run('notifyCheck')); } catch (e) { box.querySelector('.msg').textContent = '⚠️ ' + e.message; }
+    }
+    function paintNt(r) {
+      const mgr = B && B.me && B.me.mgr, tickOk = r.tickAgo >= 0 && r.tickAgo <= 3;
+      let h = `<div class="grab"></div><div class="shd"><span class="ic">🔔</span><div><h3>แจ้งเตือนพักทานข้าว</h3><small>เตือนตอน: ถึงคิว · ซื้อข้าวนาน · อีก 5 นาที · หมดเวลา · (ผู้จัดการ) พักเกิน</small></div><button class="x" onclick="closeS('ntS')">✕</button></div>`;
+      h += ntRow(r.mine > 0, 'เครื่องของฉันเปิดรับแจ้งเตือน', r.mine > 0 ? 'ลงทะเบียนไว้ ' + r.mine + ' เครื่อง' : 'ยังไม่ได้เปิด → เข้าแอป Order กด 🔔 แล้วกด "เปิดแจ้งเตือน" (iPhone ต้องเปิดจากไอคอนบนหน้าจอโฮม)');
+      h += ntRow(r.firebase, 'ระบบส่งแจ้งเตือน (Firebase)', r.firebase ? 'ตั้งค่าแล้ว' : 'ยังไม่ได้ตั้งค่า — ผู้จัดการตั้งในแอป Order');
+      h += ntRow(r.trigger ? (tickOk ? true : null) : false, 'ตัวจับเวลาเช็กทุก 1 นาที',
+        !r.trigger ? 'ยังไม่มีตัวจับเวลา → ระบบจะไม่เตือนเลย' + (mgr ? ' (กดปุ่มด้านล่างเพื่อสร้าง)' : ' — แจ้งผู้จัดการ') :
+        r.lastTick ? 'ทำงานล่าสุด ' + r.lastTick + ' น. (' + (r.tickAgo <= 0 ? 'เมื่อกี้' : r.tickAgo + ' นาทีที่แล้ว') + ')' + (tickOk ? '' : ' — ช้าผิดปกติ') : 'ยังไม่เห็นการทำงาน (รอ 1-2 นาทีแล้วเปิดใหม่)');
+      h += `<div class="sfoot" style="margin-top:12px"><button class="b-yes" id="ntTest" onclick="ntTest(this)">🔔 ส่งแจ้งเตือนทดสอบมาที่ฉัน</button></div>`;
+      if (mgr && !r.trigger) h += `<div class="sfoot" style="margin-top:8px"><button class="b-no" onclick="ntFix(this)">⏰ สร้างตัวจับเวลาให้เลย</button></div>`;
+      if (mgr && r.people && r.people.length) {
+        h += `<div class="lab" style="margin-top:14px"><span>👥 ใครเปิดรับแจ้งเตือนแล้ว</span><small>${r.people.filter(p => p.devices).length}/${r.people.length} คน</small></div>`;
+        h += r.people.sort((a, b) => (b.devices > 0) - (a.devices > 0)).map(p => `<div class="tgl" style="cursor:default"><span>${p.devices ? '✅' : '⬜'} ${esc(p.nick)}<small>${p.devices ? p.devices + ' เครื่อง · ล่าสุด ' + esc(p.last) : 'ยังไม่เปิด — จะไม่ได้รับแจ้งเตือนพัก'}</small></span></div>`).join('');
+      }
+      document.getElementById('ntBox').innerHTML = h;
+    }
+    async function ntTest(b) {
+      b.disabled = true; b.textContent = 'กำลังส่ง…';
+      try { const r = await run('notifyTest'); b.textContent = r.sent ? '✅ ส่งแล้ว ' + r.sent + ' เครื่อง — ล็อกจอแล้วรอดู' : '⚠️ ส่งไม่ได้: ' + (r.err || 'เครื่องนี้ยังไม่เปิดรับแจ้งเตือน'); }
+      catch (e) { b.textContent = '⚠️ ' + e.message; }
+      setTimeout(() => { b.disabled = false; }, 2500);
+    }
+    async function ntFix(b) { b.disabled = true; try { paintNt(await run('fixTrigger')); toast('⏰ สร้างตัวจับเวลาแล้ว'); } catch (e) { b.disabled = false; toast(e.message, 1); } }
     // ===================== ⚙️ ตั้งค่า (ผู้จัดการ) =====================
     function openSet() {
       const c = B.cfg, pp = B.people || { accounts: [], manual: [] };

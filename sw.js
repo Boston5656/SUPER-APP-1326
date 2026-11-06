@@ -16,7 +16,7 @@ self.addEventListener('push', function (e) {
     silent: d.silent === '1',
     icon: 'icon-192.png',
     badge: 'favicon-64.png',
-    data: { oid: d.oid || '', kind: kind },
+    data: { oid: d.oid || '', kind: kind, app: d.app || '' },
     vibrate: kind === 'new' || kind === 'remind' ? [200, 80, 200, 80, 400] : [120],
     requireInteraction: kind === 'new'
   };
@@ -28,11 +28,12 @@ self.addEventListener('push', function (e) {
 
 self.addEventListener('notificationclick', function (e) {
   e.notification.close();
-  var oid = (e.notification.data && e.notification.data.oid) || '';
-  var url = new URL('index.html' + (oid ? '?order=' + encodeURIComponent(oid) : ''), self.registration.scope).href;
+  var oid = (e.notification.data && e.notification.data.oid) || '', app = (e.notification.data && e.notification.data.app) || '';
+  var appId = app === 'break' ? 14 : 0;
+  var url = new URL('index.html' + (appId ? '?open=' + appId : oid ? '?order=' + encodeURIComponent(oid) : ''), self.registration.scope).href;
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (cs) {
     var hub = cs.filter(function (c) { return c.url.indexOf(self.registration.scope) === 0 && /index\.html|\/$/.test(c.url.split('?')[0]); })[0] || cs[0];
-    if (hub) { hub.postMessage({ type: 'open-order', oid: oid }); return hub.focus(); }
+    if (hub) { hub.postMessage(appId ? { type: 'open-app', id: appId } : { type: 'open-order', oid: oid }); return hub.focus(); }
     return self.clients.openWindow(url);
   }));
 });

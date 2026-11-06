@@ -21,11 +21,14 @@
         if (st.brands && st.brands.length) window.BRANDS = st.brands.slice();
         if (Array.isArray(st.types)) window.DEVICE_TYPES = st.types.slice();
         if (st.focus && st.focus.length) { window.FOCUS_ITEMS = st.focus.slice(); window.FOCUS_QTY = (st.focusQty || []).slice(); }
+        if (Array.isArray(st.failReasons)) window.FAIL_REASONS = st.failReasons.slice();
         window.CHECK_SETTINGS_META = { by: st.updatedBy || '', at: st.updatedAt || '' };
         return true;
       }
+      // ❗ สาเหตุงานไม่ผ่าน — ค่าเริ่มต้น (แก้ได้ใน ⚙️ ตั้งค่า)
+      if (!window.FAIL_REASONS) window.FAIL_REASONS = ['เครดิตไม่ผ่าน', 'ติด Blacklist', 'อายุงาน/รายได้ไม่ถึง', 'เอกสารไม่ครบ', 'ลูกค้ายกเลิก', 'ระบบขัดข้อง'];
       window.__CS_FILE_DEFAULTS = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice(),
-        types: (window.DEVICE_TYPES || []).slice(), focus: (window.FOCUS_ITEMS || []).slice(), focusQty: (window.FOCUS_QTY || []).slice() };
+        types: (window.DEVICE_TYPES || []).slice(), focus: (window.FOCUS_ITEMS || []).slice(), focusQty: (window.FOCUS_QTY || []).slice(), failReasons: (window.FAIL_REASONS || []).slice() };
       try { applyCheckSettings(JSON.parse(localStorage.getItem('chk1326_settings') || 'null')); } catch (e) {}
       function renderNameButtons() {
         document.querySelectorAll('[data-names]').forEach(function (box) {
@@ -711,6 +714,31 @@
       .fs-chart { position: relative; height: 190px; margin-bottom: 10px; }
       .fs-legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 0.66rem; color: var(--gray-1); font-weight: 600; margin-bottom: 10px; }
       .fs-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+      .fs-tap { cursor: pointer; transition: transform .25s cubic-bezier(.34,1.56,.64,1), background .2s; }
+      .fs-tap:active { transform: scale(.97); background: rgba(255,255,255,0.09); }
+      .fs-chev { font-style: normal; opacity: .45; margin-left: 2px; }
+      .fp-seg { display: flex; gap: 4px; background: var(--gray-6); border-radius: 14px; padding: 4px; margin-bottom: 12px; }
+      .fp-seg button { flex: 1; border: 0; background: none; border-radius: 11px; padding: 9px 6px; font-weight: 700; font-size: .85rem; color: var(--gray-1); }
+      .fp-seg button.on { background: #1C1C1E; color: #FFD600; }
+      .fp-rs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 4px 0 12px; }
+      .fp-rs small { font-weight: 700; font-size: .72rem; color: var(--gray-1); margin-right: 2px; }
+      .fp-rs span { background: #FFE4E6; color: #BE123C; border-radius: 100px; padding: 4px 10px; font-size: .74rem; font-weight: 700; }
+      .fp-rs span.na, .fp-reason.na { background: var(--gray-6); color: var(--gray-1); }
+      .fp-day { font-weight: 800; font-size: .8rem; margin: 14px 2px 6px; color: var(--gray-1); }
+      .fp-case { background: var(--gray-6); border-radius: 18px; padding: 10px; margin-bottom: 10px; }
+      .fp-meta { display: flex; justify-content: space-between; gap: 8px; font-size: .82rem; margin: 0 2px 6px; }
+      .fp-meta span { color: var(--gray-1); font-weight: 600; font-size: .74rem; }
+      .fp-reason { display: inline-block; background: #FFE4E6; color: #BE123C; border-radius: 10px; padding: 4px 10px; font-size: .78rem; font-weight: 700; margin-bottom: 8px; }
+      .fp-imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
+      .fp-img { position: relative; border: 0; padding: 0; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; background: #ddd; }
+      .fp-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .fp-img i { position: absolute; left: 6px; bottom: 6px; font-style: normal; font-size: .62rem; font-weight: 800; color: #fff; border-radius: 6px; padding: 2px 6px; }
+      .fp-zoom { position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,.92); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px; animation: fpIn .2s ease both; }
+      @keyframes fpIn { from { opacity: 0; } to { opacity: 1; } }
+      .fp-zoom img { max-width: 100%; max-height: calc(100% - 64px); object-fit: contain; border-radius: 10px; }
+      .fp-zbar { display: flex; gap: 10px; align-items: center; margin-top: 12px; color: #fff; font-weight: 700; font-size: .85rem; }
+      .fp-zbar a, .fp-zbar button { color: #1C1C1E; background: #FFD600; border: 0; border-radius: 100px; padding: 8px 14px; font-weight: 800; text-decoration: none; font-size: .8rem; }
+      .fp-zbar button { background: #fff; }
       .fs-brow { display: grid; grid-template-columns: minmax(70px, 96px) 1fr auto; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 14px; background: rgba(255,255,255,0.04);
         border: 1px solid rgba(255,255,255,0.06); margin-bottom: 6px; }
       .fs-brow .nm { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1828,6 +1856,12 @@
               </div>
 
               <div class="field">
+                <label class="form-label-custom">❗ สาเหตุ</label>
+                <div class="grid-3-col fail-reasons" data-names="FAIL_REASONS" data-radio="reasonFailed" data-style="btn-brand-red"></div>
+                <input type="text" id="reasonNote" class="form-control form-control-dark mt-2" maxlength="80" placeholder="รายละเอียดเพิ่ม (ถ้ามี) เช่น ขาดสลิปเงินเดือน">
+              </div>
+
+              <div class="field">
                 <label class="form-label-custom">📸 รูป SIM BL</label>
                 <input type="file" id="simImg" class="form-control form-control-dark" accept="image/*">
               </div>
@@ -2617,9 +2651,13 @@
             }
           }
 
+          var reasonPick = pickedName('reasonFailed');
+          var reasonNote = (document.getElementById('reasonNote').value || '').trim();
+          if ((window.FAIL_REASONS || []).length && !reasonPick) { showToast('เลือกสาเหตุก่อนนะ', 'warn'); resetBtn(btn, 'บันทึกหลักฐานงานไม่ผ่าน'); return; }
           var payload = {
             empNameFailed: empNameFailed,
             brandFailed: brandFailed,
+            reasonFailed: [reasonPick, reasonNote].filter(Boolean).join(' · '),
             simBase64: simBase64,
             ufundBase64: ufundBase64,
             sfBase64: sfBase64
@@ -3307,11 +3345,12 @@
         { k: 'receivers', title: '🙋 ผู้รับเคส', note: 'ปุ่มผู้รับเคสในหน้า บันทึกขาย', ph: 'ชื่อผู้รับเคส' },
         { k: 'brands', title: '🏷️ แบรนด์', note: 'ปุ่มแบรนด์ในหน้า บันทึกขาย และ งานไม่ผ่าน (ตัวพิมพ์ใหญ่อัตโนมัติ)', ph: 'เช่น HUAWEI' },
         { k: 'types', title: '📦 ประเภทสินค้า', note: '“SMARTPHONE / iPhone” มีให้เสมอ · ประเภทที่เลือกจะต่อท้ายชื่อรุ่น เช่น “iPad A16, iPad”', ph: 'เช่น AIRPODS' },
-        { k: 'focus', title: '🎯 งานโฟกัส', note: 'ปุ่มหน้า บันทึกขาย และหน้าต่างแก้ไข · แตะ 🔢 = ให้กรอกจำนวน (เช่น SANDISK x2)', ph: 'เช่น CASE' }
+        { k: 'focus', title: '🎯 งานโฟกัส', note: 'ปุ่มหน้า บันทึกขาย และหน้าต่างแก้ไข · แตะ 🔢 = ให้กรอกจำนวน (เช่น SANDISK x2)', ph: 'เช่น CASE' },
+        { k: 'failReasons', title: '❗ สาเหตุงานไม่ผ่าน', note: 'ปุ่มเลือกสาเหตุในหน้า งานไม่ผ่าน · ดูสรุปได้ตอนแตะแบรนด์ในหน้า สรุปไม่ผ่าน', ph: 'เช่น เครดิตไม่ผ่าน' }
       ];
       function openCheckSettings() {
         csDraft = { sales: (window.SALES_STAFF || []).slice(), receivers: (window.CASE_RECEIVERS || []).slice(), pc: (window.PC_STAFF || []).slice(), brands: (window.BRANDS || []).slice(),
-          types: (window.DEVICE_TYPES || []).slice(), focus: (window.FOCUS_ITEMS || []).slice(), focusQty: (window.FOCUS_QTY || []).slice() };
+          types: (window.DEVICE_TYPES || []).slice(), focus: (window.FOCUS_ITEMS || []).slice(), focusQty: (window.FOCUS_QTY || []).slice(), failReasons: (window.FAIL_REASONS || []).slice() };
         const m = window.CHECK_SETTINGS_META;
         openSheet('⚙️ ตั้งค่า Check List', m && m.at ? 'แก้ล่าสุด ' + m.at + (m.by ? ' โดย ' + m.by : '') : 'บันทึกแล้วทุกเครื่องเปลี่ยนตามทันที', '<div id="csBody"></div>');
         csRender();
@@ -3356,7 +3395,7 @@
         if (!confirm('กลับไปใช้รายชื่อเดิมจากไฟล์ staff-names.js?\n(ยังไม่บันทึกจนกว่าจะกด 💾)')) return;
         const f = window.__CS_FILE_DEFAULTS || {};
         csDraft = { sales: (f.sales || []).slice(), receivers: (f.receivers || []).slice(), pc: (f.pc || []).slice(), brands: (f.brands || []).slice(),
-          types: (f.types || []).slice(), focus: (f.focus || []).slice(), focusQty: (f.focusQty || []).slice() };
+          types: (f.types || []).slice(), focus: (f.focus || []).slice(), focusQty: (f.focusQty || []).slice(), failReasons: (f.failReasons || []).slice() };
         csRender();
       }
       function csSave() {
@@ -3665,10 +3704,10 @@
           <div class="fs-legend">${FS_SERIES.map(s => `<span><i style="background:${s.color}"></i>${s.label}</span>`).join('')}</div>`;
         brands.forEach((b, i) => {
           const it = brandSummary[b];
-          html += `<div class="fs-brow dash-item" style="animation-delay:${i * 0.04}s">
+          html += `<div class="fs-brow dash-item fs-tap" role="button" style="animation-delay:${i * 0.04}s" onclick="openFailBrand('${escapeHtml(b).replace(/'/g, "\\'")}','${cid === 'failedBrandContainer' ? 'm' : 'd'}')">
             <span class="nm">📱 ${escapeHtml(b)}</span>
             <span class="chips">${FS_SERIES.map(s => (it[s.k] || 0) ? `<span style="--c:${s.k === 'ufundFailed' && b === 'APPLE' ? '#fff' : s.color}">${s.label} ${it[s.k]}</span>` : '').join('')}</span>
-            <span class="tt">${tot(b)}</span></div>`;
+            <span class="tt">${tot(b)} <i class="fs-chev">›</i></span></div>`;
         });
         return html;
       }
@@ -3692,6 +3731,62 @@
             }
           }
         });
+      }
+      // =========================================================
+      // 🖼️ แตะแบรนด์ในหน้า สรุปไม่ผ่าน → ป๊อปอัปรูปหลักฐาน รายวัน / ทั้งเดือน + สาเหตุ
+      // =========================================================
+      const FP = { brand: '', scope: 'd', cache: {} };
+      const FP_LBL = { simBL: 'SIM BL', ufundFailed: 'U-FUND', sfFailed: 'SS Finance+' };
+      const FP_CLR = { simBL: '#FF453A', ufundFailed: '#E0B400', sfFailed: '#0A84FF' };
+      function fpThumb(id, w) { return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w' + (w || 600); }
+      function openFailBrand(brand, scope) {
+        FP.brand = brand; FP.scope = scope || 'd';
+        openSheet('📱 ' + brand + ' · รูปงานไม่ผ่าน', '', '<div id="fpBody"></div>');
+        fpLoad();
+      }
+      function fpVal() { return FP.scope === 'm' ? document.getElementById('selectFailedMonth').value : document.getElementById('selectFailedDate').value; }
+      function fpLabel() {
+        const v = fpVal(); if (!v) return '';
+        const TH = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'], p = v.split('-').map(Number);
+        return FP.scope === 'm' ? 'ทั้งเดือน ' + TH[p[1] - 1] + ' ' + (p[0] + 543) : 'วันที่ ' + p[2] + ' ' + TH[p[1] - 1] + ' ' + (p[0] + 543);
+      }
+      function fpLoad() {
+        const body = document.getElementById('fpBody'); if (!body) return;
+        const key = FP.scope + '|' + fpVal() + '|' + FP.brand;
+        document.getElementById('dashSheetSub').textContent = fpLabel();
+        const head = `<div class="fp-seg"><button type="button" class="${FP.scope === 'd' ? 'on' : ''}" onclick="FP.scope='d';fpLoad()">📆 รายวัน</button><button type="button" class="${FP.scope === 'm' ? 'on' : ''}" onclick="FP.scope='m';fpLoad()">🗓️ ทั้งเดือน</button></div>`;
+        if (FP.cache[key]) { body.innerHTML = head + fpHTML(FP.cache[key]); kickAnimations(body); return; }
+        body.innerHTML = head + loadingHTML('กำลังโหลดรูป');
+        google.script.run.withSuccessHandler(res => {
+          if (!res || res.status !== 'success') { body.innerHTML = head + `<div class="empty-note">โหลดไม่สำเร็จ${res && res.message ? ': ' + escapeHtml(res.message) : ''}</div>`; return; }
+          FP.cache[key] = res;
+          if (FP.scope + '|' + fpVal() + '|' + FP.brand === key) { body.innerHTML = head + fpHTML(res); kickAnimations(body); }
+        }).withFailureHandler(err => { body.innerHTML = head + `<div class="empty-note">โหลดไม่สำเร็จ: ${escapeHtml(err.message || '')}</div>`; })
+          .getFailedPhotos(FP.scope, fpVal(), FP.brand);
+      }
+      function fpHTML(res) {
+        const L = res.items || [];
+        if (!L.length) return `<div class="empty-note">ไม่มีรูปงานไม่ผ่านของ ${escapeHtml(FP.brand)} ${FP.scope === 'm' ? 'ในเดือนนี้' : 'ในวันนี้'} 🎉</div>`;
+        const cnt = { simBL: 0, ufundFailed: 0, sfFailed: 0 }, rs = {};
+        L.forEach(it => { it.imgs.forEach(g => cnt[g.k]++); const r = (it.reason || 'ไม่ระบุสาเหตุ').split(' · ')[0]; rs[r] = (rs[r] || 0) + 1; });
+        const rsk = Object.keys(rs).sort((a, b) => rs[b] - rs[a]);
+        let h = `<div class="db-sum">${Object.keys(FP_LBL).map(k => `<div><small>${FP_LBL[k]}</small><b style="color:${FP_CLR[k]}">${cnt[k]}</b><span>เคส</span></div>`).join('')}</div>`;
+        h += `<div class="fp-rs"><small>❗ สาเหตุ</small>${rsk.map(r => `<span${r === 'ไม่ระบุสาเหตุ' ? ' class="na"' : ''}>${escapeHtml(r)} <b>${rs[r]}</b></span>`).join('')}</div>`;
+        let lastD = '';
+        L.forEach((it, i) => {
+          if (FP.scope === 'm' && it.d !== lastD) { lastD = it.d; const p = it.d.split('-'); h += `<div class="fp-day">📆 ${+p[2]}/${+p[1]}</div>`; }
+          h += `<div class="fp-case dash-item" style="animation-delay:${Math.min(i, 12) * 0.03}s">
+            <div class="fp-meta"><b>👤 ${escapeHtml(it.emp || '-')}</b><span>${escapeHtml(it.t)}</span></div>
+            ${it.reason ? `<div class="fp-reason">❗ ${escapeHtml(it.reason)}</div>` : '<div class="fp-reason na">ไม่ระบุสาเหตุ</div>'}
+            <div class="fp-imgs">${it.imgs.map(g => `<button type="button" class="fp-img" onclick="fpZoom('${g.id}','${FP_LBL[g.k]}')"><img loading="lazy" src="${fpThumb(g.id, 500)}" alt=""><i style="background:${FP_CLR[g.k]}">${FP_LBL[g.k]}</i></button>`).join('')}</div></div>`;
+        });
+        return h;
+      }
+      function fpZoom(id, lbl) {
+        const d = document.createElement('div'); d.className = 'fp-zoom';
+        d.innerHTML = `<img src="${fpThumb(id, 1800)}" alt=""><div class="fp-zbar"><span>${escapeHtml(lbl)}</span><a href="https://drive.google.com/file/d/${encodeURIComponent(id)}/view" target="_blank" rel="noopener">เปิดใน Drive ↗</a><button type="button">✕ ปิด</button></div>`;
+        d.onclick = e => { if (e.target.tagName !== 'A') d.remove(); };
+        document.body.appendChild(d);
       }
       // ปุ่ม ‹ › เลื่อนเดือน/วัน
       function fsShift(kind, n) {
