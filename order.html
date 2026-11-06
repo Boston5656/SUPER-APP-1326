@@ -370,6 +370,23 @@
     .sc-draw { stroke-dasharray: 90; animation: scDraw 1s ease-out both; } @keyframes scDraw { from { stroke-dashoffset: 90; } to { stroke-dashoffset: 0; } }
     .sc-back { animation: scBackA 1.6s ease-in-out infinite; } @keyframes scBackA { 0%, 100% { transform: translateX(14px); } 50% { transform: translateX(-14px); } }
     @media (prefers-reduced-motion: reduce) { .trk *, .trk-mini * { animation: none !important; } }
+    .nkind{margin-bottom:4px}.nkind button{flex:1}
+    .oe-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+    @media (min-width:860px){.oe-grid{grid-template-columns:1fr 1fr}}
+    .oe-card{background:#fff;border-radius:20px;padding:14px;box-shadow:0 6px 18px -14px rgba(0,0,0,.35)}
+    .oe-h{display:flex;flex-direction:column;gap:2px;margin-bottom:10px}.oe-h b{font-size:15px}.oe-h small{font-size:11.5px;color:#8E8E93;font-weight:600;line-height:1.45}
+    .oe-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .oe-chip{display:inline-flex;align-items:center;gap:2px;background:#F2F2F7;border-radius:100px;padding:3px 4px 3px 10px;font-size:13px;font-weight:700}
+    .oe-chip em{font-style:normal;padding:0 2px}
+    .oe-chip button{width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:#8E8E93;font-size:13px;font-weight:800;cursor:pointer;padding:0}
+    .oe-chip button.rm{background:#FFE5E3;color:#D70015}
+    .oe-none{font-size:12.5px;color:#8E8E93;font-weight:600}
+    .oe-add,.oe-row{display:flex;gap:6px;align-items:center}.oe-row{margin-bottom:6px}
+    .oe-add .inp,.oe-row .inp{flex:1;min-width:0;margin:0}.oe-add .inp.pr,.oe-row .inp.pr{flex:0 0 96px}
+    .oe-add button{flex-shrink:0;height:46px;padding:0 14px;border:0;border-radius:14px;background:#1C1C1E;color:#FFD600;font-weight:800;cursor:pointer;font-family:inherit}
+    .oe-row .rm{flex-shrink:0;width:40px;height:40px;border:0;border-radius:12px;background:#FFE5E3;color:#D70015;font-weight:800;cursor:pointer}
+    .pwbox{background:#1C1C1E;color:#fff;border-radius:20px;padding:18px;text-align:center;margin:6px 0 12px}.pwbox small{display:block;color:#AEAEB2;font-weight:700;font-size:12px}
+    .pwbox b{display:block;font:800 22px 'Space Grotesk',sans-serif}.pwbox b.pw{font-size:40px;letter-spacing:6px;color:#FFD600}
 </style>
 </head>
 <body>
@@ -432,19 +449,21 @@
   <!-- ＋ เปิดบิล -->
   <div class="sheet" id="newS"><div class="bd" onclick="closeS('newS')"></div><div class="box">
     <div class="grab"></div>
-    <div class="shd"><span class="ic">🧾</span><div><h3>เปิดบิล Order</h3><small>กดส่งแล้วเด้งแจ้งพนักงานในกะทันที</small></div><button class="x" onclick="closeS('newS')">✕</button></div>
+    <div class="shd"><span class="ic" id="nIc">🧾</span><div><h3 id="nTitle">เปิดบิล Order</h3><small id="nSub">กดส่งแล้วเด้งแจ้งพนักงานในกะทันที</small></div><button class="x" onclick="closeS('newS')">✕</button></div>
+    <div class="chips nkind" id="nKind"><button data-v="" class="on">📱 มือถือ / แท็บเล็ต</button><button data-v="gadget">🎧 Gadget</button></div>
+    <div id="nGWrap" style="display:none"><div class="lab"><span>ประเภท Gadget <span class="req">*</span></span></div><div class="chips" id="nGType"></div></div>
     <div class="lab"><span>แบรนด์ <span class="req">*</span></span></div><div class="chips" id="nBrand"></div>
     <div class="lab"><span>รุ่น <span class="req">*</span></span><small>เช่น Galaxy A56 5G</small></div>
     <input class="inp big" id="nModel" maxlength="60" placeholder="พิมพ์รุ่น" list="nModelList" autocomplete="off"><datalist id="nModelList"></datalist>
     <div class="lab"><span>สี</span></div><div class="chips" id="nColor"></div>
     <input class="inp" id="nColorX" maxlength="30" placeholder="หรือพิมพ์สี" style="margin-top:6px">
-    <div class="lab"><span>ความจุ</span></div><div class="chips" id="nCap"></div>
+    <div id="nCapWrap"><div class="lab"><span>ความจุ</span></div><div class="chips" id="nCap"></div></div>
     <div class="lab"><span>จำนวน</span></div>
     <div class="stp"><button onclick="qty(-1)">−</button><b id="nQty">1</b><button class="p" onclick="qty(1)">＋</button></div>
     <div class="lab"><span>ชื่อ-สกุลลูกค้า</span></div><input class="inp" id="nCust" maxlength="60" placeholder="ชื่อ นามสกุล" autocomplete="off">
     <div class="lab"><span>เบอร์ที่สมัคร 7Club+</span><small>10 หลัก</small></div><input class="inp big" id="nPhone" inputmode="tel" maxlength="12" placeholder="08x-xxx-xxxx" autocomplete="off" oninput="fmtPhone(this)">
     <div class="lab"><span>ประเภทชำระ</span></div><div class="chips" id="nPay"></div>
-    <div class="lab"><span>💵 ราคาเครื่อง (บาท / เครื่อง)</span></div><input class="inp big" id="nPrice" type="number" inputmode="numeric" placeholder="ราคาขาย" oninput="adTotal('nAd')">
+    <div class="lab"><span id="nPriceLab">💵 ราคาเครื่อง (บาท / เครื่อง)</span></div><input class="inp big" id="nPrice" type="number" inputmode="numeric" placeholder="ราคาขาย" oninput="adTotal('nAd')">
     <div class="lab"><span>➕ ขายเสริม / ประกัน</span><small>ใส่ราคา + จำนวน · งานโฟกัสเข้า Check List ให้เอง</small></div><div id="nAd"></div>
     <div class="lab"><span></span></div>
     <div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>📲 ลูกค้าต้องการย้ายข้อมูล<small>ลูกค้าจะต้องกดยอมรับนโยบายย้ายข้อมูลตอนเซ็น</small></span><span class="sw" id="nTransfer"></span></div>
@@ -573,7 +592,7 @@
     function billHTML(o) {
       const L = o.addons || [];
       if (!o.price && !L.length) return '';
-      return `<div class="bill">${o.pkg ? `<div style="color:#B45309;font-weight:800"><span>📦 ${esc(o.pkg)}</span><span></span></div>` : ''}<div><span>📱 ${esc(o.model)}${o.qty > 1 ? ' ×' + o.qty : ''}</span><span>${o.price ? baht(o.price * (o.qty || 1)) : '—'}</span></div>${L.map(a => `<div><span>➕ ${esc(a.name)}${a.qty > 1 ? ' ×' + a.qty : ''}</span><span>${a.price ? baht(a.price * a.qty) : '—'}</span></div>`).join('')}<div class="tt"><span>รวม</span><span>${baht(o.total)}</span></div></div>`;
+      return `<div class="bill">${o.pkg ? `<div style="color:#B45309;font-weight:800"><span>📦 ${esc(o.pkg)}</span><span></span></div>` : ''}<div><span>${o.kind === 'gadget' ? '🎧' : '📱'} ${esc(o.model)}${o.qty > 1 ? ' ×' + o.qty : ''}</span><span>${o.price ? baht(o.price * (o.qty || 1)) : '—'}</span></div>${L.map(a => `<div><span>➕ ${esc(a.name)}${a.qty > 1 ? ' ×' + a.qty : ''}</span><span>${a.price ? baht(a.price * a.qty) : '—'}</span></div>`).join('')}<div class="tt"><span>รวม</span><span>${baht(o.total)}</span></div></div>`;
     }
     const qtyOf = f => { const m = String(f).match(/\sx(\d+)$/i); return m ? +m[1] : 1; };
 
@@ -763,7 +782,7 @@
       const cb = claimBtnHTML(o), claimBtn = cb ? `<div class="act">${cb}</div>` : '';
       return `<div class="oc ${o.status}${mine ? ' mine' : ''}" onclick="showOrder('${o.no}')">
         <div class="t1"><span class="bd" style="background:${bc(o.brand)}"></span>${esc(o.brand)}<span class="no">#${esc(o.no)}</span><span class="st">${LABEL[o.status] || o.status}</span></div>
-        <div class="md">${esc(o.model)}<small>${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' ×' + o.qty : ''}</small></div>
+        <div class="md">${esc(o.model)}<small>${o.kind === 'gadget' ? '🎧 ' + esc(o.gtype || 'Gadget') + ' · ' : ''}${esc([o.color, o.cap].filter(Boolean).join(' · '))}${o.qty > 1 ? ' ×' + o.qty : ''}</small></div>
         <div class="mt">👤 ${esc(o.owner)}${o.total ? ' · 💰 ' + baht(o.total) : ''}${o.pay ? ' · 💳 ' + esc(o.pay) : ''}${o.extras ? ' · ➕ ' + esc(o.extras) : ''}</div>
         <div class="ln">${tags.filter(Boolean).join('')}</div>${trkMini(o)}${claimBtn}</div>`;
     }
@@ -834,11 +853,23 @@
       return true;
     }
     window.addEventListener('message', e => { if (e.origin === location.origin && e.data && e.data.type === 'order-prefill') takePrefill(); });
+    let EDIT = null;   // ✏️ กำลังแก้ไขใบไหน (null = เปิดบิลใหม่)
+    function setKind(k, keepBrand) {
+      const c = CFG.cfg, K = CHK(), g = k === 'gadget';
+      document.querySelectorAll('#nKind button').forEach(b => b.classList.toggle('on', (b.dataset.v || '') === (k || '')));
+      document.getElementById('nGWrap').style.display = g ? '' : 'none';
+      document.getElementById('nCapWrap').style.display = g ? 'none' : '';
+      document.getElementById('nPriceLab').textContent = g ? '💵 ราคา (บาท / ชิ้น)' : '💵 ราคาเครื่อง (บาท / เครื่อง)';
+      document.getElementById('nModel').placeholder = g ? 'เช่น AirPods Pro 2 / Galaxy Watch8' : 'พิมพ์รุ่น';
+      if (!keepBrand) chipSet('nBrand', g ? (c.gBrands || []) : K.brands, '', false, true);
+    }
     function openNew() {
       if (!CFG) { toast('รอโหลดตั้งค่าแป๊บนึง'); return; }
+      EDIT = null; newHead(); document.getElementById('newS').classList.remove('lv2');
       PKG = '';
       const c = CFG.cfg, b = me().role === 'PC' ? me().brand : '';
       const K = CHK(), myB = K.brands.find(x => x.toUpperCase().split(/[\s\/]+/).includes(String(b).toUpperCase())) || '';
+      setKind('', true); chipSet('nGType', c.gTypes || [], ''); chipBindKind();
       chipSet('nBrand', K.brands, myB, false, true);
       chipSet('nColor', c.colors, ''); chipSet('nCap', c.caps, ''); chipSet('nPay', c.pays, '');
       ['nModel', 'nColorX', 'nCust', 'nPhone', 'nNote', 'nPrice'].forEach(i => document.getElementById(i).value = '');
@@ -854,6 +885,46 @@
       document.getElementById('nSend').disabled = false;
       openS('newS');
     }
+    function newHead() {
+      const e = !!EDIT;
+      document.getElementById('nTitle').textContent = e ? '✏️ แก้ไข Order #' + EDIT : 'เปิดบิล Order';
+      document.getElementById('nSub').textContent = e ? 'แก้ข้อมูลที่เปิดผิด แล้วกดบันทึก · พนักงานที่รับเคสจะได้แจ้งเตือน' : 'กดส่งแล้วเด้งแจ้งพนักงานในกะทันที';
+      document.getElementById('nIc').textContent = e ? '✏️' : '🧾';
+      document.getElementById('nSend').textContent = e ? '💾 บันทึกการแก้ไข' : '🔔 ส่ง Order';
+      const a = document.getElementById('nAsg'); if (a) { const w = a.closest('.asgw') || a; w.style.display = e ? 'none' : ''; const lab = a.previousElementSibling; if (lab && lab.classList.contains('lab')) lab.style.display = e ? 'none' : ''; }
+    }
+    function chipBindKind() {
+      const el = document.getElementById('nKind'); if (el._b) return; el._b = 1;
+      el.onclick = ev => { const b = ev.target.closest('button'); if (!b) return; setKind(b.dataset.v || ''); vib(5); };
+    }
+    // ✏️ แก้ไขใบ Order — ใช้ฟอร์มเปิดบิลเดิม เติมข้อมูลให้
+    function openEdit() {
+      const o = CUR; if (!o || !CFG) return;
+      const c = CFG.cfg, K = CHK(), g = o.kind === 'gadget';
+      EDIT = o.no; PKG = o.pkg || '';
+      chipBindKind(); setKind(g ? 'gadget' : '', true);
+      chipSet('nGType', [...new Set([...(c.gTypes || []), ...(o.gtype ? [o.gtype] : [])])], o.gtype || '');
+      const bl = g ? (c.gBrands || []) : K.brands;
+      chipSet('nBrand', [...new Set([...bl, ...(bl.some(x => x.toUpperCase() === String(o.brand).toUpperCase()) ? [] : [o.brand])])], bl.find(x => x.toUpperCase() === String(o.brand).toUpperCase()) || o.brand, false, true);
+      const inC = (c.colors || []).includes(o.color);
+      chipSet('nColor', c.colors, inC ? o.color : ''); document.getElementById('nColorX').value = inC ? '' : (o.color || '');
+      chipSet('nCap', c.caps, o.cap || ''); chipSet('nPay', [...new Set([...(c.pays || []), ...(o.pay && !(c.pays || []).includes(o.pay) ? [o.pay] : [])])], o.pay || '');
+      document.getElementById('nModel').value = o.model || ''; document.getElementById('nCust').value = o.cust || '';
+      document.getElementById('nPhone').value = o.phone || ''; fmtPhone(document.getElementById('nPhone'));
+      document.getElementById('nNote').value = o.note || ''; document.getElementById('nPrice').value = o.price || '';
+      document.getElementById('nQty').textContent = o.qty || 1; document.getElementById('nTransfer').classList.toggle('on', !!o.transfer);
+      AD.nAd = (o.addons || []).map(a => Object.assign({}, a)); adRender('nAd');
+      chipSet('nAsg', [], ''); newHead();
+      document.getElementById('nSend').disabled = false;
+      document.getElementById('newS').classList.add('lv2');   // ซ้อนบนหน้ารายละเอียด
+      openS('newS');
+    }
+    function delOrder(btn) {
+      const o = CUR; if (!o) return;
+      if (!btn._arm) { btn._arm = 1; btn.innerHTML = '⚠️ แตะอีกครั้งเพื่อลบถาวร<small>ลบออกจากชีตเลย กู้คืนไม่ได้</small>'; setTimeout(() => { if (btn.isConnected) { btn._arm = 0; btn.innerHTML = '🗑 ลบ Order ทิ้ง<small>เปิดซ้ำ / ทดสอบ · ผู้จัดการเท่านั้น</small>'; } }, 3500); return; }
+      btn.disabled = true;
+      run('deleteOrder', o.no).then(r => { OA.setQueue(r.queue, true); closeDetail(); toast('🗑 ลบ Order #' + r.no + ' แล้ว'); vib(15); try { if (REP) loadReport(); } catch (e) {} }).catch(e => { btn.disabled = false; toast(e.message, 1); });
+    }
     function paintAsg(sel) {
       const brk = CFG.onBreak || {}, tm = (CFG.team || []).filter(t => t.level !== 'off');   // 🍱 พักทานข้าวอยู่ = เลือกไม่ได้
       document.getElementById('nAsg').innerHTML = `<button data-v="" class="${sel ? '' : 'on'}">⚡ ใครว่างก็ได้</button>` + tm.map(t => brk[t.acct] ? `<button disabled style="opacity:.45">🍱 ${esc(t.nick)} · พักอยู่</button>` : `<button data-v="${esc(t.acct)}" class="${sel === t.acct ? 'on' : ''}">${lvIcon(t)} ${esc(t.nick)}</button>`).join('');
@@ -863,11 +934,18 @@
     function sendNew() {
       const f = { brand: chipVal('nBrand'), model: document.getElementById('nModel').value.trim(), color: document.getElementById('nColorX').value.trim() || chipVal('nColor'), cap: chipVal('nCap'),
         qty: +document.getElementById('nQty').textContent, cust: document.getElementById('nCust').value.trim(), phone: document.getElementById('nPhone').value.replace(/\D/g, ''),
-        pay: chipVal('nPay'), price: +document.getElementById('nPrice').value || 0, addons: AD.nAd || [], focus: focusOf(AD.nAd), assign: chipVal('nAsg'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim(), pkg: PKG };
+        pay: chipVal('nPay'), price: +document.getElementById('nPrice').value || 0, addons: AD.nAd || [], focus: focusOf(AD.nAd), assign: chipVal('nAsg'), transfer: document.getElementById('nTransfer').classList.contains('on'), note: document.getElementById('nNote').value.trim(), pkg: PKG,
+        kind: (document.querySelector('#nKind button.on') || {}).dataset ? document.querySelector('#nKind button.on').dataset.v : '', gtype: chipVal('nGType') };
+      if (f.kind === 'gadget') { f.cap = ''; if (!f.gtype) return toast('เลือกประเภท Gadget ก่อน', 1); }
       if (!f.brand) return toast('เลือกแบรนด์ก่อน', 1);
       if (!f.model) { document.getElementById('nModel').focus(); return toast('ใส่รุ่นก่อน', 1); }
       if (f.phone && !/^0\d{9}$/.test(f.phone)) return toast('เบอร์ 7Club+ ต้องเป็นเลข 10 หลัก', 1);
-      const b = document.getElementById('nSend'); b.disabled = true; b.textContent = 'กำลังส่ง…';
+      const b = document.getElementById('nSend'); b.disabled = true; b.textContent = EDIT ? 'กำลังบันทึก…' : 'กำลังส่ง…';
+      if (EDIT) {
+        const no = EDIT;
+        return run('editOrder', no, f).then(r => { b.disabled = false; newHead(); OA.setQueue(r.queue, true); closeS('newS'); EDIT = null; toast(r.same ? 'ไม่มีอะไรเปลี่ยน' : '✏️ แก้ไข #' + no + ' แล้ว'); showOrder(no, r.order); vib(12); })
+          .catch(e => { b.disabled = false; newHead(); toast(e.message, 1); });
+      }
       run('createOrder', f).then(r => { b.textContent = '🔔 ส่ง Order'; OA.setQueue(r.queue, true); closeS('newS'); toast('🔔 ส่ง Order #' + r.order.no + ' แล้ว — ' + (r.order.assign ? 'แจ้ง ' + r.order.assign.nick + ' (จอง ' + r.order.assign.mins + ' นาที)' : 'แจ้งพนักงานในกะ')); vib([20, 40, 20]); })
         .catch(e => { b.disabled = false; b.textContent = '🔔 ส่ง Order'; toast(e.message, 1); });
     }
@@ -899,7 +977,7 @@
       if (btn) btn.disabled = true;
       return run(fn, ...args).then(r => { apply(r, msg); return r; }).catch(e => { if (btn) btn.disabled = false; toast(e.message, 1); throw e; });
     }
-    const H_LABEL = { stamp: '📸 ทำรูปส่งงาน', forfeit: '⌛ สละสิทธิ์ (ไม่รับในเวลา)', sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '📲 เริ่มย้ายข้อมูล', unpark: '▶️ ย้ายข้อมูลเสร็จ ทำต่อ', ready: '✅ ย้ายข้อมูลเสร็จ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก' };
+    const H_LABEL = { stamp: '📸 ทำรูปส่งงาน', forfeit: '⌛ สละสิทธิ์ (ไม่รับในเวลา)', sale: '📊 บันทึกเข้า Check List', create: '🧾 เปิดบิล', claim: '🙋 รับเคส', work: '🔄 อัปเดตงาน', back: '↩️ ส่งกลับ PC', fix: '✍️ PC แก้ข้อมูล', picked: '📦 เบิกเครื่อง ส่งให้ PC', check: '📋 บันทึก Check List', photo: '📷 ถ่ายรูป', unphoto: '🗑 ลบรูป', park: '📲 เริ่มย้ายข้อมูล', unpark: '▶️ ย้ายข้อมูลเสร็จ ทำต่อ', ready: '✅ ย้ายข้อมูลเสร็จ พร้อมส่งมอบ', hand: '🔁 ส่งต่อเคส', sign: '✍️ ลูกค้าเซ็นรับเครื่อง', cancel: '✖️ ยกเลิก', edit: '✏️ แก้ไข Order' };
     function histLine(h) {
       let x = '';
       if (h.a === 'work') x = (WORK[h.kind] || '') + (h.text ? ' ' + h.text : '') + (h.mins ? ' · ~' + h.mins + ' นาที' : '');
@@ -913,6 +991,7 @@
       if (h.a === 'sale') x = h.ok ? 'สำเร็จ' : 'ไม่สำเร็จ';
       if (h.a === 'create' && h.to) x = 'เลือก ' + h.to + ' รับเคส';
       if (h.a === 'forfeit') x = h.who;
+      if (h.a === 'edit') x = 'แก้: ' + (h.what || '');
       return `<li><time>${hm(h.t)}</time><span>${H_LABEL[h.a] || h.a}${h.by ? ' · ' + esc(h.by) : ''}${x ? `<small>${esc(x)}</small>` : ''}</span></li>`;
     }
     function renderDetail() {
@@ -966,7 +1045,9 @@
         B.push(`<button onclick="act('unpark',['${o.no}',false],'▶️ กลับมาทำต่อ',this)">▶️ ย้ายเสร็จ ทำขั้นต่อ<small>ลูกค้ากลับมาแล้ว</small></button>`);
       }
       if (['claimed', 'picked', 'parked', 'back'].includes(o.status) && asg) B.push(me().level === 'intern' && mine ? `<button class="d" onclick="handSheet()">🔁 ส่งมอบให้พี่<small>พี่ในร้าน / ผู้จัดการ รับช่วงต่อ</small></button>` : `<button onclick="handSheet()">🔁 ส่งต่อเคส<small>หมดกะ / ติดลูกค้า</small></button>`);
+      if ((act && owner) || m.mgr) B.push(`<button onclick="openEdit()">✏️ แก้ไข Order<small>เปิดผิด แก้รุ่น / สี / ราคา / ลูกค้า</small></button>`);
       if (act && (owner || m.mgr)) B.push(`<button class="r" onclick="cancelSheet()">✖️ ยกเลิก Order<small>ลูกค้าเปลี่ยนใจ / เปิดผิด</small></button>`);
+      if (m.mgr) B.push(`<button class="r" onclick="delOrder(this)">🗑 ลบ Order ทิ้ง<small>เปิดซ้ำ / ทดสอบ · ผู้จัดการเท่านั้น</small></button>`);
       if (B.length) h += `<div class="acts">${B.join('')}</div>`;
 
       // Check List / รูป / ลายเซ็น
@@ -1510,7 +1591,7 @@
 
     // ===================== ⚙️ ตั้งค่า (ผู้จัดการ) =====================
     let STAB = 'team';
-    function openSettings() { renderSettings(); openS('setS'); }
+    function openSettings() { OE = null; renderSettings(); openS('setS'); }
     function renderSettings() {
       const c = CFG.cfg, tabs = { team: '👥 ทีมรับเคส', gen: '⏱ ทั่วไป', list: '📝 ตัวเลือก', items: '📋 Check List', terms: '🛡️ เงื่อนไข', push: '🔔 แจ้งเตือนมือถือ' };
       const lines = k => esc((c[k] || []).join('\n'));
@@ -1518,6 +1599,7 @@
       if (STAB === 'team') body = `<div class="note wh">⭐ <b>พี่ในร้าน</b> (MSC / Apple) · 🔰 <b>น้องฝึกงาน</b> รับเคสได้ แล้วส่งมอบให้พี่ / ผู้จัดการ · ⛔ <b>ไม่รับเคส</b> = ไม่เด้ง ไม่โชว์ให้ PC เลือก<br>➕ <b>คนใหม่</b>: ให้สมัครบัญชีด้วยรหัสพนักงานที่หน้าเข้าสู่ระบบ แล้วจะขึ้นที่นี่เป็นน้องฝึกงานเอง</div>
         <div id="teamL">${(CFG.team || []).map(t => `<div class="tgl" style="margin-top:8px;flex-wrap:wrap" data-a="${esc(t.acct)}"><span>${t.role === 'MANAGER' ? '👑 ' : ''}${esc(t.nick)}<small>User ${esc(t.acct)}${t.code ? ' · รหัส ' + esc(t.code) : ''}</small></span>
           <span style="display:flex;gap:6px;align-items:center"><span class="chips tlv">${[['senior', '⭐ พี่'], ['intern', '🔰 น้อง'], ['off', '⛔ ไม่รับ']].map(([k, l]) => `<button data-v="${k}" class="${t.level === k ? 'on' : ''}" style="padding:7px 10px;font-size:12px">${l}</button>`).join('')}</span>
+          ${me().admin && t.role !== 'MANAGER' ? `<button class="x" title="รีเซ็ตรหัส" onclick="resetPw('${esc(t.acct)}','${esc(t.nick)}',this)" style="background:#FFF4CC">🔑</button>` : ''}
           ${me().admin && t.role !== 'MANAGER' ? `<button class="x" title="ลบบัญชี" onclick="rmMember('${esc(t.acct)}','${esc(t.nick)}')" style="background:#FFE5E3;color:#D70015">🗑</button>` : ''}</span></div>`).join('') || '<div class="empty">ยังไม่มีบัญชีพนักงาน</div>'}</div>`;
       if (STAB === 'gen') body = `<div class="two"><div><div class="lab"><span>เตือนซ้ำถ้าไม่มีคนรับ (นาที)</span></div><input class="inp big" id="sClaim" type="number" min="1" max="60" value="${c.claimMin}"></div><div><div class="lab"><span>แจ้งผู้จัดการ (นาที)</span></div><input class="inp big" id="sMgr" type="number" min="1" max="60" value="${c.mgrMin}"></div></div>
         <div class="lab"><span>เวลาปิดร้าน</span><small>เตือนเคสค้างก่อนปิด 1 ชม.</small></div><input class="inp big" id="sClose" type="time" value="${esc(c.closeTime)}">
@@ -1525,8 +1607,7 @@
         <div class="lab"><span>🔊 เสียงเรียก (พูดในแอป)</span></div><div class="chips" id="sMode"><button data-v="fun" class="${c.sound.mode !== 'polite' ? 'on' : ''}">😆 โหมดฮา</button><button data-v="polite" class="${c.sound.mode === 'polite' ? 'on' : ''}">🙂 โหมดสุภาพ</button></div>
         <input class="inp" id="sFun" maxlength="80" value="${esc(c.sound.fun)}" placeholder="ประโยคโหมดฮา" style="margin-top:8px"><input class="inp" id="sPol" maxlength="80" value="${esc(c.sound.polite)}" placeholder="ประโยคโหมดสุภาพ" style="margin-top:6px">
         <div class="lab"><span></span></div><div class="tgl" onclick="this.querySelector('.sw').classList.toggle('on')"><span>พูดชื่อแบรนด์ + รุ่นต่อท้าย<small>เช่น "…มาเด้อสู SAMSUNG Galaxy A56"</small></span><span class="sw ${c.sound.sayModel !== false ? 'on' : ''}" id="sSay"></span></div>`;
-      if (STAB === 'list') body = `<div class="note bl">🏷️ แบรนด์ · 🎯 งานโฟกัส · 👤 รายชื่อพนักงานขาย / ผู้รับเคส ใช้ชุดเดียวกับแอป <b>Check List</b> — แก้ที่ Check List › ⚙️ ตั้งค่า</div>` + `<div class="lab"><span>➕ รายการขายเสริม / ประกัน</span><small>1 บรรทัด = ชื่อ | ราคา · ว่าง = ใช้งานโฟกัสจาก Check List</small></div><textarea id="s_addons" rows="8" placeholder="ฟิล์ม BRIGHT | 590&#10;SANDISK | 399&#10;ประกันอุบัติเหตุ | 1290">${esc((c.addons || []).map(a => a.name + (a.price ? ' | ' + a.price : '')).join('\n'))}</textarea><div class="note wh">💡 ตั้งชื่อให้ตรงกับงานโฟกัสใน Check List (เช่น FILM BRIGHT, SANDISK) แล้วจะนับเป็นงานโฟกัสให้เอง</div>`
-        + ['colors:สี', 'caps:ความจุ', 'pays:ประเภทชำระ', 'backReasons:เหตุผลส่งกลับ PC'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span><small>1 บรรทัด = 1 ตัวเลือก</small></div><textarea id="s_${k}" rows="4">${lines(k)}</textarea>`; }).join('');
+      if (STAB === 'list') body = optHTML();
       if (STAB === 'items') body = `<div class="lab"><span>รายการตรวจเครื่อง</span><small>1 บรรทัด = 1 ข้อ · เรียงตามลำดับที่ทดสอบจริง</small></div><textarea id="s_items" rows="15">${lines('items')}</textarea><div class="note or">แก้รายการ = ขึ้นเงื่อนไขฉบับใหม่ · ใบที่ลูกค้าเซ็นไปแล้วยังจำฉบับเดิม</div>`;
       if (STAB === 'terms') body = `<div class="note wh">ฉบับปัจจุบัน: <b>${esc(c.termsVer)}</b> · แก้ข้อความ = ขึ้นฉบับใหม่อัตโนมัติ</div>` + ['notice:ข้อความ 7Club+ / ใบกำกับภาษี', 'warranty:เงื่อนไขรับประกัน 7 วัน', 'transfer:นโยบายย้ายข้อมูล', 'pdpa:การเก็บข้อมูล (PDPA)'].map(x => { const [k, t] = x.split(':'); return `<div class="lab"><span>${t}</span></div><textarea id="s_${k}" rows="${k === 'pdpa' || k === 'notice' ? 3 : 8}">${esc(c[k])}</textarea>`; }).join('');
       if (STAB === 'push') body = `<div class="note ${CFG.push.ready ? 'gr' : 'or'}">${CFG.push.ready ? '✅ ตั้งค่าแจ้งเตือนมือถือแล้ว (โปรเจกต์ ' + esc(CFG.push.web.projectId) + ')' : '⚠️ ยังไม่ได้ตั้งค่า — ตอนนี้แจ้งเตือนได้เฉพาะตอนเปิดแอปค้างไว้'}</div>
@@ -1542,12 +1623,39 @@
       if (STAB === 'team') document.querySelectorAll('#teamL .tlv').forEach(el => el.onclick = e => { const b = e.target.closest('button'); if (!b) return; el.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); vib(5); });
       if (STAB === 'push') loadPushStatus();
     }
+    // ---------- 📝 ตัวเลือกในฟอร์ม (แบบ Dashboard: แตะ ✕ ลบ · พิมพ์แล้ว ＋ เพิ่ม · ‹ › เลื่อนลำดับ) ----------
+    const OPT_KEYS = ['gTypes', 'gBrands', 'colors', 'caps', 'pays', 'backReasons'];
+    const OPT_META = {
+      gTypes: ['🎧 ประเภท Gadget', 'ปุ่มตอนเปิดบิลแบบ 🎧 Gadget', 'เช่น หูฟัง'],
+      gBrands: ['🏷️ แบรนด์ Gadget', 'แบรนด์ของมือถือใช้ชุดเดียวกับ Check List', 'เช่น JBL'],
+      colors: ['🎨 สี', 'ใช้ทั้งมือถือและ Gadget · พิมพ์สีอื่นเองได้ในฟอร์ม', 'เช่น ไทเทเนียม'],
+      caps: ['💾 ความจุ', 'เฉพาะมือถือ / แท็บเล็ต', 'เช่น 2TB'],
+      pays: ['💳 ประเภทชำระ', '', 'เช่น ผ่อนบัตร 10 เดือน'],
+      backReasons: ['↩️ เหตุผลส่งกลับ PC', 'ปุ่มตอนพนักงานส่งเคสกลับ', 'เช่น เครื่องโชว์หมด']
+    };
+    let OE = null;
+    function optHTML() {
+      const c = CFG.cfg;
+      if (!OE) { OE = {}; OPT_KEYS.forEach(k => OE[k] = (c[k] || []).slice()); OE.addons = (c.addons || []).map(a => ({ name: a.name, price: a.price || '' })); }
+      const card = k => { const [t, n, ph] = OPT_META[k]; return `<div class="oe-card"><div class="oe-h"><b>${t}</b><small>${OE[k].length} รายการ${n ? ' · ' + n : ''}</small></div>
+        <div class="oe-chips">${OE[k].map((x, i) => `<span class="oe-chip">${i ? `<button onclick="oeMv('${k}',${i},-1)" aria-label="เลื่อนซ้าย">‹</button>` : ''}<em>${esc(x)}</em><button class="rm" onclick="oeRm('${k}',${i})" aria-label="ลบ">✕</button></span>`).join('') || '<span class="oe-none">ยังไม่มี — เพิ่มด้านล่าง</span>'}</div>
+        <div class="oe-add"><input class="inp" id="oe_${k}" maxlength="40" placeholder="${ph}" onkeydown="if(event.key==='Enter'){event.preventDefault();oeAdd('${k}')}"><button onclick="oeAdd('${k}')">＋ เพิ่ม</button></div></div>`; };
+      const adCard = `<div class="oe-card"><div class="oe-h"><b>➕ ขายเสริม / ประกัน / Gadget พ่วง</b><small>${OE.addons.length} รายการ · ตั้งชื่อตรงงานโฟกัสใน Check List (เช่น SANDISK) = นับงานโฟกัสให้เอง · ว่าง = ใช้งานโฟกัสจาก Check List</small></div>
+        ${OE.addons.map((a, i) => `<div class="oe-row"><input class="inp" value="${esc(a.name)}" maxlength="60" placeholder="ชื่อสินค้า" oninput="OE.addons[${i}].name=this.value"><input class="inp pr" type="number" inputmode="numeric" value="${esc(a.price)}" placeholder="ราคา" oninput="OE.addons[${i}].price=this.value"><button class="rm" onclick="OE.addons.splice(${i},1);renderSettings()" aria-label="ลบ">✕</button></div>`).join('')}
+        <div class="oe-add"><input class="inp" id="oe_adN" maxlength="60" placeholder="เช่น AirPods Pro 2 / ฟิล์ม BRIGHT"><input class="inp pr" id="oe_adP" type="number" inputmode="numeric" placeholder="ราคา" onkeydown="if(event.key==='Enter'){event.preventDefault();oeAddAd()}"><button onclick="oeAddAd()">＋</button></div></div>`;
+      return `<div class="note bl">🏷️ แบรนด์มือถือ · 🎯 งานโฟกัส · 👤 รายชื่อพนักงานขาย ใช้ชุดเดียวกับแอป <b>Check List</b> — แก้ที่ Check List › ⚙️ ตั้งค่า</div>
+        <div class="oe-grid">${card('gTypes')}${card('gBrands')}${adCard}${card('colors')}${card('caps')}${card('pays')}${card('backReasons')}</div>
+        <div class="note wh">💡 เพิ่ม / ลบ แล้วกด 💾 บันทึก ด้านล่าง · ใบ Order เก่าไม่เปลี่ยน</div>`;
+    }
+    function oeAdd(k) { const el = document.getElementById('oe_' + k), v = el.value.trim(); if (!v) return el.focus(); if (OE[k].some(x => x.toUpperCase() === v.toUpperCase())) return toast('มีอยู่แล้ว', 1); OE[k].push(k === 'gBrands' ? v.toUpperCase() : v); renderSettings(); vib(6); setTimeout(() => { const n = document.getElementById('oe_' + k); n && n.focus(); }, 30); }
+    function oeRm(k, i) { OE[k].splice(i, 1); renderSettings(); vib(6); }
+    function oeMv(k, i, d) { const a = OE[k], j = i + d; if (j < 0 || j >= a.length) return; [a[i], a[j]] = [a[j], a[i]]; renderSettings(); vib(4); }
+    function oeAddAd() { const n = document.getElementById('oe_adN'), p = document.getElementById('oe_adP'); if (!n.value.trim()) return n.focus(); OE.addons.push({ name: n.value.trim(), price: +p.value || '' }); renderSettings(); vib(6); }
     function saveSet(btn) {
       const s = {}, v = id => document.getElementById(id);
       if (STAB === 'gen') Object.assign(s, { claimMin: +v('sClaim').value, mgrMin: +v('sMgr').value, closeTime: v('sClose').value, onlyOnShift: v('sShift').classList.contains('on'),
         sound: { mode: chipVal('sMode') || 'fun', fun: v('sFun').value, polite: v('sPol').value, sayModel: v('sSay').classList.contains('on') } });
-      if (STAB === 'list') { ['colors', 'caps', 'pays', 'backReasons'].forEach(k => s[k] = v('s_' + k).value.split('\n').map(x => x.trim()).filter(Boolean));
-        s.addons = v('s_addons').value.split('\n').map(x => x.split('|')).filter(x => x[0].trim()).map(x => ({ name: x[0].trim(), price: +(String(x[1] || '').replace(/[^\d.]/g, '')) || 0 })); }
+      if (STAB === 'list') { OPT_KEYS.forEach(k => s[k] = OE[k].slice()); s.addons = OE.addons.filter(x => x.name.trim()).map(x => ({ name: x.name.trim(), price: +x.price || 0 })); }
       if (STAB === 'items') s.items = v('s_items').value.split('\n').map(x => x.trim()).filter(Boolean);
       if (STAB === 'terms') ['notice', 'warranty', 'transfer', 'pdpa'].forEach(k => s[k] = v('s_' + k).value.trim());
       btn.disabled = true;
@@ -1556,7 +1664,21 @@
         run('saveTeam', map).then(c => { CFG = c; OA.setCfg(c); btn.disabled = false; toast('💾 บันทึกทีมแล้ว'); renderSettings(); renderQueue(); }).catch(e => { btn.disabled = false; toast(e.message, 1); });
         return;
       }
-      run('saveSettings', s).then(c => { CFG = c; OA.setCfg(c); btn.disabled = false; toast('💾 บันทึกแล้ว'); renderSettings(); paintSound(); }).catch(e => { btn.disabled = false; toast(e.message, 1); });
+      run('saveSettings', s).then(c => { CFG = c; OA.setCfg(c); btn.disabled = false; toast('💾 บันทึกแล้ว'); OE = null; renderSettings(); paintSound(); }).catch(e => { btn.disabled = false; toast(e.message, 1); });
+    }
+    // 🔑 Admin รีเซ็ตรหัสให้น้องที่ลืม (รหัสเดิมดูไม่ได้ เพราะเก็บแบบเข้ารหัสทางเดียว)
+    function resetPw(acct, nick, btn) {
+      if (!btn._arm) { btn._arm = 1; btn.textContent = '❓'; toast(`แตะ 🔑 อีกครั้ง = ตั้งรหัสใหม่ให้ ${nick}`); setTimeout(() => { if (btn.isConnected) { btn._arm = 0; btn.textContent = '🔑'; } }, 3000); return; }
+      btn.disabled = true;
+      run('resetMember', acct).then(r => {
+        btn.disabled = false; btn._arm = 0; btn.textContent = '🔑';
+        const box = document.getElementById('miniBox');
+        box.innerHTML = `<div class="grab"></div><div class="shd"><span class="ic">🔑</span><div><h3>รหัสใหม่ของ ${esc(r.nick || nick)}</h3><small>บอกน้องแล้วให้เข้าแอปด้วยรหัสนี้ · เปลี่ยนเองได้ทีหลัง</small></div><button class="x" onclick="closeS('miniS')">✕</button></div>
+          <div class="pwbox"><small>User</small><b>${esc(r.user)}</b><small style="margin-top:10px">Password ใหม่</small><b class="pw">${esc(r.pass)}</b></div>
+          <div class="note or">เครื่องที่น้องล็อกอินค้างไว้จะต้องเข้าใหม่ด้วยรหัสนี้ · ปิดหน้านี้แล้วจะดูรหัสนี้อีกไม่ได้</div>
+          <div class="sfoot"><button class="b-no" onclick="navigator.clipboard && navigator.clipboard.writeText('User: ${esc(r.user)}\\nPassword: ${esc(r.pass)}').then(() => toast('📋 คัดลอกแล้ว'))">📋 คัดลอก</button><button class="b-yes" onclick="closeS('miniS')">เรียบร้อย</button></div>`;
+        openS('miniS'); vib([15, 30, 15]);
+      }).catch(e => { btn.disabled = false; btn._arm = 0; btn.textContent = '🔑'; toast(e.message, 1); });
     }
     function rmMember(acct, nick) {
       if (!confirm(`ลบบัญชี ${nick} (${acct}) ออกจากระบบ?\nเข้าแอปไม่ได้อีก ต้องสมัครใหม่ถ้าจะกลับมา`)) return;
