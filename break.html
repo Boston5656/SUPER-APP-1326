@@ -133,6 +133,35 @@
     .toast.on { opacity: 1; transform: translate(-50%, 0); } .toast.err { background: #D70015; color: #fff; }
     #view-log { display: none; }
     @media (max-width: 400px) { h1 { font-size: 26px; } .ring, .ring svg { width: 188px; height: 188px; } .ring .c b { font-size: 40px; } }
+
+    /* ===================== ⌚ Apple Watch (จอกว้าง ≤ 260px) ===================== */
+    @media (max-width: 260px) {
+      body { padding-left: 8px !important; padding-right: 8px !important; }
+      .navrow { flex-wrap: wrap; gap: 5px !important; margin-bottom: 10px !important; }
+      .navrow .seg { order: 9; flex: 1 1 100% !important; }
+      .navrow .seg button { font-size: 11.5px !important; padding: 8px 2px !important; }
+      .navrow .rb, .navrow [data-sys-back-slot] > * { width: 38px !important; height: 38px !important; min-height: 0 !important; font-size: 15px !important; }
+      .navrow [data-sys-back-slot] { margin-right: auto; }
+      .eyebrow { display: none !important; }
+      h1 { font-size: 21px !important; line-height: 1.15 !important; margin: 2px 0 4px !important; }
+      .sub { font-size: 11.5px !important; line-height: 1.45 !important; }
+      .sheet .box { padding: 6px 10px 0 !important; max-height: 100vh !important; border-radius: 20px 20px 0 0 !important; }
+      .grab { display: none !important; }
+      .shd { gap: 8px !important; margin-bottom: 8px !important; }
+      .shd .ic { width: 30px !important; height: 30px !important; font-size: 15px !important; border-radius: 10px !important; }
+      .shd h3 { font-size: 15px !important; } .shd small { display: none !important; }
+      .shd .x { width: 30px !important; height: 30px !important; }
+      .sfoot { padding: 8px 0 10px !important; gap: 6px !important; }
+      .sfoot button { height: 42px !important; font-size: 13px !important; border-radius: 13px !important; }
+      .lab { font-size: 11.5px !important; } .lab small { display: none; }
+      .inp, input.inp, textarea { font-size: 14px !important; }
+      .chips button { padding: 7px 10px !important; font-size: 12px !important; }
+      .toast { font-size: 12px !important; max-width: 92vw !important; }
+    }
+    @media (max-width: 260px) {
+      .meCard, .me { padding: 14px !important; }
+    }
+
   </style>
 </head>
 <body>

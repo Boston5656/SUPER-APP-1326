@@ -15,6 +15,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="disabled-adaptations" content="watch"><!-- ⌚ Apple Watch: ใช้ขนาดจอจริง (ไม่ย่อหน้า 320px) -->
   <title>SUPER APP 1326</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -481,6 +482,36 @@
 
     @media (prefers-reduced-motion: reduce) {
       .ios-in, .ios-pop, .cat-collapse.open .cat-row { animation: none !important; }
+    }
+
+    /* ===================== ⌚ Apple Watch (จอกว้าง ≤ 260px) ===================== */
+    @media (max-width: 260px) {
+      body { font-size: 13px; }
+      #appGrid { column-gap: 6px !important; row-gap: 16px !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .app-icon { width: 58px !important; height: 58px !important; border-radius: 18px !important; }
+      .app-icon svg { width: 26px !important; height: 26px !important; }
+      .app-item { font-size: 10px !important; letter-spacing: .3px !important; }
+      .page-dashboard { padding: 10px 6px 24px !important; }
+      #page-dashboard .box-white, #page-dashboard .dash-col.box-white { padding: 12px 10px !important; border-radius: 20px !important; margin-bottom: 10px !important; }
+      #dash-top > .box-white { flex-direction: column; }
+      #db-branch { font-size: 9.5px !important; margin-bottom: 0 !important; }
+      #db-sales { font-size: 30px !important; margin: 8px 0 6px !important; letter-spacing: -1px !important; }
+      #db-achieve, #db-forecast { font-size: 16px !important; }
+      #dash-top > .box-white > .text-right { flex-direction: row !important; align-items: flex-end; justify-content: space-between; text-align: left !important; margin-top: 10px; border-top: 1px dashed #E5E5EA; padding-top: 8px; }
+      #dash-top > .box-white > .text-right > div { margin-top: 0 !important; }
+      #db-day { font-size: 24px !important; display: inline !important; } #db-month { display: inline !important; margin-left: 4px; }
+      .dash-pills { gap: 6px !important; margin-bottom: 10px !important; }
+      .dash-pills .pill-dark { padding: 10px !important; flex-direction: column; align-items: flex-start !important; gap: 2px; }
+      .hgrid { grid-template-columns: 1fr !important; gap: 8px !important; }
+      .sl-card { padding: 12px 12px !important; gap: 6px !important; --cut: 14px; }
+      .sl-head { padding-left: 4px; flex-wrap: wrap; }
+      .sl-name { white-space: normal !important; font-size: 12px !important; }
+      .sl-mid { flex-direction: column; align-items: flex-start !important; gap: 4px !important; }
+      .sl-big { font-size: 34px !important; }
+      .sl-foot { min-height: 0 !important; padding-right: 0 !important; flex-direction: column; gap: 6px !important; }
+      .sl-chart { min-height: 34px; }
+      .sl-side { flex-direction: row !important; gap: 12px; }
+      #frame-host iframe { border-radius: 0 !important; }
     }
   </style>
 
@@ -1554,7 +1585,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.04-09';
+    const APP_VER = '2026.11.06-01';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {

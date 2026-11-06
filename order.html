@@ -387,6 +387,38 @@
     .oe-row .rm{flex-shrink:0;width:40px;height:40px;border:0;border-radius:12px;background:#FFE5E3;color:#D70015;font-weight:800;cursor:pointer}
     .pwbox{background:#1C1C1E;color:#fff;border-radius:20px;padding:18px;text-align:center;margin:6px 0 12px}.pwbox small{display:block;color:#AEAEB2;font-weight:700;font-size:12px}
     .pwbox b{display:block;font:800 22px 'Space Grotesk',sans-serif}.pwbox b.pw{font-size:40px;letter-spacing:6px;color:#FFD600}
+
+    /* ===================== ⌚ Apple Watch (จอกว้าง ≤ 260px) ===================== */
+    @media (max-width: 260px) {
+      body { padding-left: 8px !important; padding-right: 8px !important; }
+      .navrow { flex-wrap: wrap; gap: 5px !important; margin-bottom: 10px !important; }
+      .navrow .seg { order: 9; flex: 1 1 100% !important; }
+      .navrow .seg button { font-size: 11.5px !important; padding: 8px 2px !important; }
+      .navrow .rb, .navrow [data-sys-back-slot] > * { width: 38px !important; height: 38px !important; min-height: 0 !important; font-size: 15px !important; }
+      .navrow [data-sys-back-slot] { margin-right: auto; }
+      .eyebrow { display: none !important; }
+      h1 { font-size: 21px !important; line-height: 1.15 !important; margin: 2px 0 4px !important; }
+      .sub { font-size: 11.5px !important; line-height: 1.45 !important; }
+      .sheet .box { padding: 6px 10px 0 !important; max-height: 100vh !important; border-radius: 20px 20px 0 0 !important; }
+      .grab { display: none !important; }
+      .shd { gap: 8px !important; margin-bottom: 8px !important; }
+      .shd .ic { width: 30px !important; height: 30px !important; font-size: 15px !important; border-radius: 10px !important; }
+      .shd h3 { font-size: 15px !important; } .shd small { display: none !important; }
+      .shd .x { width: 30px !important; height: 30px !important; }
+      .sfoot { padding: 8px 0 10px !important; gap: 6px !important; }
+      .sfoot button { height: 42px !important; font-size: 13px !important; border-radius: 13px !important; }
+      .lab { font-size: 11.5px !important; } .lab small { display: none; }
+      .inp, input.inp, textarea { font-size: 14px !important; }
+      .chips button { padding: 7px 10px !important; font-size: 12px !important; }
+      .toast { font-size: 12px !important; max-width: 92vw !important; }
+    }
+    @media (max-width: 260px) {
+      .trk-st span, .trk-st em { display: none !important; }
+      .acts { grid-template-columns: 1fr !important; }
+      .acts button small { display: none; }
+      .hero .md { font-size: 20px !important; }
+    }
+
 </style>
 </head>
 <body>
