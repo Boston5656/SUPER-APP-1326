@@ -192,6 +192,40 @@
     .loading { text-align: center; padding: 30px 0; color: #8A8270; font-weight: 600; }
     #view-month { display: none; }
     @media (max-width: 420px) { h1 { font-size: 26px; } .ring, .ring svg { width: 116px; height: 116px; } .kn-big .v { font-size: 30px; } .tile b { font-size: 19px; } .dnav .lbl { min-width: 120px; } }
+    .pf { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; margin: 0 0 12px; } .pf::-webkit-scrollbar { display: none; }
+    .pf button { flex-shrink: 0; border-radius: 100px; padding: 8px 13px; background: rgba(255,255,255,.75); font-weight: 700; font-size: 13px; }
+    .pf button.on { background: var(--d); color: var(--y); } .pf i { font-style: normal; opacity: .6; margin-left: 3px; }
+    .pgrid { display: grid; grid-template-columns: 1fr; gap: 12px; } @media (min-width: 860px) { .pgrid { grid-template-columns: 1fr 1fr; } }
+    .pc { background: rgba(255,251,234,.96); border-radius: 24px; padding: 14px; box-shadow: 0 18px 36px -24px rgba(90,70,0,.55); border: 1px solid rgba(255,255,255,.8); animation: riseIn .5s var(--ios-ease) both; margin-bottom: 10px; }
+    .pgrid .pc { margin-bottom: 0; } .lc .pc { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+    .pc-h { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .pst { font-size: 11.5px; font-weight: 800; border-radius: 100px; padding: 4px 10px; } .pst.live { background: #DCFCE7; color: #15803D; } .pst.soon { background: #E0F2FE; color: #0369A1; } .pst.end { background: #EEE; color: #6E6E73; }
+    .ppr { font-size: 12px; font-weight: 800; background: var(--d); color: var(--y); border-radius: 100px; padding: 4px 10px; }
+    .ped { margin-left: auto; width: 34px; height: 34px; border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+    .pc h4 { margin: 10px 2px 6px; font: 700 16.5px/1.35 'Kanit', sans-serif; }
+    .psh { display: flex; flex-wrap: wrap; gap: 5px; margin: 0 0 8px; } .psh span { font-size: 11.5px; font-weight: 700; background: #F2F2F7; border-radius: 9px; padding: 4px 8px; display: inline-flex; align-items: center; gap: 5px; }
+    .psh span.b i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .pc p { margin: 0 2px 8px; font-size: 13.5px; line-height: 1.6; color: #3A3A3C; white-space: pre-wrap; }
+    .pph { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; margin-bottom: 6px; }
+    .pph button { padding: 0; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; background: #E5E5EA; }
+    .pph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pby { display: block; font-size: 11px; color: #8E8E93; font-weight: 600; margin: 2px 2px 0; }
+    .pin { width: 100%; height: 50px; border-radius: 16px; border: 0; background: #fff; padding: 0 14px; font: 600 15px 'IBM Plex Sans Thai', sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+    .pin:focus { outline: 2px solid var(--y); }
+    .pr-pick button.on { background: var(--d); color: var(--y); }
+    .pr-pick button i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+    .pr-dates { display: flex; align-items: center; gap: 8px; margin-top: 8px; } .pr-dates span { font-weight: 800; color: #8E8E93; }
+    .pr-dates label { flex: 1; font-size: 11.5px; font-weight: 700; color: #6E6E73; display: flex; flex-direction: column; gap: 4px; }
+    .pr-dates input { height: 46px; border-radius: 14px; border: 0; background: #fff; padding: 0 10px; font: 700 14px 'IBM Plex Sans Thai', sans-serif; box-shadow: 0 1px 2px rgba(0,0,0,.05); width: 100%; }
+    .pr-ph { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .pr-ph .pt { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: #E5E5EA; } .pr-ph .pt img { width: 100%; height: 100%; object-fit: cover; }
+    .pr-ph .pt button { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; font-size: 12px; }
+    .pr-ph .pt.up span { position: absolute; inset: 0; margin: auto; width: 26px; height: 26px; border: 3px solid #fff; border-top-color: var(--d); border-radius: 50%; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .padd { aspect-ratio: 1; border-radius: 14px; background: #fff; border: 2px dashed rgba(28,28,30,.2) !important; font-size: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+    .padd small { font-size: 11px; font-weight: 700; color: #6E6E73; }
+    .pz { position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,.92); display: none; flex-direction: column; align-items: center; justify-content: center; padding: 16px; }
+    .pz.on { display: flex; } .pz img { max-width: 100%; max-height: calc(100% - 48px); object-fit: contain; border-radius: 10px; } .pz small { color: #fff; font-weight: 700; margin-top: 10px; text-align: center; }
   </style>
 </head>
 <body>
@@ -199,7 +233,8 @@
     <span data-sys-back-slot></span>
     <div class="seg" id="tabSeg"><div class="glider" id="glider"></div>
       <button class="on" id="t-day" onclick="setView('day')">📅 รายวัน</button>
-      <button id="t-month" onclick="setView('month')">📊 รายงานเดือน</button>
+      <button id="t-month" onclick="setView('month')">📊 รายเดือน</button>
+      <button id="t-promo" onclick="setView('promo')">🏷️ โปร</button>
     </div>
     <button class="gear" id="gearBtn" onclick="openShops()" aria-label="ตั้งค่าร้าน" style="display:none">⚙️</button>
   </div>
@@ -241,7 +276,49 @@
       </div>
       <div id="monthBody"><div class="loading">กำลังโหลด…</div></div>
     </div>
+
+    <!-- 🏷️ โปรโมชั่น -->
+    <div id="view-promo" style="display:none">
+      <div class="datebar rise">
+        <div class="dnav"><button class="ar" onclick="stepPromo(-1)" aria-label="เดือนก่อน">‹</button>
+          <div class="lbl"><b id="pLbl">-</b><small id="pSub">โปรที่จัดในเดือนนี้</small></div>
+          <button class="ar" id="pNext" onclick="stepPromo(1)" aria-label="เดือนถัดไป">›</button></div>
+        <button class="chip" onclick="openPromo()">＋ เพิ่มโปร</button>
+      </div>
+      <div class="pf" id="pFilter"></div>
+      <div id="promoBody"><div class="loading">กำลังโหลด…</div></div>
+    </div>
   </div>
+
+  <!-- 🏷️ เพิ่ม / แก้โปรโมชั่น -->
+  <div class="sheet" id="promoSheet">
+    <div class="bd" onclick="closePromo()"></div>
+    <div class="box">
+      <div class="grab"></div>
+      <div class="shd"><span class="ic">🏷️</span><div><h3 id="prTitle">เพิ่มหลักฐานโปรโมชั่น</h3><small>รูป + รายละเอียด + ระยะเวลา · ให้ผู้ใหญ่เห็นว่าคู่แข่งทำอะไร</small></div><button class="x" onclick="closePromo()" aria-label="ปิด">✕</button></div>
+      <div class="lab"><span>🏬 ร้านที่จัดโปรนี้ <span style="color:#D70015">*</span></span><small>เลือกได้หลายร้าน</small></div>
+      <div class="qn pr-pick" id="prShops"></div>
+      <div class="lab"><span>📌 หัวข้อ <span style="color:#D70015">*</span></span></div>
+      <input class="pin" id="prHead" maxlength="80" placeholder="เช่น OPPO Reno ลดสูงสุด 3,000 + ผ่อน 0% 10 ด.">
+      <div class="lab"><span>📝 รายละเอียด</span><small>เงื่อนไข / ของแถม / ราคา</small></div>
+      <textarea id="prDetail" maxlength="600" placeholder="เช่น เฉพาะบัตร KTC · แถมหูฟัง · ใช้คู่กับโปร AIS ลดเพิ่ม 1,000"></textarea>
+      <div class="lab"><span>🏷️ แบรนด์ที่เกี่ยวข้อง</span><small>ไม่เลือก = ทั้งร้าน</small></div>
+      <div class="qn pr-pick" id="prBrands"></div>
+      <div class="lab"><span>📅 ระยะเวลา <span style="color:#D70015">*</span></span></div>
+      <div class="qn pr-pick" id="prQuick"></div>
+      <div class="pr-dates"><label>เริ่ม<input type="date" id="prStart"></label><span>→</span><label>ถึง<input type="date" id="prEnd"></label></div>
+      <div class="lab"><span>📸 รูปหลักฐาน</span><small id="prPhN">0/12 รูป</small></div>
+      <div class="pr-ph" id="prPhotos"></div>
+      <input type="file" id="prCam" accept="image/*" capture="environment" hidden onchange="prAdd(this)">
+      <input type="file" id="prAlb" accept="image/*" multiple hidden onchange="prAdd(this)">
+      <div class="sfoot">
+        <button class="b-del" id="prDel" onclick="delPromo(this)" style="display:none">ลบ</button>
+        <button class="b-no" onclick="closePromo()">ยกเลิก</button>
+        <button class="b-yes" id="prSave" onclick="savePromo()">บันทึก</button>
+      </div>
+    </div>
+  </div>
+  <div class="pz" id="pz" onclick="this.classList.remove('on')"><img id="pzImg" alt=""><small id="pzCap"></small></div>
 
   <!-- ✏️ กรอกยอด -->
   <div class="sheet" id="entry">
@@ -301,9 +378,9 @@
 
     function setView(v) {
       VIEW = v; vib(6);
-      ['day', 'month'].forEach(k => { document.getElementById('t-' + k).classList.toggle('on', k === v); document.getElementById('view-' + k).style.display = k === v ? 'block' : 'none'; });
+      ['day', 'month', 'promo'].forEach(k => { document.getElementById('t-' + k).classList.toggle('on', k === v); document.getElementById('view-' + k).style.display = k === v ? 'block' : 'none'; });
       glide();
-      if (v === 'month') loadMonth(); else loadDay();
+      if (v === 'promo') loadPromo(); else if (v === 'month') loadMonth(); else loadDay();
     }
     // ร้านเรียง: ร้านเรา → บริเวณเดียวกัน (ตามชั้น) → นอกบริเวณ · ภายในกลุ่มคงลำดับที่ตั้ง
     const FLOOR_ORDER = { G: 0, '1': 1, '2': 2, '3': 3, '': 9 };
@@ -434,6 +511,7 @@
       document.getElementById('monthBody').innerHTML = '<div class="loading">กำลังโหลดรายงาน…</div>';
       google.script.run.withSuccessHandler(d => { MD = d; renderMonth(); })
         .withFailureHandler(e => { document.getElementById('monthBody').innerHTML = `<div class="loading">โหลดไม่สำเร็จ: ${esc(e.message)}</div>`; }).getMonth(YM);
+      getPromoMonth(YM).then(() => { if (MD && MD.ym === YM && VIEW === 'month') renderMonth(); }).catch(() => {});
     }
     function monthCalc(d) {
       const shops = orderedShops(d.shops), B = d.brands, dates = Object.keys(d.days).sort();
@@ -503,7 +581,7 @@
       h += `<div class="lc notes" style="margin-top:14px;animation-delay:.12s"><div class="ch"><b>📝 เหตุผลที่แพ้ / หมายเหตุ</b><small>${c.notes.length} รายการ · ขีดแดง = วันนั้นเขาขายได้มากกว่าเรา</small></div>` +
         (c.notes.length ? c.notes.slice().reverse().map((n, i) => { const dt = new Date(n.date + 'T00:00:00');
           return `<div class="nt ${n.lose ? 'lose' : ''}" style="animation-delay:${Math.min(i, 10) * 30}ms"><div class="h"><span>${esc(n.s.name)} · ${n.e.total} เครื่อง</span><small>${dt.getDate()} ${TH_MS[dt.getMonth()]}${n.e.by ? ' · ' + esc(n.e.by) : ''}</small></div><p>${esc(n.e.note)}</p></div>`; }).join('')
-          : '<div class="empty">ยังไม่มีหมายเหตุ</div>') + `<button class="copyb" id="mCopy" onclick="copyMonth()">📋 คัดลอกสรุปเดือนส่ง LINE</button></div></div></div>`;
+          : '<div class="empty">ยังไม่มีหมายเหตุ</div>') + `</div>` + promoMonthHTML(d.ym) + `<button class="copyb" id="mCopy" onclick="copyMonth()" style="margin-top:14px">📋 คัดลอกสรุปเดือนส่ง LINE</button></div></div>`;
       document.getElementById('monthBody').innerHTML = h;
       animateRings();
       requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -515,6 +593,7 @@
         gapLead == null ? '' : (leader && leader.s.id !== OWN ? `↕️ ห่างอันดับ 1 (${leader.s.name}) ${sgn(gapLead)} เครื่อง/วัน` : `↕️ นำอันดับ 2 ${sgn(gapLead)} เครื่อง/วัน`), '',
         '🏬 อันดับร้าน (เฉลี่ย/วัน)'].concat(c.ranked.map(o => `${o.rank}. ${o.s.name} — ${o.avg.toFixed(1)}/วัน (${o.total} เครื่อง · ${o.days} วัน)`))
         .concat(c.notes.filter(n => n.lose).length ? ['', '📝 เหตุผลที่แพ้'].concat(c.notes.filter(n => n.lose).slice(-8).map(n => `• ${Number(n.date.slice(8))} ${TH_MS[m - 1]} ${n.s.name}: ${n.e.note}`)) : [])
+        .concat(promoLines(d.ym))
         .filter((x, i, a) => !(x === '' && a[i - 1] === '')).join('\n');
     }
     function copyMonth() {
@@ -524,6 +603,135 @@
       function fb() { const a = document.createElement('textarea'); a.value = t; a.style.position = 'fixed'; a.style.opacity = '0'; document.body.appendChild(a); a.select(); try { document.execCommand('copy'); ok(); } catch (e) { toast('คัดลอกไม่ได้', true); } a.remove(); }
     }
 
+    // ===================== 🏷️ โปรโมชั่นคู่แข่ง (รูป + รายละเอียด + ระยะเวลา · หลายร้าน) =====================
+    let PYM = TODAY.slice(0, 7), PFIL = 'all', PR = null;
+    const PCACHE = {};
+    function getPromoMonth(ym, force) {
+      if (PCACHE[ym] && !force) return Promise.resolve(PCACHE[ym]);
+      return new Promise((ok, no) => google.script.run.withSuccessHandler(d => { PCACHE[ym] = d; ok(d); }).withFailureHandler(no).getPromos(ym));
+    }
+    const thumb = (id, w) => `https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w${w || 500}`;
+    function imgErr(el) { if (el.dataset.fb) return; el.dataset.fb = 1; google.script.run.withSuccessHandler(u => { el.src = u; }).promoPhoto(el.dataset.id); }
+    const dShort = iso => { const [y, m, d] = iso.split('-').map(Number); return `${d} ${TH_MS[m - 1]}`; };
+    function periodTxt(p) {
+      const [sy, sm, sd] = p.start.split('-').map(Number), [ey, em, ed] = p.end.split('-').map(Number);
+      const lastDay = new Date(ey, em, 0).getDate();
+      if (sd === 1 && ed === lastDay && sy === ey) {
+        if (sm === em) return `ทั้งเดือน ${TH_MS[sm - 1]} ${String(sy + 543).slice(2)}`;
+        if (em - sm === 2 && (sm - 1) % 3 === 0) return `Q${(sm + 2) / 3}/${String(sy + 543).slice(2)} (${TH_MS[sm - 1]}–${TH_MS[em - 1]})`;
+      }
+      return sy === ey && sm === em ? `${sd}–${ed} ${TH_MS[sm - 1]}` : `${dShort(p.start)} – ${dShort(p.end)}${sy !== ey ? ' ' + String(ey + 543).slice(2) : ''}`;
+    }
+    function pState(p) { return p.end < TODAY ? ['จบแล้ว', 'end'] : p.start > TODAY ? ['ยังไม่เริ่ม', 'soon'] : ['กำลังจัด', 'live']; }
+    function loadPromo(force) {
+      const [y, m] = PYM.split('-').map(Number);
+      document.getElementById('pLbl').textContent = `${TH_M[m - 1]} ${y + 543}`;
+      if (!PCACHE[PYM] || force) document.getElementById('promoBody').innerHTML = '<div class="loading">กำลังโหลด…</div>';
+      getPromoMonth(PYM, force).then(renderPromo).catch(e => { document.getElementById('promoBody').innerHTML = `<div class="loading">โหลดไม่สำเร็จ: ${esc(e.message)}${/ไม่พบคำสั่ง|ยังไม่ได้ใส่/.test(e.message) ? '<br>— วาง Market.gs + API.gs แล้ว Deploy เป็น New version' : ''}</div>`; });
+    }
+    function stepPromo(n) { const [y, m] = PYM.split('-').map(Number), dt = new Date(y, m - 1 + n, 1); PYM = `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}`; vib(6); loadPromo(); }
+    function promoCard(p, i, mini) {
+      const [st, cls] = pState(p);
+      const names = p.shops.map(id => { const sh = (PCACHE[PYM] || PCACHE[YM] || {}).shops || []; const x = sh.find(s => s.id === id); return x ? x.name : ''; }).filter(Boolean);
+      const shopTxt = names.length ? names : p.shopNames.split(', ');
+      return `<div class="pc" style="animation-delay:${Math.min(i, 10) * 40}ms">
+        <div class="pc-h"><span class="pst ${cls}">${st}</span><span class="ppr">📅 ${periodTxt(p)}</span>${!mini && (PCACHE[PYM] || {}).isMgr || (!mini && p.by === (PCACHE[PYM] || {}).me) ? `<button class="ped" onclick="openPromo('${esc(p.id)}')">✏️</button>` : ''}</div>
+        <h4>${esc(p.title)}</h4>
+        <div class="psh">${shopTxt.map(n => `<span>🏬 ${esc(n)}</span>`).join('')}${p.brand ? p.brand.split(', ').map(b => `<span class="b"><i style="background:${BRAND_COLORS[b] || '#999'}"></i>${esc(b)}</span>`).join('') : ''}</div>
+        ${p.detail ? `<p>${esc(p.detail)}</p>` : ''}
+        ${p.photos.length ? `<div class="pph">${p.photos.map((id, k) => `<button onclick="zoomPh('${id}','${esc(p.title).replace(/'/g, '&#39;')}')"><img loading="lazy" src="${thumb(id, mini ? 300 : 500)}" data-id="${id}" onerror="imgErr(this)" alt=""></button>`).join('')}</div>` : ''}
+        <small class="pby">${esc(p.by || '')}${p.at ? ' · ' + esc(p.at) : ''}</small></div>`;
+    }
+    function renderPromo(d) {
+      if (d.ym !== PYM) return;
+      const L = d.promos.filter(p => PFIL === 'all' || p.shops.includes(PFIL));
+      const shopsWith = d.shops.filter(s => d.promos.some(p => p.shops.includes(s.id)));
+      document.getElementById('pSub').textContent = `${d.promos.length} โปร · กำลังจัด ${d.promos.filter(p => pState(p)[1] === 'live').length}`;
+      document.getElementById('pFilter').innerHTML = d.promos.length ? `<button class="${PFIL === 'all' ? 'on' : ''}" onclick="PFIL='all';renderPromo(PCACHE[PYM])">ทุกร้าน <i>${d.promos.length}</i></button>` +
+        shopsWith.map(s => `<button class="${PFIL === s.id ? 'on' : ''}" onclick="PFIL='${s.id}';renderPromo(PCACHE[PYM])">${esc(s.name)} <i>${d.promos.filter(p => p.shops.includes(s.id)).length}</i></button>`).join('') : '';
+      document.getElementById('promoBody').innerHTML = L.length ? `<div class="pgrid">${L.map((p, i) => promoCard(p, i)).join('')}</div>`
+        : `<div class="lc"><div class="empty">ยังไม่มีโปรโมชั่นในเดือนนี้<br><button class="chip" style="margin-top:12px;height:42px" onclick="openPromo()">＋ เพิ่มหลักฐานโปรโมชั่น</button></div></div>`;
+    }
+    // ในรายงานเดือน
+    function promoMonthHTML(ym) {
+      const d = PCACHE[ym];
+      if (!d) return `<div class="lc" style="margin-top:14px"><div class="ch"><b>🏷️ โปรโมชั่นคู่แข่ง</b></div><div class="loading">กำลังโหลด…</div></div>`;
+      return `<div class="lc" style="margin-top:14px;animation-delay:.14s"><div class="ch"><b>🏷️ โปรโมชั่นคู่แข่งเดือนนี้</b><small>${d.promos.length} โปร · แตะรูปเพื่อขยาย</small></div>` +
+        (d.promos.length ? d.promos.map((p, i) => promoCard(p, i, true)).join('') : '<div class="empty">ยังไม่มีบันทึกโปรโมชั่น — เพิ่มได้ที่แท็บ 🏷️ โปรโมชั่น</div>') + `</div>`;
+    }
+    function promoLines(ym) {
+      const d = PCACHE[ym]; if (!d || !d.promos.length) return [];
+      return ['', '🏷️ โปรโมชั่นคู่แข่ง'].concat(d.promos.map(p => `• [${periodTxt(p)}] ${p.shopNames}: ${p.title}${p.brand ? ' (' + p.brand + ')' : ''}${p.detail ? ' — ' + p.detail.replace(/\s+/g, ' ').slice(0, 120) : ''}`));
+    }
+    function zoomPh(id, cap) { const z = document.getElementById('pz'), im = document.getElementById('pzImg'); im.dataset.fb = ''; im.dataset.id = id; im.onerror = () => imgErr(im); im.src = thumb(id, 1600); document.getElementById('pzCap').textContent = cap || ''; z.classList.add('on'); vib(6); }
+
+    // ---- ฟอร์ม ----
+    function openPromo(id) {
+      const d = PCACHE[PYM] || PCACHE[YM] || {}, p = id ? (d.promos || []).find(x => x.id === id) : null;
+      if (!d.shops) { toast('รอโหลดรายชื่อร้านแป๊บนึง'); return getPromoMonth(PYM).then(() => openPromo(id)); }
+      PR = { id: p ? p.id : '', shops: p ? p.shops.slice() : [], brands: p && p.brand ? p.brand.split(', ') : [], photos: p ? p.photos.slice() : [], up: 0 };
+      document.getElementById('prTitle').textContent = p ? 'แก้ไขโปรโมชั่น' : 'เพิ่มหลักฐานโปรโมชั่น';
+      document.getElementById('prHead').value = p ? p.title : ''; document.getElementById('prDetail').value = p ? p.detail : '';
+      const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+      const firstQ = Math.floor(m / 3) * 3;
+      if (p) { document.getElementById('prStart').value = p.start; document.getElementById('prEnd').value = p.end; }
+      else { document.getElementById('prStart').value = isoOf(new Date(y, m, 1)); document.getElementById('prEnd').value = isoOf(new Date(y, m + 1, 0)); }
+      PR.q = [['เดือนนี้', isoOf(new Date(y, m, 1)), isoOf(new Date(y, m + 1, 0))], ['เดือนหน้า', isoOf(new Date(y, m + 1, 1)), isoOf(new Date(y, m + 2, 0))],
+        [`Q${firstQ / 3 + 1} (${TH_MS[firstQ]}–${TH_MS[firstQ + 2]})`, isoOf(new Date(y, firstQ, 1)), isoOf(new Date(y, firstQ + 3, 0))], ['วันนี้วันเดียว', TODAY, TODAY], ['7 วัน', TODAY, isoOf(new Date(y, m, now.getDate() + 6))]];
+      document.getElementById('prDel').style.display = p ? '' : 'none';
+      prPaint(); document.getElementById('promoSheet').classList.add('open'); vib(8);
+    }
+    function closePromo() { document.getElementById('promoSheet').classList.remove('open'); }
+    function prPaint() {
+      const d = PCACHE[PYM] || PCACHE[YM];
+      document.getElementById('prShops').innerHTML = orderedShops(d.shops).map(s => `<button class="${PR.shops.includes(s.id) ? 'on' : ''}" onclick="prTog('shops','${s.id}')">${s.id === OWN ? '⭐ ' : ''}${esc(s.name)}</button>`).join('');
+      document.getElementById('prBrands').innerHTML = d.brands.map(b => `<button class="${PR.brands.includes(b) ? 'on' : ''}" onclick="prTog('brands','${b}')"><i style="background:${BRAND_COLORS[b] || '#999'}"></i>${b}</button>`).join('');
+      const s0 = document.getElementById('prStart').value, e0 = document.getElementById('prEnd').value;
+      document.getElementById('prQuick').innerHTML = PR.q.map((q, i) => `<button class="${q[1] === s0 && q[2] === e0 ? 'on' : ''}" onclick="prQ(${i})">${q[0]}</button>`).join('');
+      document.getElementById('prPhotos').innerHTML = PR.photos.map((id, i) => `<div class="pt"><img src="${thumb(id, 300)}" data-id="${id}" onerror="imgErr(this)" alt=""><button onclick="PR.photos.splice(${i},1);prPaint()">✕</button></div>`).join('') +
+        Array.from({ length: PR.up }, () => '<div class="pt up"><span></span></div>').join('') +
+        (PR.photos.length + PR.up < 12 ? `<button class="padd" onclick="document.getElementById('prCam').click()">📷<small>ถ่ายรูป</small></button><button class="padd" onclick="document.getElementById('prAlb').click()">🖼️<small>อัลบั้ม</small></button>` : '');
+      document.getElementById('prPhN').textContent = `${PR.photos.length}/12 รูป`;
+    }
+    ['prStart', 'prEnd'].forEach(id => document.getElementById(id).addEventListener('change', () => PR && prPaint()));
+    function prTog(k, v) { const a = PR[k], i = a.indexOf(v); if (i < 0) a.push(v); else a.splice(i, 1); prPaint(); vib(5); }
+    function prQ(i) { document.getElementById('prStart').value = PR.q[i][1]; document.getElementById('prEnd').value = PR.q[i][2]; prPaint(); vib(5); }
+    function shrink(file) {
+      return new Promise((ok, no) => {
+        const url = URL.createObjectURL(file), im = new Image();
+        im.onload = () => { const k = Math.min(1, 1600 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+          c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', .82)); };
+        im.onerror = () => { URL.revokeObjectURL(url); no(new Error('เปิดรูปไม่ได้')); }; im.src = url;
+      });
+    }
+    async function prAdd(inp) {
+      const files = [...inp.files].slice(0, 12 - PR.photos.length - PR.up); inp.value = '';
+      for (const f of files) {
+        PR.up++; prPaint();
+        try { const u = await shrink(f); const r = await new Promise((ok, no) => google.script.run.withSuccessHandler(ok).withFailureHandler(no).uploadPromoPhoto(u)); PR.photos.push(r.id); }
+        catch (e) { toast('อัปรูปไม่สำเร็จ: ' + e.message, true); }
+        PR.up--; prPaint();
+      }
+    }
+    function savePromo() {
+      const o = { id: PR.id, shops: PR.shops, brands: PR.brands, photos: PR.photos, title: document.getElementById('prHead').value.trim(), detail: document.getElementById('prDetail').value.trim(),
+        start: document.getElementById('prStart').value, end: document.getElementById('prEnd').value };
+      if (!o.shops.length) return toast('เลือกร้านอย่างน้อย 1 ร้าน', true);
+      if (!o.title) return toast('ใส่หัวข้อก่อน', true);
+      if (!o.start || !o.end) return toast('เลือกระยะเวลาก่อน', true);
+      if (o.end < o.start) return toast('วันสิ้นสุดต้องไม่ก่อนวันเริ่ม', true);
+      if (PR.up) return toast('รออัปรูปให้เสร็จก่อน', true);
+      const b = document.getElementById('prSave'); b.disabled = true; b.textContent = 'กำลังบันทึก…';
+      google.script.run.withSuccessHandler(() => { b.disabled = false; b.textContent = 'บันทึก'; closePromo(); toast('✓ บันทึกโปรโมชั่นแล้ว'); vib(12);
+        Object.keys(PCACHE).forEach(k => delete PCACHE[k]); if (VIEW === 'promo') loadPromo(true); else if (VIEW === 'month') loadMonth(); })
+        .withFailureHandler(e => { b.disabled = false; b.textContent = 'บันทึก'; toast(e.message, true); }).savePromo(o);
+    }
+    function delPromo(btn) {
+      if (!btn._arm) { btn._arm = 1; btn.textContent = 'ยืนยันลบ?'; setTimeout(() => { btn._arm = 0; btn.textContent = 'ลบ'; }, 3000); return; }
+      btn.disabled = true;
+      google.script.run.withSuccessHandler(() => { btn.disabled = false; btn._arm = 0; btn.textContent = 'ลบ'; closePromo(); toast('ลบแล้ว'); Object.keys(PCACHE).forEach(k => delete PCACHE[k]); loadPromo(true); })
+        .withFailureHandler(e => { btn.disabled = false; toast(e.message, true); }).deletePromo(PR.id);
+    }
     // ===================== ⚙️ ร้าน (ผู้จัดการ) =====================
     let SH = null;
     function openShops() {
