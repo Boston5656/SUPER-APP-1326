@@ -1126,14 +1126,14 @@
       .db-cols {
         display: grid; column-gap: 12px;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-areas: "hero hero" "dev dev" "focus focus" "heat heat" "leader brand" "recv hour" "sales sales";
+        grid-template-areas: "hero hero" "dev dev" "focus focus" "heat heat" "race race" "leader brand" "recv hour" "sales sales";
       }
       .db-col { display: contents; }
       .dbp-hero { grid-area: hero; } .dbp-dev { grid-area: dev; } .dbp-focus { grid-area: focus; } .dbp-heat { grid-area: heat; }
       .dbp-leader { grid-area: leader; } .dbp-brand { grid-area: brand; } .dbp-recv { grid-area: recv; } .dbp-hour { grid-area: hour; }
       .dbp-sales { grid-area: sales; width: 100%; }
       @media (max-width: 768px) {
-        .db-cols { grid-template-columns: minmax(0, 1fr); grid-template-areas: "hero" "dev" "focus" "heat" "leader" "brand" "recv" "hour" "sales"; }
+        .db-cols { grid-template-columns: minmax(0, 1fr); grid-template-areas: "hero" "dev" "focus" "heat" "race" "leader" "brand" "recv" "hour" "sales"; }
       }
 
       /* =========================================================
@@ -1620,6 +1620,83 @@
         .db-head, .db-panel-head, .db-ph { flex-wrap: wrap !important; gap: 2px !important; }
         .db-title { min-width: 0 !important; white-space: normal !important; }
       }
+
+      /* =========================================================
+         🏁 Brand Race — แข่ง Att Rate ระหว่างแบรนด์
+      ========================================================= */
+      .dbp-race { grid-area: race; overflow: hidden; }
+      .rc-cd { font-size: 0.66rem; font-weight: 700; color: #1C1C1E; background: #FFD60A; border-radius: 99px; padding: 3px 10px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+      .rc-cd.end { background: #30D158; color: #fff; }
+      .rc-cd:empty { display: none; }
+      .rc-track { position: relative; height: 184px; border-radius: 16px; overflow: hidden; background: #2a2a2d;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), inset 0 10px 20px rgba(0,0,0,0.45); }
+      .rc-track::before, .rc-track::after { content: ""; position: absolute; left: 0; right: 0; height: 7px; z-index: 1;
+        background: repeating-linear-gradient(90deg, #FF453A 0 18px, #f2f2f2 18px 36px); background-size: 36px 7px; animation: rcRoad 0.45s linear infinite; }
+      .rc-track::before { top: 0; } .rc-track::after { bottom: 0; }
+      .rc-track.idle::before, .rc-track.idle::after, .rc-track.idle .rc-dash { animation-play-state: paused; }
+      .rc-lane { position: absolute; left: 0; right: 0; height: 2px; z-index: 1;
+        background: repeating-linear-gradient(90deg, rgba(255,255,255,0.55) 0 22px, transparent 22px 44px); background-size: 44px 2px; }
+      .rc-dash { animation: rcRoad 0.3s linear infinite; }
+      @keyframes rcRoad { to { background-position: -44px 0; } }
+      .rc-asph { position: absolute; inset: 7px 0; background:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.08) 50%, transparent 51%) 0 0 / 24px 18px,
+        linear-gradient(180deg, #2c2c30, #222226); }
+      .rc-start, .rc-fin { position: absolute; top: 7px; bottom: 7px; width: 10px; z-index: 1; }
+      .rc-start { left: 22px; background: rgba(255,255,255,0.35); width: 3px; }
+      .rc-fin { right: 0; width: 14px; background:
+        conic-gradient(#fff 25%, #111 0 50%, #fff 0 75%, #111 0) 0 0 / 7px 7px; box-shadow: -6px 0 14px rgba(255,255,255,0.15); }
+      .rc-car { position: absolute; z-index: 3; width: 84px; margin-left: -6px; transition: left 1.6s cubic-bezier(.22,1.18,.36,1), top 0.9s cubic-bezier(.32,.72,0,1); cursor: pointer; }
+      .rc-car .rc-in { animation: rcSurge var(--sd, 2.2s) ease-in-out var(--dl, 0s) infinite; }
+      @keyframes rcSurge { 0%,100% { transform: translateX(0); } 30% { transform: translateX(7px); } 55% { transform: translateX(-4px); } 80% { transform: translateX(3px); } }
+      .rc-car svg { display: block; width: 100%; height: auto; overflow: visible; animation: rcBob 0.32s ease-in-out infinite alternate; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.55)); }
+      @keyframes rcBob { to { transform: translateY(-1.2px) rotate(-0.6deg); } }
+      .rc-car .wh { transform-box: fill-box; transform-origin: center; animation: rcSpin 0.28s linear infinite; }
+      @keyframes rcSpin { to { transform: rotate(360deg); } }
+      .rc-car .fl { transform-box: fill-box; transform-origin: right center; animation: rcFlame 0.12s ease-in-out infinite alternate; opacity: 0.9; }
+      @keyframes rcFlame { from { transform: scaleX(0.6); opacity: 0.6; } to { transform: scaleX(1.15); opacity: 1; } }
+      .rc-car .sp { position: absolute; right: 100%; top: 38%; width: 46px; height: 14px; opacity: 0.55; pointer-events: none;
+        background: linear-gradient(transparent 2px, rgba(255,255,255,0.6) 2px 3px, transparent 3px 7px, rgba(255,255,255,0.45) 7px 8px, transparent 8px 11px, rgba(255,255,255,0.5) 11px 12px, transparent 12px);
+        -webkit-mask: linear-gradient(90deg, transparent, #000); mask: linear-gradient(90deg, transparent, #000); animation: rcWind 0.35s linear infinite; }
+      @keyframes rcWind { from { transform: translateX(10px); opacity: 0; } 40% { opacity: 0.6; } to { transform: translateX(-12px); opacity: 0; } }
+      .rc-tag { position: absolute; left: 50%; bottom: calc(100% - 4px); transform: translateX(-50%); white-space: nowrap; font-size: 0.6rem; font-weight: 800;
+        background: rgba(0,0,0,0.72); color: #fff; border-radius: 7px; padding: 1px 6px; display: flex; gap: 4px; align-items: center; letter-spacing: 0.2px; }
+      .rc-tag i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 1px rgba(255,255,255,0.5); }
+      .rc-tag b { color: #FFD60A; font-variant-numeric: tabular-nums; }
+      .rc-car.r1 .rc-tag { background: #FFD60A; color: #1C1C1E; } .rc-car.r1 .rc-tag b { color: #1C1C1E; }
+      .rc-car.r1 svg { filter: drop-shadow(0 4px 3px rgba(0,0,0,0.55)) drop-shadow(0 0 8px rgba(255,214,10,0.55)); }
+      .rc-car .bub { position: absolute; left: -26px; top: -2px; font-size: 0.62rem; font-weight: 900; color: #fff; background: #FF453A; border-radius: 8px; padding: 1px 6px;
+        opacity: 0; transform: translateY(6px) scale(0.6); pointer-events: none; }
+      .rc-car.boost .bub { animation: rcBub 2.4s cubic-bezier(.34,1.56,.64,1) forwards; }
+      @keyframes rcBub { 12% { opacity: 1; transform: none; } 75% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8px); } }
+      .rc-car.boost .fl { animation-duration: 0.06s; }
+      .rc-car.boost .rc-in { animation: rcBoost 1.2s cubic-bezier(.22,1.18,.36,1); }
+      @keyframes rcBoost { 0% { transform: translateX(-14px); } 50% { transform: translateX(10px); } 100% { transform: none; } }
+      .rc-car.dark svg .bd { stroke: rgba(255,255,255,0.55); }
+      .rc-foot { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 8px; font-size: 0.64rem; color: var(--gray-1); }
+      .rc-foot .pit { color: rgba(255,255,255,0.45); }
+      /* podium */
+      .rc-pod { position: relative; height: 196px; border-radius: 16px; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; gap: 10px; padding: 0 10px;
+        background: radial-gradient(120% 90% at 50% 110%, rgba(255,214,10,0.28), transparent 60%), linear-gradient(180deg, #1b1b1e, #111113); }
+      .rc-pod .col { flex: 1; max-width: 150px; display: flex; flex-direction: column; align-items: center; animation: rcRise 0.9s cubic-bezier(.22,1.18,.36,1) both; }
+      .rc-pod .col:nth-child(1) { animation-delay: 0.35s; } .rc-pod .col:nth-child(2) { animation-delay: 0.05s; } .rc-pod .col:nth-child(3) { animation-delay: 0.6s; }
+      @keyframes rcRise { from { transform: translateY(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+      .rc-pod .cr { width: 86px; margin-bottom: -2px; }
+      .rc-pod .cr svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 4px 3px rgba(0,0,0,0.6)); }
+      .rc-pod .nm { font-size: 0.72rem; font-weight: 800; color: #fff; margin-bottom: 4px; white-space: nowrap; }
+      .rc-pod .nm b { color: #FFD60A; margin-left: 4px; }
+      .rc-pod .blk { width: 100%; border-radius: 10px 10px 0 0; display: grid; place-items: center; font-weight: 900; font-size: 1.5rem; color: #1C1C1E; }
+      .rc-pod .p1 .blk { height: 74px; background: linear-gradient(180deg, #FFE45C, #FFC300); box-shadow: 0 0 24px rgba(255,214,10,0.45); }
+      .rc-pod .p2 .blk { height: 52px; background: linear-gradient(180deg, #F2F2F7, #AEAEB2); }
+      .rc-pod .p3 .blk { height: 38px; background: linear-gradient(180deg, #E9A66B, #B86B32); }
+      .rc-pod .crown { font-size: 1.3rem; animation: rcCrown 1.6s ease-in-out infinite; margin-bottom: -4px; }
+      @keyframes rcCrown { 50% { transform: translateY(-4px) rotate(-6deg); } }
+      .rc-pod .cf { position: absolute; top: -10px; width: 6px; height: 10px; border-radius: 2px; animation: rcCf linear forwards; }
+      @keyframes rcCf { to { transform: translateY(230px) rotate(540deg); opacity: 0.2; } }
+      .rc-pod .rest { position: absolute; top: 8px; left: 10px; right: 10px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; font-size: 0.6rem; color: rgba(255,255,255,0.6); }
+      .rc-pod .ttl { position: absolute; top: 10px; left: 0; right: 0; text-align: center; font-size: 0.78rem; font-weight: 800; color: #FFD60A; letter-spacing: 0.4px; }
+      body.land-dash .dbp-race { flex: 0 0 auto; }
+      @media (max-width: 576px) { .rc-car { width: 64px; } .rc-pod .cr { width: 70px; } .rc-tag { font-size: 0.56rem; } }
+      @media (prefers-reduced-motion: reduce) { .rc-track *, .rc-track::before, .rc-track::after, .rc-pod * { animation: none !important; } }
 </style>
   </head>
   <body>
@@ -1816,6 +1893,15 @@
                     <div class="db-sub">ปิดได้ / เครื่องที่เป็นเป้า</div>
                   </div>
                   <div id="dbHeat"><span class="loading-pill"><span class="spin"></span>กำลังประมวลผล</span></div>
+                </div>
+
+                <!-- 🏁 Brand Race -->
+                <div class="db-panel dbp-race">
+                  <div class="db-head">
+                    <div class="db-title">🏁 Brand Race · Att Rate</div>
+                    <span class="rc-cd" id="rcCd"></span>
+                  </div>
+                  <div id="dbRace"><span class="loading-pill"><span class="spin"></span>กำลังจัดสนาม</span></div>
                 </div>
               </div>
 
@@ -3032,6 +3118,7 @@
         renderDevices(computeStats(dashRows('device')));
         renderFocusGrid(st);
         renderHeatmap(rows);
+        renderRace(dash.rows);
         renderLeaderboard(computeStats(dashRows('emp')));
         renderBrands(computeStats(dashRows('brand')));
         renderReceivers(computeStats(dashRows('receiver')));
@@ -3210,6 +3297,159 @@
         </div>`;
         el.innerHTML = h;
       }
+
+
+      // =========================================================
+      // 🏁 Brand Race — แบรนด์ไหน Att Rate สูงสุดนำ · ประกาศผล 19:30
+      //   คะแนน = งานโฟกัสที่ปิดได้ / งานโฟกัสที่เป็นเป้า (ถ่วงน้ำหนัก: FILM BRIGHT = 0.5 · อื่นๆ = 1)
+      //   ใช้ข้อมูลทั้งวัน ไม่สนตัวกรอง (แข่งกันระหว่างแบรนด์)
+      // =========================================================
+      const RACE_END = '19:30';
+      const RACE_W = { 'FILM BRIGHT': 0.5 };
+      const RACE_BRANDS = [
+        { k: 'OPPO', c: '#006D34', re: /OPPO/ },
+        { k: 'VIVO', c: '#2D5BFF', re: /VIVO|IQOO/ },
+        { k: 'XIAOMI', c: '#FF6900', re: /XIAOMI|REDMI|POCO/ },
+        { k: 'SAMSUNG', c: '#141414', re: /SAMSUNG|GALAXY/, dark: 1 },
+        { k: 'APPLE', c: '#F5F5F7', re: /APPLE|IPHONE|IPAD/, light: 1 },
+        { k: 'INFINIX', c: '#8E8E93', re: /INFINIX/ },
+        { k: 'HONOR', c: '#FF5FA2', re: /HONOR/ },
+        { k: 'HUAWEI', c: '#E5141B', re: /HUAWEI/ }
+      ];
+      const race = { prevRank: {}, date: '', ended: null, boostT: {} };
+      function raceBrand(raw) {
+        const u = String(raw || '').toUpperCase();
+        return RACE_BRANDS.find(b => b.re.test(u)) || { k: u.split(/[\s/]+/)[0] || 'อื่นๆ', c: '#6E6E73' };
+      }
+      function raceEnded(dateStr) {
+        const today = ymd(new Date());
+        if (dateStr < today) return true;
+        if (dateStr > today) return false;
+        const n = new Date(), hm = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+        return hm >= RACE_END;
+      }
+      function raceScores(rows) {
+        const m = {};
+        rows.forEach(r => {
+          const b = raceBrand(r.brand);
+          const o = m[b.k] || (m[b.k] = { k: b.k, c: b.c, dark: b.dark, light: b.light, raw: r.brand, units: 0, we: 0, wh: 0, h: 0 });
+          o.units++;
+          (r.targets || []).forEach(t => {
+            const w = RACE_W[t] != null ? RACE_W[t] : 1;
+            o.we += w;
+            if ((r.hit || []).indexOf(t) !== -1) { o.wh += w; o.h++; }
+          });
+        });
+        return Object.values(m).map(o => Object.assign(o, { score: o.we ? (o.wh / o.we) * 100 : 0 }))
+          .sort((a, b) => (b.score - a.score) || (b.h - a.h) || (b.units - a.units) || a.k.localeCompare(b.k));
+      }
+      function raceCarSvg(o, num) {
+        const c = o.c, stripe = o.light ? 'rgba(0,0,0,0.18)' : 'rgba(255,255,255,0.38)', ol = o.dark ? 'rgba(255,255,255,0.55)' : 'rgba(0,0,0,0.35)';
+        const wheel = x => `<g class="wh"><circle cx="${x}" cy="36" r="8" fill="#0d0d0f"/><circle cx="${x}" cy="36" r="4.4" fill="#a1a1a6"/>` +
+          `<path d="M${x - 4} 36h8M${x} 32v8M${x - 2.8} 33.2l5.6 5.6M${x - 2.8} 38.8l5.6-5.6" stroke="#3a3a3c" stroke-width="1.2"/></g>`;
+        return `<svg viewBox="0 0 120 46" aria-hidden="true">
+          <path class="fl" d="M4 30 L-14 32 L4 34 Z" fill="#FF9F0A"/><path class="fl" d="M4 31 L-7 32 L4 33 Z" fill="#FFE680"/>
+          <path d="M1 17h13v3h-3l2.5 6h-4l-2.5-6H1z" fill="${c}" stroke="${ol}" stroke-width="1"/>
+          <path class="bd" d="M4 33C4 27 9 25 16 24L36 22C42 15 50 11 62 11L78 11C86 11 92 15 98 21L110 23C115 24 117 28 116 33L114 36L6 36Z" fill="${c}" stroke="${ol}" stroke-width="1.4"/>
+          <path d="M46 21C50 15 56 13 63 13L76 13C82 13 87 16 91 21Z" fill="#0b1626" opacity="0.88"/>
+          <path d="M52 19C55 16 58 15 62 15" stroke="rgba(255,255,255,0.55)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <rect x="18" y="27" width="84" height="2.6" rx="1.3" fill="${stripe}"/>
+          <path d="M108 25l6 2-1 3-6-1z" fill="#FFE680"/><rect x="4.5" y="27" width="4" height="3" rx="1" fill="#FF3B30"/>
+          <circle cx="62" cy="29.5" r="6" fill="#fff" stroke="rgba(0,0,0,0.25)"/><text x="62" y="32.6" text-anchor="middle" font-size="8.5" font-weight="900" font-family="system-ui,sans-serif" fill="#1C1C1E">${num}</text>
+          ${wheel(28)}${wheel(93)}</svg>`;
+      }
+      function raceCountdown() {
+        const el = document.getElementById('rcCd'); if (!el) return;
+        if (raceEnded(dash.date)) { el.className = 'rc-cd end'; el.textContent = '🏆 ประกาศผลแล้ว'; return; }
+        const today = ymd(new Date());
+        if (dash.date !== today) { el.className = 'rc-cd'; el.textContent = ''; return; }
+        const [h, m] = RACE_END.split(':').map(Number), end = new Date(); end.setHours(h, m, 0, 0);
+        const left = Math.max(0, Math.round((end - Date.now()) / 60000));
+        el.className = 'rc-cd';
+        el.textContent = '🏁 เข้าเส้นชัย ' + RACE_END + ' · อีก ' + (left >= 60 ? Math.floor(left / 60) + ' ชม. ' : '') + (left % 60) + ' น.';
+      }
+      function renderRace(rows) {
+        const el = document.getElementById('dbRace'); if (!el) return;
+        raceCountdown();
+        const list = raceScores(rows || []).filter(o => o.we > 0);
+        const ended = raceEnded(dash.date);
+        if (race.date !== dash.date) { race.date = dash.date; race.prevRank = {}; race.ended = null; el.innerHTML = ''; }
+        const phaseChanged = race.ended !== ended; race.ended = ended;
+        const pit = RACE_BRANDS.filter(b => !list.some(o => o.k === b.k)).map(b => b.k);
+        const note = '<div class="rc-foot"><span>คะแนน = % ปิดงานโฟกัส · Film Bright นับครึ่ง</span>' +
+          (pit.length ? `<span class="pit">🅿️ ยังไม่ออกตัว: ${pit.join(' · ')}</span>` : '') + '</div>';
+        if (!list.length) { el.innerHTML = emptyNote('ยังไม่มีบิลวันนี้ — รถทุกคันรออยู่ที่เส้นสตาร์ท 🏁') + note; return; }
+
+        // ---------- ประกาศผล ----------
+        if (ended) {
+          const top = list.slice(0, 3), order = [top[1], top[0], top[2]].filter(Boolean);
+          const cls = o => 'p' + (list.indexOf(o) + 1);
+          let h = `<div class="rc-pod">${list.length > 3 ? `<div class="rest">${list.slice(3).map((o, i) => `${i + 4}. ${escapeHtml(o.k)} ${Math.round(o.score)}%`).join(' · ')}</div>` : '<div class="ttl">🏆 ผู้ชนะประจำวัน</div>'}` +
+            order.map(o => `<div class="col ${cls(o)}" data-b="${escapeHtml(o.raw)}" onclick="toggleFilter('brand', this.dataset.b)">
+              ${cls(o) === 'p1' ? '<div class="crown">👑</div>' : ''}
+              <div class="nm">${escapeHtml(o.k)}<b>${Math.round(o.score)}%</b></div>
+              <div class="cr">${raceCarSvg(o, list.indexOf(o) + 1)}</div>
+              <div class="blk">${list.indexOf(o) + 1}</div></div>`).join('');
+          const key = 'race_party_' + dash.date;
+          let party = false; try { party = !localStorage.getItem(key); localStorage.setItem(key, '1'); } catch (e) {}
+          if (party) {
+            const cols = ['#FFD60A', '#30D158', '#0A84FF', '#FF453A', '#fff', '#FF9F0A'];
+            h += Array.from({ length: 40 }, (_, i) => `<i class="cf" style="left:${Math.random() * 100}%;background:${cols[i % 6]};animation-duration:${1.6 + Math.random() * 1.6}s;animation-delay:${Math.random() * 0.8}s"></i>`).join('');
+          }
+          el.innerHTML = h + '</div>' + note;
+          return;
+        }
+
+        // ---------- กำลังแข่ง ----------
+        const lead = Math.max(list[0].score, 0.0001), anyScore = list[0].score > 0;
+        const cars = list.map((o, i) => ({ o, i, lane: i % 3, x: anyScore ? 3 + 78 * (o.score / lead) : 3 }));
+        [0, 1, 2].forEach(l => {   // กันรถเลนเดียวกันซ้อนทับ
+          const inL = cars.filter(c => c.lane === l).sort((a, b) => b.x - a.x);
+          for (let j = 1; j < inL.length; j++) if (inL[j].x > inL[j - 1].x - 15) inL[j].x = Math.max(0, inL[j - 1].x - 15);
+        });
+        let tr = el.querySelector('.rc-track');
+        if (!tr || phaseChanged) {
+          el.innerHTML = `<div class="rc-track"><div class="rc-asph"></div><div class="rc-start"></div><div class="rc-fin"></div>
+            <div class="rc-lane rc-dash" style="top:calc(7px + (100% - 14px) / 3)"></div><div class="rc-lane rc-dash" style="top:calc(7px + (100% - 14px) * 2 / 3)"></div></div>` + note;
+          tr = el.querySelector('.rc-track');
+        } else {
+          el.querySelector('.rc-foot').outerHTML = note;
+        }
+        tr.classList.toggle('idle', !anyScore);
+        const seen = {};
+        cars.forEach(c => {
+          const o = c.o; seen[o.k] = 1;
+          let car = tr.querySelector(`.rc-car[data-k="${CSS.escape(o.k)}"]`);
+          const fresh = !car;
+          if (fresh) {
+            car = document.createElement('div'); car.className = 'rc-car'; car.dataset.k = o.k;
+            car.style.left = '0%'; car.style.setProperty('--sd', (1.8 + Math.random() * 1.4).toFixed(2) + 's'); car.style.setProperty('--dl', (-Math.random() * 2).toFixed(2) + 's');
+            car.onclick = () => toggleFilter('brand', car.dataset.raw);
+            tr.appendChild(car);
+          }
+          car.dataset.raw = o.raw;
+          car.classList.toggle('r1', c.i === 0); car.classList.toggle('dark', !!o.dark);
+          car.innerHTML = `<div class="rc-in"><span class="sp"></span>${raceCarSvg(o, c.i + 1)}<span class="rc-tag"><i style="background:${o.c}"></i>${c.i === 0 ? '👑 ' : ''}${escapeHtml(o.k)} <b>${o.score.toFixed(o.score < 10 ? 1 : 0)}%</b></span><span class="bub">แซง! ▲</span></div>`;
+          const laneH = `(100% - 14px) / 3`;
+          car.style.top = `calc(7px + ${laneH} * ${c.lane} + ${laneH} / 2 - 15px)`;
+          car.style.zIndex = 10 - c.i;
+          const prev = race.prevRank[o.k];
+          if (prev != null && c.i < prev) {
+            car.classList.remove('boost'); void car.offsetWidth; car.classList.add('boost');
+            clearTimeout(race.boostT[o.k]); race.boostT[o.k] = setTimeout(() => car.classList.remove('boost'), 2500);
+          }
+          if (fresh) requestAnimationFrame(() => requestAnimationFrame(() => { car.style.transitionDelay = (c.i * 0.12) + 's'; car.style.left = c.x + '%'; }));
+          else { car.style.transitionDelay = '0s'; car.style.left = c.x + '%'; }
+        });
+        tr.querySelectorAll('.rc-car').forEach(car => { if (!seen[car.dataset.k]) car.remove(); });
+        race.prevRank = {}; cars.forEach(c => race.prevRank[c.o.k] = c.i);
+      }
+      // นับถอยหลัง + สลับเป็นประกาศผลเองตอน 19:30 (ไม่ต้องกดรีเฟรช)
+      setInterval(() => {
+        if (!document.getElementById('dbRace') || !dash.date) return;
+        raceCountdown();
+        if (race.ended !== null && race.ended !== raceEnded(dash.date)) renderRace(dash.rows);
+      }, 30000);
 
       // ---------- พนักงานขาย ----------
       function renderLeaderboard(st) {
