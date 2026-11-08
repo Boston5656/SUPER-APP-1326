@@ -1694,6 +1694,41 @@
       @keyframes rcCf { to { transform: translateY(230px) rotate(540deg); opacity: 0.2; } }
       .rc-pod .rest { position: absolute; top: 8px; left: 10px; right: 10px; display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; font-size: 0.6rem; color: rgba(255,255,255,0.6); }
       .rc-pod .ttl { position: absolute; top: 10px; left: 0; right: 0; text-align: center; font-size: 0.78rem; font-weight: 800; color: #FFD60A; letter-spacing: 0.4px; }
+
+      .rc-stage { position: relative; border-radius: 16px; overflow: hidden; aspect-ratio: 1000 / 330; min-height: 150px;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); background: #0d1d13; }
+      .rc-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+      .rc-kerb { animation: rcKerb 0.5s linear infinite; }
+      @keyframes rcKerb { to { stroke-dashoffset: -32; } }
+      .rc-ln { fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 2; stroke-dasharray: 14 14; animation: rcLn 0.35s linear infinite; }
+      @keyframes rcLn { to { stroke-dashoffset: -28; } }
+      .rc-stage.idle .rc-kerb, .rc-stage.idle .rc-ln { animation-play-state: paused; }
+      .rc-deco .tr { transform-box: fill-box; transform-origin: center bottom; animation: rcTree 4s ease-in-out infinite; }
+      @keyframes rcTree { 50% { transform: rotate(2.5deg); } }
+      .rc-deco .lt { animation: rcLt 1.6s ease-in-out infinite; filter: drop-shadow(0 0 6px #FFE680); }
+      @keyframes rcLt { 50% { opacity: 0.45; } }
+      .rc-flag { transform-box: fill-box; transform-origin: left center; animation: rcFlag 0.6s ease-in-out infinite alternate; }
+      @keyframes rcFlag { to { transform: skewY(8deg) scaleX(0.9); } }
+      .rc-body { cursor: pointer; filter: drop-shadow(0 3px 2px rgba(0,0,0,0.6)); }
+      .rc-body .wh { transform-box: fill-box; transform-origin: center; animation: rcSpin 0.28s linear infinite; }
+      .rc-body .fl { transform-box: fill-box; transform-origin: right center; animation: rcFlame 0.12s ease-in-out infinite alternate; }
+      .rc-body.boost .fl { animation-duration: 0.05s; }
+      .rc-body.boost path.fl { transform: scaleX(1.8); }
+      .rc-body.dark .bd { stroke: rgba(255,255,255,0.6); }
+      .rc-body.r1 { filter: drop-shadow(0 3px 2px rgba(0,0,0,0.6)) drop-shadow(0 0 7px rgba(255,214,10,0.7)); }
+      .rc-stage.idle .rc-body .wh, .rc-stage.idle .rc-body .fl { animation-play-state: paused; }
+      .rc-tags { position: absolute; inset: 0; pointer-events: none; }
+      .rc-tag2 { position: absolute; transform: translate(-50%, -100%); white-space: nowrap; font-size: 0.58rem; font-weight: 800; pointer-events: auto; cursor: pointer;
+        background: rgba(0,0,0,0.72); color: #fff; border-radius: 7px; padding: 1px 6px; display: flex; gap: 4px; align-items: center; letter-spacing: 0.2px; }
+      .rc-tag2 i { width: 7px; height: 7px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 1px rgba(255,255,255,0.5); }
+      .rc-tag2 b { color: #FFD60A; font-variant-numeric: tabular-nums; }
+      .rc-tag2.r1 { background: #FFD60A; color: #1C1C1E; z-index: 2; } .rc-tag2.r1 b { color: #1C1C1E; }
+      .rc-tag2 .bub { position: absolute; left: 50%; bottom: 100%; margin-bottom: 3px; font-size: 0.6rem; font-weight: 900; color: #fff; background: #FF453A; border-radius: 8px; padding: 1px 6px;
+        opacity: 0; transform: translate(-50%, 6px) scale(0.6); pointer-events: none; }
+      .rc-tag2.boost .bub { animation: rcBub2 2.4s cubic-bezier(.34,1.56,.64,1) forwards; }
+      @keyframes rcBub2 { 12%, 75% { opacity: 1; transform: translate(-50%, 0); } 100% { opacity: 0; transform: translate(-50%, -8px); } }
+      @media (max-width: 576px) { .rc-tag2 { font-size: 0.5rem; padding: 0 4px; } }
+      @media (prefers-reduced-motion: reduce) { .rc-stage * { animation: none !important; } }
       body.land-dash .dbp-race { flex: 0 0 auto; }
       @media (max-width: 576px) { .rc-car { width: 64px; } .rc-pod .cr { width: 70px; } .rc-tag { font-size: 0.56rem; } }
       @media (prefers-reduced-motion: reduce) { .rc-track *, .rc-track::before, .rc-track::after, .rc-pod * { animation: none !important; } }
@@ -3316,7 +3351,7 @@
         { k: 'HONOR', c: '#FF5FA2', re: /HONOR/ },
         { k: 'HUAWEI', c: '#E5141B', re: /HUAWEI/ }
       ];
-      const race = { prevRank: {}, date: '', ended: null, boostT: {} };
+      const race = { prevRank: {}, date: '', ended: null, boostT: {}, cars: {}, raf: 0, S: null, stage: null };
       function raceBrand(raw) {
         const u = String(raw || '').toUpperCase();
         return RACE_BRANDS.find(b => b.re.test(u)) || { k: u.split(/[\s/]+/)[0] || 'อื่นๆ', c: '#6E6E73' };
@@ -3400,49 +3435,146 @@
           return;
         }
 
-        // ---------- กำลังแข่ง ----------
+        // ---------- กำลังแข่ง (สนามโค้ง) ----------
         const lead = Math.max(list[0].score, 0.0001), anyScore = list[0].score > 0;
-        const cars = list.map((o, i) => ({ o, i, lane: i % 3, x: anyScore ? 3 + 78 * (o.score / lead) : 3 }));
+        const cars = list.map((o, i) => ({ o, i, lane: [1, 0, 2][i % 3], p: anyScore ? 0.04 + 0.86 * (o.score / lead) : 0.02 }));
         [0, 1, 2].forEach(l => {   // กันรถเลนเดียวกันซ้อนทับ
-          const inL = cars.filter(c => c.lane === l).sort((a, b) => b.x - a.x);
-          for (let j = 1; j < inL.length; j++) if (inL[j].x > inL[j - 1].x - 15) inL[j].x = Math.max(0, inL[j - 1].x - 15);
+          const inL = cars.filter(c => c.lane === l).sort((a, b) => b.p - a.p);
+          for (let j = 1; j < inL.length; j++) if (inL[j].p > inL[j - 1].p - 0.085) inL[j].p = Math.max(0, inL[j - 1].p - 0.085);
         });
-        let tr = el.querySelector('.rc-track');
-        if (!tr || phaseChanged) {
-          el.innerHTML = `<div class="rc-track"><div class="rc-asph"></div><div class="rc-start"></div><div class="rc-fin"></div>
-            <div class="rc-lane rc-dash" style="top:calc(7px + (100% - 14px) / 3)"></div><div class="rc-lane rc-dash" style="top:calc(7px + (100% - 14px) * 2 / 3)"></div></div>` + note;
-          tr = el.querySelector('.rc-track');
-        } else {
-          el.querySelector('.rc-foot').outerHTML = note;
-        }
-        tr.classList.toggle('idle', !anyScore);
+        if (!el.querySelector('.rc-stage') || phaseChanged) {
+          el.innerHTML = raceStageHtml() + note; raceBuildTrack(el.querySelector('.rc-stage'));
+          race.cars = {};
+        } else el.querySelector('.rc-foot').outerHTML = note;
+        el.querySelector('.rc-stage').classList.toggle('idle', !anyScore);
+        const stage = el.querySelector('.rc-stage'), g = stage.querySelector('.rc-cars'), tags = stage.querySelector('.rc-tags');
         const seen = {};
         cars.forEach(c => {
           const o = c.o; seen[o.k] = 1;
-          let car = tr.querySelector(`.rc-car[data-k="${CSS.escape(o.k)}"]`);
-          const fresh = !car;
-          if (fresh) {
-            car = document.createElement('div'); car.className = 'rc-car'; car.dataset.k = o.k;
-            car.style.left = '0%'; car.style.setProperty('--sd', (1.8 + Math.random() * 1.4).toFixed(2) + 's'); car.style.setProperty('--dl', (-Math.random() * 2).toFixed(2) + 's');
-            car.onclick = () => toggleFilter('brand', car.dataset.raw);
-            tr.appendChild(car);
+          let rc = race.cars[o.k];
+          if (!rc) {
+            const body = document.createElementNS('http://www.w3.org/2000/svg', 'g'); body.setAttribute('class', 'rc-body');
+            const tag = document.createElement('div'); tag.className = 'rc-tag2';
+            body.addEventListener('click', () => toggleFilter('brand', rc.raw)); tag.addEventListener('click', () => toggleFilter('brand', rc.raw));
+            g.appendChild(body); tags.appendChild(tag);
+            rc = race.cars[o.k] = { body, tag, p: 0, lo: (c.lane - 1) * RT.lane, start: performance.now() + c.i * 140,
+              w: 0.7 + Math.random() * 0.9, ph: Math.random() * 6.28, w2: 1.3 + Math.random(), boost: 0 };
           }
-          car.dataset.raw = o.raw;
-          car.classList.toggle('r1', c.i === 0); car.classList.toggle('dark', !!o.dark);
-          car.innerHTML = `<div class="rc-in"><span class="sp"></span>${raceCarSvg(o, c.i + 1)}<span class="rc-tag"><i style="background:${o.c}"></i>${c.i === 0 ? '👑 ' : ''}${escapeHtml(o.k)} <b>${o.score.toFixed(o.score < 10 ? 1 : 0)}%</b></span><span class="bub">แซง! ▲</span></div>`;
-          const laneH = `(100% - 14px) / 3`;
-          car.style.top = `calc(7px + ${laneH} * ${c.lane} + ${laneH} / 2 - 15px)`;
-          car.style.zIndex = 10 - c.i;
+          rc.raw = o.raw; rc.tp = c.p; rc.tlo = (c.lane - 1) * RT.lane; rc.rank = c.i;
+          rc.body.innerHTML = raceCarSvg(o, c.i + 1).replace(/^<svg[^>]*>|<\/svg>$/g, '');
+          rc.body.classList.toggle('dark', !!o.dark); rc.body.classList.toggle('r1', c.i === 0);
+          rc.tag.className = 'rc-tag2' + (c.i === 0 ? ' r1' : '');
+          rc.tag.innerHTML = `<i style="background:${o.c}"></i>${c.i === 0 ? '👑 ' : ''}${escapeHtml(o.k)} <b>${o.score.toFixed(o.score < 10 ? 1 : 0)}%</b><span class="bub">แซง! ▲</span>`;
           const prev = race.prevRank[o.k];
           if (prev != null && c.i < prev) {
-            car.classList.remove('boost'); void car.offsetWidth; car.classList.add('boost');
-            clearTimeout(race.boostT[o.k]); race.boostT[o.k] = setTimeout(() => car.classList.remove('boost'), 2500);
+            rc.boost = performance.now(); rc.body.classList.add('boost'); rc.tag.classList.add('boost');
+            clearTimeout(race.boostT[o.k]); race.boostT[o.k] = setTimeout(() => { rc.body.classList.remove('boost'); rc.tag.classList.remove('boost'); }, 2500);
           }
-          if (fresh) requestAnimationFrame(() => requestAnimationFrame(() => { car.style.transitionDelay = (c.i * 0.12) + 's'; car.style.left = c.x + '%'; }));
-          else { car.style.transitionDelay = '0s'; car.style.left = c.x + '%'; }
         });
-        tr.querySelectorAll('.rc-car').forEach(car => { if (!seen[car.dataset.k]) car.remove(); });
+        Object.keys(race.cars).forEach(k => { if (!seen[k]) { race.cars[k].body.remove(); race.cars[k].tag.remove(); delete race.cars[k]; } });
+        // ผู้นำวาดทับบนสุด
+        Object.values(race.cars).sort((a, b) => b.rank - a.rank).forEach(rc => g.appendChild(rc.body));
         race.prevRank = {}; cars.forEach(c => race.prevRank[c.o.k] = c.i);
+        if (!race.raf) race.raf = requestAnimationFrame(raceLoop);
+      }
+
+      // ---------- สนามโค้ง: วาดถนน 3 เลนตามเส้นทาง S ----------
+      const RT = { W: 1000, H: 330, lane: 25,
+        d: 'M-10 262 C120 262 170 120 300 108 C430 96 455 244 590 246 C725 248 745 112 860 104 C915 100 960 104 1010 104' };
+      function raceStageHtml() {
+        return `<div class="rc-stage"><svg class="rc-svg" viewBox="0 0 ${RT.W} ${RT.H}" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <linearGradient id="rcSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16301f"/><stop offset="1" stop-color="#0d1d13"/></linearGradient>
+            <pattern id="rcChk" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#fff"/><rect width="5" height="5" fill="#111"/><rect x="5" y="5" width="5" height="5" fill="#111"/></pattern>
+            <pattern id="rcGrass" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="url(#rcSky)"/><path d="M0 40L40 0" stroke="rgba(255,255,255,0.025)" stroke-width="14"/></pattern>
+          </defs>
+          <rect width="${RT.W}" height="${RT.H}" fill="url(#rcGrass)"/>
+          <g class="rc-deco"></g>
+          <path class="rc-p" d="${RT.d}" fill="none" stroke="#f2f2f2" stroke-width="${RT.lane * 3 + 16}" stroke-linejoin="round"/>
+          <path class="rc-kerb" d="${RT.d}" fill="none" stroke="#FF453A" stroke-width="${RT.lane * 3 + 16}" stroke-dasharray="16 16" stroke-linejoin="round"/>
+          <path d="${RT.d}" fill="none" stroke="#2b2b2f" stroke-width="${RT.lane * 3 + 2}" stroke-linejoin="round"/>
+          <path d="${RT.d}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="${RT.lane}" stroke-linejoin="round"/>
+          <g class="rc-lines"></g><g class="rc-marks"></g><g class="rc-cars"></g>
+        </svg><div class="rc-tags"></div></div>`;
+      }
+      function raceBuildTrack(stage) {
+        const svg = stage.querySelector('svg'), path = svg.querySelector('.rc-p'), L = path.getTotalLength(), N = 260, S = [];
+        for (let i = 0; i <= N; i++) {
+          const a = path.getPointAtLength(L * i / N), b = path.getPointAtLength(Math.min(L, L * i / N + 1)), c = path.getPointAtLength(Math.max(0, L * i / N - 1));
+          const dx = b.x - c.x, dy = b.y - c.y, m = Math.hypot(dx, dy) || 1;
+          S.push({ x: a.x, y: a.y, nx: -dy / m, ny: dx / m, ang: Math.atan2(dy, dx) * 180 / Math.PI });
+        }
+        race.S = S; race.stage = stage;
+        // เส้นแบ่งเลน (วิ่งตลอด)
+        const off = k => S.map(p => (p.x + p.nx * k).toFixed(1) + ',' + (p.y + p.ny * k).toFixed(1)).join(' ');
+        const NS = 'http://www.w3.org/2000/svg';
+        [-RT.lane / 2, RT.lane / 2].forEach(k => {
+          const pl = document.createElementNS(NS, 'polyline'); pl.setAttribute('points', off(k)); pl.setAttribute('class', 'rc-ln');
+          svg.querySelector('.rc-lines').appendChild(pl);
+        });
+        // เส้นสตาร์ท + เส้นชัยตาหมากรุก
+        const mark = (q, cls, w, fill) => {
+          const p = raceAt(q), g = document.createElementNS(NS, 'g');
+          g.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${p.ang})`);
+          g.innerHTML = `<rect x="${-w / 2}" y="${-RT.lane * 1.5 - 1}" width="${w}" height="${RT.lane * 3 + 2}" fill="${fill}" class="${cls}"/>`;
+          svg.querySelector('.rc-marks').appendChild(g);
+        };
+        mark(0.035, 'st', 4, 'rgba(255,255,255,0.75)'); mark(0.955, 'fin', 16, 'url(#rcChk)');
+        const fp = raceAt(0.955);
+        svg.querySelector('.rc-marks').insertAdjacentHTML('beforeend',
+          `<g transform="translate(${fp.x + 6} ${fp.y - RT.lane * 1.5 - 44})"><rect x="0" y="0" width="3" height="46" fill="#ddd"/><path d="M3 2h26l-5 7 5 7H3z" fill="url(#rcChk)" class="rc-flag"/></g>`);
+        // ต้นไม้ / ไฟสนาม (ห่างจากถนน)
+        let seed = 11; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+        const deco = svg.querySelector('.rc-deco'); let h = '', n = 0, tries = 0;
+        while (n < 26 && tries++ < 600) {
+          const x = rnd() * RT.W, y = rnd() * RT.H;
+          if (S.some(p => Math.hypot(p.x - x, p.y - y) < RT.lane * 1.5 + 34)) continue;
+          const r = 9 + rnd() * 11, t = rnd();
+          h += t < 0.75 ? `<g class="tr" style="animation-delay:${(-rnd() * 4).toFixed(2)}s"><ellipse cx="${x + 3}" cy="${y + r * 0.9}" rx="${r}" ry="${r * 0.35}" fill="rgba(0,0,0,0.35)"/><circle cx="${x}" cy="${y}" r="${r}" fill="#1f5a33"/><circle cx="${x - r * 0.3}" cy="${y - r * 0.3}" r="${r * 0.55}" fill="#2e7d46"/></g>`
+            : `<g><rect x="${x - 1.5}" y="${y - 2}" width="3" height="26" fill="#555"/><circle class="lt" cx="${x}" cy="${y - 4}" r="6" fill="#FFE680" style="animation-delay:${(-rnd() * 2).toFixed(2)}s"/></g>`;
+          n++;
+        }
+        deco.innerHTML = h;
+      }
+      function raceAt(q) {
+        const S = race.S, f = Math.max(0, Math.min(1, q)) * (S.length - 1), i = Math.floor(f), t = f - i, a = S[i], b = S[Math.min(i + 1, S.length - 1)];
+        let da = b.ang - a.ang; if (da > 180) da -= 360; if (da < -180) da += 360;
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, nx: a.nx + (b.nx - a.nx) * t, ny: a.ny + (b.ny - a.ny) * t, ang: a.ang + da * t };
+      }
+      const RC_RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      function raceLoop(now) {
+        race.raf = 0;
+        if (!race.stage || !document.body.contains(race.stage)) return;
+        race.raf = requestAnimationFrame(raceLoop);
+        if (document.hidden) return;
+        const dt = Math.min(0.05, (now - (race.lastT || now)) / 1000); race.lastT = now;
+        const idle = race.stage.classList.contains('idle');
+        Object.values(race.cars).forEach(rc => {
+          if (now >= rc.start) rc.p += (rc.tp - rc.p) * Math.min(1, dt * 1.6);
+          rc.lo += (rc.tlo - rc.lo) * Math.min(1, dt * 2.5);
+          const bst = rc.boost && now - rc.boost < 1200 ? Math.sin((now - rc.boost) / 1200 * Math.PI) * 0.03 : 0;
+          const wob = RC_RM || idle ? 0 : Math.sin(now / 1000 * rc.w * 2.4 + rc.ph) * 0.007 + Math.sin(now / 1000 * rc.w2 * 5 + rc.ph) * 0.0025;
+          const q = Math.max(0, Math.min(0.97, rc.p + wob + bst)), pt = raceAt(q);
+          const sway = RC_RM || idle ? 0 : Math.sin(now / 1000 * rc.w2 * 1.7 + rc.ph) * 2.2;
+          const x = pt.x + pt.nx * (rc.lo + sway), y = pt.y + pt.ny * (rc.lo + sway);
+          rc.body.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(pt.ang + sway * 0.8).toFixed(1)}) scale(0.62) translate(-60 -30)`);
+          rc.tx = x; rc.ty = y - 26;
+        });
+        // ป้ายชื่อไม่ทับกัน: ผู้นำวางก่อน คันถัดไปถ้าชนจะขยับขึ้น/ลง
+        const sw = race.stage.clientWidth || 1, sh = race.stage.clientHeight || 1, kx = sw / RT.W, ky = sh / RT.H, placed = [];
+        Object.values(race.cars).sort((a, b) => a.rank - b.rank).forEach(rc => {
+          const w = rc.tag.offsetWidth || 60, h = (rc.tag.offsetHeight || 14) + 2;
+          let px = rc.tx * kx, py = rc.ty * ky;
+          for (let n = 0; n < 6; n++) {
+            const hit = placed.find(q => Math.abs(q.x - px) < (q.w + w) / 2 && Math.abs(q.y - py) < h);
+            if (!hit) break;
+            py = hit.y + (py <= hit.y && hit.y - h > 14 ? -h : h);
+          }
+          py = Math.max(14, Math.min(sh - 2, py));
+          px = Math.max(w / 2 + 2, Math.min(sw - w / 2 - 2, px));
+          placed.push({ x: px, y: py, w });
+          rc.tag.style.left = px.toFixed(1) + 'px'; rc.tag.style.top = py.toFixed(1) + 'px';
+        });
       }
       // นับถอยหลัง + สลับเป็นประกาศผลเองตอน 19:30 (ไม่ต้องกดรีเฟรช)
       setInterval(() => {
