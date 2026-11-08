@@ -1700,7 +1700,7 @@
       .rc-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
       .rc-kerb { animation: rcKerb 0.5s linear infinite; }
       @keyframes rcKerb { to { stroke-dashoffset: -32; } }
-      .rc-ln { fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 2; stroke-dasharray: 14 14; animation: rcLn 0.35s linear infinite; }
+      .rc-ln { fill: none; stroke: rgba(255,255,255,0.6); stroke-width: 2; stroke-dasharray: 14 14; }
       @keyframes rcLn { to { stroke-dashoffset: -28; } }
       .rc-stage.idle .rc-kerb, .rc-stage.idle .rc-ln { animation-play-state: paused; }
       .rc-deco .tr { transform-box: fill-box; transform-origin: center bottom; animation: rcTree 4s ease-in-out infinite; }
@@ -3440,7 +3440,7 @@
         const cars = list.map((o, i) => ({ o, i, lane: [1, 0, 2][i % 3], p: anyScore ? 0.04 + 0.86 * (o.score / lead) : 0.02 }));
         [0, 1, 2].forEach(l => {   // กันรถเลนเดียวกันซ้อนทับ
           const inL = cars.filter(c => c.lane === l).sort((a, b) => b.p - a.p);
-          for (let j = 1; j < inL.length; j++) if (inL[j].p > inL[j - 1].p - 0.085) inL[j].p = Math.max(0, inL[j - 1].p - 0.085);
+          for (let j = 1; j < inL.length; j++) if (inL[j].p > inL[j - 1].p - 0.1) inL[j].p = Math.max(0, inL[j - 1].p - 0.1);
         });
         if (!el.querySelector('.rc-stage') || phaseChanged) {
           el.innerHTML = raceStageHtml() + note; raceBuildTrack(el.querySelector('.rc-stage'));
@@ -3478,87 +3478,89 @@
         if (!race.raf) race.raf = requestAnimationFrame(raceLoop);
       }
 
-      // ---------- สนามโค้ง: วาดถนน 3 เลนตามเส้นทาง S ----------
-      const RT = { W: 1000, H: 330, lane: 25,
-        d: 'M-10 262 C120 262 170 120 300 108 C430 96 455 244 590 246 C725 248 745 112 860 104 C915 100 960 104 1010 104' };
+      // ---------- สนามเลื่อนไม่รู้จบ: ทางตรงยาว › โค้งขึ้น › ทางตรง › โค้งลง (วนซ้ำทุก 1000 หน่วย) ----------
+      const RT = { W: 1000, H: 330, lane: 33, speed: 170,
+        d: 'M0 222 L270 222 C395 222 395 108 520 108 L620 108 C745 108 745 222 870 222 L1000 222',
+        d2: 'M-2 222 L270 222 C395 222 395 108 520 108 L620 108 C745 108 745 222 870 222 L1270 222 C1395 222 1395 108 1520 108 L1620 108 C1745 108 1745 222 1870 222 L2002 222' };
       function raceStageHtml() {
+        const RW = RT.lane * 3;
         return `<div class="rc-stage"><svg class="rc-svg" viewBox="0 0 ${RT.W} ${RT.H}" preserveAspectRatio="xMidYMid slice">
           <defs>
             <linearGradient id="rcSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16301f"/><stop offset="1" stop-color="#0d1d13"/></linearGradient>
             <pattern id="rcChk" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#fff"/><rect width="5" height="5" fill="#111"/><rect x="5" y="5" width="5" height="5" fill="#111"/></pattern>
-            <pattern id="rcGrass" width="40" height="40" patternUnits="userSpaceOnUse"><rect width="40" height="40" fill="url(#rcSky)"/><path d="M0 40L40 0" stroke="rgba(255,255,255,0.025)" stroke-width="14"/></pattern>
           </defs>
-          <rect width="${RT.W}" height="${RT.H}" fill="url(#rcGrass)"/>
-          <g class="rc-deco"></g>
-          <path class="rc-p" d="${RT.d}" fill="none" stroke="#f2f2f2" stroke-width="${RT.lane * 3 + 16}" stroke-linejoin="round"/>
-          <path class="rc-kerb" d="${RT.d}" fill="none" stroke="#FF453A" stroke-width="${RT.lane * 3 + 16}" stroke-dasharray="16 16" stroke-linejoin="round"/>
-          <path d="${RT.d}" fill="none" stroke="#2b2b2f" stroke-width="${RT.lane * 3 + 2}" stroke-linejoin="round"/>
-          <path d="${RT.d}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="${RT.lane}" stroke-linejoin="round"/>
-          <g class="rc-lines"></g><g class="rc-marks"></g><g class="rc-cars"></g>
+          <rect width="${RT.W}" height="${RT.H}" fill="url(#rcSky)"/>
+          <path class="rc-p" d="${RT.d}" fill="none" stroke="none"/>
+          <g class="rc-world">
+            <g class="rc-deco"></g>
+            <path d="${RT.d2}" fill="none" stroke="#f2f2f2" stroke-width="${RW + 16}" stroke-linejoin="round"/>
+            <path d="${RT.d2}" fill="none" stroke="#FF453A" stroke-width="${RW + 16}" stroke-dasharray="16 16" pathLength="2432" stroke-linejoin="round"/>
+            <path d="${RT.d2}" fill="none" stroke="#2b2b2f" stroke-width="${RW + 2}" stroke-linejoin="round"/>
+            <path d="${RT.d2}" fill="none" stroke="#323236" stroke-width="${RT.lane}" stroke-linejoin="round"/>
+            <g class="rc-lines"></g>
+          </g>
+          <g class="rc-cars"></g>
         </svg><div class="rc-tags"></div></div>`;
       }
       function raceBuildTrack(stage) {
-        const svg = stage.querySelector('svg'), path = svg.querySelector('.rc-p'), L = path.getTotalLength(), N = 260, S = [];
+        const svg = stage.querySelector('svg'), path = svg.querySelector('.rc-p'), L = path.getTotalLength(), N = 700, S = [];
         for (let i = 0; i <= N; i++) {
           const a = path.getPointAtLength(L * i / N), b = path.getPointAtLength(Math.min(L, L * i / N + 1)), c = path.getPointAtLength(Math.max(0, L * i / N - 1));
           const dx = b.x - c.x, dy = b.y - c.y, m = Math.hypot(dx, dy) || 1;
           S.push({ x: a.x, y: a.y, nx: -dy / m, ny: dx / m, ang: Math.atan2(dy, dx) * 180 / Math.PI });
         }
-        race.S = S; race.stage = stage;
-        // เส้นแบ่งเลน (วิ่งตลอด)
-        const off = k => S.map(p => (p.x + p.nx * k).toFixed(1) + ',' + (p.y + p.ny * k).toFixed(1)).join(' ');
+        // ตารางค้นหาตามแกน X (0..1000) — ถนนวิ่งซ้ายไปขวาตลอด
+        const T = []; let j = 0;
+        for (let x = 0; x <= RT.W; x++) {
+          while (j < S.length - 2 && S[j + 1].x < x) j++;
+          const a = S[j], b = S[j + 1], t = b.x === a.x ? 0 : Math.max(0, Math.min(1, (x - a.x) / (b.x - a.x)));
+          T.push({ y: a.y + (b.y - a.y) * t, nx: a.nx + (b.nx - a.nx) * t, ny: a.ny + (b.ny - a.ny) * t, ang: a.ang + (b.ang - a.ang) * t });
+        }
+        race.T = T; race.stage = stage; race.world = svg.querySelector('.rc-world'); race.off = race.off || 0;
         const NS = 'http://www.w3.org/2000/svg';
         [-RT.lane / 2, RT.lane / 2].forEach(k => {
-          const pl = document.createElementNS(NS, 'polyline'); pl.setAttribute('points', off(k)); pl.setAttribute('class', 'rc-ln');
+          const pl = document.createElementNS(NS, 'polyline');
+          pl.setAttribute('points', [0, RT.W].map(o => S.map(p => (p.x + o + p.nx * k).toFixed(1) + ',' + (p.y + p.ny * k).toFixed(1)).join(' ')).join(' '));
+          pl.setAttribute('class', 'rc-ln'); pl.setAttribute('pathLength', '2408');
           svg.querySelector('.rc-lines').appendChild(pl);
         });
-        // เส้นสตาร์ท + เส้นชัยตาหมากรุก
-        const mark = (q, cls, w, fill) => {
-          const p = raceAt(q), g = document.createElementNS(NS, 'g');
-          g.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${p.ang})`);
-          g.innerHTML = `<rect x="${-w / 2}" y="${-RT.lane * 1.5 - 1}" width="${w}" height="${RT.lane * 3 + 2}" fill="${fill}" class="${cls}"/>`;
-          svg.querySelector('.rc-marks').appendChild(g);
-        };
-        mark(0.035, 'st', 4, 'rgba(255,255,255,0.75)'); mark(0.955, 'fin', 16, 'url(#rcChk)');
-        const fp = raceAt(0.955);
-        svg.querySelector('.rc-marks').insertAdjacentHTML('beforeend',
-          `<g transform="translate(${fp.x + 6} ${fp.y - RT.lane * 1.5 - 44})"><rect x="0" y="0" width="3" height="46" fill="#ddd"/><path d="M3 2h26l-5 7 5 7H3z" fill="url(#rcChk)" class="rc-flag"/></g>`);
-        // ต้นไม้ / ไฟสนาม (ห่างจากถนน)
+        // ต้นไม้ / ไฟสนาม (สุ่มแบบคงที่ ทุกช่วงเหมือนกัน ต่อกันเนียน)
         let seed = 11; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
-        const deco = svg.querySelector('.rc-deco'); let h = '', n = 0, tries = 0;
-        while (n < 26 && tries++ < 600) {
-          const x = rnd() * RT.W, y = rnd() * RT.H;
-          if (S.some(p => Math.hypot(p.x - x, p.y - y) < RT.lane * 1.5 + 34)) continue;
+        let h = '', n = 0, tries = 0;
+        while (n < 22 && tries++ < 800) {
+          const x = 30 + rnd() * (RT.W - 60), y = rnd() * RT.H;
+          if (S.some(p => Math.hypot(p.x - x, p.y - y) < RT.lane * 1.5 + 30)) continue;
           const r = 9 + rnd() * 11, t = rnd();
-          h += t < 0.75 ? `<g class="tr" style="animation-delay:${(-rnd() * 4).toFixed(2)}s"><ellipse cx="${x + 3}" cy="${y + r * 0.9}" rx="${r}" ry="${r * 0.35}" fill="rgba(0,0,0,0.35)"/><circle cx="${x}" cy="${y}" r="${r}" fill="#1f5a33"/><circle cx="${x - r * 0.3}" cy="${y - r * 0.3}" r="${r * 0.55}" fill="#2e7d46"/></g>`
-            : `<g><rect x="${x - 1.5}" y="${y - 2}" width="3" height="26" fill="#555"/><circle class="lt" cx="${x}" cy="${y - 4}" r="6" fill="#FFE680" style="animation-delay:${(-rnd() * 2).toFixed(2)}s"/></g>`;
+          h += t < 0.75 ? `<ellipse cx="${x + 3}" cy="${y + r * 0.9}" rx="${r}" ry="${r * 0.35}" fill="rgba(0,0,0,0.35)"/><circle cx="${x}" cy="${y}" r="${r}" fill="#1f5a33"/><circle cx="${x - r * 0.3}" cy="${y - r * 0.3}" r="${r * 0.55}" fill="#2e7d46"/>`
+            : `<rect x="${x - 1.5}" y="${y - 2}" width="3" height="26" fill="#555"/><circle cx="${x}" cy="${y - 4}" r="6" fill="#FFE680"/><circle cx="${x}" cy="${y - 4}" r="12" fill="rgba(255,230,128,0.12)"/>`;
           n++;
         }
-        deco.innerHTML = h;
+        svg.querySelector('.rc-deco').innerHTML = h + `<g transform="translate(${RT.W} 0)">${h}</g>`;
       }
-      function raceAt(q) {
-        const S = race.S, f = Math.max(0, Math.min(1, q)) * (S.length - 1), i = Math.floor(f), t = f - i, a = S[i], b = S[Math.min(i + 1, S.length - 1)];
-        let da = b.ang - a.ang; if (da > 180) da -= 360; if (da < -180) da += 360;
-        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, nx: a.nx + (b.nx - a.nx) * t, ny: a.ny + (b.ny - a.ny) * t, ang: a.ang + da * t };
+      function raceAtX(xw) {
+        const T = race.T, x = ((xw % RT.W) + RT.W) % RT.W, i = Math.floor(x), t = x - i, a = T[i], b = T[Math.min(i + 1, RT.W)];
+        return { y: a.y + (b.y - a.y) * t, nx: a.nx + (b.nx - a.nx) * t, ny: a.ny + (b.ny - a.ny) * t, ang: a.ang + (b.ang - a.ang) * t };
       }
       const RC_RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       function raceLoop(now) {
         race.raf = 0;
         if (!race.stage || !document.body.contains(race.stage)) return;
         race.raf = requestAnimationFrame(raceLoop);
-        if (document.hidden) return;
+        if (document.hidden) { race.lastT = now; return; }
         const dt = Math.min(0.05, (now - (race.lastT || now)) / 1000); race.lastT = now;
         const idle = race.stage.classList.contains('idle');
+        // ถนนเลื่อนไปทางซ้ายตลอด = รถกำลังวิ่งไปข้างหน้า
+        if (!idle && !RC_RM) { race.off = (race.off + RT.speed * dt) % RT.W; race.world.setAttribute('transform', `translate(${(-race.off).toFixed(1)} 0)`); }
         Object.values(race.cars).forEach(rc => {
           if (now >= rc.start) rc.p += (rc.tp - rc.p) * Math.min(1, dt * 1.6);
           rc.lo += (rc.tlo - rc.lo) * Math.min(1, dt * 2.5);
-          const bst = rc.boost && now - rc.boost < 1200 ? Math.sin((now - rc.boost) / 1200 * Math.PI) * 0.03 : 0;
-          const wob = RC_RM || idle ? 0 : Math.sin(now / 1000 * rc.w * 2.4 + rc.ph) * 0.007 + Math.sin(now / 1000 * rc.w2 * 5 + rc.ph) * 0.0025;
-          const q = Math.max(0, Math.min(0.97, rc.p + wob + bst)), pt = raceAt(q);
+          const bst = rc.boost && now - rc.boost < 1200 ? Math.sin((now - rc.boost) / 1200 * Math.PI) * 0.035 : 0;
+          const wob = RC_RM || idle ? 0 : Math.sin(now / 1000 * rc.w * 2.4 + rc.ph) * 0.01 + Math.sin(now / 1000 * rc.w2 * 5 + rc.ph) * 0.003;
+          const sx = RT.W * Math.max(0.05, Math.min(0.93, rc.p + wob + bst)), pt = raceAtX(sx + race.off);
           const sway = RC_RM || idle ? 0 : Math.sin(now / 1000 * rc.w2 * 1.7 + rc.ph) * 2.2;
-          const x = pt.x + pt.nx * (rc.lo + sway), y = pt.y + pt.ny * (rc.lo + sway);
-          rc.body.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(pt.ang + sway * 0.8).toFixed(1)}) scale(0.62) translate(-60 -30)`);
-          rc.tx = x; rc.ty = y - 26;
+          const x = sx + pt.nx * (rc.lo + sway), y = pt.y + pt.ny * (rc.lo + sway);
+          rc.body.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(pt.ang + sway * 0.8).toFixed(1)}) scale(0.8) translate(-60 -30)`);
+          rc.tx = x; rc.ty = y - 30;
         });
         // ป้ายชื่อไม่ทับกัน: ผู้นำวางก่อน คันถัดไปถ้าชนจะขยับขึ้น/ลง
         const sw = race.stage.clientWidth || 1, sh = race.stage.clientHeight || 1, kx = sw / RT.W, ky = sh / RT.H, placed = [];
