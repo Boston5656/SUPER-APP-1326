@@ -226,6 +226,14 @@
     .dx-top .r:first-of-type { border-top: 0; }
     .dx-top .r span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #3A3A3C; }
     .dx-top .r b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; white-space: nowrap; }
+    .dx-br { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .dx-br th { text-align: right; font-size: 10.5px; color: #8E8E93; font-weight: 700; padding: 4px 6px; border-bottom: 1px solid #ECECF0; }
+    .dx-br th:first-child, .dx-br td:first-child { text-align: left; }
+    .dx-br td { text-align: right; padding: 7px 6px; border-top: 1px solid #ECECF0; font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-weight: 700; white-space: nowrap; }
+    .dx-br td:first-child { font-family: inherit; font-weight: 800; color: #1C1C1E; }
+    .dx-br td .bb { display: block; height: 4px; border-radius: 4px; background: #ECECF0; margin-top: 4px; overflow: hidden; } .dx-br td .bb i { display: block; height: 100%; border-radius: 4px; }
+    .dx-br .ok { color: #1E9E4A; } .dx-br .bad { color: #E5484D; }
+    .dx-br tfoot td { border-top: 2px solid #D1D1D6; }
 
 
     /* การ์ดแบรนด์ (ฐาน) */
@@ -1585,7 +1593,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.08-04';
+    const APP_VER = '2026.11.13-01';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2611,6 +2619,7 @@
         html += `<div class="dx-legend"><span><i style="background:${color}"></i>ชิ้นที่ขายได้ต่อวัน</span><span><i style="background:#1C1C1E;height:3px"></i>% สะสม</span>${tgt > 0 ? '<span><i style="background:#FF9F0A;height:2px"></i>เส้นเป้า ' + pctTxt(tgt) + '%</span>' : ''}</div>
           <div class="dx-chart"><canvas id="dx-canvas"></canvas></div>${dxStatsHTML(fd.c, fmtUnit, 'ยอด')}`;
       } else html += '<div class="dx-top text-center text-xs text-zinc-400 py-6">ยังไม่มีข้อมูลรายวัน — กด 🔄 อัปเดตข้อมูล ใน Google Sheet 1 รอบ</div>';
+      html += fxBrandHTML(f, tgt);
       html += '</section></div>';
       if (!DX_NAV) DX_NEXT = { t: 'focus', k: i };
       openModal('🎯 ' + f.name, html, 'ms-wide');
@@ -2627,6 +2636,26 @@
           scales: { x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 16 } },
                     y: { beginAtZero: true, ticks: { precision: 0, font: { size: 10 } }, grid: { color: 'rgba(0,0,0,.05)' }, title: { display: true, text: 'ชิ้น', font: { size: 10 } } },
                     y1: { position: 'right', beginAtZero: true, suggestedMax: Math.max(tgt * 1.3, 10), grid: { display: false }, ticks: { callback: v => v + '%', font: { size: 10 } } } } } });
+    }
+    // 🏷️ งานโฟกัสแยกตามแบรนด์: เครื่อง / ชิ้น / Att % / ขาดอีก (เรียงตามแบรนด์ที่ขาดมากสุด)
+    function fxBrandHTML(f, tgt) {
+      const bb = lastDashboardData && lastDashboardData.fcBrand && lastDashboardData.fcBrand[f.name];
+      if (!bb) return '<div class="dx-top mt-3 text-center text-xs text-zinc-400 py-4">🏷️ แยกตามแบรนด์ — กด 🔄 อัปเดตข้อมูล 1 รอบ (หลังอัปเดตแอปเวอร์ชันนี้)</div>';
+      const rows = (bb.rows || []).map(r => {
+        const att = r.base > 0 ? r.count / r.base * 100 : null, need = tgt > 0 && r.base > 0 ? Math.max(0, Math.ceil(tgt / 100 * r.base - r.count - 1e-9)) : 0;
+        return Object.assign({ att, need }, r);
+      }).sort((a, b) => b.need - a.need || (a.att == null) - (b.att == null) || (a.att || 0) - (b.att || 0) || b.base - a.base);
+      if (!rows.length && !bb.noDev) return '<div class="dx-top mt-3 text-center text-xs text-zinc-400 py-4">🏷️ ยังไม่มีเครื่องหรือชิ้นที่นับได้เดือนนี้</div>';
+      const lack = rows.filter(r => r.need > 0).length, col = a => a == null ? '#C7C7CC' : fcHex(tgt > 0 ? a / tgt * 100 : 100);
+      const tb = rows.reduce((a, r) => a + r.base, 0), tc = rows.reduce((a, r) => a + r.count, 0) + (bb.noDev || 0);
+      return `<div class="dx-top mt-3"><h5>🏷️ แยกตามแบรนด์${tgt > 0 ? ` · <span style="color:${lack ? '#E5484D' : '#1E9E4A'}">${lack ? 'ยังขาด ' + lack + ' แบรนด์' : 'ผ่านครบทุกแบรนด์ ✓'}</span>` : ''}</h5>
+        <table class="dx-br"><thead><tr><th>แบรนด์</th><th>เครื่อง</th><th>ชิ้น</th><th>Att</th><th>${tgt > 0 ? 'ขาดอีก' : ''}</th></tr></thead><tbody>
+        ${rows.map(r => `<tr><td>${r.brand}<span class="bb"><i style="width:${r.att == null ? 0 : Math.min(100, tgt > 0 ? r.att / tgt * 100 : r.att)}%;background:${col(r.att)}"></i></span></td>
+          <td>${fmtUnit(r.base)}</td><td>${fmtUnit(r.count)}</td><td style="color:${col(r.att)}">${r.att == null ? '–' : pctTxt(r.att) + '%'}</td>
+          <td class="${r.need ? 'bad' : 'ok'}">${tgt > 0 && r.base > 0 ? (r.need ? r.need + ' ชิ้น' : '✓') : ''}</td></tr>`).join('')}
+        ${bb.noDev ? `<tr><td style="color:#8E8E93;font-weight:700">บิลแยก ไม่ระบุเครื่อง</td><td>–</td><td>${fmtUnit(bb.noDev)}</td><td></td><td></td></tr>` : ''}</tbody>
+        <tfoot><tr><td>รวม</td><td>${fmtUnit(tb)}</td><td>${fmtUnit(tc)}</td><td>${tb > 0 ? pctTxt(tc / tb * 100) + '%' : '–'}</td><td></td></tr></tfoot></table>
+        <div class="text-[10.5px] text-zinc-400 mt-2 leading-relaxed">ชิ้นนับให้แบรนด์ของเครื่องในบิลเดียวกัน หรือบิลแยกที่ Comment ระบุ SN / IMEI · ขาดอีก = ชิ้นที่ต้องทำเพิ่มให้แบรนด์นั้นถึงเป้า ${tgt > 0 ? pctTxt(tgt) + '%' : ''}</div></div>`;
     }
     function openCatDetail(name) {
       const d = lastDashboardData, c = d && d.categories.find(x => x.name === name); if (!c) return;
@@ -4552,6 +4581,29 @@
   .fc-res .tp { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,.06); color: #ddd; }
   .fc-res .tp span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .fc-warn { color: #FFB340; font-weight: 700; margin-top: 8px; }
+  .fc-sec { background: #1C1C1E; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 12px; margin-top: 12px; }
+  .fc-sec h4 { font-size: 13px; font-weight: 800; color: #fff; margin: 0 0 8px; display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .fc-sec h4 small { font-weight: 600; color: #8E8E93; font-size: 11px; }
+  .fc-pr { display: grid; grid-template-columns: 1fr 86px 30px; gap: 6px; align-items: center; background: #2C2C2E; border-radius: 14px; padding: 7px 8px 7px 12px; margin-bottom: 6px; }
+  .fc-pr .t { min-width: 0; } .fc-pr .t b { display: block; font-size: 12px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fc-pr .t small { display: block; font-size: 10.5px; color: #8E8E93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fc-pr input { min-width: 0; box-sizing: border-box; height: 34px; border-radius: 10px; border: 0; background: #fff; color: #000; font-weight: 800; font-size: 13px; text-align: right; padding: 0 8px; width: 100%; outline: none; }
+  .fc-pr .x { height: 30px; border-radius: 10px; background: #3A1D1F; color: #FF6B60; font-weight: 900; }
+  .fc-pr .add { height: 30px; border-radius: 10px; background: #FFD700; color: #000; font-weight: 900; grid-column: 3; }
+  .fc-pr.res { grid-template-columns: 1fr auto 30px; } .fc-pr.res .u { font-size: 11px; color: #ddd; font-weight: 700; white-space: nowrap; }
+  .fc-pr.on { box-shadow: inset 0 0 0 2px rgba(255,215,0,.45); }
+  .fc-srch { display: grid; grid-template-columns: 1fr auto; gap: 6px; margin-bottom: 8px; }
+  .fc-srch input { height: 40px; border-radius: 12px; border: 0; padding: 0 12px; font-weight: 700; font-size: 14px; outline: none; text-transform: uppercase; }
+  .fc-srch button { height: 40px; border-radius: 12px; padding: 0 14px; background: #FFD700; color: #000; font-weight: 800; font-size: 13px; }
+  .fc-ck { display: flex; align-items: center; gap: 10px; background: #2C2C2E; border-radius: 14px; padding: 9px 12px; margin-bottom: 6px; cursor: pointer; font-size: 12px; color: #ddd; }
+  .fc-ck i { flex: none; width: 20px; height: 20px; border-radius: 6px; border: 2px solid #48484A; display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 900; }
+  .fc-ck.on { background: #34321c; } .fc-ck.on i { background: #FFD700; border-color: #FFD700; color: #000; }
+  .fc-ck span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .fc-ck b { color: #fff; font-size: 12px; }
+  .fc-ck.warn { box-shadow: inset 0 0 0 1.5px #FF9F0A; }
+  .fc-tag { display: inline-block; border-radius: 8px; padding: 1px 6px; font-size: 10px; font-weight: 800; margin-left: 4px; background: #3A3A3C; color: #ddd; }
+  .fc-tag.dev { background: #1F3A2A; color: #30D158; } .fc-tag.no { background: #3A2A12; color: #FF9F0A; }
+  .fc-form select, .fc-form input { width: 100%; height: 42px; border-radius: 12px; border: 0; padding: 0 12px; font-weight: 700; font-size: 14px; outline: none; margin-bottom: 8px; }
+  .fc-form select { background: #3A3A3C; color: #fff; } .fc-form input { background: #fff; color: #000; text-transform: uppercase; }
   .fc-note { font-size: 11px; color: #8E8E93; font-weight: 600; line-height: 1.5; margin: 0 6px 12px; }
   .sa-pill.fc-off { opacity: .45; }
   .fc-mini { border-radius: 9999px; height: 38px; padding: 0 14px; font-weight: 800; font-size: 12px; background: #2C2C2E; color: #fff; }
@@ -4824,7 +4876,10 @@
   /* ---------- แท็บ: ⚡ งานโฟกัส (เป้า / ฐาน / เกณฑ์นับ) ---------- */
   const FC_FIELD = { CATE: 'Category', SUBCATE: 'Sub Cate', BRAND: 'แบรนด์', MODEL: 'Model', PNAME: 'ชื่อสินค้า', PCODE: 'รหัสสินค้า', MAPPED: 'หมวด (ระบบ)' };
   const FC_OP = { eq: 'เท่ากับ', start: 'ขึ้นต้นด้วย', has: 'มีคำว่า', not: 'ไม่ใช่' };
-  const FC_BASE = { SMP: 'Smartphone (Android)', IPHONE: 'iPhone', IPAD: 'iPad', WATCH: 'Apple Watch', TABLET: 'Tablet (Android)', SAMSUNG: 'Samsung มือถือ', GADGET: 'Gadget (BTB มี Serial)' };
+  const FC_BASE = { SMP: 'Smartphone (Android)', IPHONE: 'iPhone', IPAD: 'iPad', WATCH: 'Apple Watch', TABLET: 'Tablet (Android)', SAMSUNG: 'Samsung มือถือ', GADGET: 'Gadget' };
+  const FC_DEF_PHONE = ["SAMSUNG", "OPPO", "VIVO", "XIAOMI", "REALME", "HONOR", "INFINIX", "NOTHING", "TCL", "ZTE", "TECNO", "HUAWEI"];
+  const FC_DEF_TABLET = ["SAMSUNG", "OPPO", "XIAOMI", "REALME", "HUAWEI", "ALLDOCUBE", "LENOVO"];
+  const FC_GAD_HINT = /SPEAKER|HEAD ?PHONE|HEADSET|EARPHONE|EARBUD|TWS|SMART ?WATCH|SMARTBAND|WEARABLE|GAM(E|ING)|CONSOLE|CAMERA|ACTION CAM|GIMBAL/;
   const FC_FIN = { UFUND_P: 'U-Fund Personal', UFUND_S: 'U-Fund Student', SF: 'Samsung Finance+' };
   const FC_LINE = { iphone: 'iPhone', smp: 'Smartphone', ipad: 'iPad', tablet: 'Tablet', watch: 'Watch' };
   let fcData = null, fcItems = null, fcDirty = false, fcIdx = -1, fcPrev = null;
@@ -4844,15 +4899,17 @@
       parts.push(tag + (!it.rules || !it.rules.length ? '⚠️ ยังไม่ได้ตั้งเงื่อนไขนับ' : it.rules.map(r => `${FC_FIELD[r.f]} ${FC_OP[r.op]} ${r.v}`).join(it.mode === 'any' ? ' หรือ ' : ' และ ')));
     }
     if (src.fin) parts.push('💳 ' + ((it.fin && it.fin.codes) || []).map(c => FC_FIN[c]).join(' + ') + ' · ' + ((it.fin && it.fin.lines) || []).map(l => FC_LINE[l]).join('/'));
+    if ((it.products || []).length) parts.unshift('📦 ' + it.products.length + ' รหัสสินค้า' + (it.products.some(p => p.inc > 0) ? ' 💰' : ''));
     return parts.join(' + ');
   }
-  function fcBaseText(it) { return (it.base || []).map(b => FC_BASE[b]).join(' + ') || '⚠️ ยังไม่เลือกฐาน'; }
+  function fcBaseText(it) { return ((it.base || []).map(b => FC_BASE[b]).join(' + ') || '⚠️ ยังไม่เลือกฐาน') + ((it.baseBrands || []).length ? ' · เฉพาะ ' + it.baseBrands.join(', ') : ''); }
 
   function fcRenderList() {
     fcIdx = -1;
     const snap = fcData && fcData.snap;
     let h = `<p class="fc-note">${fcData.saved ? '✏️ ใช้ค่าที่ตั้งเองอยู่' : '📄 ตอนนี้ใช้เกณฑ์เดิม + เป้าจากชีต GUIDE'} · แตะงานเพื่อแก้ เป้า / ฐาน / นับจากอะไร${snap ? ' · ข้อมูลทดสอบจากรอบอัปเดต ' + saEsc(snap.at) : ''}</p>`;
-    h += `<button class="sa-btn sa-btn-yellow mb-4" onclick="fcEditNew()">+ เพิ่มงานโฟกัส</button>`;
+    h += `<button class="sa-btn sa-btn-yellow mb-2" onclick="fcEditNew()">+ เพิ่มงานโฟกัส</button>
+      <div class="grid grid-cols-2 gap-2 mb-4"><button class="fc-mini" onclick="fsOpen()">🏷️ แบรนด์ฐาน + Gadget</button><button class="fc-mini" onclick="ctOpen()">🗂️ หมวดสินค้า (CATE)</button></div>`;
     fcItems.forEach((it, i) => {
       const cnt = snap && snap.counts && snap.counts[it.name];
       h += `<div class="sa-pill${it.show ? '' : ' fc-off'}" onclick="fcEdit(${i})">
@@ -4872,7 +4929,7 @@
     fcItems.push({ name: '', target: 0, show: true, source: 'product', mode: 'all', rules: [{ f: 'BRAND', op: 'eq', v: '' }], base: ['SMP', 'IPHONE'] });
     fcDirty = true; fcEdit(fcItems.length - 1);
   }
-  function fcEdit(i) { fcIdx = i; fcPrev = null; fcRenderEdit(); document.getElementById('sa-body').scrollTop = 0; }
+  function fcEdit(i) { fcIdx = i; fcPrev = null; fcSR = null; fcRenderEdit(); document.getElementById('sa-body').scrollTop = 0; }
   function fcSet(k, v) { const it = fcItems[fcIdx]; it[k] = v; fcDirty = true; fcPrev = null; }
   function fcSrcOf(it) { if (!it.src) it.src = it.source === 'finance' ? { bill: false, sep: false, fin: true } : { bill: true, sep: it.sep !== 'off', fin: false }; return it.src; }
   function fcSrc(k) {
@@ -4880,7 +4937,7 @@
     src[k] = !src[k];
     if (!src.bill && !src.sep && !src.fin) { src[k] = true; return alert('ต้องเลือกนับจากอย่างน้อย 1 อย่าง'); }
     if (src.fin && !it.fin) it.fin = { codes: ['UFUND_P'], lines: ['iphone', 'smp'] };
-    if ((src.bill || src.sep) && !(it.rules && it.rules.length)) { it.rules = [{ f: 'BRAND', op: 'eq', v: '' }]; it.mode = it.mode || 'all'; }
+    if ((src.bill || src.sep) && !(it.rules && it.rules.length) && !(it.products || []).length) { it.rules = [{ f: 'BRAND', op: 'eq', v: '' }]; it.mode = it.mode || 'all'; }
     it.source = src.bill || src.sep ? 'product' : 'finance';
     fcDirty = true; fcPrev = null; fcRenderEdit();
   }
@@ -4898,6 +4955,7 @@
       </div>
       <label class="sa-label">ฐาน (ตัวหาร) — เลือกได้หลายอย่าง · ตัวเลข = จำนวนเครื่องเดือนนี้</label>
       <div class="fc-chips">${Object.keys(FC_BASE).map(k => chip((it.base || []).includes(k), FC_BASE[k], `fcToggle('base','${k}')`, B[k] != null ? B[k] : null)).join('')}</div>
+      ${fcBrandChips(it, B, chip)}
       <label class="sa-label">นับจาก — เลือกได้หลายอย่าง</label>
       <div class="fc-chips">${chip(src.bill, '🛍️ สินค้าในบิล', `fcSrc('bill')`, 'บิลเดียวกับเครื่อง')}${chip(src.sep, '🧾 สินค้าแยกบิล', `fcSrc('sep')`, 'บิลที่ไม่มีเครื่อง')}${chip(src.fin, '💳 ไฟแนนซ์ (ผ่อน)', `fcSrc('fin')`, 'นับเครื่องที่ผ่อน')}</div>
       <p class="fc-note mt-2">👤 พนักงาน + ร้าน: นับตามที่เลือก<br>🏷️ แบรนด์ (PC): ได้เครดิตของในบิลเดียวกับเครื่อง + บิลแยกที่ <b>Comment ระบุ SN / IMEI</b> ของเครื่องที่ขาย<b>วันเดียวกัน</b> เท่านั้น</p>`;
@@ -4916,8 +4974,8 @@
           <select onchange="fcRule(${j},'f',this.value)">${Object.keys(FC_FIELD).map(k => `<option value="${k}"${k === r.f ? ' selected' : ''}>${FC_FIELD[k]}</option>`).join('')}</select>
           <select onchange="fcRule(${j},'op',this.value)">${Object.keys(FC_OP).map(k => `<option value="${k}"${k === r.op ? ' selected' : ''}>${FC_OP[k]}</option>`).join('')}</select>
           <button class="fc-x" onclick="fcRuleDel(${j})">✕</button>
-          <input value="${saEsc(r.v)}" placeholder="ค่า" oninput="fcRule(${j},'v',this.value.toUpperCase())"></div>`).join('') +
-        `<button class="fc-mini" onclick="fcRuleAdd()">+ เพิ่มเงื่อนไข</button>`;
+          <input value="${saEsc(r.v)}" placeholder="ค่า — แตะเพื่อเลือกจากข้อมูลจริง" list="fcdl-${r.f}" oninput="fcRule(${j},'v',this.value.toUpperCase())"></div>`).join('') +
+        `<button class="fc-mini" onclick="fcRuleAdd()">+ เพิ่มเงื่อนไข</button>` + fcDatalists() + fcProdHTML(it);
     }
     h += `<button class="sa-btn mt-4" style="background:#2C2C2E;color:#fff" onclick="fcPreview()">🔍 ทดสอบนับกับข้อมูลเดือนนี้</button>
       <div id="fc-res">${fcPrev ? fcPrevHTML(fcPrev) : ''}</div>
@@ -4928,6 +4986,162 @@
       <button class="sa-btn sa-btn-yellow mt-3" onclick="fcRenderList()">✓ เสร็จ (กดบันทึกในหน้ารายการ)</button>`;
     document.getElementById('sa-body').innerHTML = h;
   }
+  // ---- 🏷️ ฐานเฉพาะบางแบรนด์ ----
+  function fcBrandChips(it, B, chip) {
+    const br = (B && B.br) || {}, m = {};
+    (it.base || []).forEach(k => Object.entries(br[k] || {}).forEach(([b, n]) => { m[b] = (m[b] || 0) + n; }));
+    (it.baseBrands || []).forEach(b => { if (!(b in m)) m[b] = 0; });
+    const list = Object.keys(m).sort((a, b) => m[b] - m[a]), sel = it.baseBrands || [];
+    if (!list.length) return (it.base || []).length ? '<p class="fc-note mt-2">🏷️ แยกแบรนด์ได้หลังกด 🔄 อัปเดตข้อมูล 1 รอบ</p>' : '';
+    return `<label class="sa-label">🏷️ ฐานเฉพาะแบรนด์ — ไม่เลือก = ทุกแบรนด์</label>
+      <div class="fc-chips">${chip(!sel.length, 'ทุกแบรนด์', 'fcBrandAll()')}${list.map(b => chip(sel.includes(b), b, `fcToggle('baseBrands','${saEsc(b)}')`, m[b])).join('')}</div>`;
+  }
+  function fcBrandAll() { fcItems[fcIdx].baseBrands = []; fcDirty = true; fcPrev = null; fcRenderEdit(); }
+  function fcDatalists() {
+    const v = (fcData && fcData.vals) || {};
+    return ['BRAND', 'CATE', 'SUBCATE', 'MAPPED', 'MODEL'].map(k => `<datalist id="fcdl-${k}">${(v[k] || []).map(x => `<option value="${saEsc(x[0])}">${x[1]} ชิ้น</option>`).join('')}</datalist>`).join('');
+  }
+  // ---- 📦 สินค้าที่เลือกเอง + 💰 Incentive ต่อชิ้น ----
+  let fcSR = null;
+  function fcProdHTML(it) {
+    const P = it.products || (it.products = []), have = new Set(P.map(p => p.c));
+    let h = `<div class="fc-sec"><h4>📦 สินค้าที่เลือกเอง + 💰 Incentive <small>${P.length} รหัส</small></h4>
+      <p class="fc-note" style="margin:0 0 8px">รหัสสินค้าในรายการนี้ = นับเข้างานนี้ทันที (ไม่ต้องตรงเงื่อนไข) · Incentive บาท/ชิ้น ใช้แทนชีต GUIDE · เว้น 0 = ใช้ค่าในชีต</p>`;
+    h += P.map((p, k) => `<div class="fc-pr"><div class="t"><b>${saEsc(p.n || p.c)}</b><small>${saEsc(p.c)}</small></div>
+      <input inputmode="decimal" value="${p.inc || ''}" placeholder="฿/ชิ้น" oninput="fcProdInc(${k}, this.value)"><button class="x" onclick="fcProdDel(${k})">✕</button></div>`).join('');
+    h += `<div class="fc-srch" style="margin-top:8px"><input id="fc-q" placeholder="ค้นหา เช่น 7CARE IPHONE" value="${saEsc((fcSR && fcSR.q) || '')}" onkeydown="if(event.key==='Enter')fcProdFind()"><button onclick="fcProdFind()">ค้นหา</button></div><div id="fc-sr">${fcSRHTML(have)}</div>
+      <div class="fc-srch"><input id="fc-pc" placeholder="หรือพิมพ์รหัสสินค้าเอง"><button style="background:#3A3A3C;color:#fff" onclick="fcProdCode()">+ เพิ่ม</button></div></div>`;
+    return h;
+  }
+  function fcSRHTML(have) {
+    if (!fcSR) return '';
+    if (fcSR.loading) return '<div class="fc-note">กำลังค้นหา...</div>';
+    if (fcSR.err) return `<div class="fc-note" style="color:#FF6B60">${saEsc(fcSR.err)}</div>`;
+    const L = fcSR.list || [], add = L.filter(x => !have.has(x.c));
+    if (!L.length) return '<div class="fc-note">ไม่พบสินค้าในข้อมูลเดือนนี้ — พิมพ์รหัสเองด้านล่างได้</div>';
+    return (add.length > 1 ? `<button class="fc-mini" style="width:100%;margin-bottom:6px" onclick="fcProdAddAll()">+ เพิ่มทั้งหมด ${add.length} รายการ</button>` : '')
+      + L.map((x, k) => `<div class="fc-pr res${have.has(x.c) ? ' on' : ''}"><div class="t"><b>${saEsc(x.n)}</b><small>${saEsc(x.c)} · ${saEsc(x.sub || '')}${x.inc ? ' · GUIDE ฿' + x.inc : ''}</small></div><span class="u">${x.unit} ชิ้น</span>
+        ${have.has(x.c) ? '<span class="u" style="color:#FFD700">✓</span>' : `<button class="add" onclick="fcProdAdd(${k})">+</button>`}</div>`).join('')
+      + (fcSR.more ? `<div class="fc-note">… อีก ${fcSR.more} รายการ พิมพ์คำค้นให้ละเอียดขึ้น</div>` : '');
+  }
+  function fcProdFind() {
+    const q = (document.getElementById('fc-q').value || '').trim(); if (!q) return;
+    fcSR = { q, loading: true }; fcRenderEditKeep();
+    google.script.run.withSuccessHandler(r => { fcSR = Object.assign({ q }, r); fcRenderEditKeep(); })
+      .withFailureHandler(e => { fcSR = { q, err: 'ค้นหาไม่สำเร็จ: ' + e.message }; fcRenderEditKeep(); })
+      .searchFocusProducts(currentUser.empId, q);
+  }
+  function fcRenderEditKeep() { const b = document.getElementById('sa-body'), y = b.scrollTop; fcRenderEdit(); b.scrollTop = y; }
+  function fcProdPush(x) { const it = fcItems[fcIdx], P = it.products || (it.products = []); if (P.some(p => p.c === x.c)) return; P.push({ c: x.c, n: x.n || '', inc: x.inc || 0 }); fcSrcOf(it); if (!it.src.bill && !it.src.sep) it.src.bill = true; it.source = 'product'; fcDirty = true; fcPrev = null; }
+  function fcProdAdd(k) { fcProdPush(fcSR.list[k]); fcRenderEditKeep(); }
+  function fcProdAddAll() { (fcSR.list || []).forEach(fcProdPush); fcRenderEditKeep(); }
+  function fcProdCode() { const v = (document.getElementById('fc-pc').value || '').trim().toUpperCase(); if (!v) return; fcProdPush({ c: v, n: '' }); fcRenderEditKeep(); }
+  function fcProdDel(k) { fcItems[fcIdx].products.splice(k, 1); fcDirty = true; fcPrev = null; fcRenderEditKeep(); }
+  function fcProdInc(k, v) { fcItems[fcIdx].products[k].inc = saNum(v) || 0; fcDirty = true; }
+
+  // ---- ⚙️ ตั้งค่ากลาง: แบรนด์ที่นับเป็นฐานเครื่อง + หมวดฐาน Gadget ----
+  let fsSet = null;
+  function fsOpen() {
+    const st = (fcData && fcData.set) || {};
+    fsSet = { phone: (st.phone || FC_DEF_PHONE).slice(), tablet: (st.tablet || FC_DEF_TABLET).slice(), gadget: st.gadget ? st.gadget.slice() : null };
+    fsRender(); document.getElementById('sa-body').scrollTop = 0;
+  }
+  function fsRender() {
+    const v = (fcData && fcData.vals) || {}, ck = (on, label, sub, fn, warn) => `<div class="fc-ck${on ? ' on' : ''}${warn ? ' warn' : ''}" onclick="${fn}"><i>${on ? '✓' : ''}</i><span>${label}</span><b>${sub}</b></div>`;
+    const brandList = (kind) => {
+      const seen = v[kind] || [], sel = fsSet[kind], names = seen.map(x => x[0]).filter(b => b !== 'APPLE');
+      sel.forEach(b => { if (!names.includes(b)) names.push(b); });
+      const u = Object.fromEntries(seen);
+      return names.map(b => ck(sel.includes(b), b, u[b] ? u[b] + ' เครื่อง' : '—', `fsTog('${kind}','${saEsc(b)}')`, !sel.includes(b) && u[b] > 0)).join('');
+    };
+    const gad = fsSet.gadget, gl = v.gadget || [];
+    let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button>
+      <p class="fc-note">ใช้กับทั้ง Dashboard: ฐานเครื่อง · แบรนด์ · Att ทุกงานโฟกัส · กรอบส้ม = มีขายแต่ยังไม่นับ</p>
+      <div class="fc-sec"><h4>📱 แบรนด์มือถือที่นับเป็นฐาน Smartphone <small>${fsSet.phone.length} แบรนด์ · iPhone นับแยกเสมอ</small></h4>${brandList('phone')}
+        <div class="fc-srch" style="margin-top:6px"><input id="fs-ph" placeholder="เพิ่มแบรนด์เอง"><button onclick="fsAdd('phone','fs-ph')">+ เพิ่ม</button></div></div>
+      <div class="fc-sec"><h4>📲 แบรนด์แท็บเล็ต (Android) <small>${fsSet.tablet.length} แบรนด์</small></h4>${brandList('tablet')}
+        <div class="fc-srch" style="margin-top:6px"><input id="fs-tb" placeholder="เพิ่มแบรนด์เอง"><button onclick="fsAdd('tablet','fs-tb')">+ เพิ่ม</button></div></div>
+      <div class="fc-sec"><h4>🎧 ฐาน Gadget (ตัวหาร Ultra Care+ Gadget) <small>${gad ? gad.length + ' หมวด' : 'เกณฑ์เดิม'}</small></h4>
+        <p class="fc-note" style="margin:0 0 8px">เกณฑ์เดิม = สินค้า BTB ที่มี Serial ทุกหมวด · เลือกหมวดเอง = นับเฉพาะหมวดที่ติ๊ก (ตามบริษัท: Speaker / Headphone / Smartwatch / Gaming / Camera)</p>
+        <div class="grid grid-cols-2 gap-2 mb-2"><button class="sa-pos${!gad ? ' active' : ''}" onclick="fsGad(null)">เกณฑ์เดิม</button><button class="sa-pos${gad ? ' active' : ''}" onclick="fsGad([])">เลือกหมวดเอง</button></div>
+        ${gad ? `<button class="fc-mini" style="width:100%;margin-bottom:8px" onclick="fsGadAuto()">✨ เลือกให้: Speaker · Headphone · Smartwatch · Gaming · Camera</button>
+          ${gl.length ? gl.map(([k, n]) => { const [c, sb] = k.split('|'); return ck(gad.includes(k), saEsc(sb || c) + (sb ? `<small style="color:#8E8E93"> · ${saEsc(c)}</small>` : ''), n + ' ชิ้น', `fsGadTog('${saEsc(k)}')`, false); }).join('') : '<p class="fc-note">ยังไม่มีข้อมูล — กด 🔄 อัปเดตข้อมูล 1 รอบ</p>'}` : ''}</div>
+      <button class="sa-btn sa-btn-yellow mt-4" onclick="fsSave()">💾 บันทึก + อัปเดต Dashboard</button>`;
+    document.getElementById('sa-body').innerHTML = h;
+  }
+  function fsKeep(fn) { const b = document.getElementById('sa-body'), y = b.scrollTop; fn(); fsRender(); b.scrollTop = y; }
+  function fsTog(kind, b) { fsKeep(() => { const a = fsSet[kind], i = a.indexOf(b); i === -1 ? a.push(b) : a.splice(i, 1); }); }
+  function fsAdd(kind, id) { const v = (document.getElementById(id).value || '').trim().toUpperCase(); if (!v) return; fsKeep(() => { if (!fsSet[kind].includes(v)) fsSet[kind].push(v); }); }
+  function fsGad(v) { fsKeep(() => { fsSet.gadget = v; if (v && !v.length) fsGadAuto(true); }); }
+  function fsGadTog(k) { fsKeep(() => { const a = fsSet.gadget, i = a.indexOf(k); i === -1 ? a.push(k) : a.splice(i, 1); }); }
+  function fsGadAuto(silent) { const pick = ((fcData.vals || {}).gadget || []).map(x => x[0]).filter(k => FC_GAD_HINT.test(k) && !/APPLE WATCH/.test(k)); const run = () => { fsSet.gadget = pick; }; silent ? run() : fsKeep(run); }
+  function fsSave() {
+    if (!fsSet.phone.length) return alert('ต้องมีแบรนด์มือถืออย่างน้อย 1 แบรนด์');
+    if (fsSet.gadget && !fsSet.gadget.length) return alert('ยังไม่ได้เลือกหมวด Gadget — หรือกด "เกณฑ์เดิม"');
+    fcRun('saveFocusSettings', [fsSet], 'กำลังบันทึก + คำนวณ Dashboard ใหม่...');
+  }
+
+  // ---- 🗂️ หมวดสินค้า (ชีต CATE): ยังไม่แมป / แก้ / เพิ่ม ----
+  const CT_DEV = ['SMARTPHONE', 'APPLE IPHONE', 'TABLET', 'APPLE IPAD', 'APPLE WATCH'];
+  let ctData = null, ctEd = null, ctQ = '', ctDirty = false;
+  function ctOpen() {
+    document.getElementById('sa-body').innerHTML = '<p class="text-center text-zinc-400 text-sm py-10">กำลังโหลดหมวดสินค้า...</p>';
+    google.script.run.withSuccessHandler(d => { ctData = d; ctEd = null; ctRender(); }).withFailureHandler(e => { document.getElementById('sa-body').innerHTML = `<p class="text-center text-zinc-400 text-sm py-10">โหลดไม่สำเร็จ: ${saEsc(e.message)}</p>`; })
+      .getCateConfig(currentUser.empId);
+  }
+  function ctOf(cat, sub) { return (ctData.rows || []).find(r => r.cat === cat && (r.sub === sub || (r.sub === '(BLANK)' && !sub))) || (ctData.rows || []).find(r => r.cat === cat && (!r.sub || r.sub === '(BLANK)')); }
+  function ctTag(r) { return !r ? '<span class="fc-tag no">ยังไม่แมป</span>' : `<span class="fc-tag${r.group === 'DEVICE' && CT_DEV.includes(r.mapped) ? ' dev' : ''}">${saEsc(r.mapped)}${r.group ? ' · ' + saEsc(r.group) : ''}</span>`; }
+  function ctRender() {
+    if (ctEd) return ctRenderEdit();
+    const q = ctQ.trim().toUpperCase(), seen = (ctData.seen || []).filter(x => !q || (x.cat + ' ' + x.sub + ' ' + x.brands).toUpperCase().includes(q));
+    const rows = (ctData.rows || []).filter(r => !q || (r.cat + ' ' + r.sub + ' ' + r.mapped + ' ' + r.group).includes(q)), nNo = (ctData.seen || []).filter(x => !x.mapped).length;
+    let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button>
+      <p class="fc-note">ชีต CATE: แมป Category / Sub cate → หมวดของระบบ + กลุ่ม · <b style="color:#30D158">นับเป็นฐานเครื่อง</b> ต้องเป็นกลุ่ม <b>DEVICE</b> + หมวด SMARTPHONE / APPLE IPHONE / TABLET / APPLE IPAD / APPLE WATCH${ctData.snapAt ? ' · ข้อมูลรอบ ' + saEsc(ctData.snapAt) : ''}</p>
+      ${ctDirty ? '<button class="sa-btn sa-btn-yellow mb-3" onclick="ctResync()">🔄 แก้แล้ว — คำนวณ Dashboard ใหม่</button>' : ''}
+      <div class="fc-srch"><input id="ct-q" placeholder="ค้นหา เช่น WATCH" value="${saEsc(ctQ)}" oninput="ctQ=this.value;ctKeep()"><button onclick="ctNew()">+ เพิ่ม</button></div>
+      <div class="fc-sec"><h4>📊 ที่เจอในข้อมูลเดือนนี้ <small>${nNo ? '⚠️ ยังไม่แมป ' + nNo : 'แมปครบ ✓'}</small></h4>
+        ${seen.slice(0, 150).map((x, k) => { const r = ctOf(x.cat, x.sub); return `<div class="fc-ck${r ? '' : ' warn'}" onclick="ctEditSeen(${(ctData.seen || []).indexOf(x)})"><span>${saEsc(x.cat)}<small style="color:#8E8E93"> › ${saEsc(x.sub || '—')}</small><br>${ctTag(r)}<small style="color:#8E8E93"> ${saEsc(x.brands)}</small></span><b>${x.unit}</b></div>`; }).join('') || '<p class="fc-note">ยังไม่มีข้อมูล — กด 🔄 อัปเดตข้อมูล 1 รอบ</p>'}</div>
+      <div class="fc-sec"><h4>🗂️ ในชีต CATE <small>${(ctData.rows || []).length} แถว</small></h4>
+        ${rows.map(r => `<div class="fc-ck" onclick="ctEditRow(${r.row})"><span>${saEsc(r.cat)}<small style="color:#8E8E93"> › ${saEsc(r.sub || '—')}</small><br>${ctTag(r)}</span><b>›</b></div>`).join('')}</div>`;
+    document.getElementById('sa-body').innerHTML = h;
+  }
+  function ctKeep() { const b = document.getElementById('sa-body'), y = b.scrollTop, el = document.activeElement && document.activeElement.id; ctRender(); b.scrollTop = y; if (el) { const i = document.getElementById(el); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } } }
+  function ctNew() { ctEd = { cat: ctQ.trim().toUpperCase(), sub: '', mapped: '', group: '', row: 0 }; ctRender(); }
+  function ctEditSeen(k) { const x = ctData.seen[k], r = ctOf(x.cat, x.sub), exact = r && (r.sub === x.sub || (!x.sub && r.sub === '(BLANK)')); ctEd = { cat: x.cat, sub: x.sub, mapped: r ? r.mapped : '', group: r ? r.group : '', row: exact ? r.row : 0, unit: x.unit, brands: x.brands }; ctRender(); }
+  function ctEditRow(row) { const r = ctData.rows.find(x => x.row === row); ctEd = Object.assign({}, r); ctRender(); }
+  function ctRenderEdit() {
+    const e = ctEd, mv = ctData.mappedVals || [], gv = ctData.groups || [];
+    document.getElementById('sa-body').innerHTML = `<button class="sa-back" onclick="ctEd=null;ctRender()">‹ กลับหมวดสินค้า</button>
+      ${e.unit ? `<p class="fc-note">เดือนนี้ขาย ${e.unit} ชิ้น · ${saEsc(e.brands || '')}</p>` : ''}
+      <div class="fc-form"><label class="sa-label">Category (ข้อมูลดิบ)</label><input id="ct-c" value="${saEsc(e.cat)}">
+        <label class="sa-label">Sub cate (เว้นว่าง = ทุก Sub cate ใน Category นี้)</label><input id="ct-s" value="${saEsc(e.sub === '(BLANK)' ? '' : e.sub)}">
+        <label class="sa-label">หมวดของระบบ (Mapped)</label><input id="ct-m" list="ct-ml" value="${saEsc(e.mapped)}" placeholder="เช่น APPLE WATCH"><datalist id="ct-ml">${mv.map(m => `<option value="${saEsc(m)}">`).join('')}</datalist>
+        <label class="sa-label">กลุ่ม (Group)</label><select id="ct-g">${['', ...gv].map(g => `<option value="${saEsc(g)}"${g === e.group ? ' selected' : ''}>${g || '— ไม่ระบุ —'}</option>`).join('')}</select></div>
+      <p class="fc-note">📱 นับเป็นเครื่อง (ฐาน): กลุ่ม DEVICE + หมวด SMARTPHONE / APPLE IPHONE / TABLET / APPLE IPAD / APPLE WATCH · 🎧 Gadget เดิม: กลุ่ม BTB + มี Serial</p>
+      <div id="ct-err"></div>
+      <button class="sa-btn sa-btn-yellow mt-3" onclick="ctSave()">💾 บันทึกลงชีต CATE</button>
+      ${e.row ? '<button class="sa-btn sa-btn-red mt-2" onclick="ctDel(this)">ลบแถวนี้</button>' : ''}`;
+  }
+  function ctSave() {
+    const r = { cat: document.getElementById('ct-c').value, sub: document.getElementById('ct-s').value, mapped: document.getElementById('ct-m').value, group: document.getElementById('ct-g').value };
+    if (!r.cat.trim() || !r.mapped.trim()) return document.getElementById('ct-err').innerHTML = '<p class="fc-note" style="color:#FF6B60">ต้องใส่ Category และ หมวดของระบบ</p>';
+    ctCall('saveCateRow', [r, ctEd.row || 0]);
+  }
+  function ctDel(btn) {
+    if (!btn.dataset.sure) { btn.dataset.sure = 1; btn.textContent = 'แตะอีกครั้งเพื่อลบ'; setTimeout(() => { if (btn.isConnected) { delete btn.dataset.sure; btn.textContent = 'ลบแถวนี้'; } }, 3000); return; }
+    ctCall('deleteCateRow', [ctEd.row]);
+  }
+  function ctCall(fn, args) {
+    const ld = document.getElementById('sa-loading'); document.getElementById('sa-loading-text').innerText = 'กำลังบันทึกชีต CATE...'; ld.style.display = 'flex';
+    const run = google.script.run.withSuccessHandler(d => { ld.style.display = 'none'; ctData = d; ctEd = null; ctDirty = true; ctRender(); }).withFailureHandler(e => { ld.style.display = 'none'; alert('❌ ' + e.message); });
+    run[fn].apply(run, [currentUser.empId].concat(args));
+  }
+  function ctResync() {
+    const ld = document.getElementById('sa-loading'); document.getElementById('sa-loading-text').innerText = 'กำลังคำนวณ Dashboard ใหม่...'; ld.style.display = 'flex';
+    google.script.run.withSuccessHandler(d => { ld.style.display = 'none'; saDirty = true; ctDirty = false; fcData = d; fcItems = JSON.parse(JSON.stringify(d.items || [])); fcDirty = false; if (d.syncError) alert('คำนวณไม่สำเร็จ: ' + d.syncError); ctOpen(); })
+      .withFailureHandler(e => { ld.style.display = 'none'; alert('❌ ' + e.message); }).resyncDashboard(currentUser.empId);
+  }
+
   function fcToggle(k, v) { const a = fcItems[fcIdx][k] = fcItems[fcIdx][k] || []; const i = a.indexOf(v); i === -1 ? a.push(v) : a.splice(i, 1); fcDirty = true; fcPrev = null; fcRenderEdit(); }
   function fcToggleFin(k, v) { const a = fcItems[fcIdx].fin[k]; const i = a.indexOf(v); i === -1 ? a.push(v) : a.splice(i, 1); fcDirty = true; fcPrev = null; fcRenderEdit(); }
   function fcSource(v) { const it = fcItems[fcIdx]; it.source = v; if (v === 'finance' && !it.fin) it.fin = { codes: ['UFUND_P'], lines: ['iphone', 'smp'] }; if (v === 'product' && !it.rules) { it.rules = [{ f: 'BRAND', op: 'eq', v: '' }]; it.mode = 'all'; } fcDirty = true; fcPrev = null; fcRenderEdit(); }
@@ -4959,6 +5173,7 @@
   function fcSave() {
     if (!fcDirty) return;
     const bad = fcItems.find(it => !String(it.name || '').trim()) ? 'มีงานที่ยังไม่ได้ใส่ชื่อ'
+      : (fcItems.find(it => (fcSrcOf(it).bill || fcSrcOf(it).sep) && !(it.products || []).length && !(it.rules || []).some(r => String(r.v || '').trim())) || {}).name ? 'งาน ' + fcItems.find(it => (fcSrcOf(it).bill || fcSrcOf(it).sep) && !(it.products || []).length && !(it.rules || []).some(r => String(r.v || '').trim())).name + ' ยังไม่มีเงื่อนไขนับหรือสินค้า'
       : (fcItems.find(it => it.show && !(it.base || []).length) || {}).name ? 'งาน ' + fcItems.find(it => it.show && !(it.base || []).length).name + ' ยังไม่ได้เลือกฐาน' : '';
     if (bad) return alert(bad);
     fcRun('saveFocusConfig', [fcItems], 'กำลังบันทึก + คำนวณ Dashboard ใหม่...');
