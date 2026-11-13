@@ -397,6 +397,46 @@
     .sec-tag { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 99px; background: rgba(255,214,0,.15); color: #FFD600; font-size: 11px; font-weight: 800; vertical-align: middle; }
     /* ===== Market Share — แนวนอน ===== */
     .modal-sheet.ms-wide { max-width: 980px; max-height: 92vh; padding: 16px; }
+    /* 🎯 ป๊อปอัปงานโฟกัส บนจอแนวนอน: เต็มจอ 16:9 ทุกอย่างอยู่ในหน้าเดียว เปิดแล้วแคปได้เลย */
+    @media (min-width: 900px) and (orientation: landscape) {
+      #top5-modal .modal-sheet.ms-focus { max-width: none !important; width: min(97vw, calc(95vh * 16 / 9)); height: min(95vh, calc(97vw * 9 / 16)); max-height: none !important;
+        overflow: hidden !important; display: flex; flex-direction: column; padding: 14px 18px 10px !important; }
+      .ms-focus > div:first-child { margin-bottom: 10px !important; padding-bottom: 8px !important; }
+      .ms-focus #top5-list { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+      .ms-focus .dx { flex: 1; min-height: 0; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "hero rank" "main rank"; gap: 12px; }
+      .ms-focus .dx-hero { grid-area: hero; padding: 14px 16px; gap: 8px; }
+      .ms-focus .dx-big { font-size: 40px; }
+      .ms-focus .dx-kpis { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+      .ms-focus .dx-kpis > div { padding: 7px 9px; } .ms-focus .dx-kpis b { font-size: 15px; } .ms-focus .dx-kpis small { font-size: 9.5px; }
+      .ms-focus .dx-main { grid-area: main; min-height: 0; gap: 8px; }
+      .ms-focus .dx-chart { flex: 1 1 auto; height: auto; min-height: 120px; padding: 8px 8px 4px; }
+      .ms-focus .dx-stats { grid-template-columns: repeat(4, 1fr); gap: 6px; } .ms-focus .dx-stats > div { padding: 7px 10px; } .ms-focus .dx-stats b { font-size: 15px; }
+      .ms-focus .fxb { grid-area: rank; min-height: 0; display: flex; flex-direction: column; padding: 14px; overflow: hidden; }
+      .ms-focus .fxb-h { margin-bottom: 10px; }
+      .ms-focus .fxb-kp > div { padding: 6px 10px; min-width: 64px; } .ms-focus .fxb-kp b { font-size: 15px; }
+      .ms-focus .fxb-pod { margin-bottom: 10px; gap: 8px; }
+      .ms-focus .fxb-pc { padding: 10px 8px 9px; border-radius: 16px; } .ms-focus .fxb-pc.r1 { padding-top: 13px; }
+      .ms-focus .fxb-pc .md { width: 26px; height: 26px; font-size: 12px; margin-bottom: 3px; } .ms-focus .fxb-pc.r1 .md { width: 32px; height: 32px; font-size: 14px; }
+      .ms-focus .fxb-pc .v { font-size: 22px; } .ms-focus .fxb-pc.r1 .v { font-size: 26px; }
+      .ms-focus .fxb-pc .tg { margin-top: 4px; }
+      .ms-focus .fxb-lg { margin-bottom: 8px; }
+      .ms-focus .fxb-t { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; gap: 4px; }
+      .ms-focus .fxb-t::-webkit-scrollbar { display: none; }
+      .ms-focus .fxb-th, .ms-focus .fxb-r { grid-template-columns: 26px minmax(64px, 1fr) minmax(60px, 1.6fr) 62px 52px 40px; gap: 8px; }
+      .ms-focus .fxb-r { padding: 6px 10px; border-radius: 11px; }
+      .ms-focus .fxb-r .at { font-size: 14px; } .ms-focus .fxb-r .nb b { font-size: 13px; }
+      .ms-focus .fxb-ft { margin-top: 6px; font-size: 10px; }
+      .ms-focus .dx-pager { margin-top: 8px; }
+    }
+    /* จอเตี้ย (โน้ตบุ๊ก): ซ่อนโพเดียม ให้ตารางอันดับเห็นครบ */
+    @media (min-width: 900px) and (orientation: landscape) and (max-height: 860px) {
+      .ms-focus .fxb-ft, .ms-focus .fxb-pc .sh { display: none; }
+      .ms-focus .fxb-pc { padding: 8px 8px 7px; } .ms-focus .fxb-pc.r1 { padding-top: 10px; }
+      .ms-focus .fxb-pc .v { font-size: 19px; } .ms-focus .fxb-pc.r1 .v { font-size: 22px; }
+      .ms-focus .fxb-r { padding: 5px 10px; } .ms-focus .fxb-t { gap: 3px; }
+      .ms-focus .dx-big { font-size: 34px; }
+    }
+    @media (min-width: 900px) and (orientation: landscape) and (max-height: 640px) { .ms-focus .fxb-pod, .ms-focus .fxb-lg { display: none; } }
     .msx { display: grid; gap: 14px; }
     .msx-hero { background: #1C1C1E; color: #fff; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative; overflow: hidden; }
     .msx-hero::before { content: ''; position: absolute; inset: -40% -30% auto auto; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255,214,0,.28), transparent 65%); pointer-events: none; }
@@ -1651,7 +1691,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.13-03';
+    const APP_VER = '2026.11.13-04';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2522,7 +2562,8 @@
     // ===== MODAL =====
     function openModal(title, html, cls) {
       document.getElementById('top5-title').innerText = title;
-      document.querySelector('#top5-modal .modal-sheet').classList.toggle('ms-wide', cls === 'ms-wide');
+      const cl = String(cls || '').split(' '), shx = document.querySelector('#top5-modal .modal-sheet');
+      shx.classList.toggle('ms-wide', cl.includes('ms-wide')); shx.classList.toggle('ms-focus', cl.includes('ms-focus'));
       document.getElementById('top5-list').innerHTML = html;
       const modal = document.getElementById('top5-modal');
       modal.classList.remove('closing');
@@ -2679,7 +2720,7 @@
       } else html += '<div class="dx-top text-center text-xs text-zinc-400 py-6">ยังไม่มีข้อมูลรายวัน — กด 🔄 อัปเดตข้อมูล ใน Google Sheet 1 รอบ</div>';
       html += '</section>' + fxBrandHTML(f, tgt) + '</div>';
       if (!DX_NAV) DX_NEXT = { t: 'focus', k: i };
-      openModal('🎯 ' + f.name, html, 'ms-wide');
+      openModal('🎯 ' + f.name, html, 'ms-wide ms-focus');
       if (!fd) return;
       let cc = 0, cb = 0;
       const cum = fd.c.map((v, k) => { cc += v; cb += fd.b[k] || 0; return cb > 0 ? Math.round(cc / cb * 1000) / 10 : null; });
