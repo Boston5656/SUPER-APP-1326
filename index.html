@@ -1593,7 +1593,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.13-01';
+    const APP_VER = '2026.11.13-02';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -4581,6 +4581,20 @@
   .fc-res .tp { display: flex; justify-content: space-between; gap: 8px; padding: 4px 0; border-top: 1px solid rgba(255,255,255,.06); color: #ddd; }
   .fc-res .tp span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .fc-warn { color: #FFB340; font-weight: 700; margin-top: 8px; }
+  .fc-grid > .sa-pill { margin-bottom: 10px; }
+  /* 🖥️ แนวนอน 16:9 — หน้าจัดการกว้างขึ้น แบ่ง 2 คอลัมน์ */
+  @media (orientation: landscape) and (min-width: 900px) {
+    .sa-card { max-width: none; width: min(94vw, calc(90vh * 16 / 9)); height: min(90vh, calc(94vw * 9 / 16)); max-height: none; }
+    .sa-body { padding: 4px 28px 26px; }
+    .sa-body { display: flex; flex-wrap: wrap; column-gap: 12px; align-content: flex-start; }
+    .sa-body > * { flex: 1 1 100%; min-width: 0; }
+    .sa-body > .sa-pill { flex: 0 0 calc(50% - 6px); }
+    .fc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); column-gap: 12px; }
+    .fc-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .fc-2col > .fc-col { min-width: 0; }
+    .fc-2col > .fc-col > :first-child { margin-top: 0; }
+    .sa-head .flex.gap-2 { max-width: 560px; }
+  }
   .fc-sec { background: #1C1C1E; border: 1px solid rgba(255,255,255,.07); border-radius: 22px; padding: 12px; margin-top: 12px; }
   .fc-sec h4 { font-size: 13px; font-weight: 800; color: #fff; margin: 0 0 8px; display: flex; justify-content: space-between; gap: 8px; align-items: center; }
   .fc-sec h4 small { font-weight: 600; color: #8E8E93; font-size: 11px; }
@@ -4909,7 +4923,8 @@
     const snap = fcData && fcData.snap;
     let h = `<p class="fc-note">${fcData.saved ? '✏️ ใช้ค่าที่ตั้งเองอยู่' : '📄 ตอนนี้ใช้เกณฑ์เดิม + เป้าจากชีต GUIDE'} · แตะงานเพื่อแก้ เป้า / ฐาน / นับจากอะไร${snap ? ' · ข้อมูลทดสอบจากรอบอัปเดต ' + saEsc(snap.at) : ''}</p>`;
     h += `<button class="sa-btn sa-btn-yellow mb-2" onclick="fcEditNew()">+ เพิ่มงานโฟกัส</button>
-      <div class="grid grid-cols-2 gap-2 mb-4"><button class="fc-mini" onclick="fsOpen()">🏷️ แบรนด์ฐาน + Gadget</button><button class="fc-mini" onclick="ctOpen()">🗂️ หมวดสินค้า (CATE)</button></div>`;
+      <div class="grid grid-cols-2 gap-2 mb-4"><button class="fc-mini" onclick="fsOpen()">🎧 ฐาน Gadget</button><button class="fc-mini" onclick="ctOpen()">🗂️ หมวดสินค้า (CATE)</button></div>`;
+    h += '<div class="fc-grid">';
     fcItems.forEach((it, i) => {
       const cnt = snap && snap.counts && snap.counts[it.name];
       h += `<div class="sa-pill${it.show ? '' : ' fc-off'}" onclick="fcEdit(${i})">
@@ -4918,6 +4933,7 @@
         <span class="block text-[10px] text-zinc-500 truncate">${saEsc(fcRuleText(it))}</span></div>
         <span class="sa-badge">${it.show ? saFmt(it.target) + '%' : '—'}</span></div>`;
     });
+ h += '</div>';
     h += `<div class="mt-4 space-y-2">
       <button class="sa-btn sa-btn-yellow" onclick="fcSave()" ${fcDirty ? '' : 'style="opacity:.45"'}>💾 บันทึก + อัปเดต Dashboard${fcDirty ? ' (มีที่แก้)' : ''}</button>
       ${fcData.saved ? '<button class="sa-btn sa-btn-red" onclick="fcReset()">↩︎ กลับไปใช้เกณฑ์เดิม</button>' : ''}</div>
@@ -4944,7 +4960,7 @@
   function fcRenderEdit() {
     const it = fcItems[fcIdx], B = (fcData.snap && fcData.snap.B) || {}, src = fcSrcOf(it);
     const chip = (on, label, fn, extra) => `<button class="fc-chip${on ? ' on' : ''}" onclick="${fn}">${label}${extra != null ? '<small>' + extra + '</small>' : ''}</button>`;
-    let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button>
+    let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button><div class="fc-2col"><div class="fc-col">
       <label class="sa-label">ชื่องานโฟกัส</label>
       <input class="sa-input" value="${saEsc(it.name)}" placeholder="เช่น SANDISK" oninput="fcSet('name', this.value.toUpperCase())" style="text-transform:uppercase">
       <div class="grid grid-cols-2 gap-2">
@@ -4964,6 +4980,7 @@
       h += `<label class="sa-label">💳 ไฟแนนซ์</label><div class="fc-chips">${Object.keys(FC_FIN).map(k => chip(f.codes.includes(k), FC_FIN[k], `fcToggleFin('codes','${k}')`)).join('')}</div>
         <label class="sa-label">นับเครื่องประเภท</label><div class="fc-chips">${Object.keys(FC_LINE).map(k => chip(f.lines.includes(k), FC_LINE[k], `fcToggleFin('lines','${k}')`)).join('')}</div>`;
     }
+    h += '</div><div class="fc-col">';
     if (src.bill || src.sep) {
       it.rules = it.rules || [];
       h += `<div class="grid grid-cols-2 gap-2 mt-2">
@@ -4983,7 +5000,7 @@
         <button class="fc-mini" onclick="fcMove(-1)" ${fcIdx === 0 ? 'disabled style="opacity:.35"' : ''}>↑ ขึ้น</button>
         <button class="fc-mini" onclick="fcMove(1)" ${fcIdx === fcItems.length - 1 ? 'disabled style="opacity:.35"' : ''}>↓ ลง</button>
         <button class="fc-mini" style="background:#3A1D1F;color:#FF6B60" onclick="fcDelete(this)">ลบงานนี้</button></div>
-      <button class="sa-btn sa-btn-yellow mt-3" onclick="fcRenderList()">✓ เสร็จ (กดบันทึกในหน้ารายการ)</button>`;
+      <button class="sa-btn sa-btn-yellow mt-3" onclick="fcRenderList()">✓ เสร็จ (กดบันทึกในหน้ารายการ)</button></div></div>`;
     document.getElementById('sa-body').innerHTML = h;
   }
   // ---- 🏷️ ฐานเฉพาะบางแบรนด์ ----
@@ -4993,8 +5010,9 @@
     (it.baseBrands || []).forEach(b => { if (!(b in m)) m[b] = 0; });
     const list = Object.keys(m).sort((a, b) => m[b] - m[a]), sel = it.baseBrands || [];
     if (!list.length) return (it.base || []).length ? '<p class="fc-note mt-2">🏷️ แยกแบรนด์ได้หลังกด 🔄 อัปเดตข้อมูล 1 รอบ</p>' : '';
-    return `<label class="sa-label">🏷️ ฐานเฉพาะแบรนด์ — ไม่เลือก = ทุกแบรนด์</label>
-      <div class="fc-chips">${chip(!sel.length, 'ทุกแบรนด์', 'fcBrandAll()')}${list.map(b => chip(sel.includes(b), b, `fcToggle('baseBrands','${saEsc(b)}')`, m[b])).join('')}</div>`;
+    return `<label class="sa-label">🏷️ แบรนด์ที่นับเป็นฐานของงานนี้ — เลือกได้หลายแบรนด์ · ทุกแบรนด์ = ตามระบบเดิม</label>
+      <div class="fc-chips">${chip(!sel.length, 'ทุกแบรนด์', 'fcBrandAll()')}${list.map(b => chip(sel.includes(b), b, `fcToggle('baseBrands','${saEsc(b)}')`, m[b])).join('')}</div>
+      ${sel.length ? `<p class="fc-note mt-1">ฐาน = ${sel.join(' + ')} รวม <b style="color:#FFD700">${sel.reduce((a, b) => a + (m[b] || 0), 0)}</b> เครื่อง</p>` : ''}`;
   }
   function fcBrandAll() { fcItems[fcIdx].baseBrands = []; fcDirty = true; fcPrev = null; fcRenderEdit(); }
   function fcDatalists() {
@@ -5043,40 +5061,27 @@
   let fsSet = null;
   function fsOpen() {
     const st = (fcData && fcData.set) || {};
-    fsSet = { phone: (st.phone || FC_DEF_PHONE).slice(), tablet: (st.tablet || FC_DEF_TABLET).slice(), gadget: st.gadget ? st.gadget.slice() : null };
+    fsSet = { gadget: st.gadget ? st.gadget.slice() : null };
     fsRender(); document.getElementById('sa-body').scrollTop = 0;
   }
   function fsRender() {
-    const v = (fcData && fcData.vals) || {}, ck = (on, label, sub, fn, warn) => `<div class="fc-ck${on ? ' on' : ''}${warn ? ' warn' : ''}" onclick="${fn}"><i>${on ? '✓' : ''}</i><span>${label}</span><b>${sub}</b></div>`;
-    const brandList = (kind) => {
-      const seen = v[kind] || [], sel = fsSet[kind], names = seen.map(x => x[0]).filter(b => b !== 'APPLE');
-      sel.forEach(b => { if (!names.includes(b)) names.push(b); });
-      const u = Object.fromEntries(seen);
-      return names.map(b => ck(sel.includes(b), b, u[b] ? u[b] + ' เครื่อง' : '—', `fsTog('${kind}','${saEsc(b)}')`, !sel.includes(b) && u[b] > 0)).join('');
-    };
+    const v = (fcData && fcData.vals) || {}, ck = (on, label, sub, fn) => `<div class="fc-ck${on ? ' on' : ''}" onclick="${fn}"><i>${on ? '✓' : ''}</i><span>${label}</span><b>${sub}</b></div>`;
     const gad = fsSet.gadget, gl = v.gadget || [];
     let h = `<button class="sa-back" onclick="fcRenderList()">‹ กลับรายการงานโฟกัส</button>
-      <p class="fc-note">ใช้กับทั้ง Dashboard: ฐานเครื่อง · แบรนด์ · Att ทุกงานโฟกัส · กรอบส้ม = มีขายแต่ยังไม่นับ</p>
-      <div class="fc-sec"><h4>📱 แบรนด์มือถือที่นับเป็นฐาน Smartphone <small>${fsSet.phone.length} แบรนด์ · iPhone นับแยกเสมอ</small></h4>${brandList('phone')}
-        <div class="fc-srch" style="margin-top:6px"><input id="fs-ph" placeholder="เพิ่มแบรนด์เอง"><button onclick="fsAdd('phone','fs-ph')">+ เพิ่ม</button></div></div>
-      <div class="fc-sec"><h4>📲 แบรนด์แท็บเล็ต (Android) <small>${fsSet.tablet.length} แบรนด์</small></h4>${brandList('tablet')}
-        <div class="fc-srch" style="margin-top:6px"><input id="fs-tb" placeholder="เพิ่มแบรนด์เอง"><button onclick="fsAdd('tablet','fs-tb')">+ เพิ่ม</button></div></div>
+      <p class="fc-note">ฐาน Gadget ใช้กับทุกงานที่เลือกฐาน "Gadget" · แบรนด์ฐานเลือกในแต่ละงานโฟกัส</p>
       <div class="fc-sec"><h4>🎧 ฐาน Gadget (ตัวหาร Ultra Care+ Gadget) <small>${gad ? gad.length + ' หมวด' : 'เกณฑ์เดิม'}</small></h4>
         <p class="fc-note" style="margin:0 0 8px">เกณฑ์เดิม = สินค้า BTB ที่มี Serial ทุกหมวด · เลือกหมวดเอง = นับเฉพาะหมวดที่ติ๊ก (ตามบริษัท: Speaker / Headphone / Smartwatch / Gaming / Camera)</p>
         <div class="grid grid-cols-2 gap-2 mb-2"><button class="sa-pos${!gad ? ' active' : ''}" onclick="fsGad(null)">เกณฑ์เดิม</button><button class="sa-pos${gad ? ' active' : ''}" onclick="fsGad([])">เลือกหมวดเอง</button></div>
         ${gad ? `<button class="fc-mini" style="width:100%;margin-bottom:8px" onclick="fsGadAuto()">✨ เลือกให้: Speaker · Headphone · Smartwatch · Gaming · Camera</button>
-          ${gl.length ? gl.map(([k, n]) => { const [c, sb] = k.split('|'); return ck(gad.includes(k), saEsc(sb || c) + (sb ? `<small style="color:#8E8E93"> · ${saEsc(c)}</small>` : ''), n + ' ชิ้น', `fsGadTog('${saEsc(k)}')`, false); }).join('') : '<p class="fc-note">ยังไม่มีข้อมูล — กด 🔄 อัปเดตข้อมูล 1 รอบ</p>'}` : ''}</div>
+          <div class="fc-grid">${gl.length ? gl.map(([k, n]) => { const [c, sb] = k.split('|'); return ck(gad.includes(k), saEsc(sb || c) + (sb ? `<small style="color:#8E8E93"> · ${saEsc(c)}</small>` : ''), n + ' ชิ้น', `fsGadTog('${saEsc(k)}')`); }).join('') : '<p class="fc-note">ยังไม่มีข้อมูล — กด 🔄 อัปเดตข้อมูล 1 รอบ</p>'}</div>` : ''}</div>
       <button class="sa-btn sa-btn-yellow mt-4" onclick="fsSave()">💾 บันทึก + อัปเดต Dashboard</button>`;
     document.getElementById('sa-body').innerHTML = h;
   }
   function fsKeep(fn) { const b = document.getElementById('sa-body'), y = b.scrollTop; fn(); fsRender(); b.scrollTop = y; }
-  function fsTog(kind, b) { fsKeep(() => { const a = fsSet[kind], i = a.indexOf(b); i === -1 ? a.push(b) : a.splice(i, 1); }); }
-  function fsAdd(kind, id) { const v = (document.getElementById(id).value || '').trim().toUpperCase(); if (!v) return; fsKeep(() => { if (!fsSet[kind].includes(v)) fsSet[kind].push(v); }); }
   function fsGad(v) { fsKeep(() => { fsSet.gadget = v; if (v && !v.length) fsGadAuto(true); }); }
   function fsGadTog(k) { fsKeep(() => { const a = fsSet.gadget, i = a.indexOf(k); i === -1 ? a.push(k) : a.splice(i, 1); }); }
   function fsGadAuto(silent) { const pick = ((fcData.vals || {}).gadget || []).map(x => x[0]).filter(k => FC_GAD_HINT.test(k) && !/APPLE WATCH/.test(k)); const run = () => { fsSet.gadget = pick; }; silent ? run() : fsKeep(run); }
   function fsSave() {
-    if (!fsSet.phone.length) return alert('ต้องมีแบรนด์มือถืออย่างน้อย 1 แบรนด์');
     if (fsSet.gadget && !fsSet.gadget.length) return alert('ยังไม่ได้เลือกหมวด Gadget — หรือกด "เกณฑ์เดิม"');
     fcRun('saveFocusSettings', [fsSet], 'กำลังบันทึก + คำนวณ Dashboard ใหม่...');
   }
@@ -5100,9 +5105,9 @@
       ${ctDirty ? '<button class="sa-btn sa-btn-yellow mb-3" onclick="ctResync()">🔄 แก้แล้ว — คำนวณ Dashboard ใหม่</button>' : ''}
       <div class="fc-srch"><input id="ct-q" placeholder="ค้นหา เช่น WATCH" value="${saEsc(ctQ)}" oninput="ctQ=this.value;ctKeep()"><button onclick="ctNew()">+ เพิ่ม</button></div>
       <div class="fc-sec"><h4>📊 ที่เจอในข้อมูลเดือนนี้ <small>${nNo ? '⚠️ ยังไม่แมป ' + nNo : 'แมปครบ ✓'}</small></h4>
-        ${seen.slice(0, 150).map((x, k) => { const r = ctOf(x.cat, x.sub); return `<div class="fc-ck${r ? '' : ' warn'}" onclick="ctEditSeen(${(ctData.seen || []).indexOf(x)})"><span>${saEsc(x.cat)}<small style="color:#8E8E93"> › ${saEsc(x.sub || '—')}</small><br>${ctTag(r)}<small style="color:#8E8E93"> ${saEsc(x.brands)}</small></span><b>${x.unit}</b></div>`; }).join('') || '<p class="fc-note">ยังไม่มีข้อมูล — กด 🔄 อัปเดตข้อมูล 1 รอบ</p>'}</div>
+        <div class="fc-grid">${seen.slice(0, 150).map((x, k) => { const r = ctOf(x.cat, x.sub); return `<div class="fc-ck${r ? '' : ' warn'}" onclick="ctEditSeen(${(ctData.seen || []).indexOf(x)})"><span>${saEsc(x.cat)}<small style="color:#8E8E93"> › ${saEsc(x.sub || '—')}</small><br>${ctTag(r)}<small style="color:#8E8E93"> ${saEsc(x.brands)}</small></span><b>${x.unit}</b></div>`; }).join('') || '<p class="fc-note">ยังไม่มีข้อมูล — กด 🔄 อัปเดตข้อมูล 1 รอบ</p>'}</div></div>
       <div class="fc-sec"><h4>🗂️ ในชีต CATE <small>${(ctData.rows || []).length} แถว</small></h4>
-        ${rows.map(r => `<div class="fc-ck" onclick="ctEditRow(${r.row})"><span>${saEsc(r.cat)}<small style="color:#8E8E93"> › ${saEsc(r.sub || '—')}</small><br>${ctTag(r)}</span><b>›</b></div>`).join('')}</div>`;
+        <div class="fc-grid">${rows.map(r => `<div class="fc-ck" onclick="ctEditRow(${r.row})"><span>${saEsc(r.cat)}<small style="color:#8E8E93"> › ${saEsc(r.sub || '—')}</small><br>${ctTag(r)}</span><b>›</b></div>`).join('')}</div></div>`;
     document.getElementById('sa-body').innerHTML = h;
   }
   function ctKeep() { const b = document.getElementById('sa-body'), y = b.scrollTop, el = document.activeElement && document.activeElement.id; ctRender(); b.scrollTop = y; if (el) { const i = document.getElementById(el); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } } }
