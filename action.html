@@ -215,7 +215,7 @@
   function home() {
     PV = null; window.scrollTo(0, 0);
     const m = B.me, ps = B.plans || [];
-    let h = hero('Action Plan', `ข้อมูลยอดขายถึง <b>${dmy(B.at) || '–'}</b> · วันที่ ${B.day || '–'}/${B.days || '–'} ของเดือน${B.chokReady ? ' · 🤖 น้องโชคพร้อม' : m.mgr ? ' · ⚠️ ยังไม่ได้ตั้ง API key น้องโชค (⚙️)' : ''}`);
+    let h = noData() + hero('Action Plan', `ข้อมูลยอดขายถึง <b>${dmy(B.at) || '–'}</b> · วันที่ ${B.day || '–'}/${B.days || '–'} ของเดือน${B.chokReady ? ' · 🤖 น้องโชคพร้อม' : m.mgr ? ' · ⚠️ ยังไม่ได้ตั้ง API key น้องโชค (⚙️)' : ''}`);
     if (m.mgr) {
       if (TAB === 'active') {
         const fails = (B.items || []).filter(x => x.fail && !ps.some(p => p.status !== 'closed' && p.kind === x.kind && p.item === x.item));
@@ -284,9 +284,9 @@
     const e = ED, items = B.items || [], active = e.status === 'active';
     const opts = ['focus', 'sales'].map(k => `<optgroup label="${k === 'focus' ? '🎯 งานโฟกัส' : '💰 ยอดขาย (Category)'}">${items.filter(x => x.kind === k).map(x => `<option value="${k}|${esc(x.item)}"${x.kind === e.kind && x.item === e.item ? ' selected' : ''}>${esc(x.item)}${x.fail ? ' ⚠️' : ''}</option>`).join('')}</optgroup>`).join('');
     let h = hero(active ? '✏️ แก้แผนระหว่างรอบ' : e.id ? '📝 แก้ร่างแผน' : '📝 เขียน Action Plan', active ? 'แก้ Action / ผลลัพธ์ที่คาดหวังได้ · Baseline และวันเริ่มรอบไม่เปลี่ยน' : 'กรอก 4 ส่วน แล้วให้น้องโชครีวิวก่อนเริ่ม DAY 1');
-    h += `<div class="grid2"><div class="stack stick"><div class="dk">
+    h += noData() + `<div class="grid2"><div class="stack stick"><div class="dk">
         <div class="ch"><b>🔍 ปัญหาจากตัวเลข</b><small>ข้อมูล ${dmy(B.at)}</small></div>
-        ${active ? `<div class="chip on" style="margin-bottom:6px">${esc(e.item)}</div>` : `<select class="in" style="background:#2C2C2E;color:#fff;box-shadow:none" onchange="pickItem(this.value)"><option value="">— เลือกงานโฟกัส / Category —</option>${opts}</select>`}
+        ${active ? `<div class="chip on" style="margin-bottom:6px">${esc(e.item)}</div>` : `<select class="in" style="background:#2C2C2E;color:#fff;box-shadow:none" onchange="pickItem(this.value)"><option value="">${items.length ? '— เลือกงานโฟกัส / Category —' : '— ยังไม่มีข้อมูล กด 🔄 ดึงข้อมูลด้านบน —'}</option>${opts}</select>`}
         <div id="probBox">${probHTML(CUR)}</div>
         <div id="d0Box"></div>
         ${CUR && B.chokReady ? `<button class="btn g sm" style="margin-top:10px" onclick="chokDay0()">🤖 น้องโชควิเคราะห์ปัญหานี้</button>` : ''}
@@ -314,6 +314,18 @@
         </div></div></div>`;
     $('app').innerHTML = h;
     if (CUR) loadLessons();
+  }
+  // ยังไม่มีตัวเลขรายวัน (ยังไม่ได้ซิงค์หลังติดตั้ง) → ปุ่มดึงข้อมูลตอนนี้
+  function noData() {
+    if (B.at && !B.histErr) return '';
+    return `<div class="dk rise" style="margin-bottom:14px"><div class="ch"><b>${B.at ? '⚠️ อัปเดตตัวเลขรายวันไม่สำเร็จ' : '📭 ยังไม่มีตัวเลขรายวันให้ Action Plan'}</b></div>
+      <div style="font-size:13px;color:#ddd;line-height:1.6">${B.histErr ? 'สาเหตุ: ' + esc(B.histErr) + '<br>' : ''}รายการงานโฟกัส / Category มาจากการซิงค์ Dashboard · กดปุ่มนี้ 1 ครั้ง (ใช้เวลาประมาณ 30–60 วินาที) หรือกด 🚀 ซิงค์ระบบ ใน Google Sheet</div>
+      ${B.me.mgr ? '<button class="btn y" style="margin-top:12px" id="rbBtn" onclick="rebuild()">🔄 ดึงข้อมูลตอนนี้</button>' : ''}</div>`;
+  }
+  async function rebuild() {
+    const b = $('rbBtn'); if (b) { b.disabled = true; b.innerHTML = '<span class="spin"></span> กำลังคำนวณ Dashboard…'; }
+    try { B = await run('rebuild'); toast(B.at ? '✅ ได้ข้อมูลถึง ' + dmy(B.at) : 'ยังไม่ได้ข้อมูล', !B.at); if (ED && $('actBox')) { CUR = ED.item ? (B.items || []).find(x => x.kind === ED.kind && x.item === ED.item) : null; editView(); } else home(); }
+    catch (e) { toast(e.message, 1); if (b) { b.disabled = false; b.textContent = '🔄 ลองอีกครั้ง'; } }
   }
   function probHTML(it) {
     if (!it) return '<div class="empty" style="color:#AEAEB2">เลือกงานด้านบน เพื่อดูตัวเลข</div>';
