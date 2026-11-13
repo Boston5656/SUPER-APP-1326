@@ -605,7 +605,7 @@
     return `<div class="rec" id="recV" style="margin-top:12px"><video id="vid" playsinline muted autoplay></video><span class="tm" id="recT">0:00</span></div>
       <div class="chips" style="margin-top:10px;justify-content:center" id="recBtns"><button class="btn" onclick="recOpen()">📷 เปิดกล้อง</button>
         <label class="btn w" style="cursor:pointer">📁 เลือกคลิป<input type="file" accept="video/*" hidden onchange="prFile(this.files[0])"></label></div>
-      <p style="font-size:11.5px;color:#6E6E73;line-height:1.5;margin:10px 4px 0">🔒 ซ้อมกับเพื่อนในร้านเท่านั้น <b>ห้ามอัดลูกค้าจริง</b> · คลิปส่งให้น้องโชควิเคราะห์แล้วลบทิ้งทันที ไม่เก็บไว้ · ผลเห็นแค่คนฝึกกับผู้จัดการ · แนะนำคลิปละไม่เกิน 1 นาที</p>
+      <p style="font-size:11.5px;color:#6E6E73;line-height:1.5;margin:10px 4px 0">🔒 ซ้อมกับเพื่อนในร้านเท่านั้น <b>ห้ามอัดลูกค้าจริง</b> · คลิปส่งให้น้องโชควิเคราะห์แล้วลบทิ้งทันที ไม่เก็บไว้ · ผลเห็นแค่คนฝึกกับผู้จัดการ · คลิปละไม่เกิน 5 นาที / 500MB (อัดในแอปตัดที่ 5 นาทีให้เอง)</p>
       <div id="prRes"></div>`;
   }
   async function prDraw() {
@@ -616,7 +616,7 @@
   }
   function prPaint() {
     if (PR.group === 'CUSTOM') return prCustom();
-    $('prBox').innerHTML = `<div class="topic"><small>หัวข้อที่สุ่มได้</small><b>${esc(PR.t.title)}</b><small>อธิบายให้เพื่อน (ที่เล่นเป็นลูกค้า) ฟัง ไม่เกิน 2 นาที</small></div>
+    $('prBox').innerHTML = `<div class="topic"><small>หัวข้อที่สุ่มได้</small><b>${esc(PR.t.title)}</b><small>อธิบายให้เพื่อน (ที่เล่นเป็นลูกค้า) ฟัง ไม่เกิน 5 นาที</small></div>
       <button class="btn w sm" style="margin:8px 0" onclick="prDraw()">🎲 สุ่มใหม่</button>
       <div class="rec" id="recV"><video id="vid" playsinline muted autoplay></video><span class="tm" id="recT">0:00</span></div>
       <div class="chips" style="margin-top:10px;justify-content:center" id="recBtns"><button class="btn" onclick="recOpen()">📷 เปิดกล้อง</button>
@@ -637,20 +637,21 @@
     REC.chunks = []; REC.rec.ondataavailable = e => e.data && e.data.size && REC.chunks.push(e.data);
     REC.rec.onstop = () => { const type = (REC.rec.mimeType || mt || 'video/webm').split(';')[0]; PR.blob = new Blob(REC.chunks, { type }); PR.mime = type; PR.sec = Math.round((Date.now() - REC.t0) / 1000); recStop(true); prReady(); };
     REC.rec.start(1000); REC.t0 = Date.now(); $('recT').classList.add('on');
-    REC.tm = setInterval(() => { const s = Math.round((Date.now() - REC.t0) / 1000); $('recT').textContent = `${Math.floor(s / 60)}:${pad(s % 60)}`; if (s >= 120) recEnd(); }, 300);
+    REC.tm = setInterval(() => { const s = Math.round((Date.now() - REC.t0) / 1000); $('recT').textContent = `${Math.floor(s / 60)}:${pad(s % 60)}`; if (s >= 300) recEnd(); }, 300);
     $('recBtns').innerHTML = '<button class="btn" onclick="recEnd()">⏹ หยุด</button>';
   }
   function recEnd() { if (REC && REC.rec && REC.rec.state !== 'inactive') REC.rec.stop(); }
   function recStop(keepBlob) { if (!REC) return; clearInterval(REC.tm); try { REC.st.getTracks().forEach(t => t.stop()); } catch (e) {} if (REC.rec && REC.rec.state !== 'inactive' && !keepBlob) try { REC.rec.stop(); } catch (e) {} REC = null; }
-  // คลิปจากเครื่องใหญ่ (> 12MB) → ย่อในแอปก่อนส่ง (เล่นคลิปแล้วอัดใหม่ 360p · ใช้เวลาเท่าความยาวคลิป)
+  // คลิปจากเครื่อง: ≤ 150MB ส่งได้เลย (อัปเป็นท่อน) · ใหญ่กว่านั้นย่อในแอปก่อน (ถ้าเครื่องรองรับ) · สูงสุด 500MB
   async function prFile(f) {
     if (!f) return; PR.sec = 0;
-    if (f.size <= 12 * 1024 * 1024) { PR.blob = f; PR.mime = f.type || 'video/mp4'; return prReady(); }
+    if (f.size > VMAX && !(document.createElement('video').captureStream)) return toast('คลิปใหญ่เกิน 500MB — ตัดให้สั้นลง หรืออัดในแอป', 1);
+    if (f.size <= 150 * 1024 * 1024) { PR.blob = f; PR.mime = f.type || 'video/mp4'; return prReady(); }
     const v = document.createElement('video'); v.src = URL.createObjectURL(f); v.playsInline = true; v.muted = false; v.volume = 0.0001;
-    if (!v.captureStream && !v.mozCaptureStream) { if (f.size > 30 * 1024 * 1024) return toast('คลิปใหญ่เกิน 30MB — อัดในแอปแทน', 1); PR.blob = f; PR.mime = f.type || 'video/mp4'; return prReady(); }
+    if (!v.captureStream && !v.mozCaptureStream) { if (f.size > VMAX) return toast('คลิปใหญ่เกิน 500MB — ตัดให้สั้นลง', 1); PR.blob = f; PR.mime = f.type || 'video/mp4'; return prReady(); }
     try {
       await new Promise((ok, no) => { v.onloadedmetadata = ok; v.onerror = () => no(new Error('เปิดคลิปไม่ได้')); });
-      if (v.duration > 180) return toast('คลิปยาวเกิน 3 นาที — ตัดให้สั้นลง หรืออัดในแอป', 1);
+      if (v.duration > 600) return toast('คลิปยาวเกิน 10 นาที — ตัดให้สั้นลง หรืออัดในแอป', 1);
       const c = document.createElement('canvas'), k = Math.min(1, 640 / Math.max(v.videoWidth, v.videoHeight)); c.width = Math.round(v.videoWidth * k / 2) * 2; c.height = Math.round(v.videoHeight * k / 2) * 2;
       const g = c.getContext('2d'), vs = c.captureStream(24), src = (v.captureStream || v.mozCaptureStream).call(v);
       src.getAudioTracks().forEach(t => vs.addTrack(t));
@@ -663,7 +664,7 @@
       rec.start(1000); await v.play(); draw();
       await new Promise(ok => { v.onended = ok; }); rec.stop(); cancelAnimationFrame(raf); await done;
       const type = (rec.mimeType || mt || 'video/webm').split(';')[0]; PR.blob = new Blob(ch, { type }); PR.mime = type; PR.sec = Math.round(v.duration);
-      if (PR.blob.size > 30 * 1024 * 1024) return toast('ย่อแล้วยังใหญ่เกิน — อัดในแอปแทน', 1);
+      if (PR.blob.size > VMAX) return toast('ย่อแล้วยังใหญ่เกิน 500MB — ตัดให้สั้นลง', 1);
       prReady();
     } catch (e) { toast('ย่อคลิปไม่สำเร็จ: ' + e.message, 1); prPaint(); }
   }
@@ -672,6 +673,8 @@
     $('recT').classList.remove('on'); $('recT').textContent = `${(PR.blob.size / 1048576).toFixed(1)} MB`;
     $('recBtns').innerHTML = `<button class="btn w" onclick="prPaint()">↺ อัดใหม่</button><button class="btn y" id="prSend" onclick="prSend()">🤖 ส่งให้น้องโชค</button>`;
   }
+  const VMAX = 500 * 1024 * 1024;
+  const b64of = blob => new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = no; r.readAsDataURL(blob); });
   async function prSend() {
     if (PR.group === 'CUSTOM') {
       PR.title = ($('prTi') || {}).value || PR.title; PR.facts = ($('prFa') || {}).value || PR.facts;
@@ -681,8 +684,24 @@
     PR.t.who = PR.who;
     const b = $('prSend'); b.disabled = true; b.innerHTML = '<span class="spin"></span> น้องโชคกำลังดูคลิป (30–60 วิ)…';
     try {
-      const b64 = await new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = no; r.readAsDataURL(PR.blob); });
-      const r = await run('chokVideo', PR.pid, PR.aid, PR.t, { mime: PR.mime, b64 });
+      let vid;
+      if (PR.blob.size <= 12 * 1024 * 1024) vid = { mime: PR.mime, b64: await b64of(PR.blob) };   // คลิปเล็ก: ส่งทีเดียว
+      else {
+        // คลิปใหญ่: อัปเป็นท่อน 8MB ตรงไปให้น้องโชค (ไม่เก็บที่ไหน ลบทิ้งหลังวิเคราะห์)
+        const mb = x => (x / 1048576).toFixed(0), tot = PR.blob.size;
+        b.innerHTML = '<span class="spin"></span> เริ่มอัปโหลด…';
+        const st = await run('videoStart', PR.pid, PR.aid, tot, PR.mime), CH = st.chunk || 8388608;
+        for (let off = 0; off < tot; off += CH) {
+          b.innerHTML = `<span class="spin"></span> อัปโหลด ${mb(off)}/${mb(tot)} MB`;
+          const b64 = await b64of(PR.blob.slice(off, Math.min(tot, off + CH)));
+          let ok = false, err;
+          for (let k = 0; k < 3 && !ok; k++) { try { await run('videoChunk', st.sid, off, b64); ok = true; } catch (e) { err = e; if (/ไม่ต่อเนื่อง|หมดเวลา|ไม่ใช่/.test(e.message)) break; await new Promise(r => setTimeout(r, 1500 * (k + 1))); } }
+          if (!ok) throw err;
+        }
+        vid = { mime: PR.mime, sid: st.sid };
+        b.innerHTML = '<span class="spin"></span> น้องโชคกำลังดูคลิป (1–2 นาที)…';
+      }
+      const r = await run('chokVideo', PR.pid, PR.aid, PR.t, vid);
       $('recBtns').innerHTML = `<button class="btn w" onclick="prDraw()">🎲 ฝึกหัวข้อใหม่</button><button class="btn" onclick="closeS('sh1');${PV ? `openPlan('${PR.pid}',true)` : 'refresh().then(home)'}">เสร็จ</button>`;
       $('prRes').innerHTML = `<div class="rev"><div class="ch"><b>🤖 ผลจากน้องโชค</b><small>${esc(PR.t.title)}</small></div>${vidHTML(r.res)}
         ${PR.t.facts ? '' : '<div style="font-size:11.5px;color:#6E6E73;margin-top:6px">ไม่ได้ใส่ข้อมูลที่ถูกต้อง — น้องโชคดูแค่วิธีพูด ไม่ได้ตรวจตัวเลข/โปร</div>'}
@@ -691,7 +710,7 @@
     } catch (e) {
       b.disabled = false; b.textContent = '🤖 ส่งอีกครั้ง';
       const net = /Failed to fetch|NetworkError|Load failed/i.test(e.message);
-      $('prRes').innerHTML = `<div class="rev"><b>⚠️ น้องโชคยังดูคลิปไม่ได้</b><div style="font-size:12.5px;margin-top:4px;white-space:pre-wrap">${esc(e.message)}${net ? '\n→ คลิปใหญ่หรือเน็ตหลุดระหว่างส่ง ลองอัดให้สั้นลง (≤ 1 นาที) แล้วส่งใหม่' : ''}</div><div style="font-size:11.5px;color:#6E6E73;margin-top:6px">ขนาดคลิป ${(PR.blob.size / 1048576).toFixed(1)} MB · ${esc(PR.mime)}</div></div>`;
+      $('prRes').innerHTML = `<div class="rev"><b>⚠️ น้องโชคยังดูคลิปไม่ได้</b><div style="font-size:12.5px;margin-top:4px;white-space:pre-wrap">${esc(e.message)}${net ? '\n→ เน็ตหลุดระหว่างส่ง ต่อ Wi-Fi แล้วกดส่งอีกครั้ง' : ''}</div><div style="font-size:11.5px;color:#6E6E73;margin-top:6px">ขนาดคลิป ${(PR.blob.size / 1048576).toFixed(1)} MB · ${esc(PR.mime)}</div></div>`;
     }
   }
   function vidHTML(r) {
