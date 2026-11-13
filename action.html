@@ -358,6 +358,7 @@
         ${stf.map(p => `<button class="chip ${sel.has(p.id) ? 'on' : ''}" onclick="togOwner(${i},'${esc(p.id)}','${esc(p.name)}','')">${esc(p.name)}</button>`).join('')}
         ${pcFirst.map(p => `<button class="chip ${sel.has(p.id) ? 'on' : ''}" onclick="togOwner(${i},'${esc(p.id)}','${esc(p.name)}','${esc(p.brand)}')">PC ${esc(p.brand)} · ${esc(p.name)}</button>`).join('')}</div>
       <span class="sm">🎥 ฝึกพูดกับน้องโชค (ไม่บังคับ)</span><div class="chips"><button class="chip ${!a.practice ? 'on' : ''}" onclick="setAct(${i},'practice',null)">ไม่มี</button>
+        <button class="chip ${a.practice && a.practice.topic === 'CUSTOM' ? 'on' : ''}" onclick="setAct(${i},'practice',{topic:'CUSTOM'})">✏️ มีฝึกพูด (กำหนดหัวข้อตอนอัป)</button>
         <button class="chip ${a.practice && a.practice.topic === 'PROMO' ? 'on' : ''}" onclick="setAct(${i},'practice',{topic:'PROMO'})">🎲 สุ่มโปรเครื่อง</button>
         ${groups.map(g => `<button class="chip ${a.practice && a.practice.topic === g ? 'on' : ''}" onclick="setAct(${i},'practice',{topic:'${esc(g)}'})">🎲 ${esc(g)}</button>`).join('')}</div></div>`;
   }
@@ -581,20 +582,40 @@
 
   // ================= 🎥 ฝึกพูด (สุ่มหัวข้อ → อัดในแอป → น้องโชควิเคราะห์ · ไม่เก็บวิดีโอ) =================
   let PR = null, REC = null;
+  // ✏️ กำหนดเอง (ค่าเริ่มต้น): ใส่เองว่าใครฝึก ฝึกเรื่องอะไร สิ่งที่ต้องพูด · 🎲 สุ่ม = ทางเลือกเสริม
   function practice(pid, aid, topic) {
-    PR = { pid, aid, group: topic || 'PROMO', t: null, blob: null, mime: '', sec: 0 };
+    const meWho = { id: (B.me || {}).id, name: (B.me || {}).name, brand: (B.me || {}).brand || '' };
+    PR = { pid, aid, group: topic && topic !== 'PROMO' && topic !== 'CUSTOM' ? topic : 'CUSTOM', t: null, blob: null, mime: '', sec: 0, who: meWho, title: '', facts: '' };
     const groups = [...new Set((B.topics || PV && PV.topics || []).map(t => t.group).filter(Boolean))];
     openS('sh1', `<div class="sh-h"><b>🎥 ฝึกพูดกับน้องโชค</b><button class="x" onclick="closeS('sh1')">✕</button></div>
-      <div class="chips" id="prG" style="margin-bottom:10px"><button class="chip ${PR.group === 'PROMO' ? 'on' : ''}" onclick="PR.group='PROMO';prDraw()">🎲 โปรเครื่อง (ชีต Promotion)</button>${groups.map(g => `<button class="chip ${PR.group === g ? 'on' : ''}" onclick="PR.group='${esc(g)}';prDraw()">🎲 ${esc(g)}</button>`).join('')}</div>
+      <div class="chips" id="prG" style="margin-bottom:10px"><button class="chip" onclick="PR.group='CUSTOM';prDraw()">✏️ กำหนดเอง</button><button class="chip" onclick="PR.group='PROMO';prDraw()">🎲 สุ่มโปรเครื่อง</button>${groups.map(g => `<button class="chip" onclick="PR.group='${esc(g)}';prDraw()">🎲 ${esc(g)}</button>`).join('')}</div>
       <div id="prBox"></div>`);
     prDraw();
   }
+  function prCustom() {
+    const ppl = (B.people || (PV && PV.people) || []), mgr = B.me && B.me.mgr, w = PR.who || {};
+    $('prBox').innerHTML = `${mgr && ppl.length ? `<label class="f" style="margin-top:0">ใครฝึก</label><div class="chips">${[{ id: B.me.id, name: B.me.name + ' (ฉัน)', brand: '' }].concat(ppl.filter(p => p.id !== B.me.id)).map(p => `<button class="chip ${w.id === p.id ? 'on' : ''}" onclick="PR.who={id:'${esc(p.id)}',name:'${esc(String(p.name).replace(' (ฉัน)', ''))}',brand:'${esc(p.brand || '')}'};prCustom()">${p.role === 'PC' ? 'PC ' + esc(p.brand) + ' · ' : ''}${esc(p.name)}</button>`).join('')}</div>` : ''}
+      <label class="f">ฝึกเรื่องอะไร</label><input class="in" id="prTi" value="${esc(PR.title)}" oninput="PR.title=this.value" placeholder="เช่น อธิบายซิมทรู 599 + ส่วนลดเครื่อง / เสนอ Ultra Care">
+      <label class="f">สิ่งที่ต้องพูด / ข้อมูลที่ถูกต้อง <small>(ไม่ใส่ก็ได้)</small></label>
+      <textarea class="in" id="prFa" oninput="PR.facts=this.value" placeholder="เช่น ค่าบริการ 599/เดือน · สัญญา 12 เดือน · ลดเครื่อง 3,000 · ยกเลิกก่อนเสียค่าปรับ
+ไม่ใส่ = น้องโชคดูความชัดเจน การถามความต้องการ การเสนอ และการปิดการขาย">${esc(PR.facts)}</textarea>
+      ${recArea()}`;
+  }
+  function recArea() {
+    return `<div class="rec" id="recV" style="margin-top:12px"><video id="vid" playsinline muted autoplay></video><span class="tm" id="recT">0:00</span></div>
+      <div class="chips" style="margin-top:10px;justify-content:center" id="recBtns"><button class="btn" onclick="recOpen()">📷 เปิดกล้อง</button>
+        <label class="btn w" style="cursor:pointer">📁 เลือกคลิป<input type="file" accept="video/*" hidden onchange="prFile(this.files[0])"></label></div>
+      <p style="font-size:11.5px;color:#6E6E73;line-height:1.5;margin:10px 4px 0">🔒 ซ้อมกับเพื่อนในร้านเท่านั้น <b>ห้ามอัดลูกค้าจริง</b> · คลิปส่งให้น้องโชควิเคราะห์แล้วลบทิ้งทันที ไม่เก็บไว้ · ผลเห็นแค่คนฝึกกับผู้จัดการ · แนะนำคลิปละไม่เกิน 1 นาที</p>
+      <div id="prRes"></div>`;
+  }
   async function prDraw() {
     document.querySelectorAll('#prG .chip').forEach(c => c.classList.toggle('on', c.getAttribute('onclick').includes(`'${PR.group}'`)));
+    if (PR.group === 'CUSTOM') { PR.t = null; PR.blob = null; return prCustom(); }
     $('prBox').innerHTML = '<div class="loading"><span class="spin"></span> กำลังสุ่ม…</div>';
     try { PR.t = await run('drawTopic', PR.group); PR.blob = null; prPaint(); } catch (e) { $('prBox').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
   }
   function prPaint() {
+    if (PR.group === 'CUSTOM') return prCustom();
     $('prBox').innerHTML = `<div class="topic"><small>หัวข้อที่สุ่มได้</small><b>${esc(PR.t.title)}</b><small>อธิบายให้เพื่อน (ที่เล่นเป็นลูกค้า) ฟัง ไม่เกิน 2 นาที</small></div>
       <button class="btn w sm" style="margin:8px 0" onclick="prDraw()">🎲 สุ่มใหม่</button>
       <div class="rec" id="recV"><video id="vid" playsinline muted autoplay></video><span class="tm" id="recT">0:00</span></div>
@@ -652,13 +673,20 @@
     $('recBtns').innerHTML = `<button class="btn w" onclick="prPaint()">↺ อัดใหม่</button><button class="btn y" id="prSend" onclick="prSend()">🤖 ส่งให้น้องโชค</button>`;
   }
   async function prSend() {
+    if (PR.group === 'CUSTOM') {
+      PR.title = ($('prTi') || {}).value || PR.title; PR.facts = ($('prFa') || {}).value || PR.facts;
+      if (!String(PR.title).trim()) { toast('ใส่ว่าฝึกเรื่องอะไรก่อน', 1); $('prTi') && $('prTi').focus(); return; }
+      PR.t = { title: PR.title.trim(), facts: PR.facts.trim(), group: 'CUSTOM' };
+    }
+    PR.t.who = PR.who;
     const b = $('prSend'); b.disabled = true; b.innerHTML = '<span class="spin"></span> น้องโชคกำลังดูคลิป (30–60 วิ)…';
     try {
       const b64 = await new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1]); r.onerror = no; r.readAsDataURL(PR.blob); });
       const r = await run('chokVideo', PR.pid, PR.aid, PR.t, { mime: PR.mime, b64 });
       $('recBtns').innerHTML = `<button class="btn w" onclick="prDraw()">🎲 ฝึกหัวข้อใหม่</button><button class="btn" onclick="closeS('sh1');${PV ? `openPlan('${PR.pid}',true)` : 'refresh().then(home)'}">เสร็จ</button>`;
       $('prRes').innerHTML = `<div class="rev"><div class="ch"><b>🤖 ผลจากน้องโชค</b><small>${esc(PR.t.title)}</small></div>${vidHTML(r.res)}
-        <details style="margin-top:8px"><summary style="font-weight:700;font-size:12.5px;cursor:pointer">📄 ดูข้อมูลที่ถูกต้องของหัวข้อนี้</summary><div style="white-space:pre-wrap;font-size:12.5px;margin-top:6px">${esc(PR.t.facts)}</div></details></div>`;
+        ${PR.t.facts ? '' : '<div style="font-size:11.5px;color:#6E6E73;margin-top:6px">ไม่ได้ใส่ข้อมูลที่ถูกต้อง — น้องโชคดูแค่วิธีพูด ไม่ได้ตรวจตัวเลข/โปร</div>'}
+        <details style="margin-top:8px;${PR.t.facts ? '' : 'display:none'}"><summary style="font-weight:700;font-size:12.5px;cursor:pointer">📄 ดูข้อมูลที่ถูกต้องของหัวข้อนี้</summary><div style="white-space:pre-wrap;font-size:12.5px;margin-top:6px">${esc(PR.t.facts)}</div></details></div>`;
       $('prRes').scrollIntoView({ behavior: 'smooth' }); vib(20);
     } catch (e) {
       b.disabled = false; b.textContent = '🤖 ส่งอีกครั้ง';
