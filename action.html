@@ -605,14 +605,14 @@
   }
   async function recOpen() {
     try {
-      const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true });
+      const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 360 } }, audio: { echoCancellation: true, noiseSuppression: true } });
       REC = { st, rec: null, chunks: [], t0: 0, tm: null }; $('vid').srcObject = st; $('vid').muted = true;
       $('recBtns').innerHTML = '<button class="btn" style="background:#FF453A;color:#fff" onclick="recGo()">⏺ เริ่มอัด</button>';
     } catch (e) { toast('เปิดกล้อง/ไมค์ไม่ได้ — อนุญาตกล้องและไมค์ หรือเลือกคลิปแทน', 1); }
   }
   function recGo() {
     const mt = ['video/mp4', 'video/webm;codecs=vp8,opus', 'video/webm'].find(t => window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
-    try { REC.rec = new MediaRecorder(REC.st, Object.assign({ videoBitsPerSecond: 900000, audioBitsPerSecond: 64000 }, mt ? { mimeType: mt } : {})); } catch (e) { return toast('เครื่องนี้อัดในแอปไม่ได้ — เลือกคลิปแทน', 1); }
+    try { REC.rec = new MediaRecorder(REC.st, Object.assign({ videoBitsPerSecond: 500000, audioBitsPerSecond: 64000 }, mt ? { mimeType: mt } : {})); } catch (e) { return toast('เครื่องนี้อัดในแอปไม่ได้ — เลือกคลิปแทน', 1); }
     REC.chunks = []; REC.rec.ondataavailable = e => e.data && e.data.size && REC.chunks.push(e.data);
     REC.rec.onstop = () => { const type = (REC.rec.mimeType || mt || 'video/webm').split(';')[0]; PR.blob = new Blob(REC.chunks, { type }); PR.mime = type; PR.sec = Math.round((Date.now() - REC.t0) / 1000); recStop(true); prReady(); };
     REC.rec.start(1000); REC.t0 = Date.now(); $('recT').classList.add('on');
@@ -621,7 +621,31 @@
   }
   function recEnd() { if (REC && REC.rec && REC.rec.state !== 'inactive') REC.rec.stop(); }
   function recStop(keepBlob) { if (!REC) return; clearInterval(REC.tm); try { REC.st.getTracks().forEach(t => t.stop()); } catch (e) {} if (REC.rec && REC.rec.state !== 'inactive' && !keepBlob) try { REC.rec.stop(); } catch (e) {} REC = null; }
-  function prFile(f) { if (!f) return; if (f.size > 30 * 1024 * 1024) return toast('คลิปใหญ่เกิน 30MB — อัดในแอปแทน (ไฟล์เล็กกว่ามาก)', 1); PR.blob = f; PR.mime = f.type || 'video/mp4'; PR.sec = 0; prReady(); }
+  // คลิปจากเครื่องใหญ่ (> 12MB) → ย่อในแอปก่อนส่ง (เล่นคลิปแล้วอัดใหม่ 360p · ใช้เวลาเท่าความยาวคลิป)
+  async function prFile(f) {
+    if (!f) return; PR.sec = 0;
+    if (f.size <= 12 * 1024 * 1024) { PR.blob = f; PR.mime = f.type || 'video/mp4'; return prReady(); }
+    const v = document.createElement('video'); v.src = URL.createObjectURL(f); v.playsInline = true; v.muted = false; v.volume = 0.0001;
+    if (!v.captureStream && !v.mozCaptureStream) { if (f.size > 30 * 1024 * 1024) return toast('คลิปใหญ่เกิน 30MB — อัดในแอปแทน', 1); PR.blob = f; PR.mime = f.type || 'video/mp4'; return prReady(); }
+    try {
+      await new Promise((ok, no) => { v.onloadedmetadata = ok; v.onerror = () => no(new Error('เปิดคลิปไม่ได้')); });
+      if (v.duration > 180) return toast('คลิปยาวเกิน 3 นาที — ตัดให้สั้นลง หรืออัดในแอป', 1);
+      const c = document.createElement('canvas'), k = Math.min(1, 640 / Math.max(v.videoWidth, v.videoHeight)); c.width = Math.round(v.videoWidth * k / 2) * 2; c.height = Math.round(v.videoHeight * k / 2) * 2;
+      const g = c.getContext('2d'), vs = c.captureStream(24), src = (v.captureStream || v.mozCaptureStream).call(v);
+      src.getAudioTracks().forEach(t => vs.addTrack(t));
+      const mt = ['video/webm;codecs=vp8,opus', 'video/webm', 'video/mp4'].find(t => MediaRecorder.isTypeSupported(t)) || '';
+      const rec = new MediaRecorder(vs, Object.assign({ videoBitsPerSecond: 500000, audioBitsPerSecond: 64000 }, mt ? { mimeType: mt } : {})), ch = [];
+      rec.ondataavailable = e => e.data && e.data.size && ch.push(e.data);
+      $('recBtns').innerHTML = '<span class="btn w" id="cmpT"><span class="spin"></span> กำลังย่อคลิป…</span>';
+      const done = new Promise(ok => { rec.onstop = ok; });
+      let raf; const draw = () => { g.drawImage(v, 0, 0, c.width, c.height); $('cmpT') && ($('cmpT').innerHTML = `<span class="spin"></span> กำลังย่อคลิป ${Math.round(v.currentTime)}/${Math.round(v.duration)} วิ`); raf = requestAnimationFrame(draw); };
+      rec.start(1000); await v.play(); draw();
+      await new Promise(ok => { v.onended = ok; }); rec.stop(); cancelAnimationFrame(raf); await done;
+      const type = (rec.mimeType || mt || 'video/webm').split(';')[0]; PR.blob = new Blob(ch, { type }); PR.mime = type; PR.sec = Math.round(v.duration);
+      if (PR.blob.size > 30 * 1024 * 1024) return toast('ย่อแล้วยังใหญ่เกิน — อัดในแอปแทน', 1);
+      prReady();
+    } catch (e) { toast('ย่อคลิปไม่สำเร็จ: ' + e.message, 1); prPaint(); }
+  }
   function prReady() {
     const u = URL.createObjectURL(PR.blob), v = $('vid'); if (v) { v.srcObject = null; v.src = u; v.muted = false; v.controls = true; v.style.transform = 'none'; }
     $('recT').classList.remove('on'); $('recT').textContent = `${(PR.blob.size / 1048576).toFixed(1)} MB`;
@@ -636,7 +660,11 @@
       $('prRes').innerHTML = `<div class="rev"><div class="ch"><b>🤖 ผลจากน้องโชค</b><small>${esc(PR.t.title)}</small></div>${vidHTML(r.res)}
         <details style="margin-top:8px"><summary style="font-weight:700;font-size:12.5px;cursor:pointer">📄 ดูข้อมูลที่ถูกต้องของหัวข้อนี้</summary><div style="white-space:pre-wrap;font-size:12.5px;margin-top:6px">${esc(PR.t.facts)}</div></details></div>`;
       $('prRes').scrollIntoView({ behavior: 'smooth' }); vib(20);
-    } catch (e) { b.disabled = false; b.textContent = '🤖 ส่งอีกครั้ง'; toast(e.message, 1); }
+    } catch (e) {
+      b.disabled = false; b.textContent = '🤖 ส่งอีกครั้ง';
+      const net = /Failed to fetch|NetworkError|Load failed/i.test(e.message);
+      $('prRes').innerHTML = `<div class="rev"><b>⚠️ น้องโชคยังดูคลิปไม่ได้</b><div style="font-size:12.5px;margin-top:4px;white-space:pre-wrap">${esc(e.message)}${net ? '\n→ คลิปใหญ่หรือเน็ตหลุดระหว่างส่ง ลองอัดให้สั้นลง (≤ 1 นาที) แล้วส่งใหม่' : ''}</div><div style="font-size:11.5px;color:#6E6E73;margin-top:6px">ขนาดคลิป ${(PR.blob.size / 1048576).toFixed(1)} MB · ${esc(PR.mime)}</div></div>`;
+    }
   }
   function vidHTML(r) {
     r = r || {}; const li = (a, ic) => (a || []).length ? `<ul>${a.map(x => `<li>${ic} ${esc(x)}</li>`).join('')}</ul>` : '';
