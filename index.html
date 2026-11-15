@@ -11,7 +11,7 @@
   <meta name="application-name" content="SUPER APP 1326">
   <script>window.GAS_APP = 'dash';</script>
   <script src="gas.js?v=2026.11.02-4"></script>
-  <script src="order-alert.js?v=2026.11.02-4"></script>
+  <script src="order-alert.js?v=2026.11.15-11"></script>
   <meta name="theme-color" content="#FFD600">
   <link rel="manifest" href="manifest.json?v=3">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1577,6 +1577,15 @@
       #db-focus .sl-side b, #db-category .sl-side b { font-size: 12px !important; }
       #db-focus .sl-side small, #db-category .sl-side small { font-size: 9px !important; }
     }
+    /* 🖥️ คอม: จอแอป 3 แถว × 4 · ไอคอนใหญ่ขึ้น · คอลัมน์ Report กว้างกว่า */
+    @media (min-width: 1000px) and (orientation: landscape) {
+      .ds { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr) !important; }
+      .ds .ds-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; grid-template-rows: repeat(3, minmax(0, 1fr)) !important; gap: 6px 10px; padding: 14px 16px 4px; }
+      .ds .ds-app, .ds .ds-app .ai { --ai: clamp(44px, min(calc(27cqh - 44px), calc(17cqw - 6px)), 92px) !important; } .ds .ds-app { gap: 8px; }
+      .ds .ds-app .an { font-size: clamp(10px, 1.6cqh, 13.5px) !important; }
+      .ds .ds-bhd { padding: 12px 14px 4px 18px; } .ds .ds-bhd b { font-size: 15px; }
+      .ds .ds-sys { width: 34px; height: 34px; font-size: 16px; }
+    }
     @media (prefers-reduced-motion: reduce) { .ds *, .ds { animation: none !important; transition: none !important; } }
   </style>
 
@@ -2015,7 +2024,7 @@
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
     try { if (navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)) document.documentElement.classList.add('pwa'); } catch (e) {}
-    const APP_VER = '2026.11.15-10';
+    const APP_VER = '2026.11.15-12';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2536,8 +2545,11 @@
         g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.05, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
         o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.02);
       },
+      idle() {   // เล่นเสร็จแล้วปิดเสียงทิ้ง → iPhone ไม่ค้างโชว์แอปที่ Dynamic Island
+        clearTimeout(this.it); this.it = setTimeout(() => { try { if (this.ctx && this.ctx.state === 'running') this.ctx.suspend(); } catch (e) {} }, 1500);
+      },
       play(n) {
-        if (!this.on || DS_MUTE()) return; this.init(); if (!this.ctx) return;
+        if (!this.on || DS_MUTE()) return; this.init(); if (!this.ctx) return; this.idle();
         const T = (f, a, d, v, ty, to) => this.tone(f, a, d, v, ty, to);
         if (n === 'move') T(740, 0, .045, .035);
         else if (n === 'page') { T(523, 0, .05, .04); T(784, .05, .07, .04); }
@@ -2551,7 +2563,7 @@
       }
     };
     const DS_MUTE = () => { try { return localStorage.getItem('hub3ds_mute') === '1'; } catch (e) { return false; } };
-    ['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, () => { if (document.body.classList.contains('ds-on')) SFX.init(); }, { passive: true }));
+    document.addEventListener('visibilitychange', () => { if (document.hidden) try { SFX.ctx && SFX.ctx.suspend(); } catch (e) {} });
 
     // ---------- คำอธิบายแอปที่ไม่มี Report ----------
     const DS_INFO = {
@@ -2635,14 +2647,16 @@
     }
     const DS_TRI = r => `<svg viewBox="0 0 10 10" style="transform:rotate(${r}deg)"><path d="M5 1.2 9.2 8.4H.8z"/></svg>`;
     const DS_BADGE = {};
-    const DS_PER = 4;
+    const DS_WIDE = () => window.matchMedia && matchMedia('(min-width: 1000px) and (orientation: landscape)').matches;   // 🖥️ คอม / จอใหญ่แนวนอน
+    const dsPer = () => DS_WIDE() ? 12 : 4;   // มือถือหน้าละ 4 แอป · คอม 12 แอป (3 แถว × 4)
     function dsGrid(dir) {
+      DS.per = dsPer();
       const g = document.getElementById('dsGrid'); if (!g) return;
-      const pg = Math.floor(DS.sel / DS_PER), from = pg * DS_PER;
+      const pg = Math.floor(DS.sel / dsPer()), from = pg * dsPer();
       DS.apg = pg;
-      g.innerHTML = DS.apps.slice(from, from + DS_PER).map((a, k) => { const i = from + k; return `<button class="ds-app${i === DS.sel ? ' sel' : ''}" data-i="${i}" data-app="${a.id}"><span class="ai">${a.icon}</span><b class="app-badge" id="badge-${a.id}"></b><span class="an">${dsEsc(a.name)}</span><small class="app-note" id="note-${a.id}"></small></button>`; }).join('');
+      g.innerHTML = DS.apps.slice(from, from + dsPer()).map((a, k) => { const i = from + k; return `<button class="ds-app${i === DS.sel ? ' sel' : ''}" data-i="${i}" data-app="${a.id}"><span class="ai">${a.icon}</span><b class="app-badge" id="badge-${a.id}"></b><span class="an">${dsEsc(a.name)}</span><small class="app-note" id="note-${a.id}"></small></button>`; }).join('');
       Object.keys(DS_BADGE).forEach(id => { const x = DS_BADGE[id], b = document.getElementById('badge-' + id); if (b) { b.textContent = x.txt || ''; b.className = 'app-badge' + (x.txt ? ' on ' + (x.cls || '') : ''); } });
-      const np = Math.ceil(DS.apps.length / DS_PER), ap = document.getElementById('dsApg');
+      const np = Math.ceil(DS.apps.length / dsPer()), ap = document.getElementById('dsApg');
       if (ap) ap.innerHTML = np > 1 ? Array.from({ length: np }, (_, i) => `<i class="${i === pg ? 'on' : ''}"></i>`).join('') : '';
       if (dir) { g.classList.remove('slide'); void g.offsetWidth; g.style.setProperty('--sx', (dir > 0 ? 30 : -30) + 'px'); g.classList.add('slide'); }
       g.querySelectorAll('.ds-app').forEach(el => el.addEventListener('click', () => {
@@ -2701,7 +2715,7 @@
       i = ((i % n) + n) % n;
       if (i === DS.sel && !quiet) return;
       const old = DS.sel; DS.sel = i; DS.page = 0; try { sessionStorage.setItem('hub3ds_sel', i); } catch (e) {}
-      if (Math.floor(i / DS_PER) !== DS.apg) dsGrid(i > old ? 1 : -1);
+      if (Math.floor(i / dsPer()) !== DS.apg) dsGrid(i > old ? 1 : -1);
       else document.querySelectorAll('#dsGrid .ds-app').forEach(el => el.classList.toggle('sel', Number(el.dataset.i) === i));
       if (!quiet) { SFX.play('move'); haptic(4); }
       dsRender(false, 1);
@@ -2760,8 +2774,8 @@
       bot.addEventListener('pointerup', e => {
         if (bx == null) return; const dx = e.clientX - bx, dy = e.clientY - by; bx = null;
         if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
-          const np = Math.ceil(DS.apps.length / DS_PER), pg = (Math.floor(DS.sel / DS_PER) + (dx < 0 ? 1 : -1) + np) % np;
-          DS.swiped = Date.now(); dsSelect(pg * DS_PER);
+          const np = Math.ceil(DS.apps.length / dsPer()), pg = (Math.floor(DS.sel / dsPer()) + (dx < 0 ? 1 : -1) + np) % np;
+          DS.swiped = Date.now(); dsSelect(pg * dsPer());
         }
       });
       // ปัดจอบน = เปลี่ยนหน้า
@@ -2845,6 +2859,7 @@
     function dsRender(dataOnly, dir) {
       const hd = document.getElementById('dsHd'), body = document.getElementById('dsBody'); if (!hd || !body) return;
       const a = DS.apps[DS.sel]; if (!a) { body.innerHTML = dsMsg('🫥', 'ยังไม่มีแอป', ''); return; }
+      dsZoom();
       const pages = dsPages(); if (DS.page >= pages.length) DS.page = Math.max(0, pages.length - 1);
       const p = pages[DS.page] || { t: '', h: '' };
       hd.innerHTML = `<span class="ic">${a.icon}</span><span class="tt"><b>${dsEsc(a.name)}</b><small>${dsEsc(p.t || '')}</small></span>
@@ -2872,9 +2887,22 @@
 
     // ---------- 📊 Dashboard ----------
     // ความสูงจอบนจริง → คิดว่าใส่ได้กี่แถว (จอสูง/ลงแอป = แน่นขึ้น ไม่เหลือที่ว่าง)
-    const dsH = () => { const b = document.getElementById('dsBody'); return (b && b.clientHeight) || 300; };
+    // 🖥️ จอใหญ่: ขยายเนื้อหาจอบนให้เต็มพื้นที่ (zoom) · มือถือ = 1 เท่า
+    function dsZoom() {
+      const t = document.getElementById('dsTop'); if (!t) return 1;
+      let z = 1;
+      if (DS_WIDE()) { const r = t.getBoundingClientRect(); z = Math.max(1, Math.min(2.4, r.width / 620, r.height / 400)); }
+      z = Math.round(z * 100) / 100;
+      ['dsHd', 'dsBody'].forEach(id => { const e = document.getElementById(id); if (e) e.style.zoom = z === 1 ? '' : z; });
+      const ft = (document.getElementById('dsFt') || {}).parentNode; if (ft && ft.style) ft.style.zoom = z === 1 ? '' : z;
+      DS.z = z; return z;
+    }
+    const dsH = () => {
+      const b = document.getElementById('dsBody'); if (!b) return 300;
+      return (b.getBoundingClientRect().height / (DS.z || 1)) - 16 || 300;
+    };
     const dsFit = (rowH, reserve, min) => Math.max(min || 1, Math.floor((dsH() - (reserve || 0)) / rowH));
-    window.addEventListener('resize', () => { clearTimeout(DS.rz); DS.rz = setTimeout(() => { if (dsActive()) dsRender(); }, 150); });
+    window.addEventListener('resize', () => { clearTimeout(DS.rz); DS.rz = setTimeout(() => { if (!dsActive()) return; if (DS.per !== dsPer()) { DS.per = dsPer(); dsGrid(); } dsRender(); }, 150); });
     function dsCatRows(list) {
       return list.map(c => { const col = c.fp >= 100 ? '#30D158' : c.fp >= 80 ? '#0A84FF' : '#FF453A';
         return `<div class="ds-row ds-cat"><span class="nm">${dsEsc(c.n)}</span><span class="mb"><i style="width:${Math.min(100, c.ap)}%;background:${col}"></i></span><span class="vl num">${dsPct(c.ap)}<small style="color:${col}">Fc ${dsPct(c.fp)}</small></span></div>`; }).join('');
