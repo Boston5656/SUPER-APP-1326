@@ -1625,6 +1625,77 @@
     @media (min-width: 900px) and (orientation: landscape) { .ms-staff .sd-right { grid-area: rank; min-height: 0; overflow-y: auto; } .ms-staff .dx-main { overflow-y: auto; } .ms-staff .sd-att b { font-size: 26px; } }
     @media (max-width: 520px) { .st-kp { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ms-staff .sd-att { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .st-att span { flex-direction: column; align-items: flex-start; gap: 0; padding: 5px 8px; } .st-att b { font-size: 15px; } }
+    /* ================= 🛸 HUD v3: กระจก · เกจวงกลม · นีออน ================= */
+    .ds .ds-glass { background-color: #0B0B0D;
+      background-image: radial-gradient(120% 80% at 15% 0%, rgba(255,214,0,.07) 0%, rgba(255,214,0,0) 55%), radial-gradient(90% 70% at 100% 100%, rgba(64,200,255,.05) 0%, rgba(64,200,255,0) 60%),
+        linear-gradient(rgba(255,255,255,.028) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.028) 1px, transparent 1px);
+      background-size: auto, auto, 22px 22px, 22px 22px; }
+    .ds .ds-hd { border-bottom: 1px solid transparent; border-image: linear-gradient(90deg, rgba(255,214,0,.5), rgba(255,255,255,.06) 40%, rgba(255,255,255,0)) 1; }
+    .ds .ds-hd .ic { box-shadow: 0 0 0 1px rgba(255,214,0,.4), 0 0 18px rgba(255,214,0,.35); }
+    .ds .ds-sec { color: #8E8E93; letter-spacing: 1.2px; font-size: 10px; }
+    /* การ์ดกระจก */
+    .ds .ds-k > div, .ds .hx-tiles > div, .ds .ds-ms { background: linear-gradient(160deg, rgba(255,255,255,.075), rgba(255,255,255,.015)); border: 1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 10px 24px -14px rgba(0,0,0,.8); border-radius: 16px; }
+    .ds .ds-k > div.k { background: linear-gradient(160deg, rgba(255,255,255,.16), rgba(255,255,255,.04)); color: #fff; }
+    .ds .ds-k > div.k span, .ds .ds-k > div.k em { color: #AEAEB2 !important; }
+    .ds .ds-k > div.y { background: linear-gradient(150deg, #FFE84D, #FFC800); border-color: rgba(255,240,150,.6); box-shadow: 0 0 26px -6px rgba(255,214,0,.55), inset 0 1px 0 rgba(255,255,255,.5); }
+    /* เกจ */
+    .hx-ring { position: relative; width: var(--rs, clamp(118px, 36%, 168px)); aspect-ratio: 1; flex-shrink: 0; }
+    .hx-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .hx-ring .arc { filter: drop-shadow(0 0 6px var(--rc)); }
+    .hx-ring .arc2 { filter: drop-shadow(0 0 4px rgba(255,255,255,.35)); }
+    .hx-ring .c { position: absolute; inset: 18%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; line-height: 1.05; }
+    .hx-ring .c small { font-size: 9px; font-weight: 800; letter-spacing: 1.2px; color: #8E8E93; }
+    .hx-ring .c b { font-size: calc(var(--rs, 150px) * .2); font-weight: 700; color: #fff; text-shadow: 0 0 18px rgba(255,255,255,.18); white-space: nowrap; }
+    .hx-ring:not([style*="--rs"]) .c b { font-size: clamp(22px, 7.5vw, 34px); }
+    .hx-ring .c em { font-style: normal; font-size: 10.5px; font-weight: 700; color: #C7C7CC; margin-top: 3px; white-space: nowrap; }
+    .hx-ring .c em i { font-style: normal; }
+    .hx-hero { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+    .hx-hero.sm { gap: 12px; }
+    .hx-side { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+    .hx-amt small { display: block; font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #8E8E93; text-transform: uppercase; }
+    .hx-amt > b { display: block; font-size: clamp(22px, 7vw, 34px); font-weight: 700; line-height: 1.1; color: #fff;
+      background: linear-gradient(180deg, #FFFFFF 30%, #FFE680); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hx-amt em { display: block; font-style: normal; font-size: 11px; font-weight: 700; color: #8E8E93; margin-top: 2px; }
+    .hx-amt em b { color: #E5E5EA; }
+    .hx-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; flex: 1; }
+    .hx-tiles.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .ds .hx-tiles > div { padding: 7px 10px; border-radius: 13px; min-width: 0; }
+    .hx-tiles small { display: block; font-size: 9.5px; font-weight: 800; color: #8E8E93; letter-spacing: .4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hx-tiles b { display: block; font-size: clamp(14px, 4.4vw, 20px); font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hx-tiles.three b { font-size: clamp(18px, 6vw, 28px); }
+    .ds .hx-tiles > div.glow { border-color: color-mix(in srgb, var(--tc) 45%, transparent); box-shadow: 0 0 22px -8px var(--tc), inset 0 1px 0 rgba(255,255,255,.08); }
+    .hx-days { margin-top: 4px; }
+    .hx-days .hd { display: flex; justify-content: space-between; font-size: 10.5px; font-weight: 700; color: #8E8E93; margin-bottom: 5px; } .hx-days .hd b { color: #fff; }
+    .hx-days .dd { display: grid; grid-template-columns: repeat(var(--nd, 31), minmax(0, 1fr)); grid-auto-flow: column; gap: 3px; height: 14px; }
+    .hx-days .dd i { border-radius: 3px; background: rgba(255,255,255,.07); }
+    .hx-days .dd i.on { background: linear-gradient(180deg, #FFE84D, #E6B800); box-shadow: 0 0 6px rgba(255,214,0,.35); }
+    .hx-days .dd i.now { background: #fff; box-shadow: 0 0 10px #fff; }
+    /* ภารกิจ */
+    .ds .hx-ms { display: flex; align-items: center; gap: 12px; padding: 10px 12px; }
+    .hx-ms .hb { flex: 1; min-width: 0; }
+    .hx-ms .h { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .hx-ms .h b { font-size: 14px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hx-ms .tag { flex-shrink: 0; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 99px; color: #FF8A80; background: rgba(255,69,58,.14); border: 1px solid rgba(255,69,58,.35); }
+    .ds .hx-ms .need { color: #AEAEB2; font-weight: 700; font-size: 11.5px; margin-top: 2px; } .hx-ms .need b { color: #fff; }
+    .hx-ms .hx-ring .c b { font-size: 15px; } .hx-ms .hx-ring .c small { font-size: 8px; letter-spacing: .3px; }
+    /* แถบ / แถวอันดับ: นีออน */
+    .ds .ds-bar { height: 9px; border-radius: 6px; background: rgba(255,255,255,.06); }
+    .ds .ds-bar > i { border-radius: 6px; background: linear-gradient(90deg, color-mix(in srgb, var(--c, #FFD600) 55%, #fff 0%), var(--c, #FFD600)) !important; box-shadow: 0 0 12px -2px var(--c, #FFD600); }
+    .ds .ds-bar > s { width: 3px; border-radius: 2px; box-shadow: 0 0 8px #FF453A; }
+    .ds .ds-row { border-bottom: 1px solid rgba(255,255,255,.05); }
+    .ds .ds-row .mb { height: 7px; border-radius: 5px; background: rgba(255,255,255,.06); overflow: visible; }
+    .ds .ds-row .mb i { border-radius: 5px; background: linear-gradient(90deg, #FFF3A0, #FFD600); box-shadow: 0 0 10px -1px rgba(255,214,0,.6); }
+    .ds .ds-cat .mb i { box-shadow: 0 0 10px -1px rgba(255,255,255,.35); }
+    .ds .ds-row .rk { border-radius: 8px; font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 700; width: 24px; height: 24px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); color: #C7C7CC; }
+    .ds .ds-row .rk.g1 { background: linear-gradient(145deg, #FFF0A0, #FFC800); color: #1C1C1E; border-color: transparent; box-shadow: 0 0 14px rgba(255,214,0,.55); }
+    .ds .ds-row .rk.g2 { background: linear-gradient(145deg, #FFFFFF, #AEB4BE); color: #1C1C1E; border-color: transparent; box-shadow: 0 0 10px rgba(255,255,255,.3); }
+    .ds .ds-row .rk.g3 { background: linear-gradient(145deg, #F2C08F, #B8763E); color: #1C1C1E; border-color: transparent; box-shadow: 0 0 10px rgba(205,127,50,.4); }
+    .ds .ds-row .vl { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; }
+    .ds .ds-chips span { background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.1); }
+    .ds .ds-chips span.g { box-shadow: 0 0 14px -6px #30D158; }
+    .ds .ds-hero .rnk { background: linear-gradient(180deg, #fff 20%, #FFD600); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 14px rgba(255,214,0,.35)); }
+    @media (orientation: landscape) and (max-height: 500px) { .hx-ring:not([style*="--rs"]) { width: clamp(96px, 30vh, 140px); } .hx-tiles b { font-size: 15px; } .hx-days { display: none; } }
     @media (prefers-reduced-motion: reduce) { .ds *, .ds { animation: none !important; transition: none !important; } }
   </style>
 
@@ -2063,7 +2134,7 @@
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
     try { if (navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)) document.documentElement.classList.add('pwa'); } catch (e) {}
-    const APP_VER = '2026.11.15-16';
+    const APP_VER = '2026.11.15-17';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2946,22 +3017,47 @@
       return list.map(c => { const col = c.fp >= 100 ? '#30D158' : c.fp >= 80 ? '#0A84FF' : '#FF453A';
         return `<div class="ds-row ds-cat"><span class="nm">${dsEsc(c.n)}</span><span class="mb"><i style="width:${Math.min(100, c.ap)}%;background:${col}"></i></span><span class="vl num">${dsPct(c.ap)}<small style="color:${col}">Fc ${dsPct(c.fp)}</small></span></div>`; }).join('');
     }
+    // 🔘 เกจวงกลมแบบ HUD: วงใน = ค่าหลัก · วงนอกบาง = ค่ารอง (เช่น Forecast) · ขีดแดง = ควรได้ ณ วันนี้
+    function dsRing(p, o) {
+      o = o || {};
+      const v = Math.max(0, Math.min(100, Number(p) || 0)), C = 2 * Math.PI * 50, C2 = 2 * Math.PI * 58, col = o.col || '#FFD600', id = 'rg' + Math.random().toString(36).slice(2, 8);
+      const out = o.outer != null ? Math.max(0, Math.min(100, Number(o.outer) || 0)) : null;
+      let tick = '';
+      if (o.mark != null) { const a = (Math.min(100, o.mark) / 100) * 2 * Math.PI - Math.PI / 2; tick = `<line x1="${(60 + 41 * Math.cos(a)).toFixed(1)}" y1="${(60 + 41 * Math.sin(a)).toFixed(1)}" x2="${(60 + 61 * Math.cos(a)).toFixed(1)}" y2="${(60 + 61 * Math.sin(a)).toFixed(1)}" stroke="#FF453A" stroke-width="2.6" stroke-linecap="round"/>`; }
+      return `<div class="hx-ring" style="--rc:${col}${o.size ? ';--rs:' + o.size : ''}"><svg viewBox="0 0 120 120" aria-hidden="true">
+        <defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${o.col2 || '#FFF6B0'}"/><stop offset=".55" stop-color="${col}"/><stop offset="1" stop-color="${col}"/></linearGradient></defs>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="9"/>
+        ${[0, 25, 50, 75].map(t => { const a = t / 100 * 2 * Math.PI - Math.PI / 2; return `<circle cx="${(60 + 50 * Math.cos(a)).toFixed(1)}" cy="${(60 + 50 * Math.sin(a)).toFixed(1)}" r="1.3" fill="rgba(255,255,255,.25)"/>`; }).join('')}
+        <circle class="arc" cx="60" cy="60" r="50" fill="none" stroke="url(#${id})" stroke-width="9" stroke-linecap="round" stroke-dasharray="${(v / 100 * C).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 60 60)"/>
+        ${out != null ? `<circle cx="60" cy="60" r="58" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2.5"/><circle class="arc2" cx="60" cy="60" r="58" fill="none" stroke="${o.outCol || '#fff'}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="${(out / 100 * C2).toFixed(1)} ${C2.toFixed(1)}" transform="rotate(-90 60 60)"/>` : ''}
+        ${tick}</svg>
+        <div class="c"><small>${o.sub || ''}</small><b class="num">${o.big != null ? o.big : dsPct(p)}</b>${o.foot ? `<em>${o.foot}</em>` : ''}</div></div>`;
+    }
+    const dsTone = v => v >= 100 ? '#30D158' : v >= 80 ? '#40C8FF' : v >= 60 ? '#FFD60A' : '#FF453A';
+    const dsGrow = g => String(g || '').charAt(0) === '-' ? '#FF6B61' : '#6EE7A0';
     function dsDashPages(x) {
       const pages = [], left = x.days && x.day ? Math.max(1, x.days - x.day + 1) : 1;
       const sub = `${x.label || ''}${x.dataDate ? ' · ข้อมูลถึง ' + x.dataDate : ''}`;
       if (x.sales) {
         const s = x.sales, perDay = Math.max(0, Math.round((s.target - s.ach) / left));
-        const cats = x.cats || [], catsFit = 0, catPer = dsFit(47, 30, 3);
+        const cats = x.cats || [], cf = dsFit(47, 330, 0), catsFit = cf >= 2 ? Math.min(cats.length, cf) : 0, catPer = dsFit(47, 30, 3);   // จอสูง/คอม: โชว์หมวดสินค้าต่อท้ายหน้าแรกเลย
+        const pace = x.days ? x.day / x.days * 100 : 0, fcCol = dsTone(s.fcP), ahead = s.achP >= pace;
         pages.push({ t: 'ยอดขาย · ' + s.who + ' · ' + sub, h: `
-          <div class="ds-k" style="--n:2"><div class="k"><span>Achieve</span><b class="num">${dsBaht(s.ach, true)}</b><em>${dsPct(s.achP)} ของเป้า</em></div>
-            <div class="y"><span>Forecast</span><b class="num">${dsBaht(s.fc, true)}</b><em style="color:#6B5B00">${dsPct(s.fcP)}</em></div></div>
-          <div class="ds-sec"><span>Achieve</span><span class="num">${dsPct(s.achP)}</span></div>${dsBar(s.achP, '', (x.day / x.days) * 100)}
-          <div class="ds-sec"><span>Forecast</span><span class="num">${dsPct(s.fcP)}</span></div>${dsBar(s.fcP, s.fcP >= 100 ? '#30D158' : s.fcP >= 80 ? '#0A84FF' : '#FF3B30')}
-          <div class="ds-k ds-k4" style="--n:4;margin-top:8px"><div><span>Target</span><b class="num">${dsBaht(s.target, true)}</b></div>
-            <div><span>ต้องทำ/วัน</span><b class="num">${s.ach >= s.target ? '✅' : dsBaht(perDay, true)}</b></div>
-            <div><span>วันที่ ${x.day}/${x.days}</span><b class="num">เหลือ ${left}</b></div>
-            <div><span>MOM${s.yoy ? ' · YOY' : ''}</span><b class="num" style="color:${String(s.mom).charAt(0) === '-' ? '#FF6B61' : '#6EE7A0'}">${dsEsc(s.mom || '-')}</b>${s.yoy ? `<em style="color:${String(s.yoy).charAt(0) === '-' ? '#FF6B61' : '#6EE7A0'}">${dsEsc(s.yoy)}</em>` : ''}</div></div>` + (catsFit ? `
-          <div class="ds-sec"><span>หมวดสินค้า</span><span>Achieve · Forecast</span></div>${dsCatRows(cats.slice(0, catsFit))}` : '') });
+          <div class="hx-hero">
+            ${dsRing(s.achP, { outer: Math.min(100, s.fcP), outCol: fcCol, mark: pace, col: '#FFD600', sub: 'ACHIEVE', foot: `<i style="color:${fcCol}">●</i> Fc ${dsPct(s.fcP)}` })}
+            <div class="hx-side">
+              <div class="hx-amt"><small>ยอดขาย · ${dsEsc(s.who)}</small><b class="num">${dsBaht(s.ach)}</b><em>เป้า <b>${dsBaht(s.target)}</b> · <span style="color:${ahead ? '#6EE7A0' : '#FF8A80'}">${ahead ? '▲ นำหน้าเส้นเวลา' : '▼ ตามหลังเส้นเวลา'}</span></em></div>
+              <div class="hx-tiles">
+                <div class="glow" style="--tc:${fcCol}"><small>คาดสิ้นเดือน</small><b class="num" style="color:${fcCol}">${dsBaht(s.fc, true)}</b></div>
+                <div><small>ต้องทำ/วัน</small><b class="num">${s.ach >= s.target ? '✓ ครบ' : dsBaht(perDay, true)}</b></div>
+                <div><small>MOM</small><b class="num" style="color:${dsGrow(s.mom)}">${dsEsc(s.mom || '-')}</b></div>
+                <div><small>YOY</small><b class="num" style="color:${dsGrow(s.yoy)}">${dsEsc(s.yoy || '-')}</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="hx-days"><div class="hd"><span>วันที่ <b>${x.day}</b>/${x.days}</span><span>เหลือ <b>${left}</b> วัน</span></div>
+            <div class="dd" style="--nd:${x.days || 30}">${Array.from({ length: x.days || 30 }, (_, i) => `<i class="${i < x.day ? (i === x.day - 1 ? 'now' : 'on') : ''}"></i>`).join('')}</div></div>` + (catsFit ? `
+          <div class="ds-sec" style="margin-top:12px"><span>หมวดสินค้า</span><span>Achieve · Forecast</span></div>${dsCatRows(cats.slice(0, catsFit))}` : '') });
         if (cats.length > catsFit) for (let i = catsFit; i < cats.length; i += catPer) pages.push({ t: 'หมวดสินค้า · ' + sub, h: `<div class="ds-sec"><span>หมวดสินค้า</span><span>Achieve · Forecast</span></div>${dsCatRows(cats.slice(i, i + catPer))}` });
       } else if (x.brand) {
         const b = x.brand;
@@ -2976,11 +3072,11 @@
       else if (!ms.length) pages.push({ t: 'ภารกิจ Att Rate', h: dsMsg('🏆', 'ผ่านทุกงานโฟกัส!', `${x.pass || 0} งานถึงเป้าแล้ว · รักษาไว้นะ`) });
       else for (let i = 0, per = dsFit(dsPC() ? 92 : 122, 0, 1); i < ms.length; i += per) {
         pages.push({ t: `ภารกิจ Att Rate ที่ยังไม่ผ่าน · ${ms.length} งาน${dsPC() ? ' · ' + (currentUser.brand || '') : ''}`, h: ms.slice(i, i + per).map(m => `
-          <div class="ds-ms"><div class="h"><b>🎯 ${dsEsc(m.name)}</b><span class="num">${dsPct(m.att)} <em>/ ${dsPct(m.t)}</em></span></div>
-            ${dsBar(m.att / Math.max(m.t, 1) * 100, '#FF3B30', 99)}
-            <div class="need">ขาดอีก ${dsN(m.need)} ชิ้น · ≈ ${dsN(m.perDay)} ชิ้น/วัน (เหลือ ${x.left} วัน)</div>
+          <div class="ds-ms hx-ms">${dsRing(m.att / Math.max(m.t, 1) * 100, { col: dsTone(m.att / Math.max(m.t, 1) * 100), col2: '#fff', big: dsPct(m.att), sub: 'เป้า ' + dsPct(m.t), size: '74px' })}<div class="hb">
+            <div class="h"><b>${dsEsc(m.name)}</b><span class="tag">ขาด ${dsN(m.need)} ชิ้น</span></div>
+            <div class="need">≈ <b>${dsN(m.perDay)}</b> ชิ้น/วัน · เหลือ ${x.left} วัน · ทำได้ ${dsN(m.c)}/${dsN(m.b)}</div>
             ${m.staff && m.staff.length ? `<div class="ds-chips">${m.staff.map(s => `<span class="r">${dsEsc(s.n)} ${s.att}% · −${s.need}</span>`).join('')}${m.staffMore ? `<span>+${m.staffMore} คน</span>` : ''}</div>` : ''}
-          </div>`).join('') });
+          </div></div>`).join('') });
       }
       return pages;
     }
@@ -2991,7 +3087,10 @@
       if (x.today) {
         const t = x.today;
         const items = (t.items || []).slice(0, 8).map(i => `<span class="${i.q ? 'g' : ''}">${dsEsc(i.n)} ${dsN(i.q)}${i.base ? ` <small style="color:#8E8E93">(${Math.round((i.dev || 0) / i.base * 100)}%)</small>` : ''}</span>`).join('');
-        let h = `<div class="ds-k"><div class="k"><span>${t.brand ? 'เครื่อง ' + dsEsc(t.brand) : 'เครื่องวันนี้'}</span><b class="num">${dsN(t.units)}</b></div><div class="y"><span>งานโฟกัส</span><b class="num">${dsN(t.focus)}</b></div><div><span>ครอบคลุม</span><b class="num">${dsPct(t.cover)}</b><em>เครื่องเปล่า ${dsN(t.bare)}</em></div></div>
+        let h = `<div class="hx-hero sm">${dsRing(t.cover, { col: dsTone(t.cover * 2), sub: 'ครอบคลุม', size: '112px' })}
+          <div class="hx-tiles three"><div class="glow" style="--tc:#FFD600"><small>${t.brand ? dsEsc(t.brand) : 'เครื่อง'}</small><b class="num">${dsN(t.units)}</b></div>
+            <div class="glow" style="--tc:#30D158"><small>โฟกัส</small><b class="num" style="color:#6EE7A0">${dsN(t.focus)}</b></div>
+            <div><small>เปล่า</small><b class="num" style="color:${t.bare ? '#FF8A80' : '#fff'}">${dsN(t.bare)}</b></div></div></div>
           ${items ? `<div class="ds-sec"><span>งานที่ติดวันนี้</span></div><div class="ds-chips">${items}</div>` : ''}`;
         if (t.brands && t.brands.length) {
           const max = Math.max(1, ...t.brands.map(b => b.f));
