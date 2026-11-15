@@ -19,7 +19,7 @@
   <title>SUPER APP 1326</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-offwhite: #F2F0EF; --bg-yellow: #FFD700; --dark-grey: #1C1C1E; --light-grey: #2C2C2E; --text-main: #1C1C1E;
@@ -1257,6 +1257,211 @@
     }
   </style>
 
+  <!-- 🎮 หน้าแรกสไตล์ 3DS (จัดทำโดย บอสตัน สุดหล่อ) -->
+  <style id="ds-style">
+    body.ds-on #page-hub > .max-w-4xl, body.ds-on #hub-logout, body.ds-on #hub-admin { display: none !important; }
+    body.ds-on #page-hub { padding: 0 !important; }
+    .ds { --dsw: #FDFDFD; --dsk: #1C1C1E; --dsg: #C9C9CE; --dsy: #FFD600; --dsr: 26px;
+      position: fixed; inset: 0; z-index: 20; display: grid; gap: 12px; overflow: hidden; user-select: none; -webkit-user-select: none;
+      padding: calc(10px + env(safe-area-inset-top)) calc(12px + env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+      background: radial-gradient(120% 55% at 50% -12%, #FFF7B0 0%, rgba(255,247,176,0) 62%), radial-gradient(90% 60% at 110% 112%, #FFBF00 0%, rgba(255,191,0,0) 62%), linear-gradient(180deg, #FFE21A 0%, #FFD600 55%, #FFCC12 100%);
+      grid-template-columns: 1fr; grid-template-rows: minmax(0, 1.7fr) minmax(0, 1fr) auto auto; gap: 10px;
+      grid-template-areas: "top" "bot" "pg" "ctl"; font-family: 'IBM Plex Sans Thai', sans-serif; color: var(--dsk); touch-action: manipulation; }
+    .ds * { box-sizing: border-box; }
+    .ds .px { font-family: 'Press Start 2P', 'Space Grotesk', monospace; letter-spacing: .5px; }
+    .ds .num { font-family: 'Space Grotesk', 'IBM Plex Sans Thai', sans-serif; font-variant-numeric: tabular-nums; }
+
+    /* ---------- จอ ---------- */
+    /* จอนูนแบบเครื่องเกม: ขอบ (bezel) ไล่เงา + กระจกจอเว้าลงไป · เอียงตาม Gyro (--tx / --ty) */
+    .ds-scr { --tx: 0deg; --ty: 0deg; --gx: 0%; --gy: 0%; position: relative; min-height: 0; min-width: 0; display: flex; padding: 7px; border-radius: var(--dsr);
+      background: linear-gradient(160deg, #FFFFFF 0%, #F6F6F8 42%, #E2E2E8 100%);
+      box-shadow: inset 0 1.5px 0 #fff, inset 0 -3px 4px rgba(0,0,0,.07), inset 0 0 0 1px rgba(255,255,255,.6),
+        0 22px 36px -18px rgba(110,80,0,.55), 0 5px 12px -5px rgba(110,80,0,.32);
+      transform: perspective(1100px) rotateX(var(--tx)) rotateY(var(--ty)); transform-style: flat; will-change: transform; }
+    .ds-scr::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 7;
+      background: radial-gradient(60% 45% at calc(30% + var(--gx)) calc(0% + var(--gy)), rgba(255,255,255,.75), rgba(255,255,255,0) 70%); mix-blend-mode: overlay; opacity: .9; }
+    .ds-glass { flex: 1; min-width: 0; min-height: 0; display: flex; flex-direction: column; position: relative; overflow: hidden; background: #fff;
+      border-radius: calc(var(--dsr) - 7px); box-shadow: inset 0 2px 7px rgba(0,0,0,.13), inset 0 0 0 1px rgba(0,0,0,.06), inset 0 -1px 0 rgba(255,255,255,.8); }
+    .ds-glass::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 6; border-radius: inherit;
+      background: linear-gradient(calc(115deg + var(--ty) * 2), rgba(255,255,255,0) 30%, rgba(255,255,255,.28) 46%, rgba(255,255,255,0) 60%);
+      transform: translateX(calc(var(--ty) * 6)); opacity: .55; }
+    .ds-top { grid-area: top; }
+    .ds-bot { grid-area: bot; margin: 0 7%; }
+    .ds-body, .ds-grid { translate: var(--px, 0) var(--py, 0); }
+    .ds-hd { display: flex; align-items: center; gap: 8px; padding: 10px 14px 8px; border-bottom: 1px solid #F0F0F3; flex-shrink: 0; min-height: 44px; }
+    .ds-hd .ic { width: 26px; height: 26px; border-radius: 8px; background: var(--dsy); display: grid; place-items: center; flex-shrink: 0; }
+    .ds-hd .ic svg { width: 17px; height: 17px; }
+    .ds-hd .tt { flex: 1; min-width: 0; line-height: 1.15; }
+    .ds-hd .tt b { display: block; font-size: 14.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-hd .tt small { display: block; font-size: 10.5px; color: #8E8E93; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-pgn { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .ds-pgn button { width: 28px; height: 28px; border: 0; border-radius: 9px; background: #F2F2F4; color: #6E6E73; font-weight: 900; font-size: 13px; cursor: pointer; }
+    .ds-pgn button:disabled { opacity: .3; }
+    .ds-pgn span { font-size: 8px; color: #8E8E93; min-width: 34px; text-align: center; }
+    .ds-body { flex: 1; min-height: 0; overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; scrollbar-width: none; padding: 10px 14px 6px; position: relative; }
+    .ds-body::-webkit-scrollbar { display: none; }
+    .ds-body.scroll { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .ds-ft { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 4px 14px 8px; font-size: 10px; color: #AEAEB2; font-weight: 600; gap: 8px; }
+    .ds-ft .px { font-size: 7.5px; color: #C7C7CC; }
+    .ds-dots { display: flex; gap: 4px; }
+    .ds-dots i { width: 6px; height: 6px; background: #E5E5EA; display: block; }
+    .ds-dots i.on { background: var(--dsk); }
+    .ds-in { animation: dsIn .32s steps(4) both; }
+    @keyframes dsIn { from { opacity: 0; transform: translateX(var(--dx, 14px)); } to { opacity: 1; transform: none; } }
+
+    /* ---------- จอล่าง: ไอคอนแอป ---------- */
+    .ds-bhd { display: flex; align-items: center; gap: 4px; padding: 8px 10px 4px 14px; flex-shrink: 0; }
+    .ds-bhd b { flex: 1; min-width: 34px; font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-sys { width: 28px; height: 28px; border: 0; border-radius: 9px; background: #F2F2F4; font-size: 14px; cursor: pointer; flex-shrink: 0; display: grid; place-items: center; color: var(--dsk); }
+    .ds-sys:active { transform: scale(.88); }
+    .ds-grid { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; display: grid; grid-template-columns: repeat(var(--cols, 4), minmax(0, 1fr)); gap: 6px 4px; padding: 8px 8px 10px; scroll-padding: 8px; align-content: start; scrollbar-width: none; }
+    .ds-grid::-webkit-scrollbar { display: none; }
+    .ds-app { position: relative; display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 6px 2px 5px; border-radius: 16px; cursor: pointer; border: 0; background: none; color: inherit; font: inherit; }
+    .ds-app .ai { width: var(--ai, 46px); height: var(--ai, 46px); border-radius: 30%; display: grid; place-items: center; transition: transform .45s var(--spring), box-shadow .25s;
+      background: linear-gradient(180deg, #FFE53D 0%, #FFD200 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -2px 3px rgba(150,100,0,.12), 0 8px 14px -8px rgba(190,140,0,.75); }
+    .ds-app .ai svg { width: 55%; height: 55%; }
+    .ds-app .an { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .3px; text-align: center; line-height: 1.1; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ds-app.sel .ai { transform: translateY(-3px) scale(1.1); box-shadow: 0 0 0 2.5px #fff, 0 0 0 5px var(--dsk), 0 14px 20px -10px rgba(120,90,0,.8); }
+    .ds-app.jelly .ai { animation: jelly .55s var(--ios-ease); }
+    .ds-app.sel::after { content: ''; position: absolute; left: 50%; top: -3px; width: 8px; height: 8px; margin-left: -4px; background: var(--dsk);
+      clip-path: polygon(0 0, 100% 0, 50% 100%); animation: dsBob .6s steps(2) infinite; }
+    @keyframes dsBob { 50% { transform: translateY(-3px); } }
+    .ds .ds-app .app-badge { position: absolute; top: -2px; left: calc(50% + 12px); right: auto; z-index: 2; }
+    .ds-app .app-note { display: none !important; }
+    .ds-app.pop { animation: dsPop .45s var(--spring) both; }
+    @keyframes dsPop { 0% { opacity: 0; transform: scale(.2) translateY(14px); } 100% { opacity: 1; transform: none; } }
+
+    /* ---------- ปุ่ม ---------- */
+    .ds-pg { grid-area: pg; display: flex; justify-content: center; gap: 16px; }
+    .ds-btn { border: 0; color: #B4B4BB; cursor: pointer; display: grid; place-items: center; -webkit-tap-highlight-color: transparent; touch-action: none;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F4F4F7 100%);
+      box-shadow: inset 0 1.5px 0 #fff, inset 0 -2.5px 3px rgba(0,0,0,.06), 0 12px 22px -10px rgba(110,80,0,.5), 0 2px 5px -1px rgba(110,80,0,.22);
+      transition: transform .38s var(--spring), box-shadow .25s ease, background .2s; }
+    .ds-btn.dn, .ds-btn:active { transform: scale(.9); transition-duration: .08s;
+      background: linear-gradient(180deg, #EFEFF3 0%, #E6E6EC 100%); box-shadow: inset 0 2px 6px rgba(0,0,0,.13), 0 4px 10px -8px rgba(110,80,0,.45); }
+    .ds-dpad .c { border-radius: 4px; background: linear-gradient(180deg, #FFFFFF, #F4F4F7) !important; box-shadow: 0 2px 5px -1px rgba(110,80,0,.22) !important; }
+    .ds-pill { width: min(30vw, 130px); height: 30px; border-radius: 99px; font-size: 9px; }
+    .ds-ctl { grid-area: ctl; display: flex; align-items: center; justify-content: space-between; padding: 0 4% 2px; }
+    .ds-dpad { --u: clamp(34px, 10vw, 50px); display: grid; grid-template-columns: repeat(3, var(--u)); grid-template-rows: repeat(3, var(--u)); }
+    .ds-dpad .ds-btn { font-size: 15px; }
+    .ds-dpad .u { grid-area: 1/2; border-radius: 99px 99px 6px 6px; }
+    .ds-dpad .d { grid-area: 3/2; border-radius: 6px 6px 99px 99px; }
+    .ds-dpad .l { grid-area: 2/1; border-radius: 99px 6px 6px 99px; }
+    .ds-dpad .r { grid-area: 2/3; border-radius: 6px 99px 99px 6px; }
+    .ds-dpad .c { grid-area: 2/2; background: var(--dsw); box-shadow: 0 4px 0 rgba(150,140,0,.35); }
+    .ds-ab { position: relative; width: clamp(140px, 42vw, 200px); height: clamp(98px, 28vw, 140px); }
+    .ds-ab .ds-btn { position: absolute; width: clamp(60px, 18vw, 86px); height: clamp(46px, 13vw, 64px); border-radius: 24px; flex-direction: column; gap: 1px; }
+    .ds-ab .ds-btn b { font-size: 15px; }
+    .ds-ab .ds-btn small { font-family: 'IBM Plex Sans Thai', sans-serif; font-size: 9.5px; font-weight: 800; color: #B5B5BA; letter-spacing: 0; }
+    .ds-ab .a { right: 0; top: 0; }
+    .ds-ab .b { left: 0; bottom: 0; }
+    .ds-ab .a.ping { animation: dsPing 1s steps(2) infinite; }
+    @keyframes dsPing { 50% { background: var(--dsy); color: var(--dsk); } }
+
+    /* ---------- เนื้อหา Report ---------- */
+    .ds-k { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 8px; margin-bottom: 10px; }
+    .ds-k > div { background: #F6F6F8; border-radius: 14px; padding: 8px 10px; min-width: 0; }
+    .ds-k > div.y { background: var(--dsy); }
+    .ds-k > div.k { background: var(--dsk); color: #fff; }
+    .ds-k span { display: block; font-size: 10px; font-weight: 700; color: #8E8E93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-k > div.y span { color: #6B5B00; } .ds-k > div.k span { color: #AEAEB2; }
+    .ds-k b { display: block; font-size: clamp(16px, 4.6vw, 24px); font-weight: 700; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-k em { font-style: normal; font-size: 10.5px; font-weight: 700; color: #8E8E93; }
+    .ds-bar { height: 12px; background: #EFEFF2; position: relative; margin: 4px 0 2px; }
+    .ds-bar > i { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(90deg, var(--c, var(--dsk)) 0 8px, transparent 8px 10px); transition: width .8s steps(12); }
+    .ds-bar > s { position: absolute; top: -3px; bottom: -3px; width: 3px; background: #FF3B30; text-decoration: none; }
+    .ds-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F2F2F4; font-size: 13px; min-width: 0; }
+    .ds-row:last-child { border-bottom: 0; }
+    .ds-row .rk { width: 22px; height: 22px; display: grid; place-items: center; font-size: 8px; background: #F2F2F4; flex-shrink: 0; }
+    .ds-row .rk.g1 { background: var(--dsy); } .ds-row .rk.g2 { background: #E5E5EA; } .ds-row .rk.g3 { background: #F5D7B5; }
+    .ds-row .nm { flex: 1; min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ds-row .nm small { font-weight: 600; color: #8E8E93; margin-left: 4px; }
+    .ds-row .vl { font-weight: 700; text-align: right; white-space: nowrap; }
+    .ds-row .vl small { display: block; font-size: 10px; color: #8E8E93; font-weight: 600; }
+    .ds-row.me { background: #FFF8C7; border-radius: 10px; padding-left: 6px; padding-right: 6px; }
+    .ds-row .mb { flex: 0 0 26%; height: 8px; background: #F2F2F4; position: relative; }
+    .ds-row .mb i { position: absolute; inset: 0 auto 0 0; background: var(--dsk); }
+    .ds-ms { background: #F6F6F8; border-radius: 16px; padding: 9px 11px; margin-bottom: 8px; }
+    .ds-ms .h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .ds-ms .h b { font-size: 14px; font-weight: 800; }
+    .ds-ms .h span { font-size: 12px; font-weight: 800; }
+    .ds-ms .h span em { font-style: normal; color: #8E8E93; font-weight: 700; }
+    .ds-ms .need { font-size: 11.5px; font-weight: 700; color: #B3261E; margin-top: 2px; }
+    .ds-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+    .ds-chips span { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: #fff; border: 1px solid #E5E5EA; white-space: nowrap; }
+    .ds-chips span.r { background: #FFE5E3; border-color: #FFC9C4; color: #B3261E; }
+    .ds-chips span.g { background: #E3F9E9; border-color: #C3EFCF; color: #1E7B34; }
+    .ds-chips span.k { background: var(--dsk); color: #FFD600; border-color: var(--dsk); }
+    .ds-sec { font-size: 10.5px; font-weight: 800; color: #8E8E93; margin: 8px 0 4px; display: flex; justify-content: space-between; text-transform: uppercase; letter-spacing: .3px; }
+    .ds-sec:first-child { margin-top: 0; }
+    .ds-2c { display: grid; grid-template-columns: 1fr; gap: 0 12px; }
+    @media (orientation: landscape) { .ds-2c { grid-template-columns: 1fr 1fr; } }
+    .ds-st { display: inline-block; font-size: 10.5px; font-weight: 800; padding: 1px 7px; border-radius: 99px; background: #F2F2F4; white-space: nowrap; }
+    .ds-st.new { background: #FF3B30; color: #fff; } .ds-st.claimed { background: #0A84FF; color: #fff; } .ds-st.back { background: #FF9F0A; color: #fff; }
+    .ds-st.picked { background: #30D158; color: #fff; } .ds-st.parked { background: #BF5AF2; color: #fff; }
+    .ds-msg { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; color: #8E8E93; font-size: 13px; font-weight: 600; padding: 10px; }
+    .ds-msg .big { font-size: 34px; }
+    .ds-msg b { color: var(--dsk); font-size: 15px; }
+    .ds-hero { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .ds-hero .rnk { font-size: clamp(38px, 12vw, 58px); font-weight: 700; line-height: 1; white-space: nowrap; }
+    .ds-hero .rnk small { font-size: 40%; color: #8E8E93; }
+    .ds-skel { height: 14px; background: linear-gradient(90deg, #F2F2F4 0 40%, #E9E9EC 50%, #F2F2F4 60%); background-size: 300% 100%; animation: dsSk 1.2s steps(8) infinite; margin: 10px 0; border-radius: 4px; }
+    @keyframes dsSk { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+    /* ---------- Order เข้า: แจ้งบนจอบน ---------- */
+    .ds-alert { position: absolute; inset: 0; z-index: 4; background: var(--dsk); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 18px; text-align: center; animation: dsIn .3s steps(3) both; }
+    .ds-alert .px { color: var(--dsy); font-size: 12px; animation: dsBlink 1s steps(2) infinite; }
+    @keyframes dsBlink { 50% { opacity: .25; } }
+    .ds-alert b { font-size: 19px; font-weight: 800; }
+    .ds-alert small { font-size: 12.5px; color: #C7C7CC; font-weight: 600; }
+    .ds-alert .bt { display: flex; gap: 10px; margin-top: 6px; }
+    .ds-alert button { border: 0; border-radius: 16px; height: 44px; padding: 0 16px; font: 800 14px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .ds-alert .ok { background: var(--dsy); color: var(--dsk); } .ds-alert .no { background: #3A3A3C; color: #fff; }
+
+    /* ---------- โหลดแบบเกม 8 bit ---------- */
+    .ds-boot { position: absolute; inset: 0; z-index: 5; background: var(--dsw); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; }
+    .ds-logo { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .ds-logo .px { font-size: clamp(14px, 4.6vw, 22px); color: var(--dsk); text-shadow: 3px 3px 0 var(--dsy); }
+    .ds-logo .n { font-family: 'Press Start 2P', monospace; font-size: clamp(30px, 11vw, 56px); color: var(--dsy); text-shadow: 4px 4px 0 var(--dsk), -2px -2px 0 var(--dsk), 2px -2px 0 var(--dsk), -2px 2px 0 var(--dsk); }
+    .ds-logo .bn { width: clamp(42px, 12vw, 64px); image-rendering: pixelated; }
+    .ds-seg { display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; width: min(78%, 360px); height: 16px; padding: 3px; border: 3px solid var(--dsk); }
+    .ds-seg i { background: #EEE; } .ds-seg i.on { background: var(--dsk); }
+    .ds-boot .tip { font-size: 12px; font-weight: 700; color: #8E8E93; text-align: center; min-height: 18px; }
+    .ds-boot .px.sm { font-size: 9px; color: #8E8E93; animation: dsBlink 1s steps(2) infinite; }
+    .ds.booted .ds-boot { animation: dsOut .4s steps(4) forwards; }
+    @keyframes dsOut { to { opacity: 0; visibility: hidden; } }
+
+    /* ---------- แนวนอน ---------- */
+    @media (orientation: landscape) {
+      .ds { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto auto; grid-template-areas: "top bot" "top pg" "top ctl"; gap: 10px 16px; }
+      .ds-bot { margin: 0; }
+      .ds-pg { gap: 10px; }
+      .ds-pill { width: 42%; height: 30px; }
+      .ds-ctl { padding: 0; }
+      .ds-dpad { --u: clamp(34px, 7.6vh, 50px); }
+      .ds-ab { width: clamp(124px, 22vh + 60px, 190px); height: clamp(96px, 20vh + 30px, 140px); }
+      .ds-ab .ds-btn { width: clamp(56px, 11vh + 20px, 84px); height: clamp(44px, 9vh + 14px, 64px); }
+      .ds-grid { --cols: 4; }
+    }
+    @media (orientation: landscape) and (max-height: 500px) {
+      .ds { padding-top: calc(8px + env(safe-area-inset-top)); padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+      .ds-app .ai { --ai: 38px; }
+      .ds-app .an { font-size: 8.5px; }
+      .ds-hd { min-height: 38px; padding: 6px 12px; }
+      .ds-body { padding: 6px 12px 2px; }
+      .ds-row { padding: 4px 0; font-size: 12px; }
+      .ds-k b { font-size: 18px; }
+    }
+    @media (min-width: 1000px) and (orientation: landscape) {
+      .ds { padding: 22px 28px; gap: 16px 24px; }
+      .ds-body { padding: 14px 22px; font-size: 15px; }
+      .ds-row { font-size: 15px; padding: 8px 0; }
+      .ds-k b { font-size: 28px; }
+      .ds-app .ai { --ai: 54px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .ds *, .ds { animation: none !important; transition: none !important; } }
+  </style>
+
   <style id="frame-style">
     #frame-shell { position: fixed; inset: 0; z-index: 45; background: #FFD600; animation: frameIn .45s var(--ios-ease) both; }
     #frame-shell.closing { animation: frameOut .3s var(--ios-ease) both; }
@@ -1691,7 +1896,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.13-05';
+    const APP_VER = '2026.11.15-02';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -1903,6 +2108,7 @@
       closeFrameApp(true);
       dropFrames();
       try { window.OrderAlert && OrderAlert.stop(); } catch (e) {}
+      try { dsReset(); } catch (e) {}
       currentUser = null;
       document.getElementById('page-dashboard').classList.add('hidden');
       document.getElementById('page-rank').classList.add('hidden');
@@ -1991,6 +2197,7 @@
           const session = JSON.parse(raw);
           if (session.user && session.user.acct && (Date.now() - session.lastActivity) < SESSION_TIMEOUT && window.SYS1326 && SYS1326.getToken()) {
             currentUser = session.user;
+            DS.boot = true;   // 🎮 เปิดแอปใหม่ = โชว์หน้าโหลด 8 bit
             document.getElementById('page-login').classList.add('hidden');
             document.getElementById('page-hub').classList.remove('hidden');
             buildAppHub();
@@ -2019,6 +2226,7 @@
       document.getElementById('loginPass').value = '';
       const le = document.getElementById('login-err'); if (le) le.remove();
       document.getElementById('loginBox').classList.add('leaving');
+      DS.boot = true;   // 🎮 ล็อกอินเสร็จ = หน้าโหลด 8 bit
       setTimeout(() => {
         document.getElementById('page-login').classList.add('hidden');
         document.getElementById('page-hub').classList.remove('hidden');
@@ -2175,8 +2383,547 @@
         .deleteAccount(a.user);
     }
 
+    // =========================================================
+    // 🎮 หน้าแรกสไตล์ 3DS — จอบน = Report ย่อ · จอล่าง = เลือกแอป
+    //   D-Pad เลือกแอป · L/R เปลี่ยนหน้า Report · A = ไปที่ Order (มี Order ใหม่ = รับเลย) · B = เปิดแอป
+    //   แตะไอคอน = เลือก · แตะซ้ำ = เปิด · ปัดจอบนซ้าย/ขวา = เปลี่ยนหน้า · คีย์บอร์ด / จอยเกมใช้ได้
+    //   ปิดได้: ปุ่ม ▦ (กลับหน้าเมนูแบบเดิม) · จัดทำโดย บอสตัน สุดหล่อ
+    // =========================================================
+    const DS = { on: true, built: '', sel: 0, page: 0, data: null, at: 0, loading: false, alert: null, seen: null, apps: [], boot: false, t: 0 };
+    try { DS.on = localStorage.getItem('hub3ds') !== '0'; } catch (e) {}
+    const dsEsc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const dsN = v => Math.round(Number(v) || 0).toLocaleString('th-TH');
+    const dsPC = () => currentUser && currentUser.role === 'PC';
+    function dsBaht(v, compact) {
+      v = Number(v) || 0;
+      if (dsPC()) { const m = maskBaht(v); return '฿' + (m !== null ? m : dsN(v)); }
+      if (compact && Math.abs(v) >= 1e6) return '฿' + (v / 1e6).toFixed(2) + 'M';
+      if (compact && Math.abs(v) >= 1e4) return '฿' + Math.round(v / 1000) + 'K';
+      return '฿' + dsN(v);
+    }
+    const dsPct = v => (v == null || isNaN(v)) ? '-' : (Math.round(Number(v) * 10) / 10).toFixed(1).replace(/\.0$/, '') + '%';
+    const dsBar = (p, c, mark) => `<div class="ds-bar"><i style="width:${Math.max(0, Math.min(100, p))}%;${c ? '--c:' + c : ''}"></i>${mark != null ? `<s style="left:${Math.max(0, Math.min(99, mark))}%"></s>` : ''}</div>`;
+
+    // ---------- 🔊 เสียงชิปเกม (สร้างเอง ไม่ต้องโหลดไฟล์) ----------
+    const SFX = {
+      ctx: null, on: true,
+      init() {
+        try { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); if (this.ctx.state === 'suspended') this.ctx.resume(); } catch (e) { this.ctx = null; }
+      },
+      tone(f, at, dur, vol, type, to) {
+        const c = this.ctx; if (!c) return;
+        const t = c.currentTime + at, o = c.createOscillator(), g = c.createGain();
+        o.type = type || 'square'; o.frequency.setValueAtTime(f, t); if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.05, t + 0.008); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + dur + 0.02);
+      },
+      play(n) {
+        if (!this.on || DS_MUTE()) return; this.init(); if (!this.ctx) return;
+        const T = (f, a, d, v, ty, to) => this.tone(f, a, d, v, ty, to);
+        if (n === 'move') T(740, 0, .045, .035);
+        else if (n === 'page') { T(523, 0, .05, .04); T(784, .05, .07, .04); }
+        else if (n === 'open') { [523, 659, 784, 1047].forEach((f, i) => T(f, i * .055, .09, .05)); }
+        else if (n === 'a') { T(988, 0, .06, .05); T(1319, .065, .12, .05); }
+        else if (n === 'tick') T(1200, 0, .02, .02);
+        else if (n === 'pop') T(880, 0, .05, .025, 'triangle', 1500);
+        else if (n === 'err') { T(196, 0, .12, .05, 'sawtooth'); T(147, .12, .16, .05, 'sawtooth'); }
+        else if (n === 'boot') { [[523, 0], [659, .1], [784, .2], [1047, .3], [784, .45], [1047, .55]].forEach(([f, a], i) => T(f, a, i > 3 ? .22 : .1, .05)); T(262, 0, .65, .03, 'triangle'); }
+        else if (n === 'order') { [[1047, 0], [1319, .12], [1568, .24], [1047, .5], [1319, .62], [1568, .74]].forEach(([f, a]) => T(f, a, .1, .06)); }
+      }
+    };
+    const DS_MUTE = () => { try { return localStorage.getItem('hub3ds_mute') === '1'; } catch (e) { return false; } };
+    ['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, () => { if (document.body.classList.contains('ds-on')) SFX.init(); }, { passive: true }));
+
+    // ---------- คำอธิบายแอปที่ไม่มี Report ----------
+    const DS_INFO = {
+      4: ['📦', 'ค้นหาสต๊อก ราคา และ FIFO', 'พิมพ์รุ่น / ยิงบาร์โค้ด ดูของในร้านได้ทันที'],
+      7: ['🧭', 'งานที่ ASM มอบหมาย', 'ส่งงาน ติดตามสถานะ ในที่เดียว'],
+      8: ['🔢', 'นับสต๊อก 100%', 'ยิงนับทั้งร้าน เห็นผลพร้อมกันทุกเครื่อง'],
+      9: ['🔫', 'Scanner', 'สแกนบาร์โค้ด / IMEI'],
+      11: ['🖼️', 'รวมภาพ', 'รวมหลายรูปเป็นภาพเดียว ส่งงานง่าย'],
+      14: ['🍱', 'พักทานข้าว', 'ต่อคิวพักทานข้าว ไม่ทิ้งหน้าร้านว่าง'],
+      15: ['🗜️', 'ย่อรูป', 'ย่อไฟล์รูปก่อนส่ง LINE / อีเมล'],
+      16: ['🧮', 'คำนวณผ่อน', 'คิดค่างวดให้ลูกค้าในไม่กี่วินาที'],
+      17: ['📸', 'รูป Display', 'ถ่ายรูป Display ทำ PowerPoint ส่งบริษัท'],
+      18: ['📝', 'Action Plan', 'แผนแก้งานไม่ผ่าน + น้องโชคช่วยวิเคราะห์']
+    };
+
+    function dsAppsList() { return APP_DEFS.filter(a => currentUser.apps.includes(a.id) || EVERYONE_APPS.includes(a.id)); }
+    function dsSetOn(on) {
+      DS.on = on; try { localStorage.setItem('hub3ds', on ? '1' : '0'); } catch (e) {}
+      DS.built = ''; buildAppHub();
+    }
+
+    // ---------- สร้างหน้าจอ ----------
+    function dsBuild() {
+      const hub = document.getElementById('page-hub');
+      document.body.classList.add('ds-on');
+      let root = document.getElementById('ds');
+      const key = (currentUser.acct || currentUser.empId) + '|' + currentUser.apps.join(',');
+      if (root && DS.built === key) { dsRender(); dsLoad(); return; }
+      DS.apps = dsAppsList();
+      if (!root) { root = document.createElement('div'); root.id = 'ds'; root.className = 'ds'; hub.appendChild(root); }
+      let saved = 0; try { saved = Number(sessionStorage.getItem('hub3ds_sel')) || 0; } catch (e) {}
+      DS.sel = Math.min(saved, DS.apps.length - 1); DS.page = 0; DS.built = key;
+      const admin = String(currentUser.empId) === '15628';
+      root.innerHTML = `
+        <section class="ds-scr ds-top" id="dsTop"><div class="ds-glass">
+          <div class="ds-hd" id="dsHd"></div>
+          <div class="ds-body" id="dsBody"></div>
+          <div class="ds-ft"><span id="dsFt"></span><span class="ds-dots" id="dsDots"></span></div>
+          <div class="ds-boot" id="dsBootT"><div class="ds-logo"><svg class="bn" viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="#1C1C1E" d="M10 1h2v1h1v2h-1v1h-1v1H9V4h1V1z"/><path fill="#FFD600" d="M3 6h1v1h1v1h2v1h3V8h1V7h1V6h1v3h-1v2h-1v1H9v1H5v-1H4v-1H3V9H2V7h1z"/><path fill="#1C1C1E" d="M2 7h1v2h1v2h1v1h4v-1h2V9h1V7h1v2h-1v2h-1v1H9v1H5v-1H4v-1H3V9H2z" opacity=".25"/></svg>
+            <div class="px">SUPER APP</div><div class="n">1326</div></div>
+            <div class="ds-seg" id="dsSegT">${'<i></i>'.repeat(20)}</div><div class="px sm">PRESS START</div></div>
+        </div></section>
+        <section class="ds-scr ds-bot" id="dsBot"><div class="ds-glass">
+          <div class="ds-bhd"><b id="dsHi"></b>
+            ${admin ? '<button class="ds-sys" onclick="openAnnounce()" aria-label="ประกาศ">📢</button><button class="ds-sys" onclick="openAccounts()" aria-label="ผู้ใช้">👥</button>' : ''}
+            <button class="ds-sys" id="dsMute" onclick="dsMute()" aria-label="เสียง"></button>
+            <button class="ds-sys" id="dsTiltB" onclick="dsTiltToggle()" aria-label="จอ 3D (Gyro)"></button>
+            <button class="ds-sys" onclick="dsSetOn(false)" aria-label="หน้าเมนูแบบเดิม">▦</button>
+            <button class="ds-sys" onclick="askLogout()" aria-label="ออกจากระบบ">⏻</button></div>
+          <div class="ds-grid" id="dsGrid"></div>
+          <div class="ds-boot" id="dsBootB"><div class="px sm" style="animation:none;color:#1C1C1E">LOADING…</div><div class="ds-seg" id="dsSegB">${'<i></i>'.repeat(20)}</div><div class="tip" id="dsTip"></div></div>
+        </div></section>
+        <div class="ds-pg"><button class="ds-btn ds-pill px" data-k="L">◀ L</button><button class="ds-btn ds-pill px" data-k="R">R ▶</button></div>
+        <div class="ds-ctl">
+          <div class="ds-dpad"><button class="ds-btn u" data-k="U" aria-label="ขึ้น">▲</button><button class="ds-btn l" data-k="Lf" aria-label="ซ้าย">◀</button><span class="c"></span><button class="ds-btn r" data-k="Rt" aria-label="ขวา">▶</button><button class="ds-btn d" data-k="D" aria-label="ลง">▼</button></div>
+          <div class="ds-ab"><button class="ds-btn a px" data-k="A" id="dsA"><b>A</b><small>Order</small></button><button class="ds-btn b px" data-k="B"><b>B</b><small>เปิดแอป</small></button></div>
+        </div>`;
+      document.getElementById('dsHi').textContent = 'สวัสดี ' + String(currentUser.name || '').split(' · ')[0];
+      dsMuteIcon(); dsTiltIcon();
+      dsGrid();
+      dsWire(root);
+      const boot = DS.boot; DS.boot = false;
+      if (boot) dsBoot(); else { root.classList.add('booted'); dsRender(); }
+      dsLoad(true);
+      dsOrderWatch();
+    }
+    function dsGrid() {
+      const g = document.getElementById('dsGrid'); if (!g) return;
+      g.innerHTML = DS.apps.map((a, i) => `<button class="ds-app${i === DS.sel ? ' sel' : ''}" data-i="${i}" data-app="${a.id}"><span class="ai">${a.icon}</span><b class="app-badge" id="badge-${a.id}"></b><span class="an">${dsEsc(a.name)}</span><small class="app-note" id="note-${a.id}"></small></button>`).join('');
+      g.querySelectorAll('.ds-app').forEach(el => el.addEventListener('click', () => {
+        const i = Number(el.dataset.i);
+        if (i === DS.sel) dsOpen(); else dsSelect(i);
+      }));
+    }
+    function dsCols() { const g = document.getElementById('dsGrid'); if (!g) return 4; return getComputedStyle(g).gridTemplateColumns.split(' ').length || 4; }
+
+    // ---------- 8 bit โหลด ----------
+    function dsBoot() {
+      const root = document.getElementById('ds'); root.classList.remove('booted');
+      const tips = ['ทิป: กด 🅱 เพื่อเปิดแอป', 'ทิป: กด L / R ดู Report หน้าอื่น', 'ทิป: กด 🅰 ไปที่ Order ทันที', 'ทิป: แตะไอคอนซ้ำ = เปิดแอป'];
+      document.getElementById('dsTip').textContent = tips[Math.floor(Math.random() * tips.length)];
+      const segs = [...document.querySelectorAll('#dsSegT i')], segs2 = [...document.querySelectorAll('#dsSegB i')];
+      let n = 0; const t0 = Date.now();
+      document.querySelectorAll('#dsGrid .ds-app').forEach(el => el.style.opacity = '0');
+      const step = () => {
+        const ready = !DS.loading || Date.now() - t0 > 3200;
+        const cap = ready ? 20 : Math.min(17, Math.floor((Date.now() - t0) / 110));
+        if (n < cap) { n++; segs[n - 1] && segs[n - 1].classList.add('on'); segs2[n - 1] && segs2[n - 1].classList.add('on'); if (n % 2) SFX.play('tick'); }
+        if (n >= 20 && Date.now() - t0 > 1500) { setTimeout(dsBootDone, 200); return; }
+        setTimeout(step, ready ? 45 : 90);
+      };
+      step();
+    }
+    function dsBootDone() {
+      const root = document.getElementById('ds'); if (!root) return;
+      root.classList.add('booted'); SFX.play('boot'); dsRender();
+      document.querySelectorAll('#dsGrid .ds-app').forEach((el, i) => {
+        setTimeout(() => { el.style.opacity = ''; el.classList.add('pop'); if (i < 8) SFX.play('pop'); setTimeout(() => el.classList.remove('pop'), 500); }, 240 + i * 55);
+      });
+    }
+
+    // ---------- ข้อมูล ----------
+    function dsLoad(force) {
+      if (DS.loading || !currentUser) return;
+      if (!force && Date.now() - DS.at < 60000) return;
+      DS.loading = true;
+      google.script.run.withSuccessHandler(d => {
+        DS.loading = false; DS.at = Date.now(); DS.data = d || {}; dsRender(true);
+      }).withFailureHandler(e => {
+        DS.loading = false; DS.at = Date.now() - 45000; DS.data = DS.data || { err: e.message }; dsRender(true);
+      }).getHub3ds();
+      clearTimeout(DS.t); DS.t = setTimeout(() => { if (dsActive() && !document.hidden) dsLoad(true); else DS.at = 0; }, 120000);
+    }
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && dsActive()) dsLoad(); });
+    function dsActive() {
+      return DS.on && currentUser && document.getElementById('ds') && !document.getElementById('page-hub').classList.contains('hidden') && document.getElementById('frame-shell').classList.contains('hidden');
+    }
+
+    // ---------- เลือก / หน้า / เปิด ----------
+    function dsSelect(i, quiet) {
+      const n = DS.apps.length; if (!n) return;
+      i = ((i % n) + n) % n;
+      if (i === DS.sel && !quiet) return;
+      DS.sel = i; DS.page = 0; try { sessionStorage.setItem('hub3ds_sel', i); } catch (e) {}
+      document.querySelectorAll('#dsGrid .ds-app').forEach(el => el.classList.toggle('sel', Number(el.dataset.i) === i));
+      const el = document.querySelector(`#dsGrid .ds-app[data-i="${i}"]`); if (el) el.scrollIntoView({ block: 'nearest', behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
+      if (!quiet) { SFX.play('move'); haptic(4); }
+      dsRender(false, 1);
+    }
+    function dsMove(k) {
+      const c = dsCols(), n = DS.apps.length;
+      if (k === 'Lf') dsSelect(DS.sel - 1);
+      else if (k === 'Rt') dsSelect(DS.sel + 1);
+      else if (k === 'U') { let t = DS.sel - c; if (t < 0) { t = DS.sel % c; while (t + c < n) t += c; } dsSelect(t); }
+      else if (k === 'D') dsSelect(DS.sel + c < n ? DS.sel + c : DS.sel % c);
+    }
+    function dsPageGo(dir) {
+      const pages = dsPages(); if (pages.length < 2) { SFX.play('err'); return; }
+      const p = DS.page + dir; if (p < 0 || p >= pages.length) { SFX.play('err'); return; }
+      DS.page = p; SFX.play('page'); haptic(4); dsRender(false, dir);
+    }
+    function dsOpen() {
+      if (DS.alert) { dsAlertView(); return; }
+      const a = DS.apps[DS.sel]; if (!a) return;
+      SFX.play('open'); haptic(10);
+      const el = document.querySelector(`#dsGrid .ds-app[data-i="${DS.sel}"]`);
+      if (el) { el.classList.remove('jelly'); void el.offsetWidth; el.classList.add('jelly'); setTimeout(() => el.classList.remove('jelly'), 600); }
+      setTimeout(() => openApp(a.id), 380);
+    }
+    function dsA() {
+      if (DS.alert) { dsAlertClaim(); return; }
+      const i = DS.apps.findIndex(a => a.id === 13);
+      if (i < 0) { SFX.play('err'); return; }
+      SFX.play('a'); haptic(6);
+      if (i === DS.sel) dsRender(false, 1); else dsSelect(i, true);
+    }
+    function dsKey(k) {
+      if (k === 'L') dsPageGo(-1); else if (k === 'R') dsPageGo(1);
+      else if (k === 'A') dsA(); else if (k === 'B') dsOpen();
+      else dsMove(k);
+    }
+    function dsMute() { try { localStorage.setItem('hub3ds_mute', DS_MUTE() ? '0' : '1'); } catch (e) {} dsMuteIcon(); SFX.play('a'); }
+    function dsMuteIcon() { const b = document.getElementById('dsMute'); if (b) b.textContent = DS_MUTE() ? '🔇' : '🔊'; }
+
+    // ---------- ปุ่มกด (แตะค้าง D-Pad = เลื่อนต่อเนื่อง) ----------
+    function dsWire(root) {
+      root.querySelectorAll('.ds-btn[data-k]').forEach(b => {
+        let rep = 0, hold = 0;
+        const stop = () => { clearTimeout(hold); clearInterval(rep); b.classList.remove('dn'); };
+        b.addEventListener('pointerdown', e => {
+          e.preventDefault(); b.classList.add('dn'); const k = b.dataset.k; dsKey(k);
+          if (/^(U|D|Lf|Rt)$/.test(k)) hold = setTimeout(() => { rep = setInterval(() => dsKey(k), 130); }, 380);
+        });
+        ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, stop));
+        b.addEventListener('contextmenu', e => e.preventDefault());
+      });
+      // ปัดจอบน = เปลี่ยนหน้า
+      const top = root.querySelector('#dsTop'); let sx = null, sy = 0;
+      top.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; sx = e.clientX; sy = e.clientY; });
+      top.addEventListener('pointerup', e => {
+        if (sx == null) return; const dx = e.clientX - sx, dy = e.clientY - sy; sx = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) dsPageGo(dx < 0 ? 1 : -1);
+      });
+    }
+    window.addEventListener('keydown', e => {
+      if (!dsActive() || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (document.querySelector('.sheet.on, #logout-sheet.on') || /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')) return;
+      const m = { ArrowUp: 'U', ArrowDown: 'D', ArrowLeft: 'Lf', ArrowRight: 'Rt', Enter: 'B', ' ': 'B', b: 'B', B: 'B', a: 'A', A: 'A', q: 'L', Q: 'L', '[': 'L', PageUp: 'L', e: 'R', E: 'R', ']': 'R', PageDown: 'R' }[e.key];
+      if (!m) return; e.preventDefault(); dsKey(m);
+    });
+    // 🎮 จอยเกม (เช่น Legion Go): D-Pad / ก้านซ้าย · A · B · LB / RB
+    (function () {
+      let raf = 0; const last = {}; let rep = {};
+      const MAP = { 12: 'U', 13: 'D', 14: 'Lf', 15: 'Rt', 0: 'A', 1: 'B', 4: 'L', 5: 'R' };
+      function loop() {
+        raf = 0; const pads = navigator.getGamepads ? [...navigator.getGamepads()].filter(Boolean) : []; if (!pads.length) return;
+        if (dsActive() && document.hasFocus()) {
+          const p = pads[0], now = Date.now(), ax = p.axes || [];
+          const st = {};
+          Object.keys(MAP).forEach(i => { st[MAP[i]] = st[MAP[i]] || !!(p.buttons[i] && p.buttons[i].pressed); });
+          if (ax[1] < -.6) st.U = true; if (ax[1] > .6) st.D = true; if (ax[0] < -.6) st.Lf = true; if (ax[0] > .6) st.Rt = true;
+          Object.keys(st).forEach(k => {
+            if (st[k] && !last[k]) { dsKey(k); rep[k] = now + 380; }
+            else if (st[k] && /^(U|D|Lf|Rt)$/.test(k) && now > rep[k]) { dsKey(k); rep[k] = now + 130; }
+            last[k] = st[k];
+          });
+        }
+        raf = requestAnimationFrame(loop);
+      }
+      window.addEventListener('gamepadconnected', () => { if (!raf) raf = requestAnimationFrame(loop); });
+    })();
+
+    // ---------- 🧾 Order เข้า → จอบนเด้ง กด A รับเลย ----------
+    function dsOrderWatch() {
+      if (DS.ow || !window.OrderAlert) return;
+      DS.ow = OrderAlert.subscribe(st => {
+        const list = (st && st.list) || [], me = (st && st.user) || {};
+        if (DS.seen && !dsPC()) {
+          const fresh = list.filter(o => o.status === 'new' && !DS.seen[o.no] && o.ownerAcct !== me.acct && !(o.assign && o.assign.acct && o.assign.acct !== me.acct && Date.now() < (o.assign.until || 0)));
+          if (fresh.length && dsActive()) { DS.alert = fresh[0]; SFX.play('order'); haptic(30); }
+        }
+        if (DS.alert) { const cur = list.find(o => o.no === DS.alert.no); if (!cur || cur.status !== 'new') DS.alert = null; }
+        DS.seen = {}; list.forEach(o => { DS.seen[o.no] = 1; });
+        DS.orders = list;
+        if (dsActive()) dsRender();
+      });
+    }
+    function dsAlertClaim() {
+      const o = DS.alert; if (!o) return; DS.alert = null; SFX.play('a'); dsRender();
+      OrderAlert.post('claim', [o.no]).then(r => {
+        if (r && r.ok === false) { SFX.play('err'); alert(r.message || 'รับเคสไม่ได้'); return; }
+        if (r && r.queue) OrderAlert.setQueue(r.queue, true);
+        openOrderApp(o.no);
+      }).catch(e => { SFX.play('err'); alert('รับเคสไม่สำเร็จ: ' + e.message); });
+    }
+    function dsAlertView() { const o = DS.alert; DS.alert = null; SFX.play('open'); dsRender(); if (o) openOrderApp(o.no); }
+
+    // ---------- วาดจอบน ----------
+    function dsPages() {
+      const a = DS.apps[DS.sel]; if (!a) return [];
+      const d = DS.data;
+      if (a.id === 13) return dsOrderPages();
+      const id = a.id, need = { 1: 'dash', 2: 'dash', 3: 'dash', 5: 'check', 6: 'shift', 10: 'rank', 12: 'market' }[id];
+      if (!need) return dsInfoPages(a);
+      if (!d) return [{ t: 'กำลังโหลด…', h: '<div class="ds-skel"></div><div class="ds-skel" style="width:70%"></div><div class="ds-skel" style="width:85%"></div>' }];
+      const x = d[need];
+      if (!x || d.err) return [{ t: 'ยังโหลดไม่ได้', h: dsMsg('📡', 'ยังโหลด Report ไม่ได้', dsEsc((d && d.err) || 'ลองใหม่อีกครั้ง') + '<br>กด 🅱 เปิดแอปได้ตามปกติ') }];
+      if (x.error) return [{ t: 'ยังไม่มีข้อมูล', h: dsMsg('🫥', 'ยังไม่มีข้อมูล', dsEsc(x.error)) }];
+      try { return ({ dash: dsDashPages, check: dsCheckPages, shift: dsShiftPages, rank: dsRankPages, market: dsMarketPages })[need](x); }
+      catch (e) { return [{ t: 'ผิดพลาด', h: dsMsg('⚠️', 'แสดง Report ไม่ได้', dsEsc(e.message)) }]; }
+    }
+    function dsMsg(ic, b, s) { return `<div class="ds-msg"><div class="big">${ic}</div><b>${b}</b><div>${s || ''}</div></div>`; }
+    function dsRender(dataOnly, dir) {
+      const hd = document.getElementById('dsHd'), body = document.getElementById('dsBody'); if (!hd || !body) return;
+      const a = DS.apps[DS.sel]; if (!a) { body.innerHTML = dsMsg('🫥', 'ยังไม่มีแอป', ''); return; }
+      const pages = dsPages(); if (DS.page >= pages.length) DS.page = Math.max(0, pages.length - 1);
+      const p = pages[DS.page] || { t: '', h: '' };
+      hd.innerHTML = `<span class="ic">${a.icon}</span><span class="tt"><b>${dsEsc(a.name)}</b><small>${dsEsc(p.t || '')}</small></span>
+        <span class="ds-pgn"><button onclick="dsPageGo(-1)" ${DS.page ? '' : 'disabled'} aria-label="หน้าก่อน">‹</button><span class="px">${DS.page + 1}/${pages.length}</span><button onclick="dsPageGo(1)" ${DS.page < pages.length - 1 ? '' : 'disabled'} aria-label="หน้าถัดไป">›</button></span>`;
+      if (dataOnly && body.dataset.k === a.id + '|' + DS.page && body.dataset.h === String(p.h.length) && !DS.alert) { dsFoot(pages); return; }
+      body.dataset.k = a.id + '|' + DS.page; body.dataset.h = String(p.h.length);
+      body.className = 'ds-body' + (p.scroll ? ' scroll' : '');
+      body.innerHTML = `<div class="${dir ? 'ds-in' : ''}" style="${dir ? '--dx:' + (dir > 0 ? 14 : -14) + 'px;' : ''}height:100%">${p.h}</div>` + (DS.alert ? dsAlertHTML(DS.alert) : '');
+      body.querySelectorAll('[data-w]').forEach(i => { requestAnimationFrame(() => { i.style.width = i.dataset.w + '%'; }); });
+      const ab = document.getElementById('dsA'); if (ab) ab.classList.toggle('ping', !!DS.alert);
+      dsFoot(pages);
+    }
+    function dsFoot(pages) {
+      const ft = document.getElementById('dsFt'), dots = document.getElementById('dsDots'); if (!ft) return;
+      const d = DS.data, upd = d && d.at ? 'อัปเดต ' + d.at : (DS.loading ? 'กำลังโหลด…' : '');
+      ft.innerHTML = `<span class="px">B</span> เปิดแอป${pages.length > 1 ? ' · <span class="px">L/R</span> หน้าอื่น' : ''}${upd ? ' · ' + upd : ''}`;
+      dots.innerHTML = pages.length > 1 ? pages.map((_, i) => `<i class="${i === DS.page ? 'on' : ''}"></i>`).join('') : '';
+    }
+    function dsAlertHTML(o) {
+      const line = [o.brand, o.model, o.color, o.cap].filter(Boolean).join(' ');
+      return `<div class="ds-alert"><div class="px">NEW ORDER!</div><div style="font-size:40px">🔥</div><b>${dsEsc(line || 'Order ใหม่')}</b>
+        <small>จาก ${dsEsc(String(o.owner || '').split(' · ')[0])}${o.qty > 1 ? ' · ' + o.qty + ' เครื่อง' : ''}</small>
+        <div class="bt"><button class="ok" onclick="dsAlertClaim()">🅰 รับ Order</button><button class="no" onclick="dsAlertView()">🅱 ดูก่อน</button></div></div>`;
+    }
+
+    // ---------- 📊 Dashboard ----------
+    function dsDashPages(x) {
+      const pages = [], left = x.days && x.day ? Math.max(1, x.days - x.day + 1) : 1;
+      const sub = `${x.label || ''}${x.dataDate ? ' · ข้อมูลถึง ' + x.dataDate : ''}`;
+      if (x.sales) {
+        const s = x.sales, perDay = Math.max(0, Math.round((s.target - s.ach) / left));
+        pages.push({ t: 'ยอดขาย · ' + s.who + ' · ' + sub, h: `
+          <div class="ds-k" style="--n:2"><div class="k"><span>Achieve</span><b class="num">${dsBaht(s.ach, true)}</b><em>${dsPct(s.achP)} ของเป้า</em></div>
+            <div class="y"><span>Forecast</span><b class="num">${dsBaht(s.fc, true)}</b><em style="color:#6B5B00">${dsPct(s.fcP)}</em></div></div>
+          <div class="ds-sec"><span>Achieve</span><span class="num">${dsPct(s.achP)}</span></div>${dsBar(s.achP, '', (x.day / x.days) * 100)}
+          <div class="ds-sec"><span>Forecast</span><span class="num">${dsPct(s.fcP)}</span></div>${dsBar(s.fcP, s.fcP >= 100 ? '#30D158' : s.fcP >= 80 ? '#0A84FF' : '#FF3B30')}
+          <div class="ds-k" style="--n:3;margin-top:10px"><div><span>Target</span><b class="num" style="font-size:16px">${dsBaht(s.target, true)}</b></div>
+            <div><span>ต้องทำ/วัน</span><b class="num" style="font-size:16px">${s.ach >= s.target ? '✅' : dsBaht(perDay, true)}</b></div>
+            <div><span>วันที่</span><b class="num" style="font-size:16px">${x.day}/${x.days}</b><em>เหลือ ${left} วัน</em></div></div>` });
+      } else if (x.brand) {
+        const b = x.brand;
+        pages.push({ t: 'แบรนด์ ' + b.name + ' · ' + sub, h: `
+          <div class="ds-hero"><span class="ic" style="width:54px;height:54px;border-radius:16px;background:#FFD600;display:grid;place-items:center;font-size:26px">🏷️</span><div><div class="px" style="font-size:12px">${dsEsc(b.name)}</div><div style="font-size:12px;color:#8E8E93;font-weight:700">ยอดเดือนนี้ (ทุกเครื่องในร้าน)</div></div></div>
+          <div class="ds-k" style="--n:2"><div class="k"><span>ขายแล้ว</span><b class="num">${dsN(b.unit)} เครื่อง</b></div><div class="y"><span>คาดการณ์สิ้นเดือน</span><b class="num">${dsN(b.fcUnit)} เครื่อง</b></div></div>
+          <div class="ds-k" style="--n:2"><div><span>ยอดเงิน</span><b class="num" style="font-size:17px">${dsBaht(b.rev)}</b></div><div><span>วันที่</span><b class="num" style="font-size:17px">${x.day}/${x.days}</b><em>เหลือ ${left} วัน</em></div></div>` });
+      } else if (x.salesErr) pages.push({ t: 'ยอดขาย', h: dsMsg('📊', 'ยังไม่มียอดขาย', dsEsc(x.salesErr)) });
+      // 🎯 ภารกิจ
+      const ms = x.missions || [];
+      if (x.missionErr) pages.push({ t: 'ภารกิจ Att Rate', h: dsMsg('🎯', 'ยังไม่มีข้อมูลงานโฟกัส', dsEsc(x.missionErr)) });
+      else if (!ms.length) pages.push({ t: 'ภารกิจ Att Rate', h: dsMsg('🏆', 'ผ่านทุกงานโฟกัส!', `${x.pass || 0} งานถึงเป้าแล้ว · รักษาไว้นะ`) });
+      else for (let i = 0; i < ms.length; i += 2) {
+        pages.push({ t: `ภารกิจ Att Rate ที่ยังไม่ผ่าน · ${ms.length} งาน${dsPC() ? ' · ' + (currentUser.brand || '') : ''}`, h: ms.slice(i, i + 2).map(m => `
+          <div class="ds-ms"><div class="h"><b>🎯 ${dsEsc(m.name)}</b><span class="num">${dsPct(m.att)} <em>/ ${dsPct(m.t)}</em></span></div>
+            ${dsBar(m.att / Math.max(m.t, 1) * 100, '#FF3B30', 99)}
+            <div class="need">ขาดอีก ${dsN(m.need)} ชิ้น · ≈ ${dsN(m.perDay)} ชิ้น/วัน (เหลือ ${x.left} วัน)</div>
+            ${m.staff && m.staff.length ? `<div class="ds-chips">${m.staff.map(s => `<span class="r">${dsEsc(s.n)} ${s.att}% · −${s.need}</span>`).join('')}${m.staffMore ? `<span>+${m.staffMore} คน</span>` : ''}</div>` : ''}
+          </div>`).join('') });
+      }
+      return pages;
+    }
+
+    // ---------- ✅ Check List ----------
+    function dsCheckPages(x) {
+      const pages = [];
+      if (x.today) {
+        const t = x.today;
+        const items = (t.items || []).slice(0, 8).map(i => `<span class="${i.q ? 'g' : ''}">${dsEsc(i.n)} ${dsN(i.q)}${i.base ? ` <small style="color:#8E8E93">(${Math.round((i.dev || 0) / i.base * 100)}%)</small>` : ''}</span>`).join('');
+        let h = `<div class="ds-k"><div class="k"><span>${t.brand ? 'เครื่อง ' + dsEsc(t.brand) : 'เครื่องวันนี้'}</span><b class="num">${dsN(t.units)}</b></div><div class="y"><span>งานโฟกัส</span><b class="num">${dsN(t.focus)}</b></div><div><span>ครอบคลุม</span><b class="num">${dsPct(t.cover)}</b><em>เครื่องเปล่า ${dsN(t.bare)}</em></div></div>
+          ${items ? `<div class="ds-sec"><span>งานที่ติดวันนี้</span></div><div class="ds-chips">${items}</div>` : ''}`;
+        if (t.brands && t.brands.length) {
+          const max = Math.max(1, ...t.brands.map(b => b.f));
+          h += `<div class="ds-sec"><span>🏆 แบรนด์ไหนโฟกัสสูงสุด</span><span>ชิ้น · ครอบคลุม</span></div>` + t.brands.slice(0, 4).map((b, i) => `
+            <div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(b.n)}<small>${dsN(b.u)} เครื่อง</small></span><span class="mb"><i style="width:${b.f / max * 100}%"></i></span><span class="vl num">${dsN(b.f)}<small>${dsPct(b.cover)}</small></span></div>`).join('');
+        }
+        if (t.me) h += `<div class="ds-sec"><span>ของฉัน (${dsEsc(t.me.n)})</span></div><div class="ds-row me"><span class="nm">${dsN(t.me.u)} เครื่อง</span><span class="vl num">${dsN(t.me.f)} ชิ้น<small>ครอบคลุม ${dsPct(t.me.cover)}</small></span></div>`;
+        pages.push({ t: 'วันนี้' + (t.brand ? ' · ' + t.brand : ' · ทั้งร้าน'), h: t.units ? h : dsMsg('🌤️', 'วันนี้ยังไม่มีบันทึกขาย', 'ขายแล้วบันทึกใน Check List ได้เลย') });
+      } else pages.push({ t: 'วันนี้', h: dsMsg('✅', 'ยังไม่มีข้อมูลวันนี้', dsEsc(x.todayErr || '')) });
+      if (x.fail) {
+        const f = x.fail, tot = f.sim + f.uf + f.sf;
+        pages.push({ t: 'สรุปงานไม่ผ่าน · เดือนนี้', h: tot ? `
+          <div class="ds-k"><div class="k"><span>SIM BL</span><b class="num">${dsN(f.sim)}</b></div><div class="y"><span>UFUND ไม่ผ่าน</span><b class="num">${dsN(f.uf)}</b></div><div><span>SF ไม่ผ่าน</span><b class="num">${dsN(f.sf)}</b></div></div>
+          <div class="ds-sec"><span>แยกแบรนด์</span><span>SIM · UFUND · SF</span></div>` + (f.brands || []).slice(0, 5).map(b => `
+            <div class="ds-row"><span class="nm">${dsEsc(b.n)}</span><span class="vl num">${b.sim} · ${b.uf} · ${b.sf}<small>รวม ${b.all}</small></span></div>`).join('')
+          : dsMsg('🎉', 'เดือนนี้ยังไม่มีงานไม่ผ่าน', 'เยี่ยมมาก!') });
+      } else if (x.failErr) pages.push({ t: 'สรุปงานไม่ผ่าน', h: dsMsg('⚠️', 'อ่านงานไม่ผ่านไม่ได้', dsEsc(x.failErr)) });
+      return pages;
+    }
+
+    // ---------- 🗓️ กะงาน ----------
+    function dsShiftPages(x) {
+      const chip = (w, cls) => `<span class="${cls || ''}">${dsEsc(w.n)}${w.t ? ' · ' + dsEsc(w.t) : ''}${w.type ? ' · ' + dsEsc(w.type) : ''}${w.v ? ' · ' + dsEsc(w.v) : ''}</span>`;
+      const staff = x.work.filter(w => !w.pc), pc = x.work.filter(w => w.pc);
+      const pages = [{ t: `วันนี้ ${x.dow || ''} ${x.day} · มาทำงาน ${x.work.length} คน`, h: `
+        <div class="ds-k"><div class="k"><span>พนักงานร้าน</span><b class="num">${staff.length}</b></div><div class="y"><span>PC</span><b class="num">${pc.length}</b></div><div><span>ลา / หยุด</span><b class="num">${x.leave.length + x.off.length}</b></div></div>
+        <div class="ds-sec"><span>👤 พนักงานร้าน</span></div><div class="ds-chips">${staff.map(w => chip(w, 'g')).join('') || '<span>ไม่มี</span>'}</div>
+        ${pc.length ? `<div class="ds-sec"><span>🏷️ PC</span></div><div class="ds-chips">${pc.map(w => chip(w)).join('')}</div>` : ''}` }];
+      if (x.leave.length || x.off.length || (x.other || []).length) pages.push({ t: 'ลา / หยุด / แจ้ง วันนี้', h: `
+        ${x.leave.length ? `<div class="ds-sec"><span>🤒 ลา</span></div><div class="ds-chips">${x.leave.map(w => chip(w, 'r')).join('')}</div>` : ''}
+        ${x.off.length ? `<div class="ds-sec"><span>🏖️ หยุด</span></div><div class="ds-chips">${x.off.map(w => chip(w)).join('')}</div>` : ''}
+        ${(x.other || []).length ? `<div class="ds-sec"><span>📣 แจ้งอื่นๆ</span></div><div class="ds-chips">${x.other.map(o => `<span>${dsEsc(o.n)} · ${dsEsc(o.type)}${o.note ? ' · ' + dsEsc(o.note) : ''}</span>`).join('')}</div>` : ''}` });
+      return pages;
+    }
+
+    // ---------- 🏆 Ranking ----------
+    function dsRankPages(x) {
+      const pages = [], mon = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'][x.month] || '';
+      if (x.err) pages.push({ t: 'ยอดแบรนด์', h: dsMsg('🏆', 'ยังไม่มีข้อมูล Ranking', dsEsc(x.err)) });
+      (x.pages || []).forEach(p => {
+        const solo = p.key === 'IPHONE' || p.key === 'IPAD';
+        let h;
+        if (!p.rows.length) h = dsMsg('🫥', 'เดือนนี้ยังไม่มียอด', '');
+        else if (solo) {
+          const r = p.rows[0], g = r.prev > 0 ? (r.rev - r.prev) / r.prev * 100 : null;
+          h = `<div class="ds-k" style="--n:2"><div class="k"><span>ยอดเดือนนี้</span><b class="num">${dsBaht(r.rev, true)}</b><em>${g == null ? '' : (g >= 0 ? '▲ ' : '▼ ') + Math.abs(g).toFixed(0) + '% vs เดือนก่อน (ทั้งเดือน)'}</em></div><div class="y"><span>จำนวน</span><b class="num">${dsN(r.u)} เครื่อง</b></div></div>
+            <div class="ds-sec"><span>🔥 Top 5 รุ่นขายดี</span><span>บาท · เครื่อง</span></div>` + (p.top || []).map((t, i) => `
+            <div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(t.name)}</span><span class="vl num">${dsBaht(t.revenue, true)}<small>${dsN(t.unit)} เครื่อง</small></span></div>`).join('');
+        } else {
+          const max = Math.max(1, ...p.rows.map(r => r.rev));
+          h = p.rows.slice(0, 6).map((r, i) => `
+            <div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(r.n)}</span><span class="mb"><i style="width:${r.rev / max * 100}%"></i></span><span class="vl num">${dsBaht(r.rev, true)}<small>${dsN(r.u)} เครื่อง</small></span></div>`).join('');
+        }
+        pages.push({ t: `${p.title.trim()} · ${mon} (MTD)${x.masked ? ' · ยอดปิดหลักท้าย' : ''}`, h });
+      });
+      if (x.focus) {
+        const f = x.focus, max = Math.max(1, ...f.staff.map(e => e.f), ...f.pc.map(e => e.f));
+        const row = (e, i) => `<div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(e.n)}<small>${dsN(e.u)} เครื่อง</small></span><span class="mb"><i style="width:${e.f / max * 100}%"></i></span><span class="vl num">${dsN(e.f)}<small>${dsPct(e.cover)}</small></span></div>`;
+        pages.push({ t: `🎯 งานโฟกัส · ${mon}`, h: f.staff.length || f.pc.length ? `
+          <div class="${f.pc.length ? 'ds-2c' : ''}"><div><div class="ds-sec"><span>👤 พนักงานร้าน</span><span>ชิ้น</span></div>${f.staff.slice(0, 5).map(row).join('') || '<div class="ds-row">-</div>'}</div>
+          ${f.pc.length ? `<div><div class="ds-sec"><span>🏷️ PC</span><span>ชิ้น</span></div>${f.pc.slice(0, 5).map(row).join('')}</div>` : ''}</div>` : dsMsg('🎯', 'ยังไม่มีงานโฟกัสเดือนนี้', '') });
+      }
+      return pages;
+    }
+
+    // ---------- 📊 Market Share ----------
+    function dsMarketPages(x) {
+      const max = Math.max(1, ...(x.top || []).map(r => r.u));
+      return [{ t: `Smartphone เดือนนี้ (ถึง ${String(x.end || '').slice(8)}/${String(x.end || '').slice(5, 7)}) · ไม่รวม iPhone`, h: `
+        <div class="ds-hero"><div class="rnk num">#${x.rank || '-'}<small> / ${x.of}</small></div><div><div style="font-weight:800;font-size:15px">อันดับร้านเรา</div>
+          <div style="font-size:12px;color:#8E8E93;font-weight:700">${dsN(x.me)} เครื่อง · แชร์ ${dsPct(x.share)}</div>
+          <div class="ds-chips">${x.above ? `<span class="r">ตาม ${dsEsc(x.above.n)} อยู่ ${dsN(x.above.gap)}</span>` : '<span class="k">👑 อันดับ 1</span>'}${x.below ? `<span class="g">นำ ${dsEsc(x.below.n)} ${dsN(x.below.gap)}</span>` : ''}</div></div></div>
+        <div class="ds-sec"><span>Top 5</span><span>เครื่อง</span></div>` + (x.top || []).map(r => `
+          <div class="ds-row ${r.own ? 'me' : ''}"><span class="rk px ${r.rank < 4 ? 'g' + r.rank : ''}">${r.rank}</span><span class="nm">${dsEsc(r.n)}</span><span class="mb"><i style="width:${r.u / max * 100}%"></i></span><span class="vl num">${dsN(r.u)}</span></div>`).join('') }];
+    }
+
+    // ---------- 🧾 Order (จากตัวเตือน Order ในเครื่อง) ----------
+    function dsOrderPages() {
+      const st = window.OrderAlert ? OrderAlert.state() : null, list = ((st && st.list) || DS.orders || []).filter(o => ['new', 'claimed', 'back', 'picked', 'parked'].includes(o.status));
+      if (!st || !st.list) return [{ t: 'กำลังโหลด…', h: '<div class="ds-skel"></div><div class="ds-skel" style="width:70%"></div>' }];
+      if (!list.length) return [{ t: 'Order ที่กำลังทำ', h: dsMsg('🧾', 'ไม่มี Order ค้าง', 'มี Order ใหม่จะเด้งที่จอนี้ · กด 🅰 รับได้เลย') }];
+      const lbl = { new: 'รอคนรับ', claimed: 'รับเคสแล้ว', back: 'ส่งกลับ PC', picked: 'เบิกแล้ว', parked: 'ย้ายข้อมูล' };
+      const ago = t => { const m = Math.max(0, Math.round((Date.now() - (Number(t) || Date.now())) / 60000)); return m < 60 ? m + ' นาที' : Math.floor(m / 60) + ' ชม. ' + (m % 60) + ' น.'; };
+      const order = { new: 0, back: 1, claimed: 2, picked: 3, parked: 4 };
+      list.sort((a, b) => order[a.status] - order[b.status] || a.created - b.created);
+      const pages = [], cnt = {}; list.forEach(o => { cnt[o.status] = (cnt[o.status] || 0) + 1; });
+      const head = `<div class="ds-chips" style="margin:0 0 6px">${Object.keys(lbl).filter(k => cnt[k]).map(k => `<span class="ds-st ${k}" style="border:0">${lbl[k]} ${cnt[k]}</span>`).join('')}</div>`;
+      for (let i = 0; i < list.length; i += 4) pages.push({ t: `Order ที่กำลังทำ ${list.length} ใบ · ปิดเคสแล้วไม่นับ`, h: head + list.slice(i, i + 4).map(o => `
+        <div class="ds-row"><span class="nm">${dsEsc([o.brand, o.model].filter(Boolean).join(' '))}<small>${dsEsc([o.color, o.cap].filter(Boolean).join(' '))}</small><br><small style="margin:0">${dsEsc(String(o.owner || '').split(' · ')[0])}${o.staff ? ' → ' + dsEsc(String(o.staff).split(' · ')[0]) : ''} · ${ago(o.created)}</small></span>
+          <span class="ds-st ${o.status}">${lbl[o.status]}</span></div>`).join('') });
+      return pages;
+    }
+
+    // ---------- แอปอื่น ----------
+    function dsInfoPages(a) {
+      const i = DS_INFO[a.id] || ['✨', a.name, ''];
+      const note = (document.getElementById('note-' + a.id) || {}).textContent || '';
+      return [{ t: 'กด 🅱 เพื่อเปิด', h: dsMsg(i[0], dsEsc(i[1]), dsEsc(i[2]) + (note ? `<div class="ds-chips" style="justify-content:center"><span class="r">${dsEsc(note)}</span></div>` : '')) }];
+    }
+    // ---------- 🧊 จอ 3D: เอียงมือถือ (Gyro) / ขยับเมาส์ (คอม) ----------
+    //   iPhone ต้องกดอนุญาต "การเคลื่อนไหวและการวางแนว" 1 ครั้ง (ขอให้ตอนแตะจอครั้งแรก) · ปิดได้ที่ปุ่ม 🧊
+    const TILT = { on: true, x: 0, y: 0, cx: 0, cy: 0, base: null, raf: 0, gyro: false, asked: false };
+    try { TILT.on = localStorage.getItem('hub3ds_tilt') !== '0' && !REDUCED_MOTION; } catch (e) {}
+    const tClamp = v => Math.max(-1, Math.min(1, v));
+    function tiltNeedsPerm() { return typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function'; }
+    function tiltAsk() {
+      if (TILT.asked || !tiltNeedsPerm()) return Promise.resolve(true);
+      TILT.asked = true;
+      return DeviceOrientationEvent.requestPermission().then(r => r === 'granted').catch(() => false);
+    }
+    function dsTiltToggle() {
+      TILT.on = !TILT.on; try { localStorage.setItem('hub3ds_tilt', TILT.on ? '1' : '0'); } catch (e) {}
+      if (TILT.on) { TILT.asked = false; TILT.base = null; tiltAsk(); } else { TILT.x = TILT.y = 0; tiltKick(); }
+      dsTiltIcon(); SFX.play('a');
+    }
+    function dsTiltIcon() { const b = document.getElementById('dsTiltB'); if (b) { b.textContent = '🧊'; b.style.opacity = TILT.on ? '1' : '.4'; } }
+    window.addEventListener('pointerdown', () => { if (TILT.on && dsActive()) tiltAsk(); }, { passive: true });
+    window.addEventListener('deviceorientation', e => {
+      if (!TILT.on || e.beta == null || !dsActive()) return;
+      let b = e.beta, g = e.gamma;
+      const ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+      if (ang === 90) { const t = b; b = -g; g = t; } else if (ang === -90 || ang === 270) { const t = b; b = g; g = -t; }
+      if (!TILT.base) TILT.base = { b, g };
+      TILT.base.b += (b - TILT.base.b) * 0.008; TILT.base.g += (g - TILT.base.g) * 0.008;   // ค่อยๆ ตั้งศูนย์ใหม่ตามท่าที่ถือ
+      TILT.x = tClamp((b - TILT.base.b) / 16); TILT.y = tClamp((g - TILT.base.g) / 16); TILT.gyro = true; tiltKick();
+    });
+    window.addEventListener('pointermove', e => {
+      if (!TILT.on || TILT.gyro || e.pointerType !== 'mouse' || !dsActive()) return;
+      TILT.x = tClamp((e.clientY / innerHeight - .5) * 2); TILT.y = tClamp((e.clientX / innerWidth - .5) * 2); tiltKick();
+    });
+    document.addEventListener('mouseleave', () => { if (!TILT.gyro) { TILT.x = TILT.y = 0; tiltKick(); } });
+    function tiltKick() { if (!TILT.raf) TILT.raf = requestAnimationFrame(tiltLoop); }
+    function tiltLoop() {
+      TILT.raf = 0;
+      const tx = TILT.on ? TILT.x : 0, ty = TILT.on ? TILT.y : 0;
+      TILT.cx += (tx - TILT.cx) * 0.14; TILT.cy += (ty - TILT.cy) * 0.14;
+      const set = (id, k) => {
+        const el = document.getElementById(id); if (!el) return;
+        el.style.setProperty('--tx', (-TILT.cx * 7 * k).toFixed(2) + 'deg'); el.style.setProperty('--ty', (TILT.cy * 9 * k).toFixed(2) + 'deg');
+        el.style.setProperty('--gx', (TILT.cy * 40).toFixed(1) + '%'); el.style.setProperty('--gy', (TILT.cx * 30).toFixed(1) + '%');
+        el.style.setProperty('--px', (-TILT.cy * 7 * k).toFixed(1) + 'px'); el.style.setProperty('--py', (-TILT.cx * 5 * k).toFixed(1) + 'px');
+      };
+      set('dsTop', 1); set('dsBot', .45);
+      if (Math.abs(tx - TILT.cx) > .002 || Math.abs(ty - TILT.cy) > .002) tiltKick();
+    }
+
+    function dsReset() {
+      DS.built = ''; DS.data = null; DS.at = 0; DS.seen = null; DS.alert = null; clearTimeout(DS.t);
+      const r = document.getElementById('ds'); if (r) r.remove(); document.body.classList.remove('ds-on');
+    }
+
     // ===== APP HUB (ไอคอนเด้ง) =====
     function buildAppHub() {
+      if (DS.on) {
+        document.getElementById('appGrid').innerHTML = '';   // กัน id ป้ายซ้ำกับจอ 3DS
+        const b3 = document.getElementById('hub-3ds'); if (b3) b3.remove();
+        dsBuild();
+        loadHubBadges();
+        try { window.OrderAlert && OrderAlert.start(); } catch (e) {}
+        return;
+      }
+      dsReset();
+      if (!document.getElementById('hub-3ds')) {
+        const b3 = document.createElement('button'); b3.id = 'hub-3ds'; b3.type = 'button'; b3.textContent = '🎮 โหมด 3DS';
+        b3.style.cssText = 'position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));border:0;border-radius:99px;height:40px;padding:0 18px;background:#1C1C1E;color:#FFD600;font:800 13px "IBM Plex Sans Thai",sans-serif;box-shadow:0 10px 22px -12px rgba(0,0,0,.7);cursor:pointer';
+        b3.onclick = () => { b3.remove(); dsSetOn(true); };
+        document.getElementById('page-hub').appendChild(b3);
+      }
       const title = document.getElementById('welcomeText');
       title.innerText = `ยินดีต้อนรับ, ${currentUser.name}`;
       title.classList.remove('hub-title'); void title.offsetWidth; title.classList.add('hub-title');
