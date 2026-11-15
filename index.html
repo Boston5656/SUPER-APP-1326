@@ -1324,7 +1324,7 @@
     .ds-app.sel .ai { transform: translateY(-3px) scale(1.1); box-shadow: 0 0 0 2.5px #fff, 0 0 0 5px var(--dsk), 0 14px 20px -10px rgba(120,90,0,.8); }
     .ds-app.jelly .ai { animation: jelly .55s var(--ios-ease); }
     .ds-app.sel::after { content: ''; position: absolute; left: 50%; top: -3px; width: 8px; height: 8px; margin-left: -4px; background: var(--dsk);
-      clip-path: polygon(0 0, 100% 0, 50% 100%); animation: dsBob .6s steps(2) infinite; }
+      clip-path: polygon(0 0, 100% 0, 50% 100%); }
     @keyframes dsBob { 50% { transform: translateY(-3px); } }
     .ds .ds-app .app-badge { position: absolute; top: -2px; left: calc(50% + 12px); right: auto; z-index: 2; }
     .ds-app .app-note { display: none !important; }
@@ -1466,9 +1466,17 @@
     .ds .ds-body, .ds .ds-grid { translate: none; }
     .ds .ds-glass { color: #F5F5F7; background: radial-gradient(130% 90% at 50% 0%, #1E1E22 0%, #0C0C0E 70%); contain: layout paint;
       box-shadow: inset 0 2px 8px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.5); }
-    .ds-deep { flex: 1; min-height: 0; display: flex; flex-direction: column; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; }
-    .ds-shade { position: absolute; inset: -20px; border-radius: calc(var(--dsr) + 13px); pointer-events: none; z-index: 8; will-change: transform;
-      box-shadow: inset 0 0 0 20px rgba(0,0,0,.92), inset 0 0 26px 26px rgba(0,0,0,.55); }
+    .ds-deep { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    /* 3D ในจอ = เลเยอร์ซ้อนกันขยับไม่เท่ากัน (parallax) · ใช้ translate3d อย่างเดียว → GPU ทำ ไม่วาดใหม่ ไม่กระตุก */
+    .ds-hd, .ds-body, .ds-ft, .ds-grid { will-change: transform; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .ds-shade { position: absolute; inset: -24px; border-radius: calc(var(--dsr) + 17px); pointer-events: none; z-index: 8; will-change: transform;
+      box-shadow: inset 0 0 0 24px rgba(0,0,0,.94), inset 0 14px 22px 18px rgba(0,0,0,.5), inset 0 -6px 26px 18px rgba(0,0,0,.32); }
+    /* แสงนวลๆ: ไฟส่องจากด้านบน วิ่งตามมุมเอียง + เงาสะท้อนกระจก + ขอบไฟบางๆ */
+    .ds-light { position: absolute; left: -35%; top: -45%; width: 170%; height: 150%; pointer-events: none; z-index: 7; will-change: transform;
+      background: radial-gradient(42% 38% at 50% 32%, rgba(255,246,200,.13) 0%, rgba(255,240,180,.05) 45%, rgba(255,255,255,0) 72%); mix-blend-mode: screen; }
+    .ds .ds-glass::before { content: ''; display: block !important; position: absolute; inset: 0; z-index: 9; pointer-events: none; border-radius: inherit;
+      background: linear-gradient(172deg, rgba(255,255,255,.075) 0%, rgba(255,255,255,.02) 22%, rgba(255,255,255,0) 40%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.09), inset 0 -1px 0 rgba(255,214,0,.05); }
     .ds .ds-hd { border-bottom-color: rgba(255,255,255,.07); }
     .ds .ds-hd .tt small, .ds .ds-pgn span, .ds .ds-sec, .ds .ds-k span, .ds .ds-k em, .ds .ds-row .nm small, .ds .ds-row .vl small, .ds .ds-ms .h span em, .ds .ds-msg { color: #8E8E93; }
     .ds .ds-pgn button, .ds .ds-sys { background: #232327; color: #C7C7CC; }
@@ -1969,7 +1977,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.15-04';
+    const APP_VER = '2026.11.15-05';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2543,7 +2551,7 @@
         <section class="ds-scr ds-top" id="dsTop"><div class="ds-glass"><div class="ds-deep" id="dsDeepT">
           <div class="ds-hd" id="dsHd"></div>
           <div class="ds-body" id="dsBody"></div>
-          <div class="ds-ft"><span id="dsFt"></span><span class="ds-dots" id="dsDots"></span></div></div><i class="ds-shade" id="dsShT"></i>
+          <div class="ds-ft"><span id="dsFt"></span><span class="ds-dots" id="dsDots"></span></div></div><i class="ds-light" id="dsLiT"></i><i class="ds-shade" id="dsShT"></i>
           <div class="ds-boot" id="dsBootT"><div class="ds-logo"><svg class="bn" viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="#1C1C1E" d="M10 1h2v1h1v2h-1v1h-1v1H9V4h1V1z"/><path fill="#FFD600" d="M3 6h1v1h1v1h2v1h3V8h1V7h1V6h1v3h-1v2h-1v1H9v1H5v-1H4v-1H3V9H2V7h1z"/><path fill="#1C1C1E" d="M2 7h1v2h1v2h1v1h4v-1h2V9h1V7h1v2h-1v2h-1v1H9v1H5v-1H4v-1H3V9H2z" opacity=".25"/></svg>
             <div class="px">SUPER APP</div><div class="n">1326</div></div>
             <div class="ds-seg" id="dsSegT">${'<i></i>'.repeat(20)}</div><div class="px sm">PRESS START</div></div>
@@ -2555,7 +2563,7 @@
             <button class="ds-sys" id="dsTiltB" onclick="dsTiltToggle()" aria-label="จอ 3D (Gyro)"></button>
             <button class="ds-sys" onclick="dsSetOn(false)" aria-label="หน้าเมนูแบบเดิม">▦</button>
             <button class="ds-sys" onclick="askLogout()" aria-label="ออกจากระบบ">⏻</button></div>
-          <div class="ds-deep" id="dsDeepB"><div class="ds-grid" id="dsGrid"></div><div class="ds-apg" id="dsApg"></div></div><i class="ds-shade" id="dsShB"></i>
+          <div class="ds-deep" id="dsDeepB"><div class="ds-grid" id="dsGrid"></div><div class="ds-apg" id="dsApg"></div></div><i class="ds-light" id="dsLiB"></i><i class="ds-shade" id="dsShB"></i>
           <div class="ds-boot" id="dsBootB"><div class="px sm" style="animation:none;color:#1C1C1E">LOADING…</div><div class="ds-seg" id="dsSegB">${'<i></i>'.repeat(20)}</div><div class="tip" id="dsTip"></div></div>
         </div></section>
         <div class="ds-pg"><button class="ds-btn ds-pill px" data-k="L" aria-label="หน้าก่อน">L</button><button class="ds-btn ds-pill px" data-k="R" aria-label="หน้าถัดไป">R</button></div>
@@ -2751,7 +2759,8 @@
         DS.seen = {}; list.forEach(o => { DS.seen[o.no] = 1; });
         DS.orders = list;
         try { const n = list.filter(o => dsPC() ? (o.ownerAcct === me.acct && o.status === 'back') : o.status === 'new').length; setBadge(13, n ? String(n) : '', 'warn'); } catch (e) {}
-        if (dsActive()) dsRender();
+        const cur13 = (DS.apps[DS.sel] || {}).id === 13, sig = (DS.alert ? DS.alert.no : '') + '|' + (cur13 ? list.map(o => o.no + o.status + (o.staff || '')).join(',') : '');
+        if (dsActive() && sig !== DS.osig) { DS.osig = sig; dsRender(); }
       });
     }
     function dsAlertClaim() {
@@ -2974,7 +2983,9 @@
       if (ang === 90) { const t = b; b = -g; g = t; } else if (ang === -90 || ang === 270) { const t = b; b = g; g = -t; }
       if (!TILT.base) TILT.base = { b, g };
       TILT.base.b += (b - TILT.base.b) * 0.008; TILT.base.g += (g - TILT.base.g) * 0.008;   // ค่อยๆ ตั้งศูนย์ใหม่ตามท่าที่ถือ
-      TILT.x = tClamp((b - TILT.base.b) / 16); TILT.y = tClamp((g - TILT.base.g) / 16); TILT.gyro = true; tiltKick();
+      const dz = v => Math.abs(v) < .025 ? 0 : v;   // กันสั่นตอนถือนิ่ง
+      const rx = dz(tClamp((b - TILT.base.b) / 18)), ry = dz(tClamp((g - TILT.base.g) / 18));
+      TILT.x += (rx - TILT.x) * .35; TILT.y += (ry - TILT.y) * .35; TILT.gyro = true; tiltKick();
     });
     window.addEventListener('pointermove', e => {
       if (!TILT.on || TILT.gyro || e.pointerType !== 'mouse' || !dsActive()) return;
@@ -2982,19 +2993,23 @@
     });
     document.addEventListener('mouseleave', () => { if (!TILT.gyro) { TILT.x = TILT.y = 0; tiltKick(); } });
     function tiltKick() { if (!TILT.raf) TILT.raf = requestAnimationFrame(tiltLoop); }
-    function tiltLoop() {
+    function tiltLoop(now) {
       TILT.raf = 0;
+      const dt = Math.min(64, Math.max(8, now - (TILT.t || now - 16))); TILT.t = now;
+      const k = 1 - Math.exp(-dt / 85);   // นุ่มเท่ากันทุกเครื่อง (60/120Hz)
       const tx = TILT.on ? TILT.x : 0, ty = TILT.on ? TILT.y : 0;
-      TILT.cx += (tx - TILT.cx) * 0.18; TILT.cy += (ty - TILT.cy) * 0.18;
-      // ขอบจอนิ่ง · เนื้อหาในจอขยับ + เอียงเล็กน้อย · เงาขอบจอเลื่อนสวน = เหมือนจอลึกลงไป (ใช้ transform อย่างเดียว ลื่น ไม่กระตุก)
-      const set = (deep, shade, k) => {
-        const d = document.getElementById(deep), sh = document.getElementById(shade); if (!d) return;
-        const x = TILT.cy * k, y = TILT.cx * k;
-        d.style.transform = `perspective(900px) translate3d(${(-x * 7).toFixed(2)}px, ${(-y * 6).toFixed(2)}px, 0) rotateX(${(y * 4).toFixed(2)}deg) rotateY(${(-x * 5).toFixed(2)}deg) scale(.985)`;
-        if (sh) sh.style.transform = `translate3d(${(x * 9).toFixed(2)}px, ${(y * 8).toFixed(2)}px, 0)`;
-      };
-      set('dsDeepT', 'dsShT', 1); set('dsDeepB', 'dsShB', .6);
-      if (Math.abs(tx - TILT.cx) > .003 || Math.abs(ty - TILT.cy) > .003) tiltKick();
+      TILT.cx += (tx - TILT.cx) * k; TILT.cy += (ty - TILT.cy) * k;
+      const X = TILT.cy, Y = TILT.cx;
+      if (!TILT.el || !TILT.el.hd || !TILT.el.hd.isConnected) {
+        const g = id => document.getElementById(id);
+        TILT.el = { hd: g('dsHd'), body: g('dsBody'), ft: (g('dsFt') || {}).parentNode, shT: g('dsShT'), liT: g('dsLiT'), grid: g('dsGrid'), shB: g('dsShB'), liB: g('dsLiB') };
+      }
+      const E = TILT.el, mv = (el, dx, dy) => { if (el) el.style.transform = `translate3d(${dx.toFixed(2)}px,${dy.toFixed(2)}px,0)`; };
+      // ลึกต่างกัน: หัวจอ/ท้ายจอขยับน้อย · เนื้อหาขยับมาก · เงาขอบเลื่อนสวน · แสงวิ่งไกลสุด
+      mv(E.hd, -X * 4, -Y * 3); mv(E.ft, -X * 4, -Y * 3); mv(E.body, -X * 9, -Y * 7);
+      mv(E.shT, X * 10, Y * 9); mv(E.liT, X * 60, Y * 45);
+      mv(E.grid, -X * 5, -Y * 4); mv(E.shB, X * 6, Y * 5); mv(E.liB, X * 40, Y * 30);
+      if (Math.abs(tx - TILT.cx) > .001 || Math.abs(ty - TILT.cy) > .001) tiltKick();
     }
 
     function dsReset() {
