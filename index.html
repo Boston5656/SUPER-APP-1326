@@ -1555,6 +1555,28 @@
     .ds .ds-dpad.pl .pad { transform: perspective(240px) rotateY(-11deg) scale(.985); }
     .ds .ds-dpad.pr .pad { transform: perspective(240px) rotateY(11deg) scale(.985); }
     @media (orientation: landscape) { .ds .ds-dpad { --u: clamp(34px, 8vh + 4px, 52px); } }
+    .ds .ds-k4 b { font-size: clamp(13px, 3.8vw, 17px) !important; } .ds .ds-k4 > div { padding: 7px 9px; }
+    .ds .ds-cat { padding: 6px 0; font-size: 12.5px; min-height: 46px; } .ds .ds-cat .mb { flex: 0 0 34%; }
+    /* 📱 ลงแอป (เต็มจอ): เว้นล่างให้ปุ่มอยู่ตำแหน่งเดียวกับตอนเปิดในเว็บ (ถนัดนิ้วโป้ง) */
+    @media (orientation: portrait) { html.pwa .ds { padding-bottom: calc(env(safe-area-inset-bottom) + 7vh); padding-top: calc(env(safe-area-inset-top) + 8px); } }
+    /* 📊 Dashboard มือถือ: การ์ดงานโฟกัส / Category 2 คอลัมน์ แน่นขึ้น เห็นครบไม่ต้องเลื่อนยาว */
+    @media (max-width: 639px) {
+      #db-focus, #db-category { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
+      #db-focus .sl-card, #db-category .sl-card { padding: 11px 11px 10px !important; gap: 6px !important; --cut: 14px; }
+      #db-focus .sl-head, #db-category .sl-head { padding-left: 4px; flex-direction: column; align-items: flex-start; gap: 4px; }
+      #db-focus .sl-name, #db-category .sl-name { white-space: normal !important; font-size: 10.5px !important; line-height: 1.2; }
+      #db-focus .sl-card .chip, #db-category .sl-card .chip { font-size: 9px; padding: 2px 6px; }
+      #db-focus .sl-mid, #db-category .sl-mid { flex-direction: column-reverse !important; align-items: flex-start !important; gap: 4px !important; }
+      #db-focus .sl-big, #db-category .sl-big { font-size: 30px !important; letter-spacing: -1px; }
+      #db-focus .sl-big small, #db-category .sl-big small { font-size: 14px; }
+      #db-focus .sl-meta, #db-category .sl-meta { font-size: 10px; gap: 1px; }
+      #db-focus .sl-meta b, #db-category .sl-meta b { font-size: 12px; }
+      #db-focus .sl-foot, #db-category .sl-foot { height: auto !important; flex-direction: column !important; gap: 6px !important; padding-right: 0 !important; }
+      #db-focus .sl-chart, #db-category .sl-chart { height: 34px; flex: 0 0 34px; }
+      #db-focus .sl-side, #db-category .sl-side { flex-direction: row !important; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px !important; padding: 6px 0 0 !important; border-left: 0; border-top: 1px solid rgba(255,255,255,.1); min-width: 0; }
+      #db-focus .sl-side b, #db-category .sl-side b { font-size: 12px !important; }
+      #db-focus .sl-side small, #db-category .sl-side small { font-size: 9px !important; }
+    }
     @media (prefers-reduced-motion: reduce) { .ds *, .ds { animation: none !important; transition: none !important; } }
   </style>
 
@@ -1992,7 +2014,8 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.15-09';
+    try { if (navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)) document.documentElement.classList.add('pwa'); } catch (e) {}
+    const APP_VER = '2026.11.15-10';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2848,19 +2871,31 @@
     }
 
     // ---------- 📊 Dashboard ----------
+    // ความสูงจอบนจริง → คิดว่าใส่ได้กี่แถว (จอสูง/ลงแอป = แน่นขึ้น ไม่เหลือที่ว่าง)
+    const dsH = () => { const b = document.getElementById('dsBody'); return (b && b.clientHeight) || 300; };
+    const dsFit = (rowH, reserve, min) => Math.max(min || 1, Math.floor((dsH() - (reserve || 0)) / rowH));
+    window.addEventListener('resize', () => { clearTimeout(DS.rz); DS.rz = setTimeout(() => { if (dsActive()) dsRender(); }, 150); });
+    function dsCatRows(list) {
+      return list.map(c => { const col = c.fp >= 100 ? '#30D158' : c.fp >= 80 ? '#0A84FF' : '#FF453A';
+        return `<div class="ds-row ds-cat"><span class="nm">${dsEsc(c.n)}</span><span class="mb"><i style="width:${Math.min(100, c.ap)}%;background:${col}"></i></span><span class="vl num">${dsPct(c.ap)}<small style="color:${col}">Fc ${dsPct(c.fp)}</small></span></div>`; }).join('');
+    }
     function dsDashPages(x) {
       const pages = [], left = x.days && x.day ? Math.max(1, x.days - x.day + 1) : 1;
       const sub = `${x.label || ''}${x.dataDate ? ' · ข้อมูลถึง ' + x.dataDate : ''}`;
       if (x.sales) {
         const s = x.sales, perDay = Math.max(0, Math.round((s.target - s.ach) / left));
+        const cats = x.cats || [], catsFit = 0, catPer = dsFit(47, 30, 3);
         pages.push({ t: 'ยอดขาย · ' + s.who + ' · ' + sub, h: `
           <div class="ds-k" style="--n:2"><div class="k"><span>Achieve</span><b class="num">${dsBaht(s.ach, true)}</b><em>${dsPct(s.achP)} ของเป้า</em></div>
             <div class="y"><span>Forecast</span><b class="num">${dsBaht(s.fc, true)}</b><em style="color:#6B5B00">${dsPct(s.fcP)}</em></div></div>
           <div class="ds-sec"><span>Achieve</span><span class="num">${dsPct(s.achP)}</span></div>${dsBar(s.achP, '', (x.day / x.days) * 100)}
           <div class="ds-sec"><span>Forecast</span><span class="num">${dsPct(s.fcP)}</span></div>${dsBar(s.fcP, s.fcP >= 100 ? '#30D158' : s.fcP >= 80 ? '#0A84FF' : '#FF3B30')}
-          <div class="ds-k" style="--n:3;margin-top:10px"><div><span>Target</span><b class="num" style="font-size:16px">${dsBaht(s.target, true)}</b></div>
-            <div><span>ต้องทำ/วัน</span><b class="num" style="font-size:16px">${s.ach >= s.target ? '✅' : dsBaht(perDay, true)}</b></div>
-            <div><span>วันที่</span><b class="num" style="font-size:16px">${x.day}/${x.days}</b><em>เหลือ ${left} วัน</em></div></div>` });
+          <div class="ds-k ds-k4" style="--n:4;margin-top:8px"><div><span>Target</span><b class="num">${dsBaht(s.target, true)}</b></div>
+            <div><span>ต้องทำ/วัน</span><b class="num">${s.ach >= s.target ? '✅' : dsBaht(perDay, true)}</b></div>
+            <div><span>วันที่ ${x.day}/${x.days}</span><b class="num">เหลือ ${left}</b></div>
+            <div><span>MOM${s.yoy ? ' · YOY' : ''}</span><b class="num" style="color:${String(s.mom).charAt(0) === '-' ? '#FF6B61' : '#6EE7A0'}">${dsEsc(s.mom || '-')}</b>${s.yoy ? `<em style="color:${String(s.yoy).charAt(0) === '-' ? '#FF6B61' : '#6EE7A0'}">${dsEsc(s.yoy)}</em>` : ''}</div></div>` + (catsFit ? `
+          <div class="ds-sec"><span>หมวดสินค้า</span><span>Achieve · Forecast</span></div>${dsCatRows(cats.slice(0, catsFit))}` : '') });
+        if (cats.length > catsFit) for (let i = catsFit; i < cats.length; i += catPer) pages.push({ t: 'หมวดสินค้า · ' + sub, h: `<div class="ds-sec"><span>หมวดสินค้า</span><span>Achieve · Forecast</span></div>${dsCatRows(cats.slice(i, i + catPer))}` });
       } else if (x.brand) {
         const b = x.brand;
         pages.push({ t: 'แบรนด์ ' + b.name + ' · ' + sub, h: `
@@ -2872,8 +2907,8 @@
       const ms = x.missions || [];
       if (x.missionErr) pages.push({ t: 'ภารกิจ Att Rate', h: dsMsg('🎯', 'ยังไม่มีข้อมูลงานโฟกัส', dsEsc(x.missionErr)) });
       else if (!ms.length) pages.push({ t: 'ภารกิจ Att Rate', h: dsMsg('🏆', 'ผ่านทุกงานโฟกัส!', `${x.pass || 0} งานถึงเป้าแล้ว · รักษาไว้นะ`) });
-      else for (let i = 0; i < ms.length; i += 2) {
-        pages.push({ t: `ภารกิจ Att Rate ที่ยังไม่ผ่าน · ${ms.length} งาน${dsPC() ? ' · ' + (currentUser.brand || '') : ''}`, h: ms.slice(i, i + 2).map(m => `
+      else for (let i = 0, per = dsFit(dsPC() ? 92 : 122, 0, 1); i < ms.length; i += per) {
+        pages.push({ t: `ภารกิจ Att Rate ที่ยังไม่ผ่าน · ${ms.length} งาน${dsPC() ? ' · ' + (currentUser.brand || '') : ''}`, h: ms.slice(i, i + per).map(m => `
           <div class="ds-ms"><div class="h"><b>🎯 ${dsEsc(m.name)}</b><span class="num">${dsPct(m.att)} <em>/ ${dsPct(m.t)}</em></span></div>
             ${dsBar(m.att / Math.max(m.t, 1) * 100, '#FF3B30', 99)}
             <div class="need">ขาดอีก ${dsN(m.need)} ชิ้น · ≈ ${dsN(m.perDay)} ชิ้น/วัน (เหลือ ${x.left} วัน)</div>
@@ -2893,7 +2928,7 @@
           ${items ? `<div class="ds-sec"><span>งานที่ติดวันนี้</span></div><div class="ds-chips">${items}</div>` : ''}`;
         if (t.brands && t.brands.length) {
           const max = Math.max(1, ...t.brands.map(b => b.f));
-          h += `<div class="ds-sec"><span>🏆 แบรนด์ไหนโฟกัสสูงสุด</span><span>ชิ้น · ครอบคลุม</span></div>` + t.brands.slice(0, 4).map((b, i) => `
+          h += `<div class="ds-sec"><span>🏆 แบรนด์ไหนโฟกัสสูงสุด</span><span>ชิ้น · ครอบคลุม</span></div>` + t.brands.slice(0, dsFit(46, (t.items || []).length > 4 ? 250 : 210, 3)).map((b, i) => `
             <div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(b.n)}<small>${dsN(b.u)} เครื่อง</small></span><span class="mb"><i style="width:${b.f / max * 100}%"></i></span><span class="vl num">${dsN(b.f)}<small>${dsPct(b.cover)}</small></span></div>`).join('');
         }
         if (t.me) h += `<div class="ds-sec"><span>ของฉัน (${dsEsc(t.me.n)})</span></div><div class="ds-row me"><span class="nm">${dsN(t.me.u)} เครื่อง</span><span class="vl num">${dsN(t.me.f)} ชิ้น<small>ครอบคลุม ${dsPct(t.me.cover)}</small></span></div>`;
@@ -2940,7 +2975,7 @@
             <div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(t.name)}</span><span class="vl num">${dsBaht(t.revenue, true)}<small>${dsN(t.unit)} เครื่อง</small></span></div>`).join('');
         } else {
           const max = Math.max(1, ...p.rows.map(r => r.rev));
-          h = p.rows.slice(0, 6).map((r, i) => `
+          h = p.rows.slice(0, dsFit(46, 6, 4)).map((r, i) => `
             <div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(r.n)}</span><span class="mb"><i style="width:${r.rev / max * 100}%"></i></span><span class="vl num">${dsBaht(r.rev, true)}<small>${dsN(r.u)} เครื่อง</small></span></div>`).join('');
         }
         pages.push({ t: `${p.title.trim()} · ${mon} (MTD)${x.masked ? ' · ยอดปิดหลักท้าย' : ''}`, h });
@@ -2949,8 +2984,8 @@
         const f = x.focus, max = Math.max(1, ...f.staff.map(e => e.f), ...f.pc.map(e => e.f));
         const row = (e, i) => `<div class="ds-row"><span class="rk px ${i < 3 ? 'g' + (i + 1) : ''}">${i + 1}</span><span class="nm">${dsEsc(e.n)}<small>${dsN(e.u)} เครื่อง</small></span><span class="mb"><i style="width:${e.f / max * 100}%"></i></span><span class="vl num">${dsN(e.f)}<small>${dsPct(e.cover)}</small></span></div>`;
         pages.push({ t: `🎯 งานโฟกัส · ${mon}`, h: f.staff.length || f.pc.length ? `
-          <div class="${f.pc.length ? 'ds-2c' : ''}"><div><div class="ds-sec"><span>👤 พนักงานร้าน</span><span>ชิ้น</span></div>${f.staff.slice(0, 5).map(row).join('') || '<div class="ds-row">-</div>'}</div>
-          ${f.pc.length ? `<div><div class="ds-sec"><span>🏷️ PC</span><span>ชิ้น</span></div>${f.pc.slice(0, 5).map(row).join('')}</div>` : ''}</div>` : dsMsg('🎯', 'ยังไม่มีงานโฟกัสเดือนนี้', '') });
+          <div class="${f.pc.length ? 'ds-2c' : ''}"><div><div class="ds-sec"><span>👤 พนักงานร้าน</span><span>ชิ้น</span></div>${f.staff.slice(0, f.pc.length && innerWidth < innerHeight ? Math.max(3, dsFit(46, 60, 3) - Math.min(f.pc.length, 3)) : dsFit(46, 30, 4)).map(row).join('') || '<div class="ds-row">-</div>'}</div>
+          ${f.pc.length ? `<div><div class="ds-sec"><span>🏷️ PC</span><span>ชิ้น</span></div>${f.pc.slice(0, innerWidth < innerHeight ? 3 : dsFit(46, 30, 4)).map(row).join('')}</div>` : ''}</div>` : dsMsg('🎯', 'ยังไม่มีงานโฟกัสเดือนนี้', '') });
       }
       return pages;
     }
@@ -2977,7 +3012,7 @@
       list.sort((a, b) => order[a.status] - order[b.status] || a.created - b.created);
       const pages = [], cnt = {}; list.forEach(o => { cnt[o.status] = (cnt[o.status] || 0) + 1; });
       const head = `<div class="ds-chips" style="margin:0 0 6px">${Object.keys(lbl).filter(k => cnt[k]).map(k => `<span class="ds-st ${k}" style="border:0">${lbl[k]} ${cnt[k]}</span>`).join('')}</div>`;
-      for (let i = 0; i < list.length; i += 4) pages.push({ t: `Order ที่กำลังทำ ${list.length} ใบ · ปิดเคสแล้วไม่นับ`, h: head + list.slice(i, i + 4).map(o => `
+      for (let i = 0, per = dsFit(56, 40, 3); i < list.length; i += per) pages.push({ t: `Order ที่กำลังทำ ${list.length} ใบ · ปิดเคสแล้วไม่นับ`, h: head + list.slice(i, i + per).map(o => `
         <div class="ds-row"><span class="nm">${dsEsc([o.brand, o.model].filter(Boolean).join(' '))}<small>${dsEsc([o.color, o.cap].filter(Boolean).join(' '))}</small><br><small style="margin:0">${dsEsc(String(o.owner || '').split(' · ')[0])}${o.staff ? ' → ' + dsEsc(String(o.staff).split(' · ')[0]) : ''} · ${ago(o.created)}</small></span>
           <span class="ds-st ${o.status}">${lbl[o.status]}</span></div>`).join('') });
       return pages;
