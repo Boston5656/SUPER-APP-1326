@@ -1459,6 +1459,79 @@
       .ds-k b { font-size: 28px; }
       .ds-app .ai { --ai: 54px; }
     }
+
+    /* =========== v2: จอดำ · ปุ่มดำแบบเครื่องเกม · 3D อยู่ในจอ (ขอบไม่ขยับ) =========== */
+    .ds .ds-scr { transform: none; will-change: auto; }
+    .ds .ds-scr::before, .ds .ds-glass::after { display: none; }
+    .ds .ds-body, .ds .ds-grid { translate: none; }
+    .ds .ds-glass { color: #F5F5F7; background: radial-gradient(130% 90% at 50% 0%, #1E1E22 0%, #0C0C0E 70%); contain: layout paint;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.5); }
+    .ds-deep { flex: 1; min-height: 0; display: flex; flex-direction: column; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden; }
+    .ds-shade { position: absolute; inset: -20px; border-radius: calc(var(--dsr) + 13px); pointer-events: none; z-index: 8; will-change: transform;
+      box-shadow: inset 0 0 0 20px rgba(0,0,0,.92), inset 0 0 26px 26px rgba(0,0,0,.55); }
+    .ds .ds-hd { border-bottom-color: rgba(255,255,255,.07); }
+    .ds .ds-hd .tt small, .ds .ds-pgn span, .ds .ds-sec, .ds .ds-k span, .ds .ds-k em, .ds .ds-row .nm small, .ds .ds-row .vl small, .ds .ds-ms .h span em, .ds .ds-msg { color: #8E8E93; }
+    .ds .ds-pgn button, .ds .ds-sys { background: #232327; color: #C7C7CC; }
+    .ds .ds-ft { color: #636366; } .ds .ds-ft .px { color: #48484A; }
+    .ds .ds-dots i { background: #2C2C30; } .ds .ds-dots i.on { background: #FFD600; }
+    .ds .ds-k > div { background: #1C1C20; }
+    .ds .ds-k > div.k { background: #F5F5F7; color: #0C0C0E; } .ds .ds-k > div.k span, .ds .ds-k > div.k em { color: #6E6E73; }
+    .ds .ds-k > div.y { color: #0C0C0E; background: #FFD600; } .ds .ds-k > div.y span, .ds .ds-k > div.y em { color: #6B5600 !important; }
+    /* จอฝังลงไปในตัวเครื่องเหลือง (ไม่มีขอบขาว) */
+    .ds .ds-scr { padding: 5px; background: linear-gradient(180deg, rgba(150,105,0,.22), rgba(255,255,255,.18));
+      box-shadow: inset 0 3px 6px rgba(110,75,0,.5), inset 0 -1.5px 1px rgba(255,255,255,.55), 0 1px 0 rgba(255,255,255,.5); }
+    .ds .ds-glass { border-radius: calc(var(--dsr) - 5px); }
+    /* ไอคอนพอดีจอทุกขนาด (คิดจากความสูงพื้นที่จริง) */
+    .ds .ds-deep { container-type: size; }
+    .ds .ds-app { --ai: clamp(30px, calc(50cqh - 40px), 64px); gap: 5px; padding: 2px; }
+    .ds .ds-app .an { font-size: clamp(8.5px, 5cqh, 11px); }
+    .ds .ds-bar { background: #232327; } .ds .ds-bar > i { background: repeating-linear-gradient(90deg, var(--c, #F5F5F7) 0 8px, transparent 8px 10px); }
+    .ds .ds-row { border-bottom-color: rgba(255,255,255,.06); }
+    .ds .ds-row .rk { background: #232327; color: #C7C7CC; } .ds .ds-row .rk.g1 { background: #FFD600; color: #0C0C0E; } .ds .ds-row .rk.g2 { background: #C7C7CC; color: #0C0C0E; } .ds .ds-row .rk.g3 { background: #C08552; color: #0C0C0E; }
+    .ds .ds-row .mb { background: #232327; } .ds .ds-row .mb i { background: #F5F5F7; }
+    .ds .ds-row.me { background: rgba(255,214,0,.13); }
+    .ds .ds-ms { background: #1C1C20; } .ds .ds-ms .need { color: #FF6B61; }
+    .ds .ds-chips span { background: #1C1C20; border-color: #2C2C30; color: #E5E5EA; }
+    .ds .ds-chips span.r { background: rgba(255,69,58,.16); border-color: rgba(255,69,58,.35); color: #FF8A80; }
+    .ds .ds-chips span.g { background: rgba(48,209,88,.15); border-color: rgba(48,209,88,.35); color: #6EE7A0; }
+    .ds .ds-chips span.k { background: #FFD600; color: #0C0C0E; border-color: #FFD600; }
+    .ds .ds-st { background: #2C2C30; color: #E5E5EA; }
+    .ds .ds-msg b { color: #F5F5F7; }
+    .ds .ds-skel { background: linear-gradient(90deg, #1C1C20 0 40%, #2A2A2E 50%, #1C1C20 60%); background-size: 300% 100%; }
+    .ds .ds-boot { background: radial-gradient(130% 90% at 50% 0%, #1E1E22 0%, #0C0C0E 70%); }
+    .ds .ds-logo .px { color: #F5F5F7; text-shadow: 3px 3px 0 #8A6F00; }
+    .ds .ds-logo .n { text-shadow: 4px 4px 0 #000, 0 0 18px rgba(255,214,0,.35); }
+    .ds .ds-seg { border-color: #F5F5F7; } .ds .ds-seg i { background: #232327; } .ds .ds-seg i.on { background: #FFD600; }
+    .ds .ds-boot .px.sm { color: #8E8E93 !important; }
+    .ds .ds-bhd b { color: #F5F5F7; }
+    .ds .ds-app .an { color: #E5E5EA; }
+    .ds .ds-app.sel .ai { box-shadow: 0 0 0 2.5px #0C0C0E, 0 0 0 5px #FFD600, 0 0 22px 2px rgba(255,214,0,.35); }
+    .ds .ds-app.sel::after { background: #FFD600; }
+    /* แอป 4 ตัวต่อหน้า (2×2 · แนวนอน 4×1) */
+    .ds .ds-grid { overflow: hidden; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); align-content: stretch; align-items: center; padding: 10px 10px 2px; gap: 2px 8px; }
+    .ds .ds-app .an { font-size: 10.5px; }
+    .ds-apg { display: flex; justify-content: center; gap: 5px; padding: 2px 0 8px; flex-shrink: 0; }
+    .ds-apg i { width: 6px; height: 6px; border-radius: 3px; background: #2C2C30; transition: width .3s var(--spring), background .2s; }
+    .ds-apg i.on { width: 16px; background: #FFD600; }
+    .ds-grid.slide { animation: dsSlide .32s var(--ios-ease) both; }
+    @keyframes dsSlide { from { opacity: 0; transform: translateX(var(--sx, 30px)); } to { opacity: 1; transform: none; } }
+    @media (orientation: landscape) {
+      .ds .ds-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: 1fr; }
+      .ds .ds-app { --ai: clamp(28px, calc(100cqh - 46px), 60px); }
+    }
+    /* ปุ่มดำแบบเครื่องเกม */
+    .ds .ds-btn { color: #6E6E73; background: linear-gradient(180deg, #34343A 0%, #17171A 100%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 3px rgba(0,0,0,.55), 0 12px 20px -9px rgba(70,50,0,.7), 0 2px 5px rgba(0,0,0,.28); }
+    .ds .ds-btn.dn, .ds .ds-btn:active { background: linear-gradient(180deg, #121214, #1C1C20); box-shadow: inset 0 2px 7px rgba(0,0,0,.7), 0 4px 10px -8px rgba(70,50,0,.6); }
+    .ds .ds-dpad .c { background: linear-gradient(180deg, #2A2A2F, #1A1A1D) !important; box-shadow: 0 4px 8px -3px rgba(70,50,0,.5) !important; border-radius: 3px; }
+    .ds .ds-dpad .ds-btn svg { width: 38%; height: 38%; fill: #5A5A60; }
+    .ds .ds-ab .ds-btn { border-radius: 50%; width: clamp(58px, 17vw, 80px); height: clamp(58px, 17vw, 80px); }
+    .ds .ds-ab .ds-btn b { font-size: clamp(17px, 5vw, 24px); color: #5A5A60; text-shadow: 0 1px 0 rgba(255,255,255,.08); }
+    .ds .ds-ab { height: clamp(104px, 30vw, 148px); }
+    .ds .ds-ab .a.ping { animation: dsPing2 1s steps(2) infinite; }
+    @keyframes dsPing2 { 50% { box-shadow: 0 0 0 3px #FFD600, 0 0 22px 4px rgba(255,214,0,.6); } }
+    .ds .ds-pill { color: #5A5A60; font-size: 10px; }
+    @media (orientation: landscape) { .ds .ds-ab .ds-btn { width: clamp(50px, 10vh + 16px, 74px); height: clamp(50px, 10vh + 16px, 74px); } }
     @media (prefers-reduced-motion: reduce) { .ds *, .ds { animation: none !important; transition: none !important; } }
   </style>
 
@@ -1896,7 +1969,7 @@
     // แอปย่อย: เปิดซ้อนในหน้านี้ (ไม่เปิดแท็บใหม่ · ไม่ต้องรีเฟรช · ไม่ต้องล็อกอินซ้ำ)
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
-    const APP_VER = '2026.11.15-02';
+    const APP_VER = '2026.11.15-04';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -2467,10 +2540,10 @@
       DS.sel = Math.min(saved, DS.apps.length - 1); DS.page = 0; DS.built = key;
       const admin = String(currentUser.empId) === '15628';
       root.innerHTML = `
-        <section class="ds-scr ds-top" id="dsTop"><div class="ds-glass">
+        <section class="ds-scr ds-top" id="dsTop"><div class="ds-glass"><div class="ds-deep" id="dsDeepT">
           <div class="ds-hd" id="dsHd"></div>
           <div class="ds-body" id="dsBody"></div>
-          <div class="ds-ft"><span id="dsFt"></span><span class="ds-dots" id="dsDots"></span></div>
+          <div class="ds-ft"><span id="dsFt"></span><span class="ds-dots" id="dsDots"></span></div></div><i class="ds-shade" id="dsShT"></i>
           <div class="ds-boot" id="dsBootT"><div class="ds-logo"><svg class="bn" viewBox="0 0 16 16" shape-rendering="crispEdges"><path fill="#1C1C1E" d="M10 1h2v1h1v2h-1v1h-1v1H9V4h1V1z"/><path fill="#FFD600" d="M3 6h1v1h1v1h2v1h3V8h1V7h1V6h1v3h-1v2h-1v1H9v1H5v-1H4v-1H3V9H2V7h1z"/><path fill="#1C1C1E" d="M2 7h1v2h1v2h1v1h4v-1h2V9h1V7h1v2h-1v2h-1v1H9v1H5v-1H4v-1H3V9H2z" opacity=".25"/></svg>
             <div class="px">SUPER APP</div><div class="n">1326</div></div>
             <div class="ds-seg" id="dsSegT">${'<i></i>'.repeat(20)}</div><div class="px sm">PRESS START</div></div>
@@ -2482,13 +2555,13 @@
             <button class="ds-sys" id="dsTiltB" onclick="dsTiltToggle()" aria-label="จอ 3D (Gyro)"></button>
             <button class="ds-sys" onclick="dsSetOn(false)" aria-label="หน้าเมนูแบบเดิม">▦</button>
             <button class="ds-sys" onclick="askLogout()" aria-label="ออกจากระบบ">⏻</button></div>
-          <div class="ds-grid" id="dsGrid"></div>
+          <div class="ds-deep" id="dsDeepB"><div class="ds-grid" id="dsGrid"></div><div class="ds-apg" id="dsApg"></div></div><i class="ds-shade" id="dsShB"></i>
           <div class="ds-boot" id="dsBootB"><div class="px sm" style="animation:none;color:#1C1C1E">LOADING…</div><div class="ds-seg" id="dsSegB">${'<i></i>'.repeat(20)}</div><div class="tip" id="dsTip"></div></div>
         </div></section>
-        <div class="ds-pg"><button class="ds-btn ds-pill px" data-k="L">◀ L</button><button class="ds-btn ds-pill px" data-k="R">R ▶</button></div>
+        <div class="ds-pg"><button class="ds-btn ds-pill px" data-k="L" aria-label="หน้าก่อน">L</button><button class="ds-btn ds-pill px" data-k="R" aria-label="หน้าถัดไป">R</button></div>
         <div class="ds-ctl">
-          <div class="ds-dpad"><button class="ds-btn u" data-k="U" aria-label="ขึ้น">▲</button><button class="ds-btn l" data-k="Lf" aria-label="ซ้าย">◀</button><span class="c"></span><button class="ds-btn r" data-k="Rt" aria-label="ขวา">▶</button><button class="ds-btn d" data-k="D" aria-label="ลง">▼</button></div>
-          <div class="ds-ab"><button class="ds-btn a px" data-k="A" id="dsA"><b>A</b><small>Order</small></button><button class="ds-btn b px" data-k="B"><b>B</b><small>เปิดแอป</small></button></div>
+          <div class="ds-dpad"><button class="ds-btn u" data-k="U" aria-label="ขึ้น">${DS_TRI(0)}</button><button class="ds-btn l" data-k="Lf" aria-label="ซ้าย">${DS_TRI(270)}</button><span class="c"></span><button class="ds-btn r" data-k="Rt" aria-label="ขวา">${DS_TRI(90)}</button><button class="ds-btn d" data-k="D" aria-label="ลง">${DS_TRI(180)}</button></div>
+          <div class="ds-ab"><button class="ds-btn a px" data-k="A" id="dsA" aria-label="A ไปที่ Order"><b>A</b></button><button class="ds-btn b px" data-k="B" aria-label="B เปิดแอป"><b>B</b></button></div>
         </div>`;
       document.getElementById('dsHi').textContent = 'สวัสดี ' + String(currentUser.name || '').split(' · ')[0];
       dsMuteIcon(); dsTiltIcon();
@@ -2499,15 +2572,25 @@
       dsLoad(true);
       dsOrderWatch();
     }
-    function dsGrid() {
+    const DS_TRI = r => `<svg viewBox="0 0 10 10" style="transform:rotate(${r}deg)"><path d="M5 1.2 9.2 8.4H.8z"/></svg>`;
+    const DS_BADGE = {};
+    const DS_PER = 4;
+    function dsGrid(dir) {
       const g = document.getElementById('dsGrid'); if (!g) return;
-      g.innerHTML = DS.apps.map((a, i) => `<button class="ds-app${i === DS.sel ? ' sel' : ''}" data-i="${i}" data-app="${a.id}"><span class="ai">${a.icon}</span><b class="app-badge" id="badge-${a.id}"></b><span class="an">${dsEsc(a.name)}</span><small class="app-note" id="note-${a.id}"></small></button>`).join('');
+      const pg = Math.floor(DS.sel / DS_PER), from = pg * DS_PER;
+      DS.apg = pg;
+      g.innerHTML = DS.apps.slice(from, from + DS_PER).map((a, k) => { const i = from + k; return `<button class="ds-app${i === DS.sel ? ' sel' : ''}" data-i="${i}" data-app="${a.id}"><span class="ai">${a.icon}</span><b class="app-badge" id="badge-${a.id}"></b><span class="an">${dsEsc(a.name)}</span><small class="app-note" id="note-${a.id}"></small></button>`; }).join('');
+      Object.keys(DS_BADGE).forEach(id => { const x = DS_BADGE[id], b = document.getElementById('badge-' + id); if (b) { b.textContent = x.txt || ''; b.className = 'app-badge' + (x.txt ? ' on ' + (x.cls || '') : ''); } });
+      const np = Math.ceil(DS.apps.length / DS_PER), ap = document.getElementById('dsApg');
+      if (ap) ap.innerHTML = np > 1 ? Array.from({ length: np }, (_, i) => `<i class="${i === pg ? 'on' : ''}"></i>`).join('') : '';
+      if (dir) { g.classList.remove('slide'); void g.offsetWidth; g.style.setProperty('--sx', (dir > 0 ? 30 : -30) + 'px'); g.classList.add('slide'); }
       g.querySelectorAll('.ds-app').forEach(el => el.addEventListener('click', () => {
+        if (Date.now() - (DS.swiped || 0) < 400) return;
         const i = Number(el.dataset.i);
         if (i === DS.sel) dsOpen(); else dsSelect(i);
       }));
     }
-    function dsCols() { const g = document.getElementById('dsGrid'); if (!g) return 4; return getComputedStyle(g).gridTemplateColumns.split(' ').length || 4; }
+    function dsCols() { const g = document.getElementById('dsGrid'); if (!g) return 2; return getComputedStyle(g).gridTemplateColumns.split(' ').length || 2; }
 
     // ---------- 8 bit โหลด ----------
     function dsBoot() {
@@ -2556,9 +2639,9 @@
       const n = DS.apps.length; if (!n) return;
       i = ((i % n) + n) % n;
       if (i === DS.sel && !quiet) return;
-      DS.sel = i; DS.page = 0; try { sessionStorage.setItem('hub3ds_sel', i); } catch (e) {}
-      document.querySelectorAll('#dsGrid .ds-app').forEach(el => el.classList.toggle('sel', Number(el.dataset.i) === i));
-      const el = document.querySelector(`#dsGrid .ds-app[data-i="${i}"]`); if (el) el.scrollIntoView({ block: 'nearest', behavior: REDUCED_MOTION ? 'auto' : 'smooth' });
+      const old = DS.sel; DS.sel = i; DS.page = 0; try { sessionStorage.setItem('hub3ds_sel', i); } catch (e) {}
+      if (Math.floor(i / DS_PER) !== DS.apg) dsGrid(i > old ? 1 : -1);
+      else document.querySelectorAll('#dsGrid .ds-app').forEach(el => el.classList.toggle('sel', Number(el.dataset.i) === i));
       if (!quiet) { SFX.play('move'); haptic(4); }
       dsRender(false, 1);
     }
@@ -2609,6 +2692,16 @@
         ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => b.addEventListener(ev, stop));
         b.addEventListener('contextmenu', e => e.preventDefault());
       });
+      // ปัดจอล่าง = หน้าแอปถัดไป (ทีละ 4 แอป)
+      const bot = root.querySelector('#dsBot'); let bx = null, by = 0;
+      bot.addEventListener('pointerdown', e => { bx = e.clientX; by = e.clientY; });
+      bot.addEventListener('pointerup', e => {
+        if (bx == null) return; const dx = e.clientX - bx, dy = e.clientY - by; bx = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.3) {
+          const np = Math.ceil(DS.apps.length / DS_PER), pg = (Math.floor(DS.sel / DS_PER) + (dx < 0 ? 1 : -1) + np) % np;
+          DS.swiped = Date.now(); dsSelect(pg * DS_PER);
+        }
+      });
       // ปัดจอบน = เปลี่ยนหน้า
       const top = root.querySelector('#dsTop'); let sx = null, sy = 0;
       top.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; sx = e.clientX; sy = e.clientY; });
@@ -2657,6 +2750,7 @@
         if (DS.alert) { const cur = list.find(o => o.no === DS.alert.no); if (!cur || cur.status !== 'new') DS.alert = null; }
         DS.seen = {}; list.forEach(o => { DS.seen[o.no] = 1; });
         DS.orders = list;
+        try { const n = list.filter(o => dsPC() ? (o.ownerAcct === me.acct && o.status === 'back') : o.status === 'new').length; setBadge(13, n ? String(n) : '', 'warn'); } catch (e) {}
         if (dsActive()) dsRender();
       });
     }
@@ -2852,7 +2946,7 @@
     // ---------- แอปอื่น ----------
     function dsInfoPages(a) {
       const i = DS_INFO[a.id] || ['✨', a.name, ''];
-      const note = (document.getElementById('note-' + a.id) || {}).textContent || '';
+      const note = (DS_BADGE[a.id] || {}).note || '';
       return [{ t: 'กด 🅱 เพื่อเปิด', h: dsMsg(i[0], dsEsc(i[1]), dsEsc(i[2]) + (note ? `<div class="ds-chips" style="justify-content:center"><span class="r">${dsEsc(note)}</span></div>` : '')) }];
     }
     // ---------- 🧊 จอ 3D: เอียงมือถือ (Gyro) / ขยับเมาส์ (คอม) ----------
@@ -2891,15 +2985,16 @@
     function tiltLoop() {
       TILT.raf = 0;
       const tx = TILT.on ? TILT.x : 0, ty = TILT.on ? TILT.y : 0;
-      TILT.cx += (tx - TILT.cx) * 0.14; TILT.cy += (ty - TILT.cy) * 0.14;
-      const set = (id, k) => {
-        const el = document.getElementById(id); if (!el) return;
-        el.style.setProperty('--tx', (-TILT.cx * 7 * k).toFixed(2) + 'deg'); el.style.setProperty('--ty', (TILT.cy * 9 * k).toFixed(2) + 'deg');
-        el.style.setProperty('--gx', (TILT.cy * 40).toFixed(1) + '%'); el.style.setProperty('--gy', (TILT.cx * 30).toFixed(1) + '%');
-        el.style.setProperty('--px', (-TILT.cy * 7 * k).toFixed(1) + 'px'); el.style.setProperty('--py', (-TILT.cx * 5 * k).toFixed(1) + 'px');
+      TILT.cx += (tx - TILT.cx) * 0.18; TILT.cy += (ty - TILT.cy) * 0.18;
+      // ขอบจอนิ่ง · เนื้อหาในจอขยับ + เอียงเล็กน้อย · เงาขอบจอเลื่อนสวน = เหมือนจอลึกลงไป (ใช้ transform อย่างเดียว ลื่น ไม่กระตุก)
+      const set = (deep, shade, k) => {
+        const d = document.getElementById(deep), sh = document.getElementById(shade); if (!d) return;
+        const x = TILT.cy * k, y = TILT.cx * k;
+        d.style.transform = `perspective(900px) translate3d(${(-x * 7).toFixed(2)}px, ${(-y * 6).toFixed(2)}px, 0) rotateX(${(y * 4).toFixed(2)}deg) rotateY(${(-x * 5).toFixed(2)}deg) scale(.985)`;
+        if (sh) sh.style.transform = `translate3d(${(x * 9).toFixed(2)}px, ${(y * 8).toFixed(2)}px, 0)`;
       };
-      set('dsTop', 1); set('dsBot', .45);
-      if (Math.abs(tx - TILT.cx) > .002 || Math.abs(ty - TILT.cy) > .002) tiltKick();
+      set('dsDeepT', 'dsShT', 1); set('dsDeepB', 'dsShB', .6);
+      if (Math.abs(tx - TILT.cx) > .003 || Math.abs(ty - TILT.cy) > .003) tiltKick();
     }
 
     function dsReset() {
@@ -2964,6 +3059,7 @@
     // =========================================================
     let hubBadgeT = null;
     function setBadge(id, txt, cls, note) {
+      try { DS_BADGE[id] = { txt, cls, note }; } catch (e) {}
       const b = document.getElementById('badge-' + id), n = document.getElementById('note-' + id);
       if (b) { b.textContent = txt || ''; b.className = 'app-badge' + (txt ? ' on ' + (cls || '') : ''); }
       if (n) { n.textContent = note || ''; n.classList.toggle('on', !!note); }
