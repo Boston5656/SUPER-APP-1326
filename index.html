@@ -1586,6 +1586,45 @@
       .ds .ds-bhd { padding: 12px 14px 4px 18px; } .ds .ds-bhd b { font-size: 15px; }
       .ds .ds-sys { width: 34px; height: 34px; font-size: 16px; }
     }
+    /* 👤 การ์ดพนักงานแบบใหม่ */
+    #page-dashboard .staff-card.st2, #page-dashboard.hmode .staff-card.st2 { display: flex !important; flex-direction: column; gap: 9px; padding: 16px 18px !important; border-radius: 6px !important; cursor: pointer; }
+    .st2 .sl-name { font-size: 15px; text-transform: none; white-space: nowrap; }
+    .st2 .sl-name em { font-style: normal; font-size: 10.5px; color: #8E8E93; font-weight: 700; margin-left: 8px; letter-spacing: 0; }
+    .st2 .chip.pass { background: rgba(48,209,88,.16); color: #30D158; } .st2 .chip.miss { background: rgba(255,69,58,.16); color: #FF6961; }
+    .st-bar { position: relative; height: 8px; border-radius: 4px; background: rgba(255,255,255,.08); }
+    .st-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 4px; transition: width 1s var(--ios-ease); }
+    .st-bar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #fff; opacity: .7; border-radius: 1px; }
+    .st-kp { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .st-kp span { display: flex; flex-direction: column; background: rgba(255,255,255,.05); border-radius: 10px; padding: 6px 8px; min-width: 0; }
+    .st-kp small, .st-att small { font-size: 9.5px; color: #8E8E93; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .st-kp b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 13px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .st-att { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+    .st-att span { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; padding: 6px 9px; border-radius: 9px; background: rgba(255,255,255,.05); border-left: 3px solid #48484A; min-width: 0; }
+    .st-att b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 13.5px; color: #fff; }
+    .st-att .ok { border-left-color: #30D158; } .st-att .ok b { color: #30D158; }
+    .st-att .mid { border-left-color: #FFD60A; } .st-att .mid b { color: #FFD60A; }
+    .st-att .bad { border-left-color: #FF453A; } .st-att .bad b { color: #FF6961; }
+    .st-att.none { display: block; font-size: 11px; color: #8E8E93; text-align: center; padding: 10px; background: rgba(255,255,255,.04); border-radius: 10px; }
+    .st-ft { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 10.5px; color: #8E8E93; font-weight: 700; padding-right: 6px; }
+    .st-ft .inc-btn { flex-shrink: 0; }
+    .ms-staff .sd-inc { margin-top: 4px; border: 0; border-radius: 14px; height: 40px; background: #FFD600; color: #1C1C1E; font: 800 13px 'IBM Plex Sans Thai', sans-serif; cursor: pointer; }
+    .ms-staff .sd-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 2px 4px; }
+    .ms-staff .sd-h b { font-size: 13px; } .ms-staff .sd-h span { font-size: 10.5px; color: #8E8E93; font-weight: 700; }
+    .ms-staff .sd-att { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .ms-staff .sd-att > div { background: #F2F2F7; border-radius: 14px; padding: 10px 12px; cursor: pointer; display: flex; flex-direction: column; gap: 3px; border-left: 4px solid #C7C7CC; transition: transform .2s; }
+    .ms-staff .sd-att > div:active { transform: scale(.96); }
+    .ms-staff .sd-att small { font-size: 10px; font-weight: 800; color: #8E8E93; letter-spacing: .3px; }
+    .ms-staff .sd-att b { font-family: var(--f-num, 'Space Grotesk'), sans-serif; font-size: 22px; line-height: 1; color: #1C1C1E; }
+    .ms-staff .sd-att i { display: block; height: 5px; border-radius: 3px; background: #E5E5EA; overflow: hidden; } .ms-staff .sd-att i u { display: block; height: 100%; background: #8E8E93; border-radius: 3px; }
+    .ms-staff .sd-att em { font-style: normal; font-size: 10px; color: #8E8E93; font-weight: 700; }
+    .ms-staff .sd-att .ok { border-left-color: #30D158; } .ms-staff .sd-att .ok b { color: #1E9E45; } .ms-staff .sd-att .ok i u { background: #30D158; }
+    .ms-staff .sd-att .mid { border-left-color: #FF9F0A; } .ms-staff .sd-att .mid b { color: #C77700; } .ms-staff .sd-att .mid i u { background: #FF9F0A; }
+    .ms-staff .sd-att .bad { border-left-color: #FF3B30; } .ms-staff .sd-att .bad b { color: #D70015; } .ms-staff .sd-att .bad i u { background: #FF3B30; }
+    .ms-staff .sd-cat { background: #fff; border-radius: 16px; color: #000; border: 1px solid #F0F0F3; padding: 6px; }
+    .ms-staff .sd-right { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    @media (min-width: 900px) and (orientation: landscape) { .ms-staff .sd-right { grid-area: rank; min-height: 0; overflow-y: auto; } .ms-staff .dx-main { overflow-y: auto; } .ms-staff .sd-att b { font-size: 26px; } }
+    @media (max-width: 520px) { .st-kp { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ms-staff .sd-att { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .st-att span { flex-direction: column; align-items: flex-start; gap: 0; padding: 5px 8px; } .st-att b { font-size: 15px; } }
     @media (prefers-reduced-motion: reduce) { .ds *, .ds { animation: none !important; transition: none !important; } }
   </style>
 
@@ -2024,7 +2063,7 @@
     // ทุกหน้าอยู่ใต้ boston5656.github.io เดียวกัน → ใช้การล็อกอินร่วมกัน
     // 🔄 เวอร์ชันหน้าเว็บ — ต้องตรงกับไฟล์ version.json (ถ้าไม่ตรง = มีของใหม่บน GitHub → โหลดใหม่ให้เอง)
     try { if (navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches)) document.documentElement.classList.add('pwa'); } catch (e) {}
-    const APP_VER = '2026.11.15-12';
+    const APP_VER = '2026.11.15-16';
     const BOOT_T = Date.now().toString(36);
     function checkUpdate(force) {
       fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(j => {
@@ -3516,7 +3555,7 @@
     function openModal(title, html, cls) {
       document.getElementById('top5-title').innerText = title;
       const cl = String(cls || '').split(' '), shx = document.querySelector('#top5-modal .modal-sheet');
-      shx.classList.toggle('ms-wide', cl.includes('ms-wide')); shx.classList.toggle('ms-focus', cl.includes('ms-focus'));
+      shx.classList.toggle('ms-wide', cl.includes('ms-wide')); shx.classList.toggle('ms-focus', cl.includes('ms-focus')); shx.classList.toggle('ms-staff', cl.includes('ms-staff'));
       document.getElementById('top5-list').innerHTML = html;
       const modal = document.getElementById('top5-modal');
       modal.classList.remove('closing');
@@ -3904,6 +3943,80 @@
     }
 
     // ===== INCENTIVE (ปุ่ม IN+) =====
+    // =========================================================
+    // 👤 การ์ดพนักงาน (สไตล์การ์ดงานโฟกัส) + Popup รายละเอียด
+    // =========================================================
+    const ST_ATT = [
+      ['SIM', 'SIM', 'sim', ['SIM']], ['BRIGHT', 'BRIGHT', 'bright', ['FILM BRIGHT', 'BRIGHT']], ['PVL', 'PVL', 'pvl', ['FILM PVL', 'PVL']],
+      ['SANDISK', 'SANDISK', 'sandisk', ['SANDISK']], ['CARE', 'CARE', 'care', ['ULTRA CARE+ FOR ANDROID', 'ULTRA CARE+']], ['SOCIAL', 'SOCIAL', 'social', ['SOCIAL CARE']],
+      ['UFUND_P', 'UFUND P', 'ufundP', ['UFUND SMARTPHONE']], ['UFUND_S', 'UFUND S', 'ufundS', ['UFUND STUDENT']], ['SF', 'SF+', 'sf', ['SF+', 'SF']]
+    ];
+    function staffAtt(s) {
+      const ar = s.attRate || {}, d = lastDashboardData || {}, focus = d.focus || [];
+      if (!(ar.u > 0)) return null;
+      const base = ar.base > 0 ? ar.base : 1;
+      return ST_ATT.map(([bucket, label, key, names]) => {
+        const v = key === 'sandisk' ? (ar.smpBase > 0 ? ar.sandisk / ar.smpBase * 100 : 0) : (Number(ar[key]) || 0) / base * 100;
+        const f = names.map(n => focus.find(x => String(x.name).toUpperCase() === n)).find(Boolean);
+        const t = f ? Number(f.target) || 0 : 0;
+        const cls = !t ? '' : v >= t ? 'ok' : v >= t * .7 ? 'mid' : 'bad';
+        return { bucket, label, v, t, cls, n: Number(ar[key]) || 0 };
+      });
+    }
+    function staffCardHTML(s, idx) {
+      const P = monthPace(), ach = Number(s.achievePer) || 0, fc = Number(s.forecastPer) || 0, hasT = s.target > 0, col = hasT ? fcHex(fc) : '#8E8E93';
+      const gap = s.target - s.achieveBaht, perDay = gap > 0 ? gap / Math.max(1, P.left) : 0;
+      const chip = !hasT ? '<span class="chip none">ไม่มีเป้า</span>' : fc >= 100 ? '<span class="chip pass">✓ ตามเป้า</span>' : '<span class="chip miss">ต้องเร่ง</span>';
+      const att = staffAtt(s);
+      const attHTML = att ? `<div class="st-att">${att.filter(a => ['SIM', 'BRIGHT', 'PVL', 'SANDISK', 'CARE', 'UFUND_P'].includes(a.bucket)).map(a => `<span class="${a.cls}"><small>${a.label}</small><b>${pctTxt(a.v)}%</b></span>`).join('')}</div>`
+        : '<div class="st-att none">ยังไม่มีฐานเครื่อง (iPhone / Smartphone)</div>';
+      return `<div class="box-dark staff-card st2 sl-card tap" onclick="openStaffDetail(${idx})">
+        <div class="sl-head"><span class="sl-name">${s.nickname}<em>${s.id} · ${s.role}</em></span>${chip}</div>
+        <div class="sl-mid">
+          <div class="sl-meta"><span>ยอด <b>${formatBaht(s.achieveBaht)}</b></span><span>Target <b>${hasT ? formatBaht(s.target) : '–'}</b></span></div>
+          <div class="sl-big" style="color:${col}">${pctTxt(ach)}<small>%</small></div>
+        </div>
+        <div class="st-bar"><i style="width:${Math.min(100, ach).toFixed(1)}%;background:${col}"></i><u style="left:${P.pace.toFixed(1)}%" title="ควรถึง ณ วันนี้"></u></div>
+        <div class="st-kp">
+          <span><small>Forecast</small><b style="color:${col}">${pctTxt(fc)}%</b></span>
+          <span><small>${gap > 0 ? 'ขาดอีก' : 'เกินเป้า'}</small><b class="${gap > 0 ? 'fc-red' : 'fc-green'}">${formatBaht(Math.abs(gap))}</b></span>
+          <span><small>ต้องทำ/วัน</small><b>${gap > 0 ? formatBaht(Math.round(perDay)) : '✓'}</b></span>
+          <span><small>MOM</small><b class="${gClass(s.mom)}">${s.mom}</b></span>
+        </div>
+        ${attHTML}
+        <div class="st-ft"><span>${att ? 'ฐาน ' + formatBaht(s.attRate.u) + ' เครื่อง · ' : ''}แตะดูรายละเอียด ›</span>
+          <button class="inc-btn" onclick="event.stopPropagation();showIncentive(${idx})" title="ดู Incentive">IN<sup>+</sup>${s.incentive > 0 ? '<span class="dot"></span>' : ''}</button></div>
+      </div>`;
+    }
+    function openStaffDetail(idx) {
+      const d = lastDashboardData, s = d && d.staffs[idx]; if (!s) return;
+      haptic(8);
+      const P = monthPace(), ach = Number(s.achievePer) || 0, fc = Number(s.forecastPer) || 0, hasT = s.target > 0, col = hasT ? fcHex(fc) : '#8E8E93';
+      const gap = s.target - s.achieveBaht, perDay = gap > 0 ? gap / Math.max(1, P.left) : 0, att = staffAtt(s);
+      let html = `<div class="dx"><aside class="dx-hero">
+          <div class="dx-kick">👤 ${s.id} · ${s.role} · ${(d.header.date || {}).monthYear || ''}</div>
+          <div class="dx-big">${formatBaht(s.achieveBaht)}${hasT ? `<small>/ ${formatBaht(s.target)}</small>` : ''}</div>
+          ${hasT ? `<div class="dx-bar"><i style="width:${Math.min(100, ach)}%;background:${col}"></i><u style="left:${P.pace}%"></u></div>
+          <div class="dx-sub">Achieve <b style="color:#fff">${pctTxt(ach)}%</b> · ควรได้ ${P.pace.toFixed(0)}% ณ วันที่ ${P.day}/${P.days} · ${ach >= P.pace ? '<span class="fc-green">นำหน้าเส้นเวลา</span>' : '<span class="fc-red">ตามหลังเส้นเวลา</span>'}</div>` : '<div class="dx-sub">ไม่มีเป้า</div>'}
+          <div class="dx-kpis">
+            <div><small>คาดสิ้นเดือน</small><b style="color:${col}">${formatBaht(s.forecastBaht)}</b></div>
+            <div><small>Forecast</small><b style="color:${col}">${pctTxt(fc)}%</b></div>
+            <div><small>${gap > 0 ? 'ขาดอีก' : 'เกินเป้า'}</small><b class="${gap > 0 ? 'fc-red' : 'fc-green'}">${formatBaht(Math.abs(gap))}</b></div>
+            <div><small>ต้องทำ/วัน (${P.left} วัน)</small><b>${gap > 0 ? formatBaht(Math.round(perDay)) : '✓'}</b></div>
+            <div><small>MOM</small><b class="${gClass(s.mom)}">${s.mom}</b></div>
+            <div><small>YOY</small><b class="${gClass(s.yoy)}">${s.yoy}</b></div>
+          </div>
+          <button class="sd-inc" onclick="showIncentive(${idx})">💰 Incentive ${s.incentive > 0 ? '฿' + formatBaht(s.incentive) : ''} ›</button>
+        </aside><section class="dx-main">
+          <div class="sd-h"><b>📶 Att Rate</b><span>${att ? 'ฐานเครื่อง ' + formatBaht(s.attRate.u) + ' เครื่อง (iPhone + Smartphone) · แตะดู Top 5' : ''}</span></div>
+          ${att ? `<div class="sd-att">${att.map(a => `<div class="${a.cls}" onclick="showTop5('${s.nickname} · ${a.label} — Top 5', getTop5('staffFocusTopProducts','${s.id}','${a.bucket}'))">
+              <small>${a.label}</small><b>${pctTxt(a.v)}%</b>
+              <i><u style="width:${Math.min(100, a.t ? a.v / a.t * 100 : a.v)}%"></u></i>
+              <em>${fmtUnit(a.n)} ชิ้น${a.t ? ' · เป้า ' + pctTxt(a.t) + '%' : ''}</em></div>`).join('')}</div>` : '<div class="text-xs text-zinc-400 py-4 text-center">ยังไม่มีฐานเครื่อง (iPhone / Smartphone)</div>'}
+        </section>
+        <section class="sd-right"><div class="sd-h"><b>🎯 เป้าหมายรายแคท</b></div><div class="sd-cat">${staffCatHTML(s.categories)}</div></section></div>`;
+      openModal('👤 ' + s.nickname, html, 'ms-wide ms-focus ms-staff');
+    }
     function showIncentive(idx) {
       const s = lastDashboardData.staffs[idx];
       if (!s) return;
@@ -5479,62 +5592,7 @@
         } else {
           document.getElementById('staff-section').style.display = '';   // ห้ามใส่ 'block' — แนวนอนต้องเป็น flex ไม่งั้นแผงยาวทะลุจอ
           let staffHtml = '';
-          data.staffs.forEach((s, idx) => {
-            // ----- เป้าหมายรายแคท (พับเก็บได้) -----
-            const catHtml = staffCatHTML(s.categories);
-
-            // ----- Att Rate (กล่องขาว โชว์ตลอด) — ฐาน = iPhone + Smartphone, SANDISK หารด้วย Smartphone -----
-            let ar = s.attRate || {};
-            let attHtml = '';
-            if (ar.u > 0) {
-              let arBase = ar.base > 0 ? ar.base : 1;
-              let p = (val) => ((val / arBase) * 100).toFixed(1);
-              let sandiskP = (ar.smpBase > 0 ? (ar.sandisk / ar.smpBase * 100) : 0).toFixed(1);
-              let tile = (bucket, label, val, cls) =>
-                `<div class="att-tile" onclick="showTop5('${s.nickname} · ${label} — Top 5', getTop5('staffFocusTopProducts','${s.id}','${bucket}'))"><span class="lbl">${label}</span><span class="val ${cls || ''}">${val}%</span></div>`;
-              attHtml = `<div class="att-box sc-att">
-                  <div class="flex justify-between items-center mb-2 px-1">
-                    <span class="font-extrabold text-xs">📶 Att Rate</span>
-                    <span class="text-[10px] font-bold text-zinc-400">ฐานเครื่อง ${formatBaht(ar.u)} เครื่อง</span>
-                  </div>
-                  <div class="grid-att">
-                    ${tile('SIM','SIM',p(ar.sim))}
-                    ${tile('BRIGHT','BRIGHT',p(ar.bright))}
-                    ${tile('PVL','PVL',p(ar.pvl))}
-                    ${tile('SANDISK','SANDISK',sandiskP)}
-                    ${tile('CARE','CARE',p(ar.care),'care')}
-                    ${tile('SOCIAL','SOCIAL',p(ar.social))}
-                    ${tile('UFUND_P','UFUND P',p(ar.ufundP),'fin')}
-                    ${tile('UFUND_S','UFUND S',p(ar.ufundS),'fin')}
-                    ${tile('SF','SF+',p(ar.sf),'fin')}
-                  </div>
-                </div>`;
-            } else {
-              attHtml = `<div class="att-box sc-att text-center"><span class="font-extrabold text-xs">📶 Att Rate</span><p class="text-[10px] text-zinc-400 mt-1">ยังไม่มีฐานเครื่อง (iPhone / Smartphone)</p></div>`;
-            }
-
-            staffHtml += `
-              <div class="box-dark staff-card text-xs relative">
-                <div class="sc-head flex justify-between border-b border-zinc-600 pb-2 mb-3"><span class="font-bold text-sm">${s.id} | ${s.nickname} <span class="text-zinc-400 font-normal text-xs">(${s.role})</span></span><span class="text-[10px] text-zinc-400 pt-1">Target: ${formatBaht(s.target)}</span></div>
-                <div class="grid-detail sc-kpi">
-                  <div><span class="block text-[10px] text-zinc-400">Achieve%</span><span class="block text-sm font-black">${s.achievePer}%</span><span class="block text-[9px] mt-1">${formatBaht(s.achieveBaht)}</span></div>
-                  <div><span class="block text-[10px] text-zinc-400">Forecast%</span><span class="block text-sm font-black ${getFcColor(s.forecastPer)}">${s.forecastPer}%</span><span class="block text-[9px] mt-1">${formatBaht(s.forecastBaht)}</span></div>
-                  <div><span class="block text-[10px] text-zinc-400">Diff Target</span><span class="block text-sm font-bold fc-red">${formatBaht(s.diff)}</span></div>
-                  <div><span class="block text-[10px] text-zinc-400">MOM / YOY</span><span class="block text-[10px] font-bold mt-1"><span class="${gClass(s.mom)}">${s.mom}</span> | <span class="${gClass(s.yoy)}">${s.yoy}</span></span></div>
-                </div>
-                ${attHtml}
-                <div class="sc-act flex items-center gap-3 mt-3">
-                  <div class="cat-toggle" onclick="toggleStaffCat(${idx}, this)">
-                    <span class="text-[11px] font-bold text-zinc-200">🎯 เป้าหมายรายแคท</span>
-                    <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-                  </div>
-                  <button class="inc-btn" onclick="showIncentive(${idx})" title="ดู Incentive">IN<sup>+</sup>${s.incentive > 0 ? '<span class="dot"></span>' : ''}</button>
-                </div>
-                <div id="cat-box-${idx}" class="cat-collapse sc-cat">
-                  <div><div class="mt-2 bg-white rounded-2xl p-3 text-black">${catHtml}</div></div>
-                </div>
-              </div>`;
-          });
+          data.staffs.forEach((s, idx) => { staffHtml += staffCardHTML(s, idx); });
           document.getElementById('db-staff').innerHTML = staffHtml || '<div class="text-xs text-zinc-500">ไม่มีข้อมูลพนักงานที่มีเป้า</div>';
         }
 

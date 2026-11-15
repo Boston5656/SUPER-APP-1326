@@ -11,7 +11,7 @@
   <script>window.GAS_APP = 'order';</script>
   <script src="staff-names.js?v=2026.11.02-1"></script>
   <script src="gas.js?v=2026.11.02-1"></script>
-  <script src="order-alert.js?v=2026.11.02-1"></script>
+  <script src="order-alert.js?v=2026.11.15-11"></script>
   <style>
     :root { --y: #FFD600; --d: #1C1C1E; --d2: #2C2C2E; --g: #8E8E93; --ok: #30D158; --no: #FF453A; --or: #FF9F0A;
       --ios-ease: cubic-bezier(.32,.72,0,1); --spring: cubic-bezier(.34,1.56,.64,1); --spring-soft: cubic-bezier(.22,1.18,.36,1); }
@@ -1475,26 +1475,98 @@
       return c.toDataURL('image/png');
     }
     // 📸 สแตมป์รูปส่งงาน (หน้าตาเดียวกับแอป Check List)
+    // 📸 สแตมป์รูปส่งงาน v2 — กรอบเหลือง · รูปมุมซ้ายล่างเว้าเป็นช่องรายละเอียด · แถบดำล่างสุด = งานโฟกัสที่ได้ (อ่านง่าย ไม่กลืนกับรูป)
+    //    ใช้ร่วมกันทั้ง Check List และ Order (โค้ดเหมือนกันทั้ง 2 ไฟล์) · จัดทำโดย บอสตัน สุดหล่อ
+    function drawStamp1326(img, modelName, focusList) {
+      const ff = "'IBM Plex Sans Thai', 'Space Grotesk', sans-serif";
+      let W = img.naturalWidth || img.width, H = img.naturalHeight || img.height; const MAX = 1200;
+      if (W > MAX) { H = Math.round(H * MAX / W); W = MAX; }
+      const u = W / 100;                                    // หน่วยอ้างอิง = 1% ของความกว้างรูป
+      const m = Math.round(u * 3.2), r = Math.round(u * 4.6), pad = u * 3;
+      const focus = (focusList || []).filter(Boolean);
+      const meas = document.createElement('canvas').getContext('2d');
+      const fit = (txt, weight, size, maxW) => { let s = size; meas.font = `${weight} ${s}px ${ff}`; while (meas.measureText(txt).width > maxW && s > size * .55) { s -= 1; meas.font = `${weight} ${s}px ${ff}`; } return s; };
+      // ----- ช่องรายละเอียด (ซ้ายล่าง) -----
+      const maxNotch = W * .6;   // ช่องรายละเอียดไม่เกิน 58% → ติ่งรูปด้านขวากว้าง
+      let L = [
+        { t: 'ID1326 BN FUTURE PARK RANGSIT 2.2', w: 700, s: u * 3.6, c: '#1C1C1E' },
+        { t: 'แนะนำบริการเสริม และ สิทธิ์แลกซื้อให้แก่ลูกค้าแล้วครับ', w: 600, s: u * 2.6, c: '#5C4A00' },
+        { t: 'รุ่น: ' + (modelName || '-'), w: 700, s: u * 3.2, c: '#1C1C1E' }
+      ];
+      // ข้อความยาว: ย่อได้นิดเดียว (ไม่เกิน 15%) แล้วตัดขึ้นบรรทัดใหม่แทน → ตัวหนังสือไม่เล็กจนอ่านยาก
+      const wrap = (x, maxW) => {
+        meas.font = `${x.w} ${x.s}px ${ff}`; if (meas.measureText(x.t).width <= maxW) return [x];
+        const s2 = x.s * .88; meas.font = `${x.w} ${s2}px ${ff}`; if (meas.measureText(x.t).width <= maxW) return [Object.assign({}, x, { s: s2 })];
+        const words = x.t.split(' '), out = []; let cur = '';
+        words.forEach(w => { const t = cur ? cur + ' ' + w : w; if (meas.measureText(t).width > maxW && cur) { out.push(cur); cur = w; } else cur = t; });
+        if (cur) out.push(cur);
+        return out.map(t => Object.assign({}, x, { t, s: fit(t, x.w, s2, maxW) }));
+      };
+      { const maxW = maxNotch - pad * 1.6; const out = []; L.forEach((x, i) => { if (i < 2) { x.s = fit(x.t, x.w, x.s, maxW); out.push(x); } else wrap(x, maxW).forEach(y => out.push(y)); }); L = out; }   // ชื่อสาขา/คำโปรย = ย่อพอดีบรรทัด · ชื่อรุ่น = ตัดบรรทัด
+      let tw = 0; L.forEach(x => { meas.font = `${x.w} ${x.s}px ${ff}`; tw = Math.max(tw, meas.measureText(x.t).width); });
+      const nW = Math.min(maxNotch, tw + pad * 1.6), lh = x => x.s * 1.42;
+      const nH = Math.min(H * .36, L.reduce((a, x) => a + lh(x), 0) + pad * 1.3);
+      // ----- แถบงานโฟกัส (ล่างสุด) -----
+      const cs = u * 3.4, cpx = u * 2.4, ch = cs * 1.72, cg = u * 1.4, bandPad = u * 2.8, lab = u * 2.6;
+      const rows = [[]]; let rw = 0; const inner = W - bandPad * 2;
+      meas.font = `700 ${cs}px ${ff}`;
+      focus.forEach(t => {
+        const label = '✓ ' + t, w = Math.min(inner, meas.measureText(label).width + cpx * 2);
+        if (rw && rw + cg + w > inner) { rows.push([]); rw = 0; }
+        rows[rows.length - 1].push({ label, w }); rw += (rw ? cg : 0) + w;
+      });
+      const bandH = focus.length ? bandPad * 2 + lab * 1.6 + rows.length * ch + (rows.length - 1) * cg : 0;
+      const gap = focus.length ? u * 2.2 : 0;
+      // ----- ผืนผ้าใบ -----
+      const CW = W + m * 2, CH = m + H + gap + bandH + m;
+      const c = document.createElement('canvas'); c.width = Math.round(CW); c.height = Math.round(CH);
+      const g = c.getContext('2d');
+      const bg = g.createLinearGradient(0, 0, 0, CH); bg.addColorStop(0, '#FFE033'); bg.addColorStop(1, '#FFC800');
+      g.fillStyle = bg; g.fillRect(0, 0, CW, CH);
+      // รูป: สี่เหลี่ยมมุมมน · มุมซ้ายล่างเว้าเป็นขั้นบันไดโค้ง (เหมือนภาพร่าง)
+      const x0 = m, y0 = m, x1 = m + W, y1 = m + H, yN = y1 - nH, xN = x0 + nW, k = Math.min(nH * 1.5, W * .13);   // k = ความยาวโค้ง S (ยิ่งยาว ยิ่งโค้งนุ่ม)
+      const path = () => {
+        g.beginPath();
+        g.moveTo(x0 + r, y0);
+        g.arcTo(x1, y0, x1, y1, r); g.arcTo(x1, y1, x0, y1, r);
+        g.lineTo(xN + k, y1);
+        g.bezierCurveTo(xN + k * .5, y1, xN + k * .5, yN, xN, yN);   // โค้ง S เต็มๆ (หัว-ท้ายแนวนอน)
+        g.arcTo(x0, yN, x0, y0, Math.min(r, nH * .45)); g.arcTo(x0, y0, x1, y0, r); g.closePath();
+      };
+      g.save(); g.shadowColor = 'rgba(90,60,0,.35)'; g.shadowBlur = u * 2.4; g.shadowOffsetY = u * .6; path(); g.fillStyle = '#000'; g.fill(); g.restore();
+      g.save(); path(); g.clip(); g.drawImage(img, x0, y0, W, H); g.restore();
+      // ข้อความในช่องเหลือง
+      g.textBaseline = 'top'; let ty = yN + pad * .75;
+      L.forEach(x => { g.font = `${x.w} ${x.s}px ${ff}`; g.fillStyle = x.c; g.fillText(x.t, x0 + pad * .5, ty); ty += lh(x); });
+      // แถบงานโฟกัส
+      if (focus.length) {
+        const by = y1 + gap;
+        g.save(); g.shadowColor = 'rgba(90,60,0,.3)'; g.shadowBlur = u * 1.6; g.shadowOffsetY = u * .4;
+        g.beginPath(); if (g.roundRect) g.roundRect(x0, by, W, bandH, r); else g.rect(x0, by, W, bandH); g.fillStyle = '#1C1C1E'; g.fill(); g.restore();
+        g.font = `700 ${lab}px ${ff}`; g.fillStyle = '#FFD600'; g.fillText('งานโฟกัสที่ได้ · ' + focus.length + ' งาน', x0 + bandPad, by + bandPad);
+        let cy = by + bandPad + lab * 1.6;
+        rows.forEach(row => {
+          let cx = x0 + bandPad;
+          row.forEach(ch0 => {
+            g.beginPath(); if (g.roundRect) g.roundRect(cx, cy, ch0.w, ch, ch / 2); else g.rect(cx, cy, ch0.w, ch);
+            g.fillStyle = '#FFD600'; g.fill();
+            g.font = `700 ${cs}px ${ff}`; g.fillStyle = '#1C1C1E'; g.textBaseline = 'middle';
+            let t = ch0.label; while (g.measureText(t).width > ch0.w - cpx * 2 && t.length > 4) t = t.slice(0, -2) + '…';
+            g.fillText(t, cx + cpx, cy + ch / 2 + cs * .04); g.textBaseline = 'top';
+            cx += ch0.w + cg;
+          });
+          cy += ch + cg;
+        });
+      }
+      return c.toDataURL('image/jpeg', .88);
+    }
+
     function stampDataUrl(src, modelName, focusList) {
       return new Promise((resolve, reject) => {
         const img = new Image();
         img.onload = async () => {
-          try { await document.fonts.load("700 20px 'Space Grotesk'"); await document.fonts.ready; } catch (e) {}
-          const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
-          let width = img.naturalWidth, height = img.naturalHeight; const MAX = 1200;
-          if (width > MAX) { height = Math.round(height * MAX / width); width = MAX; }
-          canvas.width = width; canvas.height = height; ctx.drawImage(img, 0, 0, width, height);
-          const bf = Math.max(14, Math.floor(width * 0.018)), px = bf * 2.2, py = bf * 2.2, ls = bf * 1.5, ff = "'Space Grotesk', 'IBM Plex Sans Thai', sans-serif";
-          const T = [{ t: 'ID1326 BN FUTURE PARK RANGSIT 2.2', f: `700 ${bf * 1.1}px ${ff}`, c: '#FFD600' }, { t: 'แนะนำบริการเสริม และ สิทธิ์แลกซื้อให้แก่ลูกค้าแล้วครับ', f: `600 ${bf * .85}px ${ff}`, c: '#CCCCCC' }, { t: 'รุ่น: ' + modelName, f: `700 ${bf}px ${ff}`, c: '#FFFFFF' }];
-          if (focusList.length) { T.push({ sp: 1 }); T.push({ t: 'งานโฟกัสที่ได้:', f: `700 ${bf}px ${ff}`, c: '#FFFFFF' }); focusList.forEach(x => T.push({ t: '  ✅ ' + x, f: `600 ${bf}px ${ff}`, c: '#FFFFFF' })); }
-          let mw = 0; T.forEach(x => { if (x.sp) return; ctx.font = x.f; mw = Math.max(mw, ctx.measureText(x.t).width); });
-          const bw = Math.min(width - px * 2, mw + px * 2); let bh = T.length * ls + py * 1.8; T.forEach(x => { if (x.sp) bh -= ls * .5; });
-          const sx = px, sy = height - bh - py;
-          ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 10; ctx.fillStyle = 'rgba(28,28,30,.9)'; ctx.beginPath();
-          if (ctx.roundRect) ctx.roundRect(sx, sy, bw, bh, bf * 1.8); else ctx.rect(sx, sy, bw, bh); ctx.fill(); ctx.shadowColor = 'transparent';
-          ctx.textBaseline = 'top'; let cy = sy + py;
-          T.forEach(x => { if (x.sp) { cy += ls * .5; return; } ctx.font = x.f; ctx.fillStyle = x.c; ctx.fillText(x.t, sx + px, cy); cy += ls; });
-          resolve(canvas.toDataURL('image/jpeg', .85));
+          try { await document.fonts.load("700 30px 'IBM Plex Sans Thai'"); await document.fonts.ready; } catch (e) {}
+          resolve(drawStamp1326(img, modelName, focusList));
         };
         img.onerror = () => reject(new Error('อ่านรูปไม่ได้')); img.src = src;
       });
